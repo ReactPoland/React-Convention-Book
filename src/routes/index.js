@@ -15,14 +15,6 @@ import StaffView                    from 'views/staff/StaffView';
 import StaffMemberView              from 'views/staff/StaffMemberView';
 import StaffInvitationView          from 'views/staff/StaffInvitationView';
 import StaffRegistrationView        from 'views/staff/StaffRegistrationView';
-// import ExercisesView                from 'views/exercises/ExercisesView';
-// import ExerciseView                 from 'views/exercises/ExerciseView';
-// import AddExerciseView              from 'views/exercises/AddExerciseView';
-// import EditExerciseView             from 'views/exercises/EditExerciseView';
-// import WorkoutsView                 from 'views/workouts/WorkoutsView';
-// import WorkoutView                  from 'views/workouts/WorkoutView';
-// import AddWorkoutView               from 'views/workouts/AddWorkoutView';
-// import EditWorkoutView              from 'views/workouts/EditWorkoutView';
 
 export default (
   <Route        component={CoreLayout} path='/'>
@@ -38,15 +30,6 @@ export default (
     <Route      component={StaffView}  path='/staff' name='staff' />
     <Route      component={StaffMemberView}  path='/staff/:id' name='staff' />
     <Route      component={StaffInvitationView}  path='/staff-invite' name='staff-invite' />
-    {/*<Route      component={ExercisesView}  path='/exercises' name='exercises' />
-    <Route      component={ExerciseView}  path='/exercises/:exercise' name='exercise' />
-    <Route      component={AddExerciseView}  path='/add_exercise' name='add_exercise' />
-    <Route      component={EditExerciseView}  path='/exercises/edit/:exercise' name='edit_exercise' />
-    <Route      component={WorkoutsView}  path='/workouts' name='workouts' />
-    <Route      component={WorkoutView}  path='/workouts/:workout' name='workout' />
-    <Route      component={AddWorkoutView}  path='/add_workout' name='add_workout' />
-    <Route      component={EditWorkoutView}  path='/workouts/edit/:workout' name='edit_workout' />
-    <Route      component={TokenNotFoundView}  path='/token-not-found' name='token-not-found' />*/}
     <Route      component={StaffRegistrationView}  path='/staff-register/:token' name='staff-register' />
 
   </Route>

@@ -4,10 +4,12 @@ import { routeReducer }       from 'redux-simple-router';
 import session    from './session';
 import dashboard  from './dashboard';
 import staff      from './staff';
+import restaurant from './restaurant';
 
 export default combineReducers({
   routing: routeReducer,
   session,
   dashboard,
-  staff
+  staff,
+  restaurant
 });

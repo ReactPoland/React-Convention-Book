@@ -31,12 +31,7 @@ class DashboardView extends React.Component {
     return (
       <div id='dashboardView'>
         <div className='row'>
-          {/*<div className='col-md-6'>
-            <DashboardClientNotes clients={this.props.clients} activeDay={this.props.dashboard.date} />
-          </div>
-          <div className='col-md-6'>
-            <DashboardCalendar onCalendarDayClick={this._onCalendarDayClick} activeDay={this.props.dashboard.date} />
-          </div>*/}
+          <h2> Dashboard View </h2>
         </div>
         <hr />
         <Link to='/'>Back To Home View</Link>

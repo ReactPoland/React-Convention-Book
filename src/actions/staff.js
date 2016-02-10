@@ -1,33 +1,27 @@
 import {
-  // ADD_CLIENT,
-  // EDIT_CLIENT,
-  // DELETE_CLIENT,
-  // SEND_MESSAGE
+  ADD_STAFF,
+  EDIT_STAFF,
+  DELETE_STAFF,
+  SEND_MESSAGE
 } from '../constants/staff';
 
 export default {
-  // addClient: (newClient) => {
-  //   return {
-  //     type: ADD_CLIENT,
-  //     payload: newClient
-  //   }
-  // },
-  // editClient: (clientId, editedClient) => {
-  //   return {
-  //     type: EDIT_CLIENT,
-  //     payload: { clientId, editedClient }
-  //   }
-  // },
-  // deleteClient: (clientId) => {
-  //   return {
-  //     type: DELETE_CLIENT,
-  //     payload: clientId
-  //   }
-  // },
-  // sendMessage: (clientId, message) => {
-  //   return {
-  //     type: SEND_MESSAGE,
-  //     payload: { clientId, message }
-  //   }
-  // }
+  addStaff: (newStaff) => {
+    return {
+      type: ADD_STAFF,
+      payload: newStaff
+    }
+  },
+  editStaff: (staffId, editedStaff) => {
+    return {
+      type: EDIT_STAFF,
+      payload: { staffId, editedStaff }
+    }
+  },
+  deleteStaff: (staffId) => {
+    return {
+      type: DELETE_STAFF,
+      payload: staffId
+    }
+  }
 }

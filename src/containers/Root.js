@@ -46,7 +46,7 @@ export default class Root extends React.Component {
           <Router history={noQueryKeyHistory}>
             {routes}
           </Router>
-          {this.renderDevTools()}
+          {/*this.renderDevTools()*/}
         </div>
       </Provider>
     );

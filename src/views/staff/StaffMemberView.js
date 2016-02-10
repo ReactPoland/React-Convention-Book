@@ -18,27 +18,27 @@ const mapDispatchToProps = (dispatch) => ({
   dashboardActions: bindActionCreators(dashboardActions, dispatch)
 });
 
-const Note = ({date, text, status}) => {
-  let noteDate = new Date(date);
-  return (
-    <div className={status ? ('panel panel-' + status) : 'panel panel-default'}>
-      <div className='panel-heading'>{noteDate.getDate()}-{noteDate.getMonth()}-{noteDate.getFullYear()}</div>
-      <div className={status ? ('panel-body text-' + status) : 'panel-body'}>
-        {text}
-      </div>
-    </div>
-  );
-};
+// const Note = ({date, text, status}) => {
+//   let noteDate = new Date(date);
+//   return (
+//     <div className={status ? ('panel panel-' + status) : 'panel panel-default'}>
+//       <div className='panel-heading'>{noteDate.getDate()}-{noteDate.getMonth()}-{noteDate.getFullYear()}</div>
+//       <div className={status ? ('panel-body text-' + status) : 'panel-body'}>
+//         {text}
+//       </div>
+//     </div>
+//   );
+// };
 
-const Notes = ({notes}) => (
-  <div className='notes'>
-    {notes.length ?
-      notes.map((note, i) => <Note key={i} {...note} />)
-      :
-      <p className='empty'>No notes from Client</p>
-    }
-  </div>
-);
+// const Notes = ({notes}) => (
+//   <div className='notes'>
+//     {notes.length ?
+//       notes.map((note, i) => <Note key={i} {...note} />)
+//       :
+//       <p className='empty'>No notes from Client</p>
+//     }
+//   </div>
+// );
 
 class Client extends React.Component {
   constructor(props) {
@@ -56,6 +56,7 @@ class Client extends React.Component {
   }
 
   componentWillMount() {
+    console.log(this.props);
     // Get staff data from store
     let staff = this.props.staff;
     // Find current client's object
@@ -118,8 +119,8 @@ class Client extends React.Component {
   }
 
   render() {
-    let {FirstName, LastName, Email, notes, chat} = this.state.staffObject,
-        noteDates = notes.map(note => note.date);
+    let {FirstName, LastName, Email, notes, chat} = this.state.staffObject;
+        // noteDates = notes.map(note => note.date);
     return (
       <div id='clientView'>
         <div className='row'>
@@ -145,23 +146,23 @@ class Client extends React.Component {
                 </div>}
           </div>
         </div>
-        <div className='row'>
+        {/*<div className='row'>
           <div className='col-md-6'>
             <div className='row'>
               <div className='col-md-12' style={{marginBottom: 10}}>
                 <Notes notes={notes} />
               </div>
-              {/*<div className='col-md-12'>
+              <div className='col-md-12'>
                 <Chat messages={chat} onMessageSend={this._messageSend} />
-              </div>*/}
+              </div>
             </div>
           </div>
-          {/*<div className='col-md-6'>
+          <div className='col-md-6'>
             <div className='calendar'>
               <StaffCalendar onCalendarDayClick={this._onCalendarDayClick} activeDay={this.props.dashboard.date} noteDates={noteDates} />
             </div>
-          </div>*/}
-        </div>
+          </div>x
+        </div>*/}
         <hr />
         <Link to='/'>Back To Home View</Link>
       </div>

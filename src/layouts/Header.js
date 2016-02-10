@@ -67,8 +67,6 @@ class Header extends React.Component {
         <li><a onClick={this._handleLogOut}>{this.state.sendingRequest ? 'Logging out...' : 'Log out'}</a></li>
         <li><Link to="dashboard">Dashboard</Link></li>
         <li><Link to="staff">Staff</Link></li>
-        {/*<li><Link to="exercises">Exercises</Link></li>
-        <li><Link to="workouts">Workouts</Link></li>*/}
         <li><Link to="account_settings">Account Settings</Link></li>
       </ul>
       :
