@@ -331,3 +331,14 @@ h4.alert {
 .validation-error {
   color: #f00;
 }
+
+
+/* Dashboard components */
+.DashboardBox {
+  border: 1px solid #eee;
+  padding: 20px;
+
+  &-Header {
+    color: #333;
+  }
+}

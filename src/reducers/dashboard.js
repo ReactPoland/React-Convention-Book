@@ -1,8 +1,8 @@
 import { createReducer } from '../utils';
 
 import {
-  SET_DATE,
-  RESET_DATE
+  // SET_DATE,
+  // RESET_DATE
 } from '../constants/dashboard';
 
 const initialState = {
@@ -10,17 +10,17 @@ const initialState = {
 };
 
 export default createReducer(initialState, {
-  [SET_DATE]: (state, payload) => {
-    return {
-      ...state,
-      date: payload.date
-    };
-  },
-  [RESET_DATE]: (state) => {
-    return {
-      ...state,
-      date: new Date()
-    };
-  },
+  // [SET_DATE]: (state, payload) => {
+  //   return {
+  //     ...state,
+  //     date: payload.date
+  //   };
+  // },
+  // [RESET_DATE]: (state) => {
+  //   return {
+  //     ...state,
+  //     date: new Date()
+  //   };
+  // },
 });
 

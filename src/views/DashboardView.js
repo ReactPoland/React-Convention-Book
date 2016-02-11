@@ -3,13 +3,15 @@ import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as dashboardActions from 'actions/dashboard';
-import DashboardCalendar from 'components/dashboard/DashboardCalendar';
-import DashboardClientNotes from 'components/dashboard/DashboardClientNotes';
+
+import NewsFeed from 'components/dashboard/NewsFeed';
+import MenusBox from 'components/dashboard/MenusBox';
 
 const mapStateToProps = (state) => ({
   session: state.session,
   dashboard: state.dashboard,
-  clients: state.clients
+  post: state.post,
+  menu: state.menu
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -19,12 +21,6 @@ const mapDispatchToProps = (dispatch) => ({
 class DashboardView extends React.Component {
   constructor(props) {
     super(props);
-    this._onCalendarDayClick = this._onCalendarDayClick.bind(this);
-  }
-
-  _onCalendarDayClick(day) {
-    //Dispatch action - save active day into state
-    this.props.actions.setDate(day);
   }
 
   render() {
@@ -32,6 +28,16 @@ class DashboardView extends React.Component {
       <div id='dashboardView'>
         <div className='row'>
           <h2> Dashboard View </h2>
+          <div className="col-md-4">
+            <NewsFeed posts={this.props.post.posts} />
+          </div>
+          <div className="col-md-4">
+            <MenusBox menus={this.props.menu.menus} />
+          </div>
+          <div className="col-md-4"></div>
+          <div className="col-md-4"></div>
+          <div className="col-md-4"></div>
+          <div className="col-md-4"></div>
         </div>
         <hr />
         <Link to='/'>Back To Home View</Link>

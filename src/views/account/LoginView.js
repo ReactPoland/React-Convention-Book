@@ -41,9 +41,11 @@ class LoginView extends React.Component {
     ///////////////////////// mock
     const {email, password} = credentials;
     if(email == 'admin' && password == 'test') {
+      this.props.history.pushState(null, '/dashboard');
       return this.props.actions.login({
         first: 'test',
         last: 'admin',
+        role: 'admin',
         token: 'magic-login-token'
       });
     }

@@ -17,8 +17,10 @@ const staffList = [
     "Email": "staff_member@mailinator.com",
     "Password": "",
     "Verified": false,
-    "Gender": "male",
-    "Position": "Chef"
+    "Position": "Chef",
+    "Location": "123 Wall St., 12345 New York, NY",
+    "Address": "123 Wall St., 12345 New York, NY",
+    "StartDate": "2016-01-15T05:48:51.112472-05:00"
   },
   {
     "Id": "1162953910005334015",
@@ -30,8 +32,10 @@ const staffList = [
     "Email": "staff_member2@mailinator.com",
     "Password": "",
     "Verified": false,
-    "Gender": "male",
-    "Position": "Vice Chef"
+    "Position": "Vice Chef",
+    "Location": "123 Wall St., 12345 New York, NY",
+    "Address": "123 Wall St., 12345 New York, NY",
+    "StartDate": "2016-01-15T05:48:51.112472-05:00"
   }
 ];
 
