@@ -1,9 +1,10 @@
 import React from 'react';
-import Formsy from 'formsy-react';
+import { Form, Decorator as FormsyDecorator } from 'formsy-react';
 import { DefaultInput } from './DefaultInput';
 import { DefaultSelect } from './DefaultSelect';
 
-export default class AddStaffMemberForm extends React.Component {
+// @FormsyDecorator()
+class AddStaffMemberForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +17,13 @@ export default class AddStaffMemberForm extends React.Component {
   }
 
   _onAddStaffMember(member) {
-    this.props.onAddMember(member);
+    if(this.state.canSubmit) {
+      this.props.onAddMember(member);
+    } else {
+      this.setState({
+        errorMessage: 'Please fill in all required information.'
+      });
+    }
   }
 
   _disableButton() {
@@ -24,6 +31,7 @@ export default class AddStaffMemberForm extends React.Component {
       canSubmit: false
     });
   }
+
 
   _enableButton() {
     this.setState({
@@ -40,29 +48,89 @@ export default class AddStaffMemberForm extends React.Component {
   render() {
     return (
       <div className="row" style={{marginTop: 20}}>
-        <Formsy.Form onSubmit={this._onAddStaffMember} onValid={this._enableButton} onInvalid={this._disableButton}>
+        <Form onSubmit={this._onAddStaffMember} onValid={this._enableButton} onInvalid={this._disableButton}>
           <div className="col-md-6">
-            <DefaultInput name="FirstName" title="First Name" required />
-            <DefaultInput name="Email" title="Email Address" required type="email" />
-            <DefaultInput name="Phone" title="Telephone Number" required />
-            <DefaultInput name="StartDate" title="Start Date" type="date" required />
-            {/*
-
-              @P: Here goes one more field but I don't understand what it is about
-
-                  it's called 'Location(s)'
-
-              */}
+            <DefaultInput
+              name="FirstName"
+              title="First Name"
+              required
+              tabindex="1"
+              validations="isAlpha"
+              validationError="Invalid first name" />
+            <DefaultInput
+              name="Email"
+              title="Email Address"
+              required
+              type="email"
+              validations="isEmail"
+              validationError="Invalid email address"
+              tabindex="3" />
+            <DefaultInput
+              name="Phone"
+              title="Telephone Number"
+              validations="isNumeric"
+              validationError="Invalid telephone number"
+              required
+              tabindex="5" />
+            <DefaultInput
+              name="StartDate"
+              title="Start Date"
+              type="date"
+              required
+              validations="isExisty"
+              validationError="Invalid start date"
+              tabindex="7" />
           </div>
           <div className="col-md-6">
-            <DefaultInput name="LastName" title="Last Name" required />
-            <DefaultInput name="ReEmail" title="Confirm Email Address" required type="email" />
-            <DefaultInput name="Mailing" title="Mailing Address" required />
-            <DefaultSelect name="Position" title="Position" required options={this.props.restaurant.availablePositions} />
+            <DefaultInput
+              name="LastName"
+              title="Last Name"
+              required
+              validations="isAlpha"
+              validationError="Invalid last name"
+              tabindex="2" />
+            <DefaultInput
+              name="ReEmail"
+              title="Confirm Email Address"
+              required
+              validations="equalsField:Email"
+              validationError="Emails are different"
+              type="email"
+              tabindex="4" />
+            <DefaultInput
+              name="Mailing"
+              title="Mailing Address"
+              required
+              validations="isExisty"
+              validationError="Invalid mailing address"
+              tabindex="6" />
+            <DefaultSelect
+              name="Position"
+              title="Position"
+              placeholder="Position"
+              required
+              validations="isExisty"
+              validationError="Invalid position"
+              tabindex="8"
+              options={this.props.restaurant.positions} />
           </div>
-          <button type="submit" disabled={!this.state.canSubmit} className="btn btn-default pull-right">Submit</button>
-        </Formsy.Form>
+          <div className="col-md-12">
+            <DefaultSelect
+              name="Location"
+              title="Location"
+              placeholder="Location"
+              required
+              validations="isExisty"
+              validationError="Invalid location"
+              tabindex="9"
+              options={this.props.restaurant.locations} />
+            <p className="validation-error">{this.state.errorMessage}</p>
+            <button tabIndex="10" type="submit" className="btn btn-default pull-right">Submit</button>
+          </div>
+        </Form>
       </div>
     );
   }
 }
+
+export default AddStaffMemberForm;

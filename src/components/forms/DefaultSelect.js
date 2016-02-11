@@ -6,6 +6,11 @@ export const DefaultSelect = React.createClass({
   changeValue(event) {
     this.setValue(event.currentTarget.value);
   },
+
+  componentWillMount() {
+    this.setValue("");
+  },
+
   render() {
     const className = 'form-group' + (this.props.className || ' ') + (this.showRequired() ? 'required' : this.showError() ? 'error' : '');
     const errorMessage = this.getErrorMessage();
@@ -15,10 +20,18 @@ export const DefaultSelect = React.createClass({
       </option>
     ));
 
+    let placeholder = null;
+    if(this.props.placeholder) {
+      placeholder = (
+        <option value="" disabled defaultSelected>{this.props.placeholder}</option>
+      );
+    }
+
     return (
       <div className={className}>
         <label htmlFor={this.props.name} className='control-label'>{this.props.title}</label>
-        <select name={this.props.name} onChange={this.changeValue} value={this.getValue()} className='form-control'>
+        <select name={this.props.name} onChange={this.changeValue} value={this.getValue()} className='form-control' tabIndex={this.props.tabindex}>
+          {placeholder}
           {options}
         </select>
         <span className='validation-error'>{errorMessage}</span>

@@ -27,6 +27,7 @@ class StaffView extends React.Component {
     this._onFilter = this._onFilter.bind(this);
     this.onAddMember = this.onAddMember.bind(this);
     this._showForm = this._showForm.bind(this);
+    this._showSuccess = this._showSuccess.bind(this);
   }
 
   _onFilter(data) {
@@ -44,10 +45,23 @@ class StaffView extends React.Component {
       response.Id = Math.random();
 
       this.props.actions.addStaff(response);
+      this._showSuccess(member);
       this.setState({
         showAddForm: false
       });
     }
+  }
+
+  _showSuccess({FirstName = "", LastName = ""}) {
+    this.setState({
+      successMessage: `An account for ${FirstName} ${LastName} has been succesfully created`
+    }, () => {
+      setTimeout(() => {
+        this.setState({
+          successMessage: ''
+        });
+      }, 10000);
+    });
   }
 
   _showForm() {
@@ -67,10 +81,18 @@ class StaffView extends React.Component {
       );
     }
 
+    let successBox = null;
+    if(this.state.successMessage) {
+      successBox = (
+        <p className="alert alert-success">{this.state.successMessage}</p>
+      );
+    }
+
     return (
       <div id='staffView'>
         <div className='row'>
           <div className="col-md-7">
+            {successBox}
             {addForm}
           </div>
           <div className='col-md-12' style={{paddingTop: 10, paddingBottom: 10}}>

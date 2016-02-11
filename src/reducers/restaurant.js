@@ -6,7 +6,7 @@ import { createReducer } from '../utils';
 
 const initialState = {
   name: 'Restaurant Name',
-  availablePositions: [{
+  positions: [{
     title: 'Chef',
     name: 'chef'
   }, {
@@ -24,6 +24,16 @@ const initialState = {
   }, {
     title: 'Bartender',
     name: 'bartender'
+  }],
+  locations: [{
+    name: 'NY',
+    title: '548 Wide St., 25487-4565 New York'
+  }, {
+    name: 'DC',
+    title: '45 Tree Av., 13254 Washington D.C.'
+  }, {
+    name: 'NM',
+    title: '874 Long St., 99999 New Mexico'
   }]
 };
 

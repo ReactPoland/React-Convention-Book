@@ -8,7 +8,7 @@ html {
 #dashboardView {
   margin-top: 10px;
   .dashboard-client-notes {
-    padding: 0 0.5em; 
+    padding: 0 0.5em;
     border: 1px solid #ddd;
     max-height: 600px;
     overflow-y: auto;
@@ -72,11 +72,11 @@ h4.alert {
     text-align: center;
   }
   .info {
-    margin-top: 0.5em; 
-    margin-bottom: 0.5em; 
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
   }
   .notes {
-    padding: 0.5em; 
+    padding: 0.5em;
     border: 1px solid #ddd;
     height: 295px;
     overflow-y: auto;
@@ -318,4 +318,16 @@ h4.alert {
 
 .DayPicker--ar {
   direction: rtl;
+}
+
+// forms globals
+.form-group.error {
+  input {
+    border-color: #f00;
+    box-shadow: 0 0 5px rgba(255,0,0,.7);
+  }
+}
+
+.validation-error {
+  color: #f00;
 }

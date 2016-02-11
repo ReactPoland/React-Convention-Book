@@ -15,6 +15,7 @@ export const DefaultInput = React.createClass({
           <input
             type={this.props.type || 'text'}
             name={this.props.name}
+            tabIndex={this.props.tabindex}
             className='form-control'
             onChange={this.changeValue}
             value={this.getValue()}
