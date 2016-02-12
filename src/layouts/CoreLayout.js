@@ -5,8 +5,16 @@ import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import { axiosHttpRequest } from 'utils/axiosHttpRequest';
 import Header from './Header';
+import { Link } from 'react-router';
+
+import { Paper, FlatButton } from 'material-ui';
+import Colors from 'material-ui/lib/styles/colors';
+import AlertWarning from 'material-ui/lib/svg-icons/alert/warning';
+
+import SideNav from './SideNav';
 
 const mapStateToProps = (state) => ({
+  entireState: state,
   session: state.session
 });
 
@@ -15,6 +23,45 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const whiteList = ['home', 'login', 'register', 'reset-password1', 'reset-password2', 'token-not-found', 'athlete-register'];
+
+const warningPanelStyles = {
+  margin: '12px auto',
+  width: 800,
+  textAlign: 'center',
+  padding: 12,
+  position: 'fixed',
+  top: 82,
+  left: '50%',
+  transform: "translateX(-50%)"
+};
+
+const iconStyles = {
+  lineHeight: 48,
+  verticalAlign: 'middle',
+  margin: '0 24',
+  width: 24,
+  height: 24
+};
+
+const ConfirmEmailBox = (state, navigate) => {
+  return !state.user.verified && state.loggedIn ?
+    <Paper zDepth={1} style={warningPanelStyles}>
+      <AlertWarning
+        style={iconStyles}
+        color={Colors.yellow500} />
+      <span>Please verify your email address</span>
+      <FlatButton
+        primary={false}
+        style={{marginLeft: 24}}
+        label="Resend confirmation email"
+        onClick={navigate.bind(this, '/resend_confirmation_email')} />
+      <FlatButton
+        primary={false}
+        label="Change email address"
+        onClick={navigate.bind('/change_confirmation_email')} />
+    </Paper>
+    : null;
+}
 
 class CoreLayout extends React.Component {
   static propTypes = {
@@ -25,6 +72,7 @@ class CoreLayout extends React.Component {
     super(props);
     this._checkIfLoggedIn = this._checkIfLoggedIn.bind(this);
     this._checkChildName = this._checkChildName.bind(this);
+    this._navigate = this._navigate.bind(this);
   }
 
   async _checkIfLoggedIn() {
@@ -36,14 +84,27 @@ class CoreLayout extends React.Component {
     let response = await axiosHttpRequest(requestObj);
 
     /////////// mock
-
+    if(sessionStorage.magicToken === 'magic-login-token') {
+      return this.props.sessionActions.login({
+        first: 'test',
+        last: 'admin',
+        role: 'admin',
+        verified: false,
+        profilePic: 'http://lorempixel.com/100/100/people/',
+        token: 'magic-login-token'
+      });
+    }
     /////////// endof mock
 
     if (response.status === 200 && response.statusText === 'OK') {
       this.props.sessionActions.login(response.data);
     } else {
-      this.props.history.pushState(null, '/login')
+      this.props.history.pushState(null, '/login');
     }
+  }
+
+  _navigate(route) {
+    this.props.history.pushState(null, route);
   }
 
   _checkChildName(names) {
@@ -57,10 +118,16 @@ class CoreLayout extends React.Component {
 
   render () {
     if (this.props.session.loggedIn || this._checkChildName(whiteList)) {
-      return (<div className="container">
-              <Header history={this.props.history} />
-              {this.props.children}
-            </div>);
+      return (
+        <div>
+          <Header history={this.props.history} />
+          <div className="ContentWrapper">
+            <SideNav {...this.props.entireState} />
+            {ConfirmEmailBox(this.props.session, this._navigate)}
+            {this.props.children}
+          </div>
+        </div>
+      );
     } else {
       this._checkIfLoggedIn();
       return null;

@@ -15,6 +15,7 @@ import StaffView                    from 'views/staff/StaffView';
 import StaffMemberView              from 'views/staff/StaffMemberView';
 import StaffInvitationView          from 'views/staff/StaffInvitationView';
 import StaffRegistrationView        from 'views/staff/StaffRegistrationView';
+import MenuListView                 from 'views/menu/MenuListView';
 
 export default (
   <Route        component={CoreLayout} path='/'>
@@ -31,6 +32,6 @@ export default (
     <Route      component={StaffMemberView}  path='/staff/:id' name='staff' />
     <Route      component={StaffInvitationView}  path='/staff-invite' name='staff-invite' />
     <Route      component={StaffRegistrationView}  path='/staff-register/:token' name='staff-register' />
-
+    <Route      component={MenuListView} path="/menu/:id" name="menu-list" />
   </Route>
 );

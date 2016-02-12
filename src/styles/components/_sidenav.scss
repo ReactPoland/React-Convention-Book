@@ -1,0 +1,108 @@
+.SideNav {
+  width: 80%;
+  height: 80%;
+  margin: 0 auto 0;
+  transition: all .7s ease-out !important;
+  position: fixed;
+  top: 200px;
+
+  .DashboardBox {
+    min-height: 350px;
+    height: 10%;
+    border: 1px solid #eee;
+    padding: 20px;
+    margin-bottom: 16px;
+    position: absolute;
+    transition: all .7s ease-out !important;
+
+    &-Header {
+      color: #333;
+    }
+
+    a:hover,
+    a:active {
+      text-decoration: none;
+    }
+
+    &:nth-child(1) {
+      left: 0;
+      top: 0;
+      right: 68%;
+    }
+
+    &:nth-child(2) {
+      left: 33%;
+      top: 0;
+      right: 35%;
+    }
+
+    &:nth-child(3) {
+      left: 66%;
+      top: 0;
+      right: 0;
+    }
+
+    &:nth-child(4) {
+      left: 0;
+      top: 360px;
+      right: 68%;
+    }
+
+    &:nth-child(5) {
+      left: 33%;
+      top: 360px;
+      right: 35%;
+    }
+
+    &:nth-child(6) {
+      left: 66%;
+      top: 360px;
+      right: 0;
+    }
+
+    &.display-none {
+      display: none;
+      visibility: hidden;
+    }
+  }
+
+  &.open {
+    width: 250px;
+    top: 0px;
+    bottom: 0;
+    left: 0;
+    margin-top: 0;
+    height: 100%;
+
+    & + .Content {
+      margin-left: 250px;
+    }
+
+    > span {
+      display: none;
+    }
+
+    .open {
+      z-index: 1100;
+      top: 64px;
+      right: auto;
+      left: 0;
+      width: 250px;
+      min-height: 100%;
+      margin-bottom: 0;
+      border-left: none;
+    }
+  }
+}
+
+.Content {
+  width: 80%;
+  padding-left: 150px;
+}
+
+.ContentWrapper {
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 100px;
+}

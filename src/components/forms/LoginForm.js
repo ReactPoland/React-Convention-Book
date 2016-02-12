@@ -1,5 +1,7 @@
 import React from 'react';
 import Formsy from 'formsy-react';
+import { FlatButton, RaisedButton } from 'material-ui';
+
 import { DefaultInput } from './DefaultInput';
 
 export class LoginForm extends React.Component {
@@ -28,7 +30,12 @@ export class LoginForm extends React.Component {
       <Formsy.Form onSubmit={this._submit} onValid={this._enableButton} onInvalid={this._disableButton}>
         <DefaultInput name='email' title='Email' required />
         <DefaultInput type='password' name='password' title='Password' required />
-        <button type='submit' className='btn btn-default' disabled={!this.state.canSubmit}>{this.props.sendingRequest ? 'Logging in...' : 'Log in'}</button>
+        <RaisedButton
+          secondary={true}
+          type="submit"
+          disabled={!this.state.canSubmit}
+          style={{margin: '0 auto', display: 'block', width: 150}}
+          label={this.props.sendingRequest ? 'Logging in...' : 'Log in'} />
       </Formsy.Form>
     );
   }

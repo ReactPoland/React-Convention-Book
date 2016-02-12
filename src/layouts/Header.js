@@ -2,9 +2,12 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
-import * as dashboardActions from 'actions/dashboard';
 import { Link } from 'react-router';
 import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+
+import { FlatButton, AppBar } from 'material-ui';
+import UserHeaderEntity from 'components/UserHeaderEntity';
+import Colors from 'material-ui/lib/styles/colors';
 
 const mapStateToProps = (state) => ({
   session: state.session,
@@ -13,7 +16,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   sessionActions: bindActionCreators(sessionActions, dispatch),
-  dashboardActions: bindActionCreators(dashboardActions, dispatch)
+  // dashboardActions: bindActionCreators(dashboardActions, dispatch)
 });
 
 class Header extends React.Component {
@@ -46,7 +49,6 @@ class Header extends React.Component {
     if (response.status === 200 && response.statusText === 'OK') {
       //Dispatch logout action
       this.props.sessionActions.logout();
-      this.props.dashboardActions.resetDate();
     } else {
       //Display error message
       let errorMessage = response.data.error ? response.data.error : response.status + ' ' + response.statusText;
@@ -58,40 +60,36 @@ class Header extends React.Component {
   }
 
   render () {
+    const {user} = this.props.session;
     let userIsLogged = this.props.session.loggedIn;
   	let emailIsConfirmed = this.props.session.user.verified;
-    let errorMessage = this.state.error ? <h4 className='alert alert-danger'><strong>Error</strong> {this.state.error}</h4> : null;
-    //Show different links depending on user log in status
-    let links = userIsLogged ?
-      <ul className="nav nav-tabs">
-        <li><a onClick={this._handleLogOut}>{this.state.sendingRequest ? 'Logging out...' : 'Log out'}</a></li>
-        <li><Link to="dashboard">Dashboard</Link></li>
-        <li><Link to="staff">Staff</Link></li>
-        <li><Link to="account_settings">Account Settings</Link></li>
-      </ul>
-      :
-      <ul className="nav nav-tabs">
-        <li><Link to="login">Log in</Link></li>
-        <li><Link to="register">Register</Link></li>
-      </ul>;
+    let errorMessage = this.state.error ? <h4 className="UserEntity-Error" style={{color: Colors.red300}}><strong>Error</strong> {this.state.error}</h4> : null;
 
-    //Show message if user is logged in and didn't confirm email yet
-    let isEmailConfirmed = (userIsLogged && !emailIsConfirmed) ?
-      <p>
-        Please verify your email address |
-        <Link to="/resend_confirmation_email">Resend confirmation email</Link> |
-        <Link to ="/change_confirmation_email">Change email address</Link>
-      </p>
-      :
-      null;
+    //Show different links depending on user log in status
+    let userEntity = (
+      <ul style={{listStyle: 'none'}}>
+        <li style={{display: 'inline-block', marginTop: 9}}><Link to="/login"><FlatButton label="Login" /></Link></li>
+        <li style={{display: 'inline-block', marginTop: 9}}><Link to="/register"><FlatButton label="Sign Up" /></Link></li>
+      </ul>
+    );
+
+    if(userIsLogged) {
+      userEntity = (
+        <UserHeaderEntity user={user} />
+      );
+    }
 
     return (
-      <div>
-        <h1>The RestaurantReason Project</h1>
-        {isEmailConfirmed}
-        {links}
-        {errorMessage}
-      </div>
+      <AppBar
+        className="MainHeader"
+        title={
+          <h1 className="MainHeader-Title">
+            <Link to="/dashboard">The Restaurants Reason</Link>
+          </h1>
+        }
+        iconClassNameLeft="display-none"
+        iconElementRight={errorMessage || userEntity}>
+      </AppBar>
     );
   }
 }

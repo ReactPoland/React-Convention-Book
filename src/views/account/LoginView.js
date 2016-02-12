@@ -3,8 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
-import { LoginForm } from 'components/forms/LoginForm';
 import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import { Paper, FlatButton } from 'material-ui';
+import { LoginForm } from 'components/forms/LoginForm';
 
 const mapStateToProps = (state) => ({
   session: state.session
@@ -29,7 +30,7 @@ class LoginView extends React.Component {
       error: null,
       sendingRequest: true
     });
-
+console.log(credentials)
     let requestObj = {
       method: 'post',
       url: '/auth/login',
@@ -42,6 +43,7 @@ class LoginView extends React.Component {
     const {email, password} = credentials;
     if(email == 'admin' && password == 'test') {
       this.props.history.pushState(null, '/dashboard');
+      sessionStorage.setItem('magicToken', 'magic-login-token');
       return this.props.actions.login({
         first: 'test',
         last: 'admin',
@@ -72,16 +74,19 @@ class LoginView extends React.Component {
     return (
       <div id='loginView'>
         <div className='form'>
-          <h1>Log in</h1>
-          <LoginForm
-            onSubmit={this.login}
-            sendingRequest={this.state.sendingRequest}
-          />
-          <Link to='/reset-password'>Forgot password</Link>
+          <Paper zDepth={1} style={{padding: 16}}>
+            <h1>Log in</h1>
+            <LoginForm
+              onSubmit={this.login}
+              sendingRequest={this.state.sendingRequest} />
+          </Paper>
+          <div style={{textAlign: 'center'}}>
+            <Link to='/reset-password' style={{display: 'inline-block', margin: '24px auto'}}>
+              <FlatButton label="Forgot password" />
+            </Link>
+          </div>
         </div>
         {errorMessage}
-        <hr />
-        <Link to='/'>Back To Home View</Link>
       </div>
     );
   }

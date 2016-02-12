@@ -1,9 +1,29 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
+
 @import 'base';
 @import 'vendor/normalize';
+
+/* individual components */
+@import 'components/header';
+@import 'components/sidenav';
 
 html {
   overflow-y: scroll;
 }
+
+// #root {
+//   padding-top: 100px;
+// }
+
+html, body, #root, #root > div {
+  width: 100%;
+}
+
+// .main-container {
+//   position: relative;
+//   padding-left: 250px;
+//   padding-right: 25px;
+// }
 
 #dashboardView {
   margin-top: 10px;
@@ -330,15 +350,4 @@ h4.alert {
 
 .validation-error {
   color: #f00;
-}
-
-
-/* Dashboard components */
-.DashboardBox {
-  border: 1px solid #eee;
-  padding: 20px;
-
-  &-Header {
-    color: #333;
-  }
 }

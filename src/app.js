@@ -4,6 +4,9 @@ import createBrowserHistory   from 'history/lib/createBrowserHistory';
 import { syncReduxAndRouter } from 'redux-simple-router';
 import Root                   from './containers/Root';
 import configureStore         from './store/configureStore';
+import injectTapEventPlugin   from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
 
 const target  = document.getElementById('root');
 const history = createBrowserHistory();
