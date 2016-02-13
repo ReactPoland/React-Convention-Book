@@ -11,6 +11,8 @@ import { Paper, FlatButton } from 'material-ui';
 import Colors from 'material-ui/lib/styles/colors';
 import AlertWarning from 'material-ui/lib/svg-icons/alert/warning';
 
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
 import SideNav from './SideNav';
 
 const mapStateToProps = (state) => ({
@@ -22,15 +24,26 @@ const mapDispatchToProps = (dispatch) => ({
   sessionActions: bindActionCreators(sessionActions, dispatch)
 });
 
-const whiteList = ['home', 'login', 'register', 'reset-password1', 'reset-password2', 'token-not-found', 'athlete-register'];
+const whiteList = ['home', 'login', 'register', 'reset-password1', 'reset-password2', 'token-not-found'];
+const fullWidth = whiteList.concat(['dashboard', 'account_settings']);
+
+function isFullWidth() {
+  for(let i = fullWidth.length - 1; i >= 0; i--) {
+    if(window.location.hash.includes(fullWidth[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 const warningPanelStyles = {
   margin: '12px auto',
   width: 800,
   textAlign: 'center',
   padding: 12,
-  position: 'fixed',
-  top: 82,
+  position: 'absolute',
+  top: 0,
   left: '50%',
   transform: "translateX(-50%)"
 };
@@ -73,6 +86,16 @@ class CoreLayout extends React.Component {
     this._checkIfLoggedIn = this._checkIfLoggedIn.bind(this);
     this._checkChildName = this._checkChildName.bind(this);
     this._navigate = this._navigate.bind(this);
+
+
+    // this makes sure that classes was updated
+    // visual matter
+    const pushState = this.props.history.pushState;
+    const _this = this;
+    this.props.history.pushState = function() {
+      _this.forceUpdate();
+      pushState(...arguments);
+    }.bind(this.props.history);
   }
 
   async _checkIfLoggedIn() {
@@ -86,8 +109,8 @@ class CoreLayout extends React.Component {
     /////////// mock
     if(sessionStorage.magicToken === 'magic-login-token') {
       return this.props.sessionActions.login({
-        first: 'test',
-        last: 'admin',
+        firstName: 'test',
+        lastName: 'admin',
         role: 'admin',
         verified: false,
         profilePic: 'http://lorempixel.com/100/100/people/',
@@ -117,11 +140,16 @@ class CoreLayout extends React.Component {
   }
 
   render () {
+    const classes = ["ContentWrapper"];
+    if(isFullWidth()) {
+      classes.push('fullsize');
+    }
+
     if (this.props.session.loggedIn || this._checkChildName(whiteList)) {
       return (
         <div>
           <Header history={this.props.history} />
-          <div className="ContentWrapper">
+          <div className={classes.join(" ")}>
             <SideNav {...this.props.entireState} />
             {ConfirmEmailBox(this.props.session, this._navigate)}
             {this.props.children}

@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
 import { axiosHttpRequest } from 'utils/axiosHttpRequest';
-import { Paper, FlatButton } from 'material-ui';
+import { Paper, FlatButton, Snackbar } from 'material-ui';
 import { LoginForm } from 'components/forms/LoginForm';
+import Colors from 'material-ui/lib/styles/colors';
 
 const mapStateToProps = (state) => ({
   session: state.session
@@ -30,7 +31,7 @@ class LoginView extends React.Component {
       error: null,
       sendingRequest: true
     });
-console.log(credentials)
+
     let requestObj = {
       method: 'post',
       url: '/auth/login',
@@ -45,8 +46,8 @@ console.log(credentials)
       this.props.history.pushState(null, '/dashboard');
       sessionStorage.setItem('magicToken', 'magic-login-token');
       return this.props.actions.login({
-        first: 'test',
-        last: 'admin',
+        firstName: 'test',
+        lastName: 'admin',
         role: 'admin',
         token: 'magic-login-token'
       });
@@ -57,7 +58,7 @@ console.log(credentials)
       //Dispatch login action
       this.props.actions.login(response.data);
       //Redirect to dashboard
-      this.props.history.pushState(null, '/dashboard')
+      this.props.history.pushState(null, '/dashboard');
     } else {
       //Display error message
       let errorMessage = response.data.error ? response.data.error : response.status + ' ' + response.statusText;
@@ -69,24 +70,26 @@ console.log(credentials)
   }
 
   render() {
-    let errorMessage = this.state.error ? <h4 className='alert alert-danger'><strong>Error</strong> {this.state.error}</h4> : null;
-
     return (
       <div id='loginView'>
         <div className='form'>
-          <Paper zDepth={1} style={{padding: 16}}>
-            <h1>Log in</h1>
-            <LoginForm
-              onSubmit={this.login}
-              sendingRequest={this.state.sendingRequest} />
-          </Paper>
+          <LoginForm
+            onSubmit={this.login}
+            sendingRequest={this.state.sendingRequest} />
           <div style={{textAlign: 'center'}}>
             <Link to='/reset-password' style={{display: 'inline-block', margin: '24px auto'}}>
               <FlatButton label="Forgot password" />
             </Link>
           </div>
         </div>
-        {errorMessage}
+        <Snackbar
+          autohideDuration={5000}
+          bodyStyle={{
+            background: Colors.red800
+          }}
+          onRequestClose={() => {}}
+          open={!!this.state.error}
+          message={this.state.error} />
       </div>
     );
   }

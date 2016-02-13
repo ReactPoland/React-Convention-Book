@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500,700);
 
 @import 'base';
 @import 'vendor/normalize';
@@ -11,19 +11,9 @@ html {
   overflow-y: scroll;
 }
 
-// #root {
-//   padding-top: 100px;
-// }
-
 html, body, #root, #root > div {
   width: 100%;
 }
-
-// .main-container {
-//   position: relative;
-//   padding-left: 250px;
-//   padding-right: 25px;
-// }
 
 #dashboardView {
   margin-top: 10px;
@@ -59,7 +49,7 @@ html, body, #root, #root > div {
 #resetPasswordView1,
 #resetPasswordView2 {
   .form {
-    max-width: 400px;
+    max-width: 450px;
     margin: 0 auto;
   }
   h1 {
@@ -350,4 +340,26 @@ h4.alert {
 
 .validation-error {
   color: #f00;
+}
+
+.Content {
+  padding: 24px;
+}
+
+.ContentWrapper {
+  position: absolute;
+  top: 64px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 95%;
+  margin: 0 auto;
+  padding-top: 100px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all .3s ease-out;
+
+  &.fullsize {
+    left: 250px;
+  }
 }

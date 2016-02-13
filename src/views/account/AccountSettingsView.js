@@ -6,6 +6,8 @@ import { Link } from 'react-router';
 import { AccountSettingsForm } from 'components/forms/AccountSettingsForm';
 import { ChangePasswordForm } from 'components/forms/ChangePasswordForm';
 import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import { Snackbar } from 'material-ui';
+import Styles from 'styles/inlineStyles';
 
 const mapStateToProps = (state) => ({
   session: state.session
@@ -96,29 +98,29 @@ class AccountSettingsView extends React.Component {
   }
 
   render() {
-    let accountSuccessMessage = this.state.accountSuccess ? <h4 className='alert alert-success'>{this.state.accountSuccess}</h4> : null;
-    let passwordSuccessMessage = this.state.passwordSuccess ? <h4 className='alert alert-success'>{this.state.passwordSuccess}</h4> : null;
-    let accountErrorMessage = this.state.accountError ? <h4 className='alert alert-danger'><strong>Error</strong> {this.state.accountError}</h4> : null;
-    let passwordErrorMessage = this.state.passwordError ? <h4 className='alert alert-danger'><strong>Error</strong> {this.state.passwordError}</h4> : null;
+    const successMessage = this.state.accountSuccess || this.state.passwordSuccess;
+    const errorMessage = this.state.passwordError || this.state.accountError;
 
     return (
       <div id='accountSettingsView'>
-        <div className='row'>
+        <div className='row-fluid'>
           <div className='col-md-6'>
-            <h1>Update Account</h1>
             <AccountSettingsForm session={this.props.session} onSubmit={this._updateAccount} sendingRequest={this.state.sendingAccountRequest} />
-            {accountSuccessMessage}
-            {accountErrorMessage}
           </div>
           <div className='col-md-6'>
-            <h1>Change Password</h1>
             <ChangePasswordForm session={this.props.session} onSubmit={this._changePassword} sendingRequest={this.state.sendingPasswordRequest} />
-            {passwordSuccessMessage}
-            {passwordErrorMessage}
           </div>
         </div>
-        <hr />
-        <Link to='/'>Back To Home View</Link>
+        <Snackbar
+          open={!!successMessage}
+          message={successMessage}
+          bodyStyle={Styles.snackbar.success}
+          autoHideDuration={5000} />
+        <Snackbar
+          open={!!errorMessage}
+          message={errorMessage}
+          autoHideDuration={5000}
+          bodyStyle={Styles.snackbar.error} />
       </div>
     );
   }

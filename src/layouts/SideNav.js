@@ -85,6 +85,11 @@ function getRecipes(props) {
   return props ? props.recipes || [] : [];
 }
 
+const routes = ['train', 'menu', 'recipe', 'manage', 'post'];
+function hasMenu(route) {
+  return routes.indexOf(route) !== -1;
+}
+
 export default class SideNav extends React.Component {
   constructor(props) {
     super(props);
@@ -101,35 +106,16 @@ export default class SideNav extends React.Component {
       train: train,
       managing: managing
     }
-    switch(route) {
-      case 'dashboard':
-        props.open = null;
-        props.visible = 'all';
-        break;
-      case 'menu':
-        props.open = 'menus';
-        props.visible = 'menus';
-        break;
-      case 'train':
-        props.open = 'train';
-        props.visible = 'train';
-        break;
-      case 'managing':
-        props.open = 'managing';
-        props.visible = 'managing';
-        break;
-      case 'recipe':
-        props.open = 'recipe';
-        props.visible = 'recipe';
-        break;
-      case 'posts':
-        props.open = 'posts';
-        props.visible = 'posts';
-        break;
-      default:
-        props.open = null,
-        props.visible = null
-        break;
+
+    if(route === 'dashboard') {
+      props.open = null;
+      props.visible = 'all';
+    } else if(hasMenu(route)) {
+      props.open = route;
+      props.visible = route;
+    } else {
+      props.open = null;
+      props.visible = null;
     }
 
     return props;
@@ -148,8 +134,12 @@ export default class SideNav extends React.Component {
       : null;
 
     let classes = ['SideNav'];
-    if(props.visible !== 'all') {
+    if(props.visible !== 'all' && props.visible !== null) {
       classes.push('open');
+    }
+
+    if(props.visible === null && props.open === null) {
+      classes.push('display-none');
     }
 
     return (
@@ -158,14 +148,14 @@ export default class SideNav extends React.Component {
           prefix="post"
           items={props.posts || []}
           label="News Feed"
-          open={props.open === 'posts'}
-          visible={props.visible === 'posts' || props.visible === 'all'} />
+          open={props.open === 'post'}
+          visible={props.visible === 'post' || props.visible === 'all'} />
         <DashboardBox
           prefix="menu"
           items={props.menus || []}
           label="Menus"
-          open={props.open === 'menus'}
-          visible={props.visible === 'menus' || props.visible === 'all'} />
+          open={props.open === 'menu'}
+          visible={props.visible === 'menu' || props.visible === 'all'} />
         <DashboardBox
           prefix="task"
           items={props.schedule || []}
@@ -182,8 +172,8 @@ export default class SideNav extends React.Component {
           prefix="recipe"
           items={props.recipes || []}
           label="Recipes"
-          open={props.open === 'recipes'}
-          visible={props.visible === 'all' || props.visible === 'recipes'} />
+          open={props.open === 'recipe'}
+          visible={props.visible === 'all' || props.visible === 'recipe'} />
         {manageBox}
       </div>
     );

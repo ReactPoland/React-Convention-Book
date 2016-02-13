@@ -20,18 +20,22 @@ import MenuListView                 from 'views/menu/MenuListView';
 export default (
   <Route        component={CoreLayout} path='/'>
     <IndexRoute component={HomeView} name='home'/>
+
     <Route      component={RegisterView}  path='/register' name='register' />
     <Route      component={LoginView}  path='/login' name='login' />
-    <Route      component={DashboardView}  path='/dashboard' name='dashboard' />
     <Route      component={ResendConfirmationEmailView}  path='/resend_confirmation_email' name='resend_confirmation_email' />
     <Route      component={ChangeConfirmationEmailView}  path='/change_confirmation_email' name='change_confirmation_email' />
     <Route      component={ResetPasswordView1}  path='/reset-password' name='reset-password1' />
     <Route      component={ResetPasswordView2}  path='/reset-password/:token' name='reset-password2' />
+
     <Route      component={AccountSettingsView}  path='/account_settings' name='account_settings' />
+
+    <Route      component={DashboardView}  path='/dashboard' name='dashboard' />
     <Route      component={StaffView}  path='/staff' name='staff' />
     <Route      component={StaffMemberView}  path='/staff/:id' name='staff' />
     <Route      component={StaffInvitationView}  path='/staff-invite' name='staff-invite' />
     <Route      component={StaffRegistrationView}  path='/staff-register/:token' name='staff-register' />
+
     <Route      component={MenuListView} path="/menu/:id" name="menu-list" />
   </Route>
 );

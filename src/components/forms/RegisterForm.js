@@ -2,6 +2,7 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import { DefaultInput } from './DefaultInput';
 import { DefaultSelect } from './DefaultSelect';
+import { Paper, RaisedButton } from 'material-ui';
 
 export class RegisterForm extends React.Component {
   constructor() {
@@ -27,18 +28,27 @@ export class RegisterForm extends React.Component {
   render () {
     return (
       <Formsy.Form onSubmit={this._submit} onValid={this._enableButton} onInvalid={this._disableButton}>
-        <DefaultInput title="First name" name="FirstName" validations="isAlphanumeric" validationError="Display name must be alphanumeric and can't be blank" required/>
-        <DefaultInput title="Last name" name="LastName" validations="isAlphanumeric" validationError="Display name must be alphanumeric and can't be blank" required/>
-        <DefaultInput title="E-mail" name="Email" validations="isEmail" validationError="This is not a valid email" required/>
-        <DefaultSelect title='Gender' name='Gender' value='male' required
-          options={[
-            { value: 'male', title: 'Male' },
-            { value: 'female', title: 'Female' }
-          ]}
-        />
-        <DefaultInput title="Password" name="Password" validationError="Password can't be blank" required/>
-        <DefaultInput title="Repeat password" name="RepeatedPassword" validations="equalsField:Password" validationError="Password must match" required/>
-        <button type="submit" className='btn btn-default' disabled={!this.state.canSubmit}>{this.props.sendingRequest ? 'Sending request...' : 'Register'}</button>
+        <Paper style={{padding: 32}}>
+          <h3>Register</h3>
+          <DefaultInput title="First name" name="FirstName" validations="isAlphanumeric" validationError="Display name must be alphanumeric and can't be blank" required/>
+          <DefaultInput title="Last name" name="LastName" validations="isAlphanumeric" validationError="Display name must be alphanumeric and can't be blank" required/>
+          <DefaultInput title="E-mail" name="Email" validations="isEmail" validationError="This is not a valid email" required/>
+          <DefaultSelect title='Gender' name='Gender' value='male' required
+            options={[
+              { value: 'male', title: 'Male' },
+              { value: 'female', title: 'Female' }
+            ]}
+          />
+          <DefaultInput title="Password" type="password" name="Password" validationError="Password can't be blank" required />
+          <DefaultInput title="Repeat password" type="password" name="RepeatedPassword" validations="equalsField:Password" validationError="Password must match" required />
+          <div style={{textAlign: 'center', marginTop: 25}}>
+            <RaisedButton
+              type="submit"
+              primary={true}
+              disabled={!this.state.canSubmit}
+              label={this.props.sendingRequest ? 'Sending request...' : 'Register'} />
+          </div>
+        </Paper>
       </Formsy.Form>
     );
   }

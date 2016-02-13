@@ -5,6 +5,8 @@ import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
 import { RegisterForm } from 'components/forms/RegisterForm';
 import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import { Snackbar } from 'material-ui';
+import Styles from 'styles/inlineStyles';
 
 const mapStateToProps = (state) => ({
   session: state.session
@@ -61,29 +63,32 @@ class RegisterView extends React.Component {
   }
 
   render () {
-    let errorMessage = this.state.error ? <h4 className='alert alert-danger'><strong>Error</strong> {this.state.error}</h4> : null;
+    const error = this.state.error || '';
 
     return (
       <div id='registerView'>
         {
           !this.state.userRegistered ?
             <div className='form'>
-              <h1>Register</h1>
               <RegisterForm
                 onSubmit={this.registration}
                 sendingRequest={this.state.sendingRequest}
               />
             </div>
           :
-            <h4 className='alert alert-success'>Registration successful. Check your inbox for verification email</h4>
+            <Snackbar
+              bodyStyle={Styles.snackbar.success}
+              open={!!this.state.userRegistered}
+              message="Registration successful. Check your inbox for verification email" />
         }
-        {errorMessage}
-        <hr />
-        <Link to='/'>Back To Home View</Link>
+        <Snackbar
+          open={!!error}
+          message={error}
+          bodyStyle={Styles.snackbar.error} />
       </div>
     )
   }
-  
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterView);

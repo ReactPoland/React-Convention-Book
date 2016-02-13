@@ -1,13 +1,52 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { MobileTearSheet, List, ListItem } from 'material-ui';
+import { List, ListItem, IconMenu, MenuItem, Divider } from 'material-ui';
+import { ActionSettings } from 'material-ui/lib/svg-icons';
+import Colors from 'material-ui/lib/styles/colors';
 
-const Item = (item, prefix) => {
-  return (
-    <Link to={item.link || `/${prefix}/${item.id}`}>
-      <ListItem key={item.id} className="DashboardBox-Item" primaryText={item.title} />
-    </Link>
-  );
+function isActiveLink(item) {
+  const hash = window.location.hash;
+  return hash.includes(item.id);
+}
+
+const Item = (item, prefix, open) => {
+  const classes = ["DashboardBox-Item"];
+  const isActive = isActiveLink(item);
+  let description = null;
+  let icon = null;
+
+  if(isActive) {
+    classes.push("active");
+  }
+
+  if(!open) {
+    description = item.description;
+  }
+
+  if(open && isActive) {
+    icon = (
+      <IconMenu
+        iconButtonElement={
+          <ActionSettings color={Colors.cyan500} />
+        }>
+        <MenuItem primaryText="Edit Sections" />
+        <MenuItem primaryText="Reorder Items" />
+        <MenuItem primaryText="Add Item" />
+      </IconMenu>
+    );
+
+    return (
+      <span className={classes.join(" ")}>
+        <ListItem disabled key={item.id} primaryText={item.title} secondaryText={description} rightIcon={icon} />
+      </span>
+    );
+  } else {
+    return (
+      <Link to={item.link || `/${prefix}/${item.id}`} className={classes.join(" ")}>
+        <ListItem key={item.id} primaryText={item.title} secondaryText={description} rightIcon={icon} />
+      </Link>
+    );
+  }
 };
 
 export default class DashboardBox extends React.Component {
@@ -30,10 +69,30 @@ export default class DashboardBox extends React.Component {
     }
 
     return (
-      <List subheader={this.props.label} className={classes.join(' ')}>
+      <List className={classes.join(' ')}>
+        <ListItem
+          primaryText={this.props.label}
+          disabled
+          rightIcon={
+            this.props.open
+            ? <IconMenu
+                iconButtonElement={
+                  <ActionSettings color="#fff" />
+                }>
+
+                <MenuItem primaryText="Create Menu" />
+                <MenuItem primaryText="Edit Menu" />
+                <MenuItem primaryText="Reorder Menus" />
+                <MenuItem primaryText="Manage Sections" />
+              </IconMenu>
+            : null
+          }
+          style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />
+
+        <Divider />
         {
           items.map((item) => {
-            return Item(item, this.props.prefix);
+            return Item(item, this.props.prefix, this.props.open);
           })
         }
       </List>

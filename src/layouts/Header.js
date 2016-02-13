@@ -46,6 +46,11 @@ class Header extends React.Component {
 
     let response = await axiosHttpRequest(requestObj);
 
+    ////// mock
+    this.props.sessionActions.logout();
+    delete sessionStorage.magicToken;
+    ////// endof mock
+
     if (response.status === 200 && response.statusText === 'OK') {
       //Dispatch logout action
       this.props.sessionActions.logout();
@@ -64,27 +69,34 @@ class Header extends React.Component {
     let userIsLogged = this.props.session.loggedIn;
   	let emailIsConfirmed = this.props.session.user.verified;
     let errorMessage = this.state.error ? <h4 className="UserEntity-Error" style={{color: Colors.red300}}><strong>Error</strong> {this.state.error}</h4> : null;
+    let link = '/';
 
     //Show different links depending on user log in status
     let userEntity = (
-      <ul style={{listStyle: 'none'}}>
-        <li style={{display: 'inline-block', marginTop: 9}}><Link to="/login"><FlatButton label="Login" /></Link></li>
-        <li style={{display: 'inline-block', marginTop: 9}}><Link to="/register"><FlatButton label="Sign Up" /></Link></li>
+      <ul style={{listStyle: 'none'}} className="UserEntity-LoginBtns">
+        <li style={{display: 'inline-block', marginTop: 9}}>
+          <Link to="/login"><FlatButton label="Login" /></Link>
+        </li>
+        <li style={{display: 'inline-block', marginTop: 9}}>
+          <Link to="/register"><FlatButton label="Sign Up" /></Link>
+        </li>
       </ul>
     );
 
     if(userIsLogged) {
+      link = '/dashboard';
       userEntity = (
-        <UserHeaderEntity user={user} />
+        <UserHeaderEntity user={user} onLogout={this._handleLogOut} history={this.props.history} />
       );
     }
+
 
     return (
       <AppBar
         className="MainHeader"
         title={
           <h1 className="MainHeader-Title">
-            <Link to="/dashboard">The Restaurants Reason</Link>
+            <Link to={link}>The Restaurants Reason</Link>
           </h1>
         }
         iconClassNameLeft="display-none"

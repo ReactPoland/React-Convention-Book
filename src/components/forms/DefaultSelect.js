@@ -1,23 +1,24 @@
 import React from 'react';
-import Formsy from 'formsy-react'
+import Formsy from 'formsy-react';
+import { SelectField, MenuItem } from 'material-ui';
 
 export const DefaultSelect = React.createClass({
   mixins: [Formsy.Mixin],
-  changeValue(event) {
-    this.setValue(event.currentTarget.value);
+  changeValue(event, index, value) {
+    this.setValue(value);
   },
 
   componentWillMount() {
-    this.setValue("");
+    this.setValue(this.props.value || "");
   },
 
   render() {
-    const className = 'form-group' + (this.props.className || ' ') + (this.showRequired() ? 'required' : this.showError() ? 'error' : '');
     const errorMessage = this.getErrorMessage();
     const options = this.props.options.map((option, i) => (
-      <option key={option.title+option.value} value={option.value}>
-        {option.title}
-      </option>
+      <MenuItem
+        value={option.value}
+        key={option.title + option.value}
+        primaryText={option.title} />
     ));
 
     let placeholder = null;
@@ -28,13 +29,18 @@ export const DefaultSelect = React.createClass({
     }
 
     return (
-      <div className={className}>
-        <label htmlFor={this.props.name} className='control-label'>{this.props.title}</label>
-        <select name={this.props.name} onChange={this.changeValue} value={this.getValue()} className='form-control' tabIndex={this.props.tabindex}>
-          {placeholder}
-          {options}
-        </select>
-        <span className='validation-error'>{errorMessage}</span>
+      <div>
+        <SelectField
+          name={this.props.name}
+          tabIndex={this.props.tabindex}
+          floatingLabelText={this.props.title}
+          floatingLabelStyle={{fontWeight: 300}}
+          onChange={this.changeValue}
+          fullWidth
+          errorText={errorMessage}
+          value={this.getValue()}>
+            {options}
+        </SelectField>
       </div>
     );
   }

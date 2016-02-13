@@ -1,19 +1,36 @@
+$main-anim-duration: .5s;
+
 .SideNav {
-  width: 80%;
-  height: 80%;
   margin: 0 auto 0;
-  transition: all .7s ease-out !important;
+  transition:
+    left    $main-anim-duration ease-out $main-anim-duration,
+    right   $main-anim-duration ease-out $main-anim-duration,
+    bottom  $main-anim-duration ease-out 0s,
+    top     $main-anim-duration ease-out 0s
+    !important;
   position: fixed;
   top: 200px;
+  left: 0;
+  bottom: 0;
+  right: 0;
 
   .DashboardBox {
-    min-height: 350px;
-    height: 10%;
-    border: 1px solid #eee;
-    padding: 20px;
-    margin-bottom: 16px;
+    height: 350px;
+    border: none;//1px solid #eee;
+    opacity: 1;
     position: absolute;
-    transition: all .7s ease-out !important;
+    transition:
+      left    $main-anim-duration  ease-out $main-anim-duration,
+      right   $main-anim-duration  ease-out $main-anim-duration,
+      height  $main-anim-duration  ease-out 0s,
+      bottom  $main-anim-duration  ease-out 0s,
+      top     $main-anim-duration  ease-out 0s,
+      opacity .5s                  ease-out $main-anim-duration,
+      z-index .1s                  ease-out 0s
+      !important;
+    box-shadow:
+      0 1px 6px rgba(0, 0, 0, 0.12),
+      0 1px 4px rgba(0, 0, 0, 0.24);
 
     &-Header {
       color: #333;
@@ -25,54 +42,75 @@
     }
 
     &:nth-child(1) {
-      left: 0;
+      left: 3%;
       top: 0;
-      right: 68%;
+      right: 67%;
     }
 
     &:nth-child(2) {
-      left: 33%;
+      left: 35%;
       top: 0;
       right: 35%;
+      bottom: 0;
     }
 
     &:nth-child(3) {
-      left: 66%;
+      left: 67%;
       top: 0;
-      right: 0;
+      right: 3%;
     }
 
     &:nth-child(4) {
-      left: 0;
-      top: 360px;
-      right: 68%;
+      left: 3%;
+      top: 370px;
+      right: 67%;
     }
 
     &:nth-child(5) {
-      left: 33%;
-      top: 360px;
+      left: 35%;
+      top: 370px;
       right: 35%;
     }
 
     &:nth-child(6) {
-      left: 66%;
-      top: 360px;
-      right: 0;
+      left: 67%;
+      top: 370px;
+      right: 3%;
+    }
+
+    &-Item {
+      &.active {
+        font-weight: 700;
+        > div > span {
+          background-color: rgba(0,0,0,.12) !important;
+        }
+      }
     }
 
     &.display-none {
-      display: none;
-      visibility: hidden;
+      transition: .5s ease-out 0s !important;
+      opacity: 0;
     }
   }
 
-  &.open {
-    width: 250px;
-    top: 0px;
+  &.display-none {
+    display: none;
+  }
+
+  &.open {//.SideNav
+    top: 0;
     bottom: 0;
     left: 0;
-    margin-top: 0;
+    right: calc(100vw - 250px);
     height: 100%;
+    padding: 24px;
+    position: fixed;
+    transition:
+      left    $main-anim-duration ease-out 0s,
+      right   $main-anim-duration ease-out 0s,
+      bottom  $main-anim-duration ease-out $main-anim-duration,
+      top     $main-anim-duration ease-out $main-anim-duration
+      !important;
 
     & + .Content {
       margin-left: 250px;
@@ -82,27 +120,24 @@
       display: none;
     }
 
-    .open {
-      z-index: 1100;
+    .DashboardBox.open {
+      z-index: 1101;
+      height: 100%;
       top: 64px;
-      right: auto;
+      right: 0;
       left: 0;
-      width: 250px;
-      min-height: 100%;
+      bottom: 0;
       margin-bottom: 0;
-      border-left: none;
+      border: none;
+      transition:
+        left    $main-anim-duration  ease-out 0s,
+        right   $main-anim-duration  ease-out 0s,
+        height  $main-anim-duration  ease-out $main-anim-duration,
+        bottom  $main-anim-duration  ease-out $main-anim-duration,
+        top     $main-anim-duration  ease-out $main-anim-duration,
+        opacity .5s                  ease-out $main-anim-duration,
+        z-index .1s                  ease-out $main-anim-duration
+        !important;
     }
   }
-}
-
-.Content {
-  width: 80%;
-  padding-left: 150px;
-}
-
-.ContentWrapper {
-  position: relative;
-  width: 80%;
-  margin: 0 auto;
-  padding-top: 100px;
 }

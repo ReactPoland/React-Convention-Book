@@ -2,6 +2,7 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import { DefaultInput } from './DefaultInput';
 import { DefaultSelect } from './DefaultSelect';
+import { RaisedButton, Paper } from 'material-ui';
 
 export class ChangePasswordForm extends React.Component {
   constructor() {
@@ -27,9 +28,18 @@ export class ChangePasswordForm extends React.Component {
   render() {
     return (
       <Formsy.Form onSubmit={this._submit} onValid={this._enableButton} onInvalid={this._disableButton}>
-        <DefaultInput name='OldPassword' title='Old Password' required />
-        <DefaultInput name='NewPassword' title='New Password' required />
-        <button type='submit' className='btn btn-default' disabled={!this.state.canSubmit}>{this.props.sendingRequest ? 'Sending request...' : 'Change Password'}</button>
+        <Paper style={{padding: 32}}>
+          <h3>Change password</h3>
+          <DefaultInput name='OldPassword' title='Old Password' type="password" required />
+          <DefaultInput name='NewPassword' title='New Password' type="password" required />
+          <div style={{textAlign: 'center'}}>
+            <RaisedButton
+              primary={true}
+              type='submit'
+              disabled={!this.state.canSubmit}
+              label={this.props.sendingRequest ? 'Sending request...' : 'Change Password'} />
+          </div>
+        </Paper>
       </Formsy.Form>
     );
   }
