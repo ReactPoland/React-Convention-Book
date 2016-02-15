@@ -6,8 +6,8 @@ import { createReducer } from '../utils';
 
 // model is completely imporvised for now
 // MAKE IT RIGHT LATER!
-const initialState = {
-  recipes: [{
+const initialState = new Map([
+  ["7003244936931878", {
     id: "7003244936931878",
     title: 'Sandwich',
     price: 12.25,
@@ -25,7 +25,7 @@ const initialState = {
       amount: 5,
       unit: 'g'
     }]
-  }, {
+  }], ["7975821618456393", {
     id: "7975821618456393",
     title: 'Spaghetti Bolognese',
     price: 15,
@@ -43,7 +43,7 @@ const initialState = {
       amount: 100,
       unit: 'ml'
     }]
-  }, {
+  }], ["7016743689309806", {
     id: "7016743689309806",
     title: 'Salad',
     price: 30,
@@ -54,7 +54,7 @@ const initialState = {
       unit: 'kg'
     }]
   }]
-};
+]);
 
 export default createReducer(initialState, {
   // add action handlers when needed

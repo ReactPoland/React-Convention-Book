@@ -1,8 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { List, ListItem, IconMenu, MenuItem, Divider } from 'material-ui';
-import { ActionSettings } from 'material-ui/lib/svg-icons';
 import Colors from 'material-ui/lib/styles/colors';
+import {
+  ActionSettings,
+  EditorModeEdit,
+  ContentAdd,
+  ActionSwapVert,
+  ActionBuild
+} from 'material-ui/lib/svg-icons'
 
 function isActiveLink(item) {
   const hash = window.location.hash;
@@ -29,9 +35,15 @@ const Item = (item, prefix, open) => {
         iconButtonElement={
           <ActionSettings color={Colors.cyan500} />
         }>
-        <MenuItem primaryText="Edit Sections" />
-        <MenuItem primaryText="Reorder Items" />
-        <MenuItem primaryText="Add Item" />
+        <MenuItem
+          primaryText="Edit Sections"
+          rightIcon={<EditorModeEdit />} />
+        <MenuItem
+          primaryText="Reorder Items"
+          rightIcon={<ActionSwapVert />} />
+        <MenuItem
+          primaryText="Add Item"
+          rightIcon={<ContentAdd />} />
       </IconMenu>
     );
 
@@ -58,14 +70,43 @@ export default class DashboardBox extends React.Component {
     let { items } = this.props || {items: []};
     let classes = ['DashboardBox'];
 
+
     if(!this.props.open) {
-      items = (items || []).slice(0, 6);
+      if(items instanceof Map) {
+        const items2 = [];
+        let limit = 6;
+
+        for(let item of items.keys()) {
+          if(limit--) {
+            items2.push(items.get(item));
+          } else {
+            break;
+          }
+        }
+
+        items = items2;
+      } else {
+        items = (items || []).slice(0, 6);
+      }
     } else {
       classes.push('open');
     }
 
     if(!this.props.visible) {
       classes.push('display-none');
+    }
+
+    let menuItems = [];
+    items.forEach((item) => {
+      menuItems.push(Item(item, this.props.prefix, this.props.open));
+    });
+
+    let staticLink = null;
+    if(this.props.prefix === 'menu') {
+      staticLink = (
+        Item({id: 'library', title: 'Library'}, this.props.prefix, this.props.open)
+      );
+      menuItems = menuItems.slice(0, 5);
     }
 
     return (
@@ -76,25 +117,34 @@ export default class DashboardBox extends React.Component {
           rightIcon={
             this.props.open
             ? <IconMenu
+                menuStyle={{
+                  width: 200
+                }}
                 iconButtonElement={
                   <ActionSettings color="#fff" />
                 }>
 
-                <MenuItem primaryText="Create Menu" />
-                <MenuItem primaryText="Edit Menu" />
-                <MenuItem primaryText="Reorder Menus" />
-                <MenuItem primaryText="Manage Sections" />
+                <MenuItem
+                  primaryText="Create Menu"
+                  rightIcon={<ContentAdd />} />
+                <MenuItem
+                  primaryText="Edit Menu"
+                  rightIcon={<EditorModeEdit />} />
+                <MenuItem
+                  primaryText="Reorder Menus"
+                  rightIcon={<ActionSwapVert />} />
+                <MenuItem
+                  primaryText="Manage Sections"
+                  rightIcon={<ActionBuild />} />
               </IconMenu>
             : null
           }
           style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />
 
         <Divider />
-        {
-          items.map((item) => {
-            return Item(item, this.props.prefix, this.props.open);
-          })
-        }
+
+        { staticLink }
+        { menuItems }
       </List>
     );
   }

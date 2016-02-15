@@ -58,7 +58,7 @@ const iconStyles = {
 
 const ConfirmEmailBox = (state, navigate) => {
   return !state.user.verified && state.loggedIn ?
-    <Paper zDepth={1} style={warningPanelStyles}>
+    <Paper zDepth={1} style={warningPanelStyles} className="InfoBox">
       <AlertWarning
         style={iconStyles}
         color={Colors.yellow500} />

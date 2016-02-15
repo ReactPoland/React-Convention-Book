@@ -4,15 +4,29 @@
 @import 'vendor/normalize';
 
 /* individual components */
+@import 'components/add-section';
+@import 'components/excerpt';
 @import 'components/header';
+@import 'components/menu-list';
 @import 'components/sidenav';
 
 html {
   overflow-y: scroll;
 }
 
-html, body, #root, #root > div {
+html,
+body,
+#root,
+#root > div,
+#root > div > div,
+.ContentWrapper,
+.ContentWrapper > .SideNav ~ div:not(.InfoBox) {
   width: 100%;
+  height: 100%;
+}
+
+body::-webkit-scrollbar {
+  width: 0 !important;
 }
 
 #dashboardView {
@@ -55,6 +69,14 @@ html, body, #root, #root > div {
   h1 {
     text-align: center;
   }
+}
+
+#loginView {
+  margin-top: 100px;
+}
+
+.mt100 {
+  margin-top: 100px;
 }
 
 h4.alert {
@@ -352,14 +374,30 @@ h4.alert {
   right: 0;
   bottom: 0;
   left: 0;
-  max-width: 95%;
   margin: 0 auto;
-  padding-top: 100px;
   overflow-y: auto;
   overflow-x: hidden;
   transition: all .3s ease-out;
+  max-height: calc(100vh - 64px);
 
   &.fullsize {
     left: 250px;
+    max-width: calc(100vw - 250px);
   }
+}
+
+#accountSettingsView,
+.MenuList {
+  margin-top: 100px;
+}
+
+.ViewLoaderWrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

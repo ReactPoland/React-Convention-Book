@@ -2,6 +2,7 @@ $main-anim-duration: .5s;
 
 .SideNav {
   margin: 0 auto 0;
+  z-index: 1100;
   transition:
     left    $main-anim-duration ease-out $main-anim-duration,
     right   $main-anim-duration ease-out $main-anim-duration,

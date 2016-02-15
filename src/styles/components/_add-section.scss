@@ -1,0 +1,15 @@
+.AddSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  &-Sheet {
+    text-align: center;
+    padding: 24px 24px 8px 24px;
+  }
+
+  &-CTAHeader {
+    margin-bottom: 24px;
+  }
+}

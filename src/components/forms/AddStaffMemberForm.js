@@ -1,9 +1,8 @@
 import React from 'react';
-import { Form, Decorator as FormsyDecorator } from 'formsy-react';
+import { Form } from 'formsy-react';
 import { DefaultInput } from './DefaultInput';
 import { DefaultSelect } from './DefaultSelect';
 
-// @FormsyDecorator()
 class AddStaffMemberForm extends React.Component {
   constructor(props) {
     super(props);
@@ -38,12 +37,6 @@ class AddStaffMemberForm extends React.Component {
       canSubmit: true
     });
   }
-
- /*
-    TODO:
-    - form validation (patterns etc)
-    - check if mails match
-  */
 
   render() {
     return (

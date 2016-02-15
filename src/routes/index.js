@@ -15,7 +15,10 @@ import StaffView                    from 'views/staff/StaffView';
 import StaffMemberView              from 'views/staff/StaffMemberView';
 import StaffInvitationView          from 'views/staff/StaffInvitationView';
 import StaffRegistrationView        from 'views/staff/StaffRegistrationView';
-import MenuListView                 from 'views/menu/MenuListView';
+
+import Menus                        from 'views/menu/Main';
+import MenuDetailView               from 'views/menu/MenuDetailView';
+import MenuLibraryView              from 'views/menu/MenuLibraryView';
 
 export default (
   <Route        component={CoreLayout} path='/'>
@@ -30,12 +33,16 @@ export default (
 
     <Route      component={AccountSettingsView}  path='/account_settings' name='account_settings' />
 
+    <Route component={Menus} path='/menu' name="menu">
+        <Route component={MenuLibraryView} path="/menu/library" name="menu-library" />
+        <Route component={MenuDetailView} path="/menu/:id" name="menu-list" />
+    </Route>
+
     <Route      component={DashboardView}  path='/dashboard' name='dashboard' />
     <Route      component={StaffView}  path='/staff' name='staff' />
     <Route      component={StaffMemberView}  path='/staff/:id' name='staff' />
     <Route      component={StaffInvitationView}  path='/staff-invite' name='staff-invite' />
     <Route      component={StaffRegistrationView}  path='/staff-register/:token' name='staff-register' />
 
-    <Route      component={MenuListView} path="/menu/:id" name="menu-list" />
   </Route>
 );
