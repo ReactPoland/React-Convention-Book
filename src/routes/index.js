@@ -17,8 +17,9 @@ import StaffInvitationView          from 'views/staff/StaffInvitationView';
 import StaffRegistrationView        from 'views/staff/StaffRegistrationView';
 
 import Menus                        from 'views/menu/Main';
-import MenuDetailView               from 'views/menu/MenuDetailView';
 import MenuLibraryView              from 'views/menu/MenuLibraryView';
+import MenuSectionsView             from 'views/menu/MenuSectionsView';
+import MenuDetailView               from 'views/menu/MenuDetailView';
 
 export default (
   <Route        component={CoreLayout} path='/'>
@@ -35,6 +36,7 @@ export default (
 
     <Route component={Menus} path='/menu' name="menu">
         <Route component={MenuLibraryView} path="/menu/library" name="menu-library" />
+        <Route component={MenuSectionsView} path="/menu/sections" name="menu-sections" />
         <Route component={MenuDetailView} path="/menu/:id" name="menu-list" />
     </Route>
 

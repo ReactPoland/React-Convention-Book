@@ -7,6 +7,7 @@ export const DefaultInput = React.createClass({
   changeValue(event) {
     this.setValue(event.currentTarget[this.props.type === 'checkbox' ? 'checked' : 'value']);
   },
+
   render() {
     const errorMessage = this.getErrorMessage();
 
@@ -16,10 +17,13 @@ export const DefaultInput = React.createClass({
           floatingLabelText={this.props.title}
           floatingLabelStyle={{fontWeight: 300}}
           fullWidth
+          autoFocus={this.props.autoFocus}
+          ref={this.props.name}
           errorText={errorMessage}
           type={this.props.type || 'text'}
           name={this.props.name}
           onChange={this.changeValue}
+          onBlur={this.props.onBlur}
           required={this.props.required}
           defaultValue={this.props.value || this.getValue()} />
         {this.props.children}

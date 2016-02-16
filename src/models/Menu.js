@@ -6,8 +6,26 @@ export default class Menu extends Model {
     super(menu);
 
     this.type = 'Menu';
-    this.sections = (menu.sections || []).map((section) => {
-      return new MenuSection(section);
-    });
+    this.sections = (menu.sections || []).map((section) => ({
+      id: section.id,
+      items: (section.items || []).map((item) => item)
+    }));
+  }
+
+  formatForWire() {
+    const forWire = super.formatForWire();
+
+    if(this.sections) {
+      if(Array.isArray(this.sections)) {
+        forWire.sections = this.sections.map(
+          (section) => ({
+            id: section.id,
+            items: (section.items || []).map((item) => item)
+          })
+        );
+      }
+    }
+
+    return forWire;
   }
 }

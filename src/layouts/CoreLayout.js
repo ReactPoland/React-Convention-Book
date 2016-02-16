@@ -16,8 +16,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import SideNav from './SideNav';
 
 const mapStateToProps = (state) => ({
-  entireState: state,
-  session: state.session
+  ...state
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -150,7 +149,7 @@ class CoreLayout extends React.Component {
         <div>
           <Header history={this.props.history} />
           <div className={classes.join(" ")}>
-            <SideNav {...this.props.entireState} />
+            <SideNav {...this.props} />
             {ConfirmEmailBox(this.props.session, this._navigate)}
             {this.props.children}
           </div>

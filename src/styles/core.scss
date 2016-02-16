@@ -401,3 +401,17 @@ h4.alert {
   justify-content: center;
   align-items: center;
 }
+
+.TableRow {
+  &--no_checkbox {
+    th:first-child {
+      display: none !important;
+    }
+  }
+}
+
+.TableColumn {
+  &--actions {
+    width: 130px !important;
+  }
+}

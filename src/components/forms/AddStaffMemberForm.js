@@ -31,7 +31,6 @@ class AddStaffMemberForm extends React.Component {
     });
   }
 
-
   _enableButton() {
     this.setState({
       canSubmit: true

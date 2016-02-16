@@ -9,7 +9,8 @@ import * as actions from 'actions';
 import rolesUtils from 'utils/roles';
 
 import Loader from 'decorators/Loader';
-import DashboardBox from 'components/dashboard/DashboardBox';
+import SidenavList from 'components/sidenav/SidenavList';
+import MenuEntity from 'layouts/SidenavEntities/MenuEntity';
 
 const mapStateToProps = (state) => ({
   ...state
@@ -193,7 +194,7 @@ class SideNav extends React.Component {
     const currentRoute = getCurrentRoute();
     const props = this._getProps(currentRoute);
     const manageBox = showManageBox ?
-      <DashboardBox
+      <SidenavList
         items={props.managing || []}
         label="Manage"
         open={props.open === 'managing'}
@@ -215,27 +216,28 @@ class SideNav extends React.Component {
 
     return (
       <div className={classes.join(" ")}>
-        <DashboardBox
+        <SidenavList
           prefix="post"
           items={props.posts || []}
           label="News Feed"
           {...openOrVisible(props, 'post')} />
-        <DashboardBox
+        <MenuEntity
+          {...this.props}
           prefix="menu"
           items={props.menus || []}
           label="Menus"
           {...openOrVisible(props, 'menu')} />
-        <DashboardBox
+        <SidenavList
           prefix="task"
           items={props.schedule || []}
           label="Schedule"
           {...openOrVisible(props, 'schedule')} />
-        <DashboardBox
+        <SidenavList
           prefix="train"
           items={props.train || []}
           label="Learn/Train"
           {...openOrVisible(props, 'train')} />
-        <DashboardBox
+        <SidenavList
           prefix="recipe"
           items={props.recipes || []}
           label="Recipes"
