@@ -96,7 +96,7 @@ class Header extends React.Component {
         className="MainHeader"
         title={
           <h1 className="MainHeader-Title">
-            <Link to={link}>The Restaurants Reason</Link>
+            <Link to={link}>The Restaurant Reason</Link>
           </h1>
         }
         iconClassNameLeft="display-none"

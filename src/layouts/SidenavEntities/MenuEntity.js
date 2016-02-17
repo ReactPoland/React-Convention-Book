@@ -19,6 +19,7 @@ import SidenavListItem from 'components/sidenav/SidenavListItem';
 import AddMenuModal from 'components/menu/modals/AddMenuModal';
 import EditMenusModal from 'components/menu/modals/EditMenusModal';
 import ReorderMenusModal from 'components/menu/modals/ReorderMenusModal';
+import EditMenuSectionsModal from 'components/menu/modals/EditMenuSectionsModal';
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
@@ -34,9 +35,11 @@ export default class MenuEntity extends React.Component {
     this.onAddMenu = this.onAddMenu.bind(this);
     this.onUpdateMenu = this.onUpdateMenu.bind(this);
     this.onDeleteMenu = this.onDeleteMenu.bind(this);
+    this.onReorderMenus = this.onReorderMenus.bind(this);
+    this.onMenuSectionsReorder = this.onMenuSectionsReorder.bind(this);
 
     this.state = {
-      modal: null//'reorder-menus'
+      modal: null
     };
   }
 
@@ -50,19 +53,52 @@ export default class MenuEntity extends React.Component {
     }
   }
 
+  _onMenuListItemAction(event, value) {
+    const { id } = this.props.params;
+    const menu = this.props.menu.get(id);
+
+    this.setState({
+      menuInEdit: menu,
+      modal: value
+    });
+  }
+
   onAddMenu(menu) {
-    console.log('#################\nCALL API\n#################');
+    console.log('\n#################\nCALL API: ADD MENU\n#################\n');
     this.props.actions.menu.add(menu.formatForWire());
   }
 
   onUpdateMenu(menu) {
-    console.log('#################\nCALL API\n#################');
+    console.log('\n#################\nCALL API: UPDATE MENU\n#################\n');
     this.props.actions.menu.update(menu.formatForWire());
   }
 
   onDeleteMenu(id) {
-    console.log('#################\nCALL API\n#################');
+    console.log('\n#################\nCALL API: DELETE MENU\n#################\n');
     this.props.actions.menu.delete(id);
+  }
+
+  onReorderMenus(order) {
+    console.log('\n#################\nCALL API: CHANGE MENU ORDER\n#################\n');
+    order = order.map((item) => item.id);
+    this.props.actions.menu.reorder(order);
+  }
+
+  onMenuSectionsReorder(newOrder) {
+    console.log('\n#################\nCALL API: UPDATE MENU\n#################\n');
+    const currentMenu = this.state.menuInEdit;
+    const newSections = newOrder.map((order) => {
+      const sectionExistedAlready = currentMenu.sections.find((section) => section.id === order.id);
+      const menuItems = sectionExistedAlready ? sectionExistedAlready.items : [];
+
+      return {
+        id: order.id,
+        items: menuItems
+      };
+    });
+
+    currentMenu.sections = newSections;
+    this.props.actions.menu.update(currentMenu.formatForWire());
   }
 
   render() {
@@ -108,16 +144,20 @@ export default class MenuEntity extends React.Component {
 
     const itemMenuComponent = (
       <IconMenu
+        onChange={this._onMenuListItemAction.bind(this)}
         iconButtonElement={
           <ActionSettings color={Colors.cyan500} />
         }>
         <MenuItem
           primaryText="Edit Sections"
+          value="edit-menu-sections"
           rightIcon={<EditorModeEdit />} />
         <MenuItem
           primaryText="Reorder Items"
+          value="reorder-menu-items"
           rightIcon={<ActionSwapVert />} />
         <MenuItem
+          value="add-menu-item"
           primaryText="Add Item"
           rightIcon={<ContentAdd />} />
       </IconMenu>
@@ -148,8 +188,18 @@ export default class MenuEntity extends React.Component {
           open={this.state.modal === 'edit-menus'} />
 
         <ReorderMenusModal
-          open={this.state.modal == 'reorder-menus'}
-          menus={this.props.menu} />
+          open={this.state.modal === 'reorder-menus'}
+          menus={this.props.menu}
+          onHide={this.setState.bind(this, {modal: null})}
+          onDone={this.onReorderMenus} />
+
+        <EditMenuSectionsModal
+          open={this.state.modal === 'edit-menu-sections'}
+          menu={this.state.menuInEdit}
+          fullSections={this.props.section}
+          onDone={this.onMenuSectionsReorder}
+          onHide={this.setState.bind(this, {modal: null})} />
+
       </SidenavList>
     );
   }

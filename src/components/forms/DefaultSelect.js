@@ -6,10 +6,17 @@ export const DefaultSelect = React.createClass({
   mixins: [Formsy.Mixin],
   changeValue(event, index, value) {
     this.setValue(value);
+    this.props.onChange && this.props.onChange(value);
   },
 
   componentWillMount() {
     this.setValue(this.props.value || "");
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.value !== this.getValue()) {
+      this.setValue(nextProps.value);
+    }
   },
 
   render() {

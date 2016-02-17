@@ -2,6 +2,15 @@ import React, { PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
 import ItemTypes from 'constants/DNDItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
+import {
+  Paper,
+  IconButton
+} from 'material-ui';
+import {
+  ActionOpenWith,
+  ActionDelete
+} from 'material-ui/lib/svg-icons';
+import Colors from 'material-ui/lib/styles/colors';
 
 /**
  *
@@ -50,13 +59,38 @@ const itemTarget = {
   }
 }
 
-const style = {
-  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
-  backgroundColor: 'white',
-  cursor: 'move'
+const paperStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  padding: '16px',
+  position: 'relative',
+  border: '1px solid ' + Colors.grey300,
+  marginTop: -1
 };
+
+const wrapperStyles = {
+  margin: 16
+};
+
+const iconStyles = {
+  position: 'absolute',
+  left: 16,
+  height: 24,
+  overflow: 'hidden'
+};
+
+const titleStyles = {
+  display: 'inline-block',
+  lineHeight: '24px',
+  marginLeft: 40
+};
+
+const deleteBtnStyles = {
+  position: 'absolute',
+  top: 6,
+  right: 8
+};
+
 
 @DropTarget(ItemTypes.ORDER_ENTITY, itemTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
@@ -71,7 +105,6 @@ export default class ReorderDraggableBox extends React.Component {
     connectDropTarget: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
-    // text: PropTypes.string.isRequired,
     index: PropTypes.number.isRequired,
     moveItem: PropTypes.func.isRequired,
     item: PropTypes.object.isRequired
@@ -82,12 +115,31 @@ export default class ReorderDraggableBox extends React.Component {
   }
 
   render() {
-    const { connectDragSource, connectDropTarget, isDragging } = this.props;
-    const opacity = isDragging ? 0 : 1;
+    const { item, connectDragSource, connectDropTarget, isDragging } = this.props;
+    const zDepth = isDragging ? 2 : 0;
+    const wrapperStyle = isDragging ? wrapperStyles : {};
+    const allowDelete = !!this.props.onDelete;
+    let deleteButton = null;
+
+    if(allowDelete) {
+      deleteButton = (
+        <IconButton style={deleteBtnStyles} onClick={this.props.onDelete.bind(this, item.id)}>
+          <ActionDelete color={Colors.grey300} hoverColor={Colors.red800} />
+        </IconButton>
+      );
+    }
 
     return connectDragSource(connectDropTarget(
-      <div style={{...style, opacity}}>
-        {this.props.item.title}
+      <div style={wrapperStyle}>
+        <Paper zDepth={zDepth} style={paperStyles}>
+          <div style={iconStyles}>
+            <ActionOpenWith
+              color={isDragging ? Colors.cyan500 : Colors.grey500}
+              hoverColor={Colors.cyan500} />
+          </div>
+          <span style={titleStyles}>{item.title}</span>
+          {deleteButton}
+        </Paper>
       </div>
     ));
   }

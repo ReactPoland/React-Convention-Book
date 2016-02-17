@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as menuActions from 'actions/menu';
 
 import Loader from '../../decorators/Loader';
-import AddSectionPlaceholder from 'components/menu/AddSectionPlaceholder';
+import AddPlaceholder from 'components/menu/AddPlaceholder';
 import MenuSection from 'components/menu/MenuSection';
 
 const mapStateToProps = (state) => ({
@@ -59,11 +59,12 @@ class MenuDetailView extends React.Component {
 
     if(!menu.sections || !menu.sections.length) {
       return  (
-        <AddSectionPlaceholder />
+        <AddPlaceholder />
       );
     } else {
       return (
         <div className="Content MenuList">
+        <h2>{menu.title}</h2>
         {
           menu.sections.map((section) => {
             return (

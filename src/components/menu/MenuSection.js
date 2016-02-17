@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import  MenuListItem from './MenuListItem';
+import MenuListItem from './MenuListItem';
+import AddPlaceholder from 'components/menu/AddPlaceholder';
 
 const mapStateToProps = (state) => ({
   section: state.section,
@@ -27,10 +28,12 @@ class MenuSection extends React.Component {
       <div className="MenuSection">
         <h3 className="MenuSection-Title">{currentSection.title}</h3>
         {
-          items.map((item) => {
-            if(!item) return null;
-            return <MenuListItem item={item} key={item.id} />
-          })
+          items.length
+          ? items.map((item) => {
+              if(!item) return null;
+              return <MenuListItem item={item} key={item.id} />
+            })
+          : <AddPlaceholder />
         }
       </div>
     );

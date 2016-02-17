@@ -7,7 +7,8 @@ import {
   MENU_LIST,
   MENU_ADD,
   MENU_UPDATE,
-  MENU_DELETE
+  MENU_DELETE,
+  MENU_REORDER
 } from 'constants/menu';
 
 const initialState = new Map();
@@ -39,5 +40,16 @@ export default createReducer(initialState, {
 
   [MENU_DELETE]: (state, payload) => {
     return mapHelpers.removeItem(state, payload);
+  },
+
+  [MENU_REORDER]: (state, payload) => {
+    const sortArray = payload.slice();
+    const newMap = new Map();
+
+    sortArray.forEach((sortArrayItem) => {
+      newMap.set(sortArrayItem, state.get(sortArrayItem));
+    });
+
+    return newMap;
   }
 });

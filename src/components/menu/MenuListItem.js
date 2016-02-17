@@ -87,24 +87,26 @@ export default class MenuListItem extends React.Component {
           </Popover>
         </div>
         <div className="MenuItem-Right">
-          <CardTitle title={item.title}>
-            <IconMenu
-              style={menuStyle}
-              anchorOrigin={{vertical: 'top', horizontal: 'right'}}
-              targetOrigin={{vertical: 'top', horizontal: 'right'}}
-              iconButtonElement={
-                <IconButton>
-                  <ActionSettings color={Colors.grey400} />
-                </IconButton>
-              }>
-              <MenuItem
-                primaryText="Edit Item"
-                rightIcon={<EditorModeEdit />} />
-              <MenuItem
-                primaryText="Remove Item"
-                rightIcon={<ActionDelete />} />
-            </IconMenu>
-          </CardTitle>
+          <h4>
+            <CardTitle title={item.title}>
+              <IconMenu
+                style={menuStyle}
+                anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+                targetOrigin={{vertical: 'top', horizontal: 'right'}}
+                iconButtonElement={
+                  <IconButton>
+                    <ActionSettings color={Colors.grey400} />
+                  </IconButton>
+                }>
+                <MenuItem
+                  primaryText="Edit Item"
+                  rightIcon={<EditorModeEdit />} />
+                <MenuItem
+                  primaryText="Remove Item"
+                  rightIcon={<ActionDelete />} />
+              </IconMenu>
+            </CardTitle>
+          </h4>
           <CardText>
             <Excerpt text={item.description} />
           </CardText>
