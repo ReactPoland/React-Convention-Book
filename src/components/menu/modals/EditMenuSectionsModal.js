@@ -1,11 +1,18 @@
 import React from 'react';
 import {
   Dialog,
-  FlatButton
+  FlatButton,
+  FloatingActionButton
 } from 'material-ui';
+import {
+  ContentAdd
+} from 'material-ui/lib/svg-icons';
+import Colors from 'material-ui/lib/styles/colors';
 import { Form } from 'formsy-react';
 
-import { DefaultSelect } from 'components/forms/DefaultSelect';
+import { Section } from 'models';
+
+import { DefaultInput } from 'components/forms/DefaultInput';
 import ReorderItemsWrapper from 'components/dnd/ReorderItemsWrapper';
 
 export default class EditMenuSectionsModal extends React.Component {
@@ -13,6 +20,8 @@ export default class EditMenuSectionsModal extends React.Component {
     super(props);
 
     this._onDone = this._onDone.bind(this);
+    this._enableButton = this._enableButton.bind(this);
+    this._disableButton = this._disableButton.bind(this);
 
     this.state = {
       sections: this._getSections(this.props)
@@ -42,23 +51,33 @@ export default class EditMenuSectionsModal extends React.Component {
   }
 
   _onSectionAdd(value) {
-    const sections = this.state.sections.slice();
-
-    sections.push(this.props.fullSections.get(value));
-
-    this.setState({ sections });
+    value.items = [];
+    const section = new Section(value);
+    this.props.onAddSection(section);
+    this.setState({
+      addInputOpen: false
+    });
   }
 
   onSectionDelete(sectionId) {
-    const sections = this.state.sections
-      .slice()
-      .filter((section) => section.id !== sectionId);
+    this.props.onDeleteSection(sectionId);
+    // const sections = this.state.sections
+    //   .slice()
+    //   .filter((section) => section.id !== sectionId);
 
-    this.setState({sections});
+    // this.setState({sections});
   }
 
   updateOrder(newOrder) {
     this.setState({sections: newOrder});
+  }
+
+  _enableButton() {
+    this.setState({canSubmit: true});
+  }
+
+  _disableButton() {
+    this.setState({canSubmit: false});
   }
 
   render() {
@@ -89,15 +108,52 @@ export default class EditMenuSectionsModal extends React.Component {
           items={this.state.sections}
           onDelete={this.onSectionDelete.bind(this)} />
 
-        <Form style={{margin: '0 24px', maxWidth: 250}}>
-          <DefaultSelect
-            name="addSection"
-            title="Add Section"
-            placeholder="Add Section"
-            options={options}
-            onChange={this._onSectionAdd.bind(this)}
-            value={null} />
-        </Form>
+        <div style={{
+            position: 'absolute',
+            height: 100,
+            bottom: 16,
+            width: 370,
+            overflow: 'hidden'
+          }}>
+          <Form
+            ref="form"
+            style={{
+              width: 300,
+              position: 'absolute',
+              left: this.state.addInputOpen ? 64 : '-100%',
+              bottom: 8,
+              transition: 'left .3s ease-out'
+            }}
+            onSubmit={this._onSectionAdd.bind(this)}
+            onValid={this._enableButton}
+            onInvalid={this._disableButton}>
+            <DefaultInput
+              title="Section Name"
+              name="title"
+              style={{
+                width: 200
+              }}
+              required
+              placeholder="Section Name" />
+
+            <FlatButton
+              label="ok"
+              primary={true}
+              type="submit"
+              disabled={!this.state.canSubmit}
+              style={{
+                position: 'absolute',
+                right: 0,
+                bottom: 0
+              }} />
+          </Form>
+          <FloatingActionButton
+            mini={true}
+            style={{bottom: 8, left: 8, position: 'absolute'}}
+            onClick={() => this.setState({addInputOpen: !this.state.addInputOpen})}>
+            <ContentAdd color={Colors.white} />
+          </FloatingActionButton>
+        </div>
 
       </Dialog>
     );

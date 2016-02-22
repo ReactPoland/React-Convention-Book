@@ -16,7 +16,8 @@ export const DefaultInput = React.createClass({
         <TextField
           floatingLabelText={this.props.title}
           floatingLabelStyle={{fontWeight: 300}}
-          fullWidth
+          fullWidth={this.props.style && !this.props.style.width}
+          style={this.props.style}
           autoFocus={this.props.autoFocus}
           ref={this.props.name}
           errorText={errorMessage}

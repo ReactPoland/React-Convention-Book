@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { FlatButton, Paper } from 'material-ui';
 
 export default class AddSectionPlaceholder extends React.Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    onAdd: PropTypes.func.isRequired
+  }
   constructor(props) {
     super(props);
   }

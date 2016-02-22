@@ -20,6 +20,7 @@ import AddMenuModal from 'components/menu/modals/AddMenuModal';
 import EditMenusModal from 'components/menu/modals/EditMenusModal';
 import ReorderMenusModal from 'components/menu/modals/ReorderMenusModal';
 import EditMenuSectionsModal from 'components/menu/modals/EditMenuSectionsModal';
+import AddMenuItemModal from 'components/menu/modals/AddMenuItemModal';
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
@@ -36,6 +37,8 @@ export default class MenuEntity extends React.Component {
     this.onUpdateMenu = this.onUpdateMenu.bind(this);
     this.onDeleteMenu = this.onDeleteMenu.bind(this);
     this.onReorderMenus = this.onReorderMenus.bind(this);
+    this.onAddMenuSection = this.onAddMenuSection.bind(this);
+    this.onDeleteMenuSection = this.onDeleteMenuSection.bind(this);
     this.onMenuSectionsReorder = this.onMenuSectionsReorder.bind(this);
 
     this.state = {
@@ -82,6 +85,29 @@ export default class MenuEntity extends React.Component {
     console.log('\n#################\nCALL API: CHANGE MENU ORDER\n#################\n');
     order = order.map((item) => item.id);
     this.props.actions.menu.reorder(order);
+  }
+
+  onAddMenuSection(section) {
+    section.id = Math.random().toString().substring(2); // <---- remove me
+    console.log('\n#################\nCALL API: ADD MENU SECTION\n#################\n');
+    const menu = this.state.menuInEdit;
+    this.props.actions.section.add(section.formatForWire());
+
+    setTimeout(() => {
+      // this is mocked asynchronous task :)
+      // part below should happen when you get created section from API!
+      // I'll just take it from state for now
+      console.log('\n#################\nCALL API: UPDATE MENU\n#################\n');
+      menu.sections.push(section);
+      this.props.actions.menu.update(menu.formatForWire());
+    }, 100);
+  }
+
+  onDeleteMenuSection(sectionId) {
+    console.log('\n#################\nCALL API: UPDATE MENU\n#################\n');
+    const menu = this.state.menuInEdit;
+    menu.sections = menu.sections.filter((section) => section.id !== sectionId);
+    this.props.actions.menu.update(menu.formatForWire());
   }
 
   onMenuSectionsReorder(newOrder) {
@@ -197,8 +223,13 @@ export default class MenuEntity extends React.Component {
           open={this.state.modal === 'edit-menu-sections'}
           menu={this.state.menuInEdit}
           fullSections={this.props.section}
+          onAddSection={this.onAddMenuSection}
+          onDeleteSection={this.onDeleteMenuSection}
           onDone={this.onMenuSectionsReorder}
           onHide={this.setState.bind(this, {modal: null})} />
+
+        <AddMenuItemModal
+          open={this.state.modal === 'add-menu-item'} />
 
       </SidenavList>
     );
