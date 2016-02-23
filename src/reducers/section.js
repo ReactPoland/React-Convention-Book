@@ -7,7 +7,7 @@ import {
   SECTION_DELETE
 } from 'constants/section';
 
-import mapHelpers from 'utils/map-immutability-helpers';
+import mapHelpers from 'utils/mapHelpers';
 
 function getRandomId() {
   return Math.random().toString().substring(2);
@@ -17,11 +17,16 @@ const initialState = new Map();
 
 export default createReducer(initialState, {
   [SECTION_LIST]: (state, payload) => {
-    const sections = new Map();
-    (payload || []).forEach((section) => {
-      sections.set(section.id, new Section(section));
+    const keys = payload ? Object.keys(payload) : [];
+    const items = [];
+
+    keys.splice(keys.indexOf('$__path'), 1);
+
+    keys.forEach((key) => {
+      items.push(new Section(payload[key]));
     });
-    return sections;
+
+    return mapHelpers.addMultipleItems(state, items, 'id');
   },
 
   [SECTION_ADD]: (state, payload) => {

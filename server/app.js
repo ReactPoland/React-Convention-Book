@@ -1,4 +1,5 @@
 import express              from 'express';
+import falcor               from 'falcor-express';
 import webpack              from 'webpack';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
 import WebpackHotMiddleware from 'webpack-hot-middleware';
@@ -6,6 +7,7 @@ import historyApiFallback   from 'connect-history-api-fallback';
 import chalk                from 'chalk';
 import config               from '../config';
 import webpackConfig        from '../build/webpack/development_hot';
+import Router               from 'falcor-router';
 
 const paths = config.get('utils_paths');
 const compiler = webpack(webpackConfig);
@@ -13,6 +15,18 @@ const app = express();
 
 app.use(historyApiFallback({
   verbose : false
+}));
+
+app.use('src/model.json', falcor.dataSourceRoute(function(req, res) {
+ return new Router([{
+  route: 'model',
+  get: () => {
+    return {
+      path: ['model'],
+      value: "0"
+    };
+  }
+ }]);
 }));
 
 // Enable webpack middleware if the application is being

@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-import { axiosHttpRequest } from 'utils/axiosHttpRequest'
+// import { axiosHttpRequest } from 'utils/axiosHttpRequest'
+import API from 'utils/API';
 
 import StaffRegistrationForm from 'components/forms/StaffRegistrationForm'
 

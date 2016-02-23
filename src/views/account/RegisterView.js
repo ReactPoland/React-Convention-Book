@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
 import { RegisterForm } from 'components/forms/RegisterForm';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import API from 'utils/API';
 import { Snackbar } from 'material-ui';
 import Styles from 'styles/inlineStyles';
 
@@ -44,7 +44,7 @@ class RegisterView extends React.Component {
       data: credentials
     }
 
-    let response = await axiosHttpRequest(requestObj);
+    let response = await API.post(requestObj);
 
     if (response.status === 201 && response.statusText === 'Created') {
       //Display success message

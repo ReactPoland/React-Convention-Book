@@ -5,7 +5,8 @@ import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
 import { AccountSettingsForm } from 'components/forms/AccountSettingsForm';
 import { ChangePasswordForm } from 'components/forms/ChangePasswordForm';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+// import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import API from 'utils/API';
 import { Snackbar } from 'material-ui';
 import Styles from 'styles/inlineStyles';
 
@@ -44,7 +45,7 @@ class AccountSettingsView extends React.Component {
       data: formData
     }
 
-    let response = await axiosHttpRequest(requestObj);
+    let response = await API.post(requestObj);
 
     if (response.status === 200 && response.statusText === 'OK') {
       //Dispatch updateUserSettings action
@@ -77,7 +78,7 @@ class AccountSettingsView extends React.Component {
       data: formData
     }
 
-    let response = await axiosHttpRequest(requestObj);
+    let response = await API.post(requestObj);
 
     if (response.status === 200 && response.statusText === 'OK') {
       //Dispatch updateUserSettings action

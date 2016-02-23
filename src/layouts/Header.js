@@ -3,7 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+// import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import API from 'utils/API';
 
 import { FlatButton, AppBar } from 'material-ui';
 import UserHeaderEntity from 'components/UserHeaderEntity';
@@ -44,7 +45,7 @@ class Header extends React.Component {
       url: '/logout'
     }
 
-    let response = await axiosHttpRequest(requestObj);
+    let response = await API.post(requestObj);
 
     ////// mock
     this.props.sessionActions.logout();

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import mapHelpers from 'utils/map-immutability-helpers';
+import mapHelpers from 'utils/mapHelpers';
 import {
   Dialog,
   FlatButton

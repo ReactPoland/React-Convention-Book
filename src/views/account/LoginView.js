@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import API from 'utils/API';
 import { Paper, FlatButton, Snackbar } from 'material-ui';
 import { LoginForm } from 'components/forms/LoginForm';
 import Colors from 'material-ui/lib/styles/colors';
@@ -38,7 +38,7 @@ class LoginView extends React.Component {
       data: credentials
     }
 
-    let response = await axiosHttpRequest(requestObj);
+    let response = await API.post(requestObj);
 
     ///////////////////////// mock
     const {email, password} = credentials;

@@ -13,6 +13,9 @@ import {
   ActionSettings
 } from 'material-ui/lib/svg-icons';
 
+import mapHelpers from 'utils/mapHelpers';
+import API from 'utils/API';
+
 import SidenavList from 'components/sidenav/SidenavList';
 import SidenavListItem from 'components/sidenav/SidenavListItem';
 
@@ -32,18 +35,40 @@ export default class MenuEntity extends React.Component {
   constructor(props) {
     super(props);
 
-    this._onHeaderAction = this._onHeaderAction.bind(this);
-    this.onAddMenu = this.onAddMenu.bind(this);
-    this.onUpdateMenu = this.onUpdateMenu.bind(this);
-    this.onDeleteMenu = this.onDeleteMenu.bind(this);
-    this.onReorderMenus = this.onReorderMenus.bind(this);
-    this.onAddMenuSection = this.onAddMenuSection.bind(this);
-    this.onDeleteMenuSection = this.onDeleteMenuSection.bind(this);
-    this.onMenuSectionsReorder = this.onMenuSectionsReorder.bind(this);
+    this._fetchData             = this._fetchData.bind(this);
+    this._onHeaderAction        = this._onHeaderAction.bind(this);
+    this.onAddMenu              = this.onAddMenu.bind(this);
+    this.onUpdateMenu           = this.onUpdateMenu.bind(this);
+    this.onDeleteMenu           = this.onDeleteMenu.bind(this);
+    this.onReorderMenus         = this.onReorderMenus.bind(this);
+    this.onAddMenuSection       = this.onAddMenuSection.bind(this);
+    this.onDeleteMenuSection    = this.onDeleteMenuSection.bind(this);
+    this.onMenuSectionsReorder  = this.onMenuSectionsReorder.bind(this);
 
     this.state = {
       modal: null
     };
+  }
+
+  async _fetchData() {
+    const response = await API.get(
+      // I don't know yet exact number of items needed
+      // perhaps we'll need to fetch items partialy (pagination style)
+      ['restaurants', 0, 'menus', {from: 0, to: 20}, ['id', 'title', 'description', 'sections'], {from: 0, to: 100}, 'id']
+    );
+    this.props.actions.menu.menuList(response.restaurants[0].menus);
+  }
+
+  componentDidMount() {
+    if(this.props.open) {
+      this._fetchData();
+    }
+  }
+
+  componentWillUpdate(nextProps) {
+    if(nextProps.open !== this.props.open && nextProps.open) {
+      this._fetchData();
+    }
   }
 
   _onHeaderAction(event, value) {
@@ -192,6 +217,7 @@ export default class MenuEntity extends React.Component {
     const prepend = [
       SidenavListItem({}, {id: 'library', title: 'Library'}, 'menu', true),
     ];
+    const items = this.props.open ? this.props.items : mapHelpers.getFromRange(this.props.items, 0, 3);
 
     return (
       <SidenavList
@@ -199,7 +225,7 @@ export default class MenuEntity extends React.Component {
         headerComponent={header}
         staticItems={prepend}
         menuComponent={itemMenuComponent}
-        items={this.props.items}>
+        items={items}>
 
         <AddMenuModal
           open={this.state.modal === 'add-menu'}

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { ChangeConfirmationEmailForm } from 'components/forms/ChangeConfirmationEmailForm';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+// import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import API from 'utils/API';
 
 class ChangeConfirmationEmailView extends React.Component {
   constructor(props) {
@@ -41,7 +42,7 @@ class ChangeConfirmationEmailView extends React.Component {
         sendingRequest: false
       });
     }
-    
+
   }
 
   render() {

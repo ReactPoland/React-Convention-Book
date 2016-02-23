@@ -3,6 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import * as menuActions from 'actions/menu';
+import * as sectionActions from 'actions/section';
+import * as menuItemActions from 'actions/menuItem';
+
+import API from 'utils/API';
 
 import Loader from '../../decorators/Loader';
 import AddPlaceholder from 'components/menu/AddPlaceholder';
@@ -16,7 +20,11 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(menuActions, dispatch)
+  actions: {
+    menu: bindActionCreators(menuActions, dispatch),
+    section: bindActionCreators(sectionActions, dispatch),
+    menuItem: bindActionCreators(menuItemActions, dispatch),
+  }
 });
 
 @Loader()
@@ -25,9 +33,34 @@ class MenuDetailView extends React.Component {
     super(props);
     const id = this.props.params.id;
 
+    this._fetchData = this._fetchData.bind(this);
+
     this.state = {
       menu: this.props.menu.get(id)
     };
+
+    this._fetchData(id);
+  }
+
+  async _fetchData(id) {
+    const {actions} = this.props;
+    const response = await API.get(
+      ['menusById', id, 'sections', {from: 0, to: 100}, ['id', 'title', 'items'], {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl']]
+    );
+    const sections = response.menusById[id].sections;
+    const keys = response.menusById[id].sections ? Object.keys(response.menusById[id].sections) : [];
+    keys.splice(keys.indexOf('$__path'), 1);
+
+    const menuItems = keys.reduce((items, index) => {
+      const keys = sections[index].items ? Object.keys(sections[index].items) : [];
+      keys.splice(keys.indexOf('$__path'), 1);
+
+      const items2 = keys.map((index2) => sections[index].items[index2]);
+      return items.concat(items2);
+    }, []);
+
+    actions.section.sectionList(response.menusById[id].sections);
+    actions.menuItem.menuItemList(menuItems);
   }
 
   loader(props) {
@@ -41,6 +74,9 @@ class MenuDetailView extends React.Component {
 
   componentWillUpdate(nextProps, nextState) {
     this.loader(nextState);
+    if(nextProps.params.id !== this.props.params.id) {
+      this._fetchData(nextProps.params.id);
+    }
   }
 
   componentWillReceiveProps(props, state) {
@@ -69,8 +105,8 @@ class MenuDetailView extends React.Component {
           menu.sections.map((section) => {
             return (
               <MenuSection
-                sectionSketch={section}
-                key={section.id} />
+                sectionId={section}
+                key={section} />
             );
           })
         }

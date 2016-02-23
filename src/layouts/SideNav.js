@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { ListItem } from 'material-ui';
+import Colors from 'material-ui/lib/styles/colors';
 
+// import { falcorGet } from 'utils/axiosHttpRequest';
 import * as actions from 'actions';
+import API from 'utils/API';
 
 import rolesUtils from 'utils/roles';
 
@@ -74,37 +77,23 @@ function sortTasksByDate(a, b) {
 //   return props ? props.menus || [] : [];
 // }
 
-function getSchedule(props) {
-  const now = new Date();
-  const threeDays = new Date(now).setDate(now.getDate() + 3);
-  let tasks = props ? props.tasks || [] : [];
+// function getSchedule(props) {
+//   const now = new Date();
+//   const threeDays = new Date(now).setDate(now.getDate() + 3);
+//   let tasks = props ? props.tasks || [] : [];
 
-  tasks = tasks.filter((task) => task.date > now && task.date < threeDays);
-  return tasks.sort(sortTasksByDate);
-}
+//   tasks = tasks.filter((task) => task.date > now && task.date < threeDays);
+//   return tasks.sort(sortTasksByDate);
+// }
 
-function getRecipes(props) {
-  return props ? props.recipes || [] : [];
-}
+// function getRecipes(props) {
+//   return props ? props.recipes || [] : [];
+// }
 
 const routes = ['train', 'menu', 'recipe', 'manage', 'post'];
 function hasMenu(route) {
   return routes.indexOf(route) !== -1;
 }
-
-async function getFromDB({url}) {
-  const response = await axiosHttpRequest({
-    url,
-    method: 'get'
-  });
-
-  if(response.status === 200 && response.statusText === 'OK') {
-    return response;
-  } else {
-    alert('TODO: get menus error');
-  }
-}
-
 
 function openOrVisible(props, name) {
   return {
@@ -136,33 +125,17 @@ class SideNav extends React.Component {
     const { menu, menuItem, section, actions } = this.props;
 
     if(!menu.length) {
-      const menus = await getFromDB({
-        url: '/restaurant/restaurantID/menus'
-      });
+      const response = await API.get(
+        ['restaurants', 0, 'menus', {from: 0, to: 5}, ['title', 'id', 'description']]
+      );
 
-      actions.menu.menuList(menus.data);
-    }
-
-    if(!section.length) {
-      const sections = await getFromDB({
-        url: '/restaurant/restaurantID/sections'
-      });
-
-      actions.section.sectionList(sections.data);
-    }
-
-    if(!menuItem.length) {
-      const menuItems = await getFromDB({
-        url: '/restaurant/restaurantID/menuLibrary'
-      });
-
-      actions.menuItem.menuItemList(menuItems.data);
+      actions.menu.menuList(response.restaurants[0].menus);
     }
   }
 
   loader(props) {
     this.props.__showLoaderUntil
-      .bind(this, props, 'menu', 'menuItem', 'section')();
+      .bind(this, props, 'menu')();
   }
 
   _getProps(route) {
@@ -198,6 +171,7 @@ class SideNav extends React.Component {
         items={props.managing || []}
         label="Manage"
         open={props.open === 'managing'}
+        headerComponent={<ListItem primaryText='Manage' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
         visible={props.visible === 'all' || props.visible === 'managing'} />
       : null;
 
@@ -220,6 +194,7 @@ class SideNav extends React.Component {
           prefix="post"
           items={props.posts || []}
           label="News Feed"
+          headerComponent={<ListItem primaryText='News Feed' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
           {...openOrVisible(props, 'post')} />
         <MenuEntity
           {...this.props}
@@ -231,16 +206,19 @@ class SideNav extends React.Component {
           prefix="task"
           items={props.schedule || []}
           label="Schedule"
+          headerComponent={<ListItem primaryText='Schedule' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
           {...openOrVisible(props, 'schedule')} />
         <SidenavList
           prefix="train"
           items={props.train || []}
           label="Learn/Train"
+          headerComponent={<ListItem primaryText='Learn/Train' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
           {...openOrVisible(props, 'train')} />
         <SidenavList
           prefix="recipe"
           items={props.recipes || []}
           label="Recipes"
+          headerComponent={<ListItem primaryText='Recipes' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
           {...openOrVisible(props, 'recipe')} />
         {manageBox}
       </div>

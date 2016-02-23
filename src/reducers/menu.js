@@ -1,7 +1,7 @@
 import { createReducer } from '../utils';
 import { Menu } from 'models';
 
-import mapHelpers from 'utils/map-immutability-helpers';
+import mapHelpers from 'utils/mapHelpers';
 
 import {
   MENU_LIST,
@@ -19,11 +19,16 @@ function getRandomId() {
 
 export default createReducer(initialState, {
   [MENU_LIST]: (state, payload) => {
-    const menus = new Map();
-    (payload || []).forEach((menu) => {
-      menus.set(menu.id , new Menu(menu));
+    const keys = Object.keys(payload);
+    const items = [];
+
+    keys.splice(keys.indexOf('$__path'), 1);
+
+    keys.forEach((key) => {
+      items.push(new Menu(payload[key]));
     });
-    return menus;
+
+    return mapHelpers.addMultipleItems(state, items, 'id');
   },
 
   [MENU_ADD]: (state, payload) => {

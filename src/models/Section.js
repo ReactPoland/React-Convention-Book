@@ -5,7 +5,14 @@ export default class Section extends Model {
     super(section);
     this.type = 'Section';
     this.category = section.category;
-    this.items = (section.items || []).map((item) => item);
+
+    if(Array.isArray(section.items)) {
+      this.items = section.items.map((item) => item)
+    } else {
+      const keys = section.items ? Object.keys(section.items) : [];
+      keys.splice(keys.indexOf('$__path'), 1);
+      this.items = keys.map((key) => section.items[key].id);
+    }
   }
 
   formatForWire() {

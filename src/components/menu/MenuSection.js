@@ -15,11 +15,11 @@ class MenuSection extends React.Component {
   }
 
   render() {
-    const { sectionSketch, menuItem, section } = this.props;
-    if(!sectionSketch || !menuItem || !section) return <span />;
-    const currentSection = this.props.section.get(sectionSketch.id);
+    const { sectionId, menuItem, section } = this.props;
+    if(!sectionId || !menuItem || !section) return <span />;
+    const currentSection = this.props.section.get(sectionId);
     if(!currentSection) return <span />
-    const items = sectionSketch.items.map((item) => {
+    const items = currentSection.items.map((item) => {
       const id = item && typeof item === 'object' ? item.id : item;
       return menuItem.get(id);
     });

@@ -3,7 +3,7 @@ import 'styles/core.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import API from 'utils/API';
 import Header from './Header';
 import { Link } from 'react-router';
 
@@ -98,12 +98,14 @@ class CoreLayout extends React.Component {
   }
 
   async _checkIfLoggedIn() {
-    let requestObj = {
-      method: 'get',
-      url: '/v1/user/me'
-    }
+    // let requestObj = {
+    //   method: 'get',
+    //   url:
+    // }
 
-    let response = await axiosHttpRequest(requestObj);
+    let response = await API.get(
+      ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'profilePic']]
+    );
 
     /////////// mock
     if(sessionStorage.magicToken === 'magic-login-token') {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import API from 'utils/API';
 
 const mapStateToProps = (state) => ({
   session: state.session
@@ -29,7 +29,7 @@ class ResendConfirmationEmailView extends React.Component {
       url: '/v1/user/resend-verification'
     }
 
-    let response = await axiosHttpRequest(requestObj);
+    let response = await API.post(requestObj);
 
     if (response.status === 200 && response.statusText === 'OK') {
       this.setState({

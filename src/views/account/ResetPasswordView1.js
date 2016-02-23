@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { ResetPasswordForm1 } from 'components/forms/ResetPasswordForm1';
-import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+// import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import API from 'utils/API';
 
 class ResetPasswordView1 extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class ResetPasswordView1 extends React.Component {
       data: formData
     }
 
-    let response = await axiosHttpRequest(requestObj);
+    let response = await API.post(requestObj);
 
     if (response.status === 200 && response.statusText === 'OK') {
       //Display success message

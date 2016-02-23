@@ -6,7 +6,8 @@ import Formsy from 'formsy-react'
 
 import * as staffActions from 'actions/staff'
 
-import { axiosHttpRequest } from 'utils/axiosHttpRequest'
+// import { axiosHttpRequest } from 'utils/axiosHttpRequest'
+import API from 'utils/API';
 
 import { StaffInvitationForm } from 'components/forms/StaffInvitationForm'
 
@@ -44,7 +45,12 @@ class StaffInvitationView extends React.Component {
 
     /*** TEMPORARY ***/
     console.log('credentials', JSON.stringify(credentials, null, 2))
-    setTimeout(function() { this.setState({ userInvited: true, sendingRequest: false }) }.bind(this), 1000)
+    setTimeout(function() {
+      this.setState({
+        userInvited: true,
+        sendingRequest: false
+      })
+    }.bind(this), 1000);
     /*****************/
 
     // let response = await axiosHttpRequest(requestObj)
