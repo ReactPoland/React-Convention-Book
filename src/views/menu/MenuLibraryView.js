@@ -2,6 +2,9 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import API from 'utils/API';
+import * as menuItemActions from 'actions/menuItem';
+
 import Loader from 'decorators/Loader';
 import MenuListItem from 'components/menu/MenuListItem';
 
@@ -9,10 +12,23 @@ const mapStateToProps = (state) => ({
   menuItem: state.menuItem
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(menuItemActions, dispatch)
+});
+
 @Loader()
 class MenuLibraryView extends React.Component {
   constructor(props) {
     super(props);
+
+    this._fetchData();
+  }
+
+  async _fetchData() {
+    const response = await API.get(
+      ['restaurants', 0, 'menuItems', {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl']]
+    );
+    this.props.actions.menuItemList(response.restaurants[0].menuItems);
   }
 
   render() {
@@ -34,4 +50,4 @@ class MenuLibraryView extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(MenuLibraryView);
+export default connect(mapStateToProps, mapDispatchToProps)(MenuLibraryView);

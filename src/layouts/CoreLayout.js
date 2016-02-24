@@ -23,14 +23,25 @@ const mapDispatchToProps = (dispatch) => ({
   sessionActions: bindActionCreators(sessionActions, dispatch)
 });
 
-const whiteList = ['home', 'login', 'register', 'reset-password1', 'reset-password2', 'token-not-found'];
-const fullWidth = whiteList.concat(['dashboard', 'account_settings']);
+const whiteList = [
+  'home', 'login', 'register', 'reset-password1',
+  'reset-password2', 'token-not-found'
+];
+const fullWidth = whiteList.concat([
+  'dashboard', 'account-settings', 'resend-confirmation-email',
+  'change-confirmation-email', 'reset-password'
+]);
 
 function isFullWidth() {
+  console.log()
   for(let i = fullWidth.length - 1; i >= 0; i--) {
     if(window.location.hash.includes(fullWidth[i])) {
       return false;
     }
+  }
+
+  if(window.location.hash === '#/') {
+    return false;
   }
 
   return true;
@@ -66,11 +77,11 @@ const ConfirmEmailBox = (state, navigate) => {
         primary={false}
         style={{marginLeft: 24}}
         label="Resend confirmation email"
-        onClick={navigate.bind(this, '/resend_confirmation_email')} />
+        onClick={navigate.bind(this, '/resend-confirmation-email')} />
       <FlatButton
         primary={false}
         label="Change email address"
-        onClick={navigate.bind('/change_confirmation_email')} />
+        onClick={navigate.bind(this, '/change-confirmation-email')} />
     </Paper>
     : null;
 }
@@ -98,25 +109,13 @@ class CoreLayout extends React.Component {
   }
 
   async _checkIfLoggedIn() {
-    // let requestObj = {
-    //   method: 'get',
-    //   url:
-    // }
-
     let response = await API.get(
-      ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'profilePic']]
+      ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email']]
     );
 
     /////////// mock
     if(sessionStorage.magicToken === 'magic-login-token') {
-      return this.props.sessionActions.login({
-        firstName: 'test',
-        lastName: 'admin',
-        role: 'admin',
-        verified: false,
-        profilePic: 'http://lorempixel.com/100/100/people/',
-        token: 'magic-login-token'
-      });
+      return this.props.sessionActions.login(response.v1.user.me);
     }
     /////////// endof mock
 

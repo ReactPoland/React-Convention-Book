@@ -1,67 +1,65 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { ResetPasswordForm1 } from 'components/forms/ResetPasswordForm1';
-// import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import { Snackbar, Paper } from 'material-ui';
+
 import API from 'utils/API';
+import Styles from 'styles/inlineStyles';
+
+import { ResetPasswordForm1 } from 'components/forms/ResetPasswordForm1';
+import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
 
 class ResetPasswordView1 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
+      requestError: null,
+      requestSuccess: null,
       emailSent: false,
       sendingRequest: false
     };
     this._sendResetEmail = this._sendResetEmail.bind(this);
+    this.nullifyRequestState = this.nullifyRequestState.bind(this);
   }
 
   async _sendResetEmail(formData) {
     this.setState({
-      error: null,
+      requestError: null,
+      requestSuccess: null,
       sendingRequest: true
     });
 
-    let requestObj = {
-      method: 'post',
-      url: '/auth/reset-password',
-      data: formData
-    }
+    console.log('\n#################\nCALL API: SEND PASSWORD EMAIL\n#################\n');
 
-    let response = await API.post(requestObj);
+    setTimeout(() => {
+      this.setState({
+        sendingRequest: false,
+        requestSuccess: 'We\'ve sent email to you'
+      });
+    }, 300);
+  }
 
-    if (response.status === 200 && response.statusText === 'OK') {
-      //Display success message
-      this.setState({
-        emailSent: true,
-        sendingRequest: false
-      });
-    } else {
-      //Display error message
-      let errorMessage = response.data.error ? response.data.error : response.status + ' ' + response.statusText;
-      this.setState({
-        error: errorMessage,
-        sendingRequest: false
-      });
-    }
+  nullifyRequestState() {
+    this.setState({
+      requestError: null,
+      requestSuccess: null
+    });
+    this.props.history.pushState(null, '/');
   }
 
   render() {
-    let errorMessage = this.state.error ? <h4 className='alert alert-danger'><strong>Error</strong> {this.state.error}</h4> : null;
+    const { requestSuccess, requestError } = this.state;
 
     return (
-      <div id='resetPasswordView1'>
-        {
-          !this.state.emailSent ?
-            <div className='form'>
-              <h1>Reset Password View</h1>
-              <ResetPasswordForm1 onSubmit={this._sendResetEmail} sendingRequest={this.state.sendingRequest} />
-            </div>
-          :
-            <h4 className='alert alert-success'>Check your email for reset password link</h4>
-        }
-        {errorMessage}
-        <hr />
-        <Link to='/'>Back To Home View</Link>
+      <div id='resetPasswordView1' className="mt100">
+        <Paper zDepth={2} className="text-center" style={Styles.paper.small}>
+          <h2>Reset Password</h2>
+          <ResetPasswordForm1 onSubmit={this._sendResetEmail} sendingRequest={this.state.sendingRequest} />
+        </Paper>
+
+        <ErrorSuccessMsg
+          errorMessage={requestError}
+          successMessage={requestSuccess}
+          onRequestClose={this.nullifyRequestState} />
       </div>
     );
   }

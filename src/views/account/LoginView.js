@@ -1,12 +1,15 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
-import API from 'utils/API';
 import { Paper, FlatButton, Snackbar } from 'material-ui';
-import { LoginForm } from 'components/forms/LoginForm';
 import Colors from 'material-ui/lib/styles/colors';
+
+import API from 'utils/API';
+import * as sessionActions from 'actions/session';
+import Styles from 'styles/inlineStyles';
+
+import { LoginForm } from 'components/forms/LoginForm';
 
 const mapStateToProps = (state) => ({
   session: state.session
@@ -16,6 +19,8 @@ const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(sessionActions, dispatch)
 });
 
+const onRequestClose = () => {};
+const emptyString = ' ';
 class LoginView extends React.Component {
   constructor(props) {
     super(props);
@@ -32,41 +37,17 @@ class LoginView extends React.Component {
       sendingRequest: true
     });
 
-    let requestObj = {
-      method: 'post',
-      url: '/auth/login',
-      data: credentials
-    }
-
-    let response = await API.post(requestObj);
-
     ///////////////////////// mock
     const {email, password} = credentials;
     if(email == 'admin' && password == 'test') {
       this.props.history.pushState(null, '/dashboard');
+      const response = await API.get(
+        ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email']]
+      );
       sessionStorage.setItem('magicToken', 'magic-login-token');
-      return this.props.actions.login({
-        firstName: 'test',
-        lastName: 'admin',
-        role: 'admin',
-        token: 'magic-login-token'
-      });
+      return this.props.actions.login(response.v1.user.me);
     }
     ///////////////////////// endof mock
-
-    if (response.status === 200 && response.statusText === 'OK') {
-      //Dispatch login action
-      this.props.actions.login(response.data);
-      //Redirect to dashboard
-      this.props.history.pushState(null, '/dashboard');
-    } else {
-      //Display error message
-      let errorMessage = response.data.error ? response.data.error : response.status + ' ' + response.statusText;
-      this.setState({
-        error: errorMessage,
-        sendingRequest: false
-      });
-    }
   }
 
   render() {
@@ -84,12 +65,10 @@ class LoginView extends React.Component {
         </div>
         <Snackbar
           autohideDuration={5000}
-          bodyStyle={{
-            background: Colors.red800
-          }}
-          onRequestClose={() => {}}
+          bodyStyle={Styles.snackbar.error}
+          onRequestClose={onRequestClose}
           open={!!this.state.error}
-          message={this.state.error} />
+          message={this.state.error || emptyString} />
       </div>
     );
   }

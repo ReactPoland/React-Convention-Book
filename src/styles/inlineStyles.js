@@ -8,5 +8,13 @@ export default {
     success: {
       background: Colors.green500
     }
+  },
+
+  paper: {
+    small: {
+      margin: '0 auto',
+      maxWidth: 400,
+      padding: 32
+    }
   }
 }

@@ -1,5 +1,4 @@
 import { createReducer } from '../utils';
-// import API from '../API';
 
 import {
   LOGIN,
@@ -30,7 +29,7 @@ export default createReducer(initialState, {
     /*
      * this happens when a user is logged but refresh the app,
      * then we populate the store from the localStorage in Header.js
-     */ 
+     */
     return {
       loggedIn: true,
       user: payload.response.user

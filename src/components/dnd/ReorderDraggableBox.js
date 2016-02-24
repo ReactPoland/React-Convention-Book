@@ -123,7 +123,7 @@ export default class ReorderDraggableBox extends React.Component {
 
     if(allowDelete) {
       deleteButton = (
-        <IconButton style={deleteBtnStyles} onClick={this.props.onDelete.bind(this, item.id)}>
+        <IconButton style={deleteBtnStyles} onClick={this.props.onDelete.bind(this, item)}>
           <ActionDelete color={Colors.grey300} hoverColor={Colors.red800} />
         </IconButton>
       );

@@ -1,18 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { ResetPasswordForm2 } from 'components/forms/ResetPasswordForm2';
-// import { axiosHttpRequest } from 'utils/axiosHttpRequest';
+import { Snackbar, Paper } from 'material-ui';
+
 import API from 'utils/API';
+import Styles from 'styles/inlineStyles';
+
+import { ResetPasswordForm2 } from 'components/forms/ResetPasswordForm2';
+import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
 
 class ResetPasswordView2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      success: null,
-      error: null,
+      requestSuccess: null,
+      requestError: null,
       sendingRequest: false
     };
     this._changePassword = this._changePassword.bind(this);
+    this.nullifyRequestState = this.nullifyRequestState.bind(this);
   }
 
   async _changePassword(formData) {
@@ -22,46 +27,37 @@ class ResetPasswordView2 extends React.Component {
       sendingRequest: true
     });
 
-    let requestObj = {
-      method: 'post',
-      url: '/auth/reset-password/' + this.props.routeParams.token,
-      data: {
-        Password: formData.Password
-      }
-    }
+    console.log('\n#################\nCALL API: SEND PASSWORD EMAIL\n#################\n');
 
-    let response = await API.post(requestObj);
+    setTimeout(() => {
+      this.setState({
+        sendingRequest: false,
+        requestSuccess: 'Password successfully changed'
+      });
+    }, 300);
+  }
 
-    if (response.status === 200 && response.statusText === 'OK') {
-      //Display success message
-      this.setState({
-        success: 'Password changed',
-        sendingRequest: false
-      });
-    } else {
-      //Display error message
-      let errorMessage = response.data.error ? response.data.error : response.status + ' ' + response.statusText;
-      this.setState({
-        error: errorMessage,
-        sendingRequest: false
-      });
-    }
+  nullifyRequestState() {
+    this.setState({
+      requestSuccess: null,
+      requestError: null
+    });
+    this.props.history.pushState(null, '/');
   }
 
   render() {
-    let successMessage = this.state.success ? <h4 className='alert alert-success'> {this.state.success}</h4> : null,
-        errorMessage = this.state.error ? <h4 className='alert alert-danger'><strong>Error</strong> {this.state.error}</h4> : null;
-
+    const { requestSuccess, requestError } = this.state;
     return (
-      <div id='resetPasswordView2'>
-        <div className='form'>
-          <h1>Input new password</h1>
+      <div id='resetPasswordView2' className="mt100">
+        <Paper zDepth={2} className="text-center" style={Styles.paper.small}>
+          <h2>Type new password</h2>
           <ResetPasswordForm2 onSubmit={this._changePassword} sendingRequest={this.state.sendingRequest} />
-        </div>
-        {successMessage}
-        {errorMessage}
-        <hr />
-        <Link to='/'>Back To Home View</Link>
+        </Paper>
+
+        <ErrorSuccessMsg
+          errorMessage={requestError}
+          successMessage={requestSuccess}
+          onRequestClose={this.nullifyRequestState} />
       </div>
     );
   }

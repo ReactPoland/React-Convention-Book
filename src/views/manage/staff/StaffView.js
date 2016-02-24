@@ -1,11 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import staffActions from '../../actions/staff';
-import StaffTable from 'components/staff/StaffTable';
-import Filter from 'components/Filter';
-import AddStaffMemberForm from 'components/forms/AddStaffMemberForm';
 import { bindActionCreators } from 'redux';
+import { RaisedButton } from 'material-ui';
+
+import staffActions from 'actions/staff';
+import API from 'utils/API';
+import mapHelpers from 'utils/mapHelpers';
+
+import Filter from 'components/Filter';
+import StaffTable from 'components/staff/StaffTable';
+import AddStaffMemberForm from 'components/forms/AddStaffMemberForm';
 
 const mapStateToProps = (state) => ({
   session: state.session,
@@ -35,21 +40,17 @@ class StaffView extends React.Component {
   }
 
   onAddMember(member) {
-
-    // :D
-    member.status = 200;
-    member.statusText = 'OK';
     const response = member;
 
-    if(response.status === 200 && response.statusText === 'OK') {
-      response.Id = Math.random();
+    console.log('\n#################\nCALL API: INVITE STAFF MEMBER\n#################\n');
 
-      this.props.actions.addStaff(response);
-      this._showSuccess(member);
-      this.setState({
-        showAddForm: false
-      });
-    }
+    response.Id = Math.random();
+
+    this.props.actions.addStaff(response);
+    this._showSuccess(member);
+    this.setState({
+      showAddForm: false
+    });
   }
 
   _showSuccess({FirstName = "", LastName = ""}) {
@@ -89,22 +90,21 @@ class StaffView extends React.Component {
     }
 
     return (
-      <div id='staffView'>
+      <div id='staffView' className="mt100 Content">
         <div className='row'>
           <div className="col-md-7">
             {successBox}
             {addForm}
           </div>
           <div className='col-md-12' style={{paddingTop: 10, paddingBottom: 10}}>
-            <button
-              className="btn btn-default pull-left"
+            <RaisedButton
               onClick={this._showForm}
-              style={{marginRight: 15}}>
-                Add Someone
-            </button>
+              primary={true}
+              style={{float: 'left', marginRight: 15}}
+              label={"Add Someone"} />
 
             <Filter
-              data={this.props.staff}
+              data={mapHelpers.toArray(this.props.staff)}
               filterBy='LastName'
               onFilter={this._onFilter}
               placeholder='Filter last names'
@@ -116,8 +116,6 @@ class StaffView extends React.Component {
             <StaffTable staff={staff} />
           </div>
         </div>
-        <hr />
-        <Link to='/'>Back To Home View</Link>
       </div>
     );
   }

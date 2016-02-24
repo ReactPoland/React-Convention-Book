@@ -1,5 +1,6 @@
 import { createReducer } from '../utils';
 import { MenuItem } from 'models';
+import mapHelpers from 'utils/mapHelpers';
 
 import {
   MENUITEM_LIST
@@ -9,10 +10,17 @@ const initialState = new Map();
 
 export default createReducer(initialState, {
   [MENUITEM_LIST]: (state, payload) => {
-    const menuItems = new Map();
-    (payload || []).forEach((item) => {
-      menuItems.set(item.id, new MenuItem(item));
+    const keys = Object.keys(payload);
+    const pathIndex = keys.indexOf('$__path');
+
+    if(pathIndex !== -1) {
+      keys.splice(pathIndex, 1);
+    }
+
+    const newItems = keys.map((key) => {
+      return new MenuItem(payload[key]);
     });
-    return menuItems;
+
+    return mapHelpers.addMultipleItems(state, newItems);
   }
 });

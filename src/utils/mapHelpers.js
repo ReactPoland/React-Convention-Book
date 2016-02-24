@@ -25,7 +25,7 @@ const removeItem = (map, key) => {
   return newMap;
 };
 
-const addMultipleItems = (map, items, key) => {
+const addMultipleItems = (map, items, key = 'id') => {
   const newMap = duplicate(map);
   items.forEach((item) => {
     newMap.set(item[key], item);

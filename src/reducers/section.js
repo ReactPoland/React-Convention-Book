@@ -18,15 +18,17 @@ const initialState = new Map();
 export default createReducer(initialState, {
   [SECTION_LIST]: (state, payload) => {
     const keys = payload ? Object.keys(payload) : [];
-    const items = [];
+    const pathIndex = keys.indexOf('$__path');
 
-    keys.splice(keys.indexOf('$__path'), 1);
+    if(pathIndex !== -1) {
+      keys.splice(pathIndex, 1);
+    }
 
-    keys.forEach((key) => {
-      items.push(new Section(payload[key]));
+    const items = keys.map((key) => {
+      return new Section(payload[key]);
     });
 
-    return mapHelpers.addMultipleItems(state, items, 'id');
+    return mapHelpers.addMultipleItems(state, items);
   },
 
   [SECTION_ADD]: (state, payload) => {

@@ -24,6 +24,9 @@ export default class Root extends React.Component {
   }
 
   renderDevTools () {
+    // @P: I usually do not use devtools because they're annoying
+    /// comment out first 'return' to get them
+    return null;
     if (!this.props.debug) {
       return null;
     }
@@ -46,7 +49,7 @@ export default class Root extends React.Component {
           <Router history={noQueryKeyHistory}>
             {routes}
           </Router>
-          {/*this.renderDevTools()*/}
+          {this.renderDevTools()}
         </div>
       </Provider>
     );

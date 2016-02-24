@@ -37,12 +37,12 @@ function getCurrentRoute() {
 }
 
 const managing = [
-  { id: 'staff',      title: 'Staff',         link: '/staff' },
-  { id: 'reports',    title: 'Reports',       link: '/reports' },
-  { id: 'messaging',  title: 'Messaging',     link: '/message' },
-  { id: 'video',      title: 'Video Library', link: '/video' },
-  { id: 'suppliers',  title: 'Suppliers',     link: '/suppliers' },
-  { id: 'inventory',  title: 'Inventory',     link: '/inventory'}
+  { id: 'staff',      title: 'Staff',         link: '/manage/staff' },
+  { id: 'reports',    title: 'Reports',       link: '/manage/reports' },
+  { id: 'messaging',  title: 'Messaging',     link: '/manage/message' },
+  { id: 'video',      title: 'Video Library', link: '/manage/video' },
+  { id: 'suppliers',  title: 'Suppliers',     link: '/manage/suppliers' },
+  { id: 'inventory',  title: 'Inventory',     link: '/manage/inventory'}
 ];
 
 const train = [{
@@ -170,9 +170,8 @@ class SideNav extends React.Component {
       <SidenavList
         items={props.managing || []}
         label="Manage"
-        open={props.open === 'managing'}
-        headerComponent={<ListItem primaryText='Manage' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
-        visible={props.visible === 'all' || props.visible === 'managing'} />
+        headerComponent={<ListItem primaryText='Manage' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
+        {...openOrVisible(props, 'manage')} />
       : null;
 
     let classes = ['SideNav'];
@@ -194,7 +193,7 @@ class SideNav extends React.Component {
           prefix="post"
           items={props.posts || []}
           label="News Feed"
-          headerComponent={<ListItem primaryText='News Feed' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
+          headerComponent={<ListItem primaryText='News Feed' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
           {...openOrVisible(props, 'post')} />
         <MenuEntity
           {...this.props}
@@ -206,19 +205,19 @@ class SideNav extends React.Component {
           prefix="task"
           items={props.schedule || []}
           label="Schedule"
-          headerComponent={<ListItem primaryText='Schedule' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
+          headerComponent={<ListItem primaryText='Schedule' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
           {...openOrVisible(props, 'schedule')} />
         <SidenavList
           prefix="train"
           items={props.train || []}
           label="Learn/Train"
-          headerComponent={<ListItem primaryText='Learn/Train' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
+          headerComponent={<ListItem primaryText='Learn/Train' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
           {...openOrVisible(props, 'train')} />
         <SidenavList
           prefix="recipe"
           items={props.recipes || []}
           label="Recipes"
-          headerComponent={<ListItem primaryText='Recipes' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}}/>}
+          headerComponent={<ListItem primaryText='Recipes' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
           {...openOrVisible(props, 'recipe')} />
         {manageBox}
       </div>

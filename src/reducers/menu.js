@@ -20,12 +20,14 @@ function getRandomId() {
 export default createReducer(initialState, {
   [MENU_LIST]: (state, payload) => {
     const keys = Object.keys(payload);
-    const items = [];
+    const pathIndex = keys.indexOf('$__path');
 
-    keys.splice(keys.indexOf('$__path'), 1);
+    if(pathIndex !== -1) {
+      keys.splice(pathIndex, 1);
+    }
 
-    keys.forEach((key) => {
-      items.push(new Menu(payload[key]));
+    const items = keys.map((key) => {
+      return new Menu(payload[key]);
     });
 
     return mapHelpers.addMultipleItems(state, items, 'id');

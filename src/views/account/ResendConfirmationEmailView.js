@@ -1,68 +1,80 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { Snackbar, Paper, RaisedButton } from 'material-ui';
+
+import Styles from 'styles/inlineStyles';
 import API from 'utils/API';
+
+import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
 
 const mapStateToProps = (state) => ({
   session: state.session
 });
 
+const paperStyles = {
+  margin: '0 auto',
+  maxWidth: 400,
+  padding: 32
+};
+
 class ResendConfirmationEmailView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
       emailResend: false,
       sendingRequest: false
     };
+
     this._onResend = this._onResend.bind(this);
+    this.nullifyRequestState = this.nullifyRequestState.bind(this);
   }
 
   async _onResend() {
     this.setState({
-      error: null,
+      requestError: null,
       sendingRequest: true
     });
 
-    let requestObj = {
-      method: 'get',
-      url: '/v1/user/resend-verification'
-    }
+    console.log('\n#################\nCALL API: RESEND EMAIL\n#################\n');
 
-    let response = await API.post(requestObj);
+    setTimeout(() => {
+      this.setState({
+        sendingRequest: false,
+        requestSuccess: 'Email sent'
+      });
+    }, 300);
+  }
 
-    if (response.status === 200 && response.statusText === 'OK') {
-      this.setState({
-        emailResend: true,
-        sendingRequest: false
-      });
-    } else {
-      //Display error message
-      let errorMessage = response.data.error ? response.data.error : response.status + ' ' + response.statusText;
-      this.setState({
-        error: errorMessage,
-        sendingRequest: false
-      });
-    }
+  nullifyRequestState() {
+    this.setState({
+      requestError: null,
+      requestSuccess: null
+    });
+    this.props.history.pushState(null, '/');
   }
 
   render() {
-    let errorMessage = this.state.error ? <h4 className='alert alert-danger'><strong>Error</strong> {this.state.error}</h4> : null;
+    const { requestSuccess, requestError } = this.state;
+    let currentEmail = '';
+
+    try {
+      currentEmail = this.props.session.user.email;
+    } catch(e) {};
+
     return (
-      <div>
-        {
-          !this.state.emailResend ?
-            <div className='text-center'>
-              <h1>Last verification email has been sent to: <strong>{this.props.session.user.email}</strong></h1>
-              <h3>Do you want to re-send it?</h3>
-              <button className='btn btn-default' onClick={this._onResend}>{this.state.sendingRequest ? 'Sending email...' : 'Yes, re-send'}</button>
-            </div>
-          :
-            <h4 className='alert alert-success'>New verification email sent</h4>
-        }
-        {errorMessage}
-        <hr />
-        <Link to='/'>Back To Home View</Link>
+      <div id="resendConfirmationEmailView" className="mt100">
+        <Paper zDepth={2} className="text-center" style={Styles.paper.small}>
+          <h2>Resend confirmation email</h2>
+          <p>Last verification email has been sent to: <strong>{currentEmail}</strong></p>
+          <p>Do you want to re-send it?</p>
+          <RaisedButton primary={true} onClick={this._onResend} label={btnText} />
+        </Paper>
+
+        <ErrorSuccessMsg
+          errorMessage={requestError}
+          successMessage={requestSuccess}
+          onRequestClose={this.nullifyRequestState} />
       </div>
     );
   }

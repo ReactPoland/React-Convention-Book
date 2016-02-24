@@ -16,8 +16,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  sessionActions: bindActionCreators(sessionActions, dispatch),
-  // dashboardActions: bindActionCreators(dashboardActions, dispatch)
+  sessionActions: bindActionCreators(sessionActions, dispatch)
 });
 
 class Header extends React.Component {
@@ -40,29 +39,30 @@ class Header extends React.Component {
       sendingRequest: true
     });
 
-    let requestObj = {
-      method: 'post',
-      url: '/logout'
-    }
 
-    let response = await API.post(requestObj);
+    // let requestObj = {
+    //   method: 'post',
+    //   url: 'https://iron-staging.herokuapp.com/logout'
+    // }
+
+    // let response = await API.post(requestObj);
 
     ////// mock
     this.props.sessionActions.logout();
     delete sessionStorage.magicToken;
     ////// endof mock
 
-    if (response.status === 200 && response.statusText === 'OK') {
-      //Dispatch logout action
-      this.props.sessionActions.logout();
-    } else {
-      //Display error message
-      let errorMessage = response.data.error ? response.data.error : response.status + ' ' + response.statusText;
-      this.setState({
-        error: errorMessage + ' (error while logging out)',
-        sendingRequest: false
-      });
-    }
+    // if (response.status === 200 && response.statusText === 'OK') {
+    //   //Dispatch logout action
+    //   this.props.sessionActions.logout();
+    // } else {
+    //   //Display error message
+    //   let errorMessage = response.data.error ? response.data.error : response.status + ' ' + response.statusText;
+    //   this.setState({
+    //     error: errorMessage + ' (error while logging out)',
+    //     sendingRequest: false
+    //   });
+    // }
   }
 
   render () {

@@ -49,13 +49,14 @@ export default class ReorderItemsWrapper extends React.Component {
   }
 
   render() {
-    const items = (this.state.items || []).map((menu, index) => {
+    const items = (this.state.items || []).map((item, index) => {
       return (
         <ReorderDraggableBox
-          item={menu}
-          id={menu.id}
+          item={item}
           index={index}
-          key={menu.id}
+          /* use title as a key if item is newly created and doesn't have id yet */
+          id={item.id || item.title}
+          key={item.id || item.title}
           moveItem={this.moveItem}
           onDelete={this.props.onDelete} />
       );

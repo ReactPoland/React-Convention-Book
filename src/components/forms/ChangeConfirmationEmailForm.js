@@ -1,7 +1,7 @@
 import React from 'react';
 import Formsy from 'formsy-react';
 import { DefaultInput } from './DefaultInput';
-import { DefaultSelect } from './DefaultSelect';
+import { RaisedButton } from 'material-ui';
 
 export class ChangeConfirmationEmailForm extends React.Component {
   constructor() {
@@ -25,10 +25,12 @@ export class ChangeConfirmationEmailForm extends React.Component {
   }
 
   render() {
+    const btnText = this.props.sendingRequest ? 'Sending request...' : 'Change email';
+
     return (
       <Formsy.Form onSubmit={this._submit} onValid={this._enableButton} onInvalid={this._disableButton}>
         <DefaultInput name='Email' title='Email' validations='isEmail' validationError='This is not a valid email' required />
-        <button type='submit' className='btn btn-default' disabled={!this.state.canSubmit}>{this.props.sendingRequest ? 'Sending request...' : 'Change email'}</button>
+        <RaisedButton type="submit" disabled={!this.state.canSubmit} label={btnText} primary={true} />
       </Formsy.Form>
     );
   }

@@ -38,14 +38,13 @@ export default class EditMenuSectionsModal extends React.Component {
     const { menu } = props;
     const menuSections = menu ? menu.sections : [];
     const sections = menuSections.map((section) => {
-      return this.props.fullSections.get(section.id);
+      return this.props.fullSections.get(section);
     });
     return sections;
   }
 
   _onDone() {
     const menuSections = this.state.sections.slice();
-
     this.props.onDone(menuSections);
     this.props.onHide();
   }
@@ -53,19 +52,19 @@ export default class EditMenuSectionsModal extends React.Component {
   _onSectionAdd(value) {
     value.items = [];
     const section = new Section(value);
-    this.props.onAddSection(section);
+    const stateSections = this.state.sections.slice();
+    const sections = stateSections.concat(section);
+
     this.setState({
+      sections,
       addInputOpen: false
     });
   }
 
-  onSectionDelete(sectionId) {
-    this.props.onDeleteSection(sectionId);
-    // const sections = this.state.sections
-    //   .slice()
-    //   .filter((section) => section.id !== sectionId);
-
-    // this.setState({sections});
+  onSectionDelete(section) {
+    const sections = this.state.sections.slice();
+    sections.splice(sections.indexOf(section), 1);
+    this.setState({sections});
   }
 
   updateOrder(newOrder) {
@@ -83,15 +82,17 @@ export default class EditMenuSectionsModal extends React.Component {
   render() {
     const { fullSections } = this.props;
     const currentSections = this.state.sections;
+    const availableSections = [];
     const actionBtns = [
       <FlatButton label="Cancel" onClick={this.props.onHide} />,
       <FlatButton label="Save" primary={true} onClick={this._onDone} />
     ];
-    const availableSections = [];
+
     fullSections.forEach((section) => {
-      const isThere = !!currentSections.find((s) => s.id === section.id);
+      const isThere = !!currentSections.find((s) => (s || {}).id === section.id);
       return !isThere ? availableSections.push(section) : false;
     });
+
     const options = availableSections.map((section) => ({
       title: section.title,
       value: section.id

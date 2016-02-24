@@ -1,5 +1,7 @@
 import React from 'react';
 import Formsy from 'formsy-react';
+import { RaisedButton } from 'material-ui';
+
 import { DefaultInput } from '../forms/DefaultInput';
 
 export class ResetPasswordForm2 extends React.Component {
@@ -24,11 +26,13 @@ export class ResetPasswordForm2 extends React.Component {
   }
 
   render() {
+    const btnText = this.props.sendingRequest ? 'Sending request...' : 'Change password';
+
     return (
       <Formsy.Form onSubmit={this._submit} onValid={this._enableButton} onInvalid={this._disableButton}>
         <DefaultInput type='password' title='Password' name='Password' validationError="Password can't be blank" required />
         <DefaultInput type='password' title='Repeat password' name='RepeatedPassword' validations='equalsField:Password' validationError='Passwords must match' required />
-        <button type='submit' className='btn btn-default' disabled={!this.state.canSubmit}>{this.props.sendingRequest ? 'Sending request...' : 'Change password'}</button>
+        <RaisedButton type='submit' disabled={!this.state.canSubmit} label={btnText} primary={true} />
       </Formsy.Form>
     );
   }

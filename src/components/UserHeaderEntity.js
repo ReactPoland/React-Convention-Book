@@ -11,7 +11,7 @@ export default class UserHeaderEntity extends React.Component {
   _redirect(event, value) {
     switch(value) {
       case 1:
-        this.props.history.pushState(null, '/account_settings');
+        this.props.history.pushState(null, '/account-settings');
         break;
       case 2:
         this.props.onLogout && this.props.onLogout();
@@ -27,7 +27,7 @@ export default class UserHeaderEntity extends React.Component {
       <div className="UserEntity">
         <p className="UserEntity-Title">
           {(user.firstName || '') + ' ' + (user.lastName || '')}
-          <img className="UserEntity-Pic" alt="" src={user.profilePic} />
+          <img className="UserEntity-Pic" alt="" src={user.imageUrl} />
         </p>
         <div className="UserEntity-Menu">
           <IconMenu
