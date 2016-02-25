@@ -27,12 +27,14 @@ In our case we are building the publishing app so it will be a list of articles.
 ```
 In general, we start from mocked collection of articles - later we will add a feature of adding more articles into the MongoDB's collection, but for now we will stick with only two artciles for the sake of brevity.
 
-HINT: to list your localhost databases do:
+
+
+
+### HINT: to list your localhost databases do:
 ```
 $ mongo
 ```
 and while you will be in the mongo's shell, type:
-```
 ```
 Welcome to the MongoDB shell.
 For interactive help, type "help".
