@@ -53,13 +53,13 @@ you need to run it. Run in your terminal the mongoDb with that command:
 mongod
 ```
 then you shall see:
-<http://test.przeorski.pl/book/002_mongodb_is_running.png>
+![mongodb is running](http://test.przeorski.pl/book/002_mongodb_is_running.png)
 
 
 and after that 
 1) Open the Robomongo's client
 2) Create a connection with default (make sure you are running mongoDB from terminal)
-<http://test.przeorski.pl/book/003_create_new_connection.png>
+![Robomongo default create a new connection](http://test.przeorski.pl/book/003_create_new_connection.png)
 
 # Summary of MongoDb & Robomongo setup
 Currently, you have a localhost database set-up finished.
