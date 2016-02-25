@@ -43,6 +43,10 @@ $ mongo
 ```
 and while you will be in the mongo's shell, type:
 ```
+show dbs
+```
+as on the full example below:
+```
 Welcome to the MongoDB shell.
 For interactive help, type "help".
 For more comprehensive documentation, see
@@ -56,10 +60,6 @@ Server has startup warnings:
 local  0.078GB
 >
 ```
-the
-```
-show dbs
-```
-and in our example it shows that we have one database in the localhost called local.
+... in our example it shows that we have one database in the localhost called local.
 
 
