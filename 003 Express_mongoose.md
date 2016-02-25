@@ -62,4 +62,9 @@ local  0.078GB
 ```
 ... in our example it shows that we have one database in the localhost called local.
 
+### Importing the articles to the MongoDB
+Below we will use terminal (command prompt) in order to import the articles into database. Alternatively you can use Robomongo to do it via GUI as well.
+
+
+
 
