@@ -7,7 +7,7 @@ mongod
 
 which will make the database up and running for you and you want to leave it running at the background (open new tab in the terminal and leave the mongodb running in background in another one otherwise everything below won't work).
 
-We need to import the first example collection into the database. 
+### We need to import the first example collection into the database. 
 
 In the project's directory create a file called initData.js:
 ```
