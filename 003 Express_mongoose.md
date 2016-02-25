@@ -7,7 +7,14 @@ mongod
 
 which will make the database up and running for you and you want to leave it running at the background.
 
-we need to import the first example collection into the database. 
+We need to import the first example collection into the database. 
+
+In the project's directory create a file called initData.js:
+```
+touch initData.js
+```
+
+And into that initiData.js file add the initial JSON with two artciles that is listed below:
 
 In our case we are building the publishing app so it will be a list of articles. Below we will have an example collection of articles in a JSON's format:
 
