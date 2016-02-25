@@ -57,9 +57,11 @@ then you shall see:
 ![mongodb is running](http://test.przeorski.pl/book/002_mongodb_is_running.png)
 
 
-and after that 
-[] Open the Robomongo's client
-[] Create a connection with default (make sure you are running mongoDB from terminal)
+and after that :
+
+1) Open the Robomongo's client
+
+2) Create a connection with default (make sure you are running mongoDB from terminal)
 
 ![Robomongo default create a new connection](http://test.przeorski.pl/book/003_create_new_connection.png)
 
