@@ -1,0 +1,1 @@
+here will be full instruction how to setup mongodb and mongoose
