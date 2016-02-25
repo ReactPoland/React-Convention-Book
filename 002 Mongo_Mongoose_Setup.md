@@ -6,6 +6,8 @@ The instructions below will be described for the OS X - if you have other operat
 
 <001_mongodb_versions_community.png>
 
+![MongoDB different operation systems](http://test.przeorski.pl/book/001_mongodb_versions_community.png)
+
 All the MongoDB instructions you can find at https://docs.mongodb.org/manual/installation/
 
 # Mongo on OS X
