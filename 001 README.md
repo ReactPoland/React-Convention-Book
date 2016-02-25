@@ -9,7 +9,7 @@ We are giving you "one-stop book" for full-stack development.
 # Technical stack we will use
 In this book we do assume that you are familiar with JavaScript (ES5, ES6) and we will also introduce you to some mechanism from ES7 and ES8. 
 
-For the client-side you will you React.js which already you have to be familiar of as we won't discuss React's API in details.
+For the client-side you will use React.js which already you have to be familiar of as we won't discuss React's API in details.
 
 For data management on the client-side we will use Redux. We will also show you how to setup the server-side rendering with Redux.
 
