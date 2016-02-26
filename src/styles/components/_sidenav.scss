@@ -10,6 +10,7 @@ $main-anim-duration: .5s;
     top     $main-anim-duration ease-out 0s
     !important;
   position: fixed;
+  max-width: 1280px;
   top: 200px;
   left: 0;
   bottom: 0;

@@ -18,6 +18,50 @@ const cache = {
       }
     }
   },
+  usersById: {
+    1162953910005334: {
+      "id": "1162953910005334",
+      "createdAt": "2016-01-15T05:48:51.112472-05:00",
+      "updatedAt": "2016-01-15T05:48:51.112472-05:00",
+      "firstName": "Jim",
+      "lastName": "Example",
+      "imageUrl": "http://lorempixel.com/500/500/people",
+      "email": "jim@mailinator.com",
+      "verified": false,
+      "position": "Chef",
+      "location": "123 Wall St., 12345 New York, NY",
+      "address": "123 Wall St., 12345 New York, NY",
+      "startDate": "2016-01-15T05:48:51.112472-05:00"
+    },
+    1162953910005337: {
+      "id": "1162953910005337",
+      "createdAt": "2016-01-15T05:48:51.112472-05:00",
+      "updatedAt": "2016-01-15T05:48:51.112472-05:00",
+      "firstName": "John",
+      "lastName": "Smith",
+      "imageUrl": "http://lorempixel.com/200/300/people",
+      "email": "john@mailinator.com",
+      "verified": false,
+      "position": "Vice Chef",
+      "location": "123 Wall St., 12345 New York, NY",
+      "address": "123 Wall St., 12345 New York, NY",
+      "startDate": "2016-01-15T05:48:51.112472-05:00"
+    },
+    2162953910005337: {
+      "id": "2162953910005337",
+      "createdAt": "2016-01-15T05:48:51.112472-05:00",
+      "updatedAt": "2016-01-15T05:48:51.112472-05:00",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "imageUrl": "http://lorempixel.com/700/300/people",
+      "email": "jane@mailinator.com",
+      "verified": false,
+      "position": "Vice Chef",
+      "location": "123 Wall St., 12345 New York, NY",
+      "address": "123 Wall St., 12345 New York, NY",
+      "startDate": "2016-01-15T05:48:51.112472-05:00"
+    }
+  },
   menuItemsById: {
     7975821618456393: {
       id: "7975821618456393",
@@ -91,7 +135,7 @@ const cache = {
       ]
     },
     1543075663503259: {
-      id: "15430756635032594",
+      id: "1543075663503259",
       title: "Prix Fixe",
       category: "Dinner",
       items: null
@@ -101,7 +145,8 @@ const cache = {
       title: "Appetizers",
       category: "Dinner",
       items: [
-        $ref(['menuItemsById', 7975821618456393])
+        $ref(['menuItemsById', 7975821618456393]),
+        $ref(['menuItemsById', 7270940095186234])
       ]
     }
   },
@@ -122,7 +167,8 @@ const cache = {
       description: "Lorem ipsum Consectetur anim Duis tempor quis pariatur aute est magna in qui dolore.",
       sections: [
         $ref(['sectionsById', 7085243347100914]),
-        $ref(['sectionsById', 7557792635634542])
+        $ref(['sectionsById', 7557792635634542]),
+        $ref(['sectionsById', 1543075663503259])
       ]
     },
     6918394977692515: {
@@ -209,6 +255,11 @@ const cache = {
         $ref(['menuItemsById', 3872054405510425]),
         $ref(['menuItemsById', 6603445904329419]),
         $ref(['menuItemsById', 7270940095186234])
+      ],
+      staff: [
+        $ref(['usersById', 1162953910005334]),
+        $ref(['usersById', 1162953910005337]),
+        $ref(['usersById', 2162953910005337])
       ]
     }
   }

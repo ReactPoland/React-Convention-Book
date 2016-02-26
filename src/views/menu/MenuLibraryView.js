@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import API from 'utils/API';
 import * as menuItemActions from 'actions/menuItem';
+import falcorUtils from 'utils/falcorUtils';
 
 import Loader from 'decorators/Loader';
 import MenuListItem from 'components/menu/MenuListItem';
@@ -28,7 +29,8 @@ class MenuLibraryView extends React.Component {
     const response = await API.get(
       ['restaurants', 0, 'menuItems', {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl']]
     );
-    this.props.actions.menuItemList(response.restaurants[0].menuItems);
+    const menus = falcorUtils.makeArray({object: response.restaurants[0], name: 'menuItems'});
+    this.props.actions.menuItemList(menus);
   }
 
   render() {

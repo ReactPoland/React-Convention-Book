@@ -9,25 +9,13 @@ import {
 
 import mapHelpers from 'utils/mapHelpers';
 
-function getRandomId() {
-  return Math.random().toString().substring(2);
-}
-
 const initialState = new Map();
 
 export default createReducer(initialState, {
   [SECTION_LIST]: (state, payload) => {
-    const keys = payload ? Object.keys(payload) : [];
-    const pathIndex = keys.indexOf('$__path');
-
-    if(pathIndex !== -1) {
-      keys.splice(pathIndex, 1);
-    }
-
-    const items = keys.map((key) => {
-      return new Section(payload[key]);
+    const items = payload.map((item) => {
+      return new Section(item);
     });
-
     return mapHelpers.addMultipleItems(state, items);
   },
 

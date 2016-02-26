@@ -10,15 +10,8 @@ const initialState = new Map();
 
 export default createReducer(initialState, {
   [MENUITEM_LIST]: (state, payload) => {
-    const keys = Object.keys(payload);
-    const pathIndex = keys.indexOf('$__path');
-
-    if(pathIndex !== -1) {
-      keys.splice(pathIndex, 1);
-    }
-
-    const newItems = keys.map((key) => {
-      return new MenuItem(payload[key]);
+    const newItems = payload.map((menuItem) => {
+      return new MenuItem(menuItem);
     });
 
     return mapHelpers.addMultipleItems(state, newItems);

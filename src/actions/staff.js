@@ -1,11 +1,17 @@
 import {
+  STAFF_LIST,
   ADD_STAFF,
   EDIT_STAFF,
-  DELETE_STAFF,
-  SEND_MESSAGE
+  DELETE_STAFFE
 } from '../constants/staff';
 
 export default {
+  staffList: (staff) => {
+    return {
+      type: STAFF_LIST,
+      payload: staff
+    };
+  },
   addStaff: (newStaff) => {
     return {
       type: ADD_STAFF,

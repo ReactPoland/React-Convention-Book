@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ListItem } from 'material-ui';
 import Colors from 'material-ui/lib/styles/colors';
 
-// import { falcorGet } from 'utils/axiosHttpRequest';
+import falcorUtils from 'utils/falcorUtils';
 import * as actions from 'actions';
 import API from 'utils/API';
 
@@ -73,10 +73,6 @@ function sortTasksByDate(a, b) {
 //   return items.sort(sortPostsByDate);
 // }
 
-// function getMenus(props) {
-//   return props ? props.menus || [] : [];
-// }
-
 // function getSchedule(props) {
 //   const now = new Date();
 //   const threeDays = new Date(now).setDate(now.getDate() + 3);
@@ -128,8 +124,8 @@ class SideNav extends React.Component {
       const response = await API.get(
         ['restaurants', 0, 'menus', {from: 0, to: 5}, ['title', 'id', 'description']]
       );
-
-      actions.menu.menuList(response.restaurants[0].menus);
+      const menus = falcorUtils.makeArray({object: response.restaurants[0], name: 'menus'});
+      actions.menu.menuList(menus);
     }
   }
 
@@ -141,7 +137,7 @@ class SideNav extends React.Component {
   _getProps(route) {
     let props = {
       posts: this.props.post,//getPosts(this.props.post),
-      menus: this.props.menu,//getMenus(this.props.menu),
+      menus: this.props.menu,
       schedule: this.props.schedule,//getSchedule(this.props.schedule),
       recipes: this.props.recipe,//getRecipes(this.props.recipe),
       train: train,
@@ -163,6 +159,7 @@ class SideNav extends React.Component {
   }
 
   render() {
+    const headerStyle = {backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'};
     const showManageBox = rolesUtils.isAdminOrManager(this.props.session.user);
     const currentRoute = getCurrentRoute();
     const props = this._getProps(currentRoute);
@@ -170,7 +167,7 @@ class SideNav extends React.Component {
       <SidenavList
         items={props.managing || []}
         label="Manage"
-        headerComponent={<ListItem primaryText='Manage' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
+        headerComponent={<ListItem primaryText='Manage' disabled style={headerStyle} />}
         {...openOrVisible(props, 'manage')} />
       : null;
 
@@ -193,7 +190,7 @@ class SideNav extends React.Component {
           prefix="post"
           items={props.posts || []}
           label="News Feed"
-          headerComponent={<ListItem primaryText='News Feed' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
+          headerComponent={<ListItem primaryText='News Feed' disabled style={headerStyle} />}
           {...openOrVisible(props, 'post')} />
         <MenuEntity
           {...this.props}
@@ -205,19 +202,19 @@ class SideNav extends React.Component {
           prefix="task"
           items={props.schedule || []}
           label="Schedule"
-          headerComponent={<ListItem primaryText='Schedule' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
+          headerComponent={<ListItem primaryText='Schedule' disabled style={headerStyle} />}
           {...openOrVisible(props, 'schedule')} />
         <SidenavList
           prefix="train"
           items={props.train || []}
           label="Learn/Train"
-          headerComponent={<ListItem primaryText='Learn/Train' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
+          headerComponent={<ListItem primaryText='Learn/Train' disabled style={headerStyle} />}
           {...openOrVisible(props, 'train')} />
         <SidenavList
           prefix="recipe"
           items={props.recipes || []}
           label="Recipes"
-          headerComponent={<ListItem primaryText='Recipes' disabled style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />}
+          headerComponent={<ListItem primaryText='Recipes' disabled style={headerStyle} />}
           {...openOrVisible(props, 'recipe')} />
         {manageBox}
       </div>

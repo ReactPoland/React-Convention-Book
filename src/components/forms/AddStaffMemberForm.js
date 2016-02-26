@@ -1,7 +1,10 @@
 import React from 'react';
 import { Form } from 'formsy-react';
+import { RaisedButton } from 'material-ui';
+
 import { DefaultInput } from './DefaultInput';
 import { DefaultSelect } from './DefaultSelect';
+import { DefaultDatePicker } from './DefaultDatePicker';
 
 class AddStaffMemberForm extends React.Component {
   constructor(props) {
@@ -16,13 +19,7 @@ class AddStaffMemberForm extends React.Component {
   }
 
   _onAddStaffMember(member) {
-    if(this.state.canSubmit) {
-      this.props.onAddMember(member);
-    } else {
-      this.setState({
-        errorMessage: 'Please fill in all required information.'
-      });
-    }
+    this.props.onAddMember(member);
   }
 
   _disableButton() {
@@ -38,19 +35,23 @@ class AddStaffMemberForm extends React.Component {
   }
 
   render() {
+    const availableLocations = this.props.restaurant.locations.reduce((a, location) => {
+      return a.concat(location.title);
+    }, []);
+
     return (
       <div className="row" style={{marginTop: 20}}>
         <Form onSubmit={this._onAddStaffMember} onValid={this._enableButton} onInvalid={this._disableButton}>
           <div className="col-md-6">
             <DefaultInput
-              name="FirstName"
+              name="firstName"
               title="First Name"
               required
               tabindex="1"
               validations="isAlpha"
               validationError="Invalid first name" />
             <DefaultInput
-              name="Email"
+              name="email"
               title="Email Address"
               required
               type="email"
@@ -58,46 +59,50 @@ class AddStaffMemberForm extends React.Component {
               validationError="Invalid email address"
               tabindex="3" />
             <DefaultInput
-              name="Phone"
+              name="phone"
               title="Telephone Number"
               validations="isNumeric"
               validationError="Invalid telephone number"
               required
               tabindex="5" />
-            <DefaultInput
-              name="StartDate"
-              title="Start Date"
-              type="date"
-              required
-              validations="isExisty"
-              validationError="Invalid start date"
-              tabindex="7" />
+            <div style={{paddingTop: 24}}>
+              <DefaultDatePicker
+                name="startDate"
+                autoOk
+                hintText="Start Date"
+                container="dialog"
+                mode="landscape"
+                required
+                validations="isExisty"
+                validationError="Invalid start date"
+                tabIndex="7" />
+            </div>
           </div>
           <div className="col-md-6">
             <DefaultInput
-              name="LastName"
+              name="lastName"
               title="Last Name"
               required
               validations="isAlpha"
               validationError="Invalid last name"
               tabindex="2" />
             <DefaultInput
-              name="ReEmail"
+              name="reEmail"
               title="Confirm Email Address"
               required
-              validations="equalsField:Email"
+              validations="equalsField:email"
               validationError="Emails are different"
               type="email"
               tabindex="4" />
             <DefaultInput
-              name="Mailing"
+              name="address"
               title="Mailing Address"
               required
               validations="isExisty"
               validationError="Invalid mailing address"
               tabindex="6" />
             <DefaultSelect
-              name="Position"
+              name="position"
               title="Position"
               placeholder="Position"
               required
@@ -108,16 +113,22 @@ class AddStaffMemberForm extends React.Component {
           </div>
           <div className="col-md-12">
             <DefaultSelect
-              name="Location"
+              name="location"
               title="Location"
               placeholder="Location"
               required
               validations="isExisty"
               validationError="Invalid location"
               tabindex="9"
-              options={this.props.restaurant.locations} />
+              options={availableLocations} />
             <p className="validation-error">{this.state.errorMessage}</p>
-            <button tabIndex="10" type="submit" className="btn btn-default pull-right">Submit</button>
+            <RaisedButton
+              disabled={!this.state.canSubmit}
+              primary={true}
+              style={{float: 'right'}}
+              label="Add"
+              type="submit"
+              tabIndex={10} />
           </div>
         </Form>
       </div>

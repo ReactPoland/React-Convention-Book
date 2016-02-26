@@ -4,28 +4,35 @@ import { SelectField, MenuItem } from 'material-ui';
 
 export const DefaultSelect = React.createClass({
   mixins: [Formsy.Mixin],
-  changeValue(event, index, value) {
-    this.setValue(value);
-    this.props.onChange && this.props.onChange(value);
+
+  getDefaultProps() {
+    return {
+      onChange: () => {}
+    };
   },
 
-  componentWillMount() {
+  changeValue(event, index, value) {
+    this.setValue(value);
+    this.props.onChange(value);
+  },
+
+  componentDidMount() {
     this.setValue(this.props.value || "");
   },
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.value !== this.getValue()) {
-      this.setValue(nextProps.value);
-    }
-  },
+  // componentWillReceiveProps(nextProps) {
+  //   if(nextProps.value !== this.getValue()) {
+  //     this.setValue(nextProps.value);
+  //   }
+  // },
 
   render() {
     const errorMessage = this.getErrorMessage();
     const options = this.props.options.map((option, i) => (
       <MenuItem
-        value={option.value}
-        key={option.title + option.value}
-        primaryText={option.title} />
+        value={option}
+        key={option}
+        primaryText={option} />
     ));
 
     let placeholder = null;
@@ -44,6 +51,7 @@ export const DefaultSelect = React.createClass({
           floatingLabelStyle={{fontWeight: 300}}
           onChange={this.changeValue}
           fullWidth
+          required={this.props.required}
           errorText={errorMessage}
           value={this.getValue()}>
             {options}

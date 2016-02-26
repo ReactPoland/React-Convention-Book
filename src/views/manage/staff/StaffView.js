@@ -7,10 +7,12 @@ import { RaisedButton } from 'material-ui';
 import staffActions from 'actions/staff';
 import API from 'utils/API';
 import mapHelpers from 'utils/mapHelpers';
+import { StaffMember } from 'models';
 
 import Filter from 'components/Filter';
 import StaffTable from 'components/staff/StaffTable';
 import AddStaffMemberForm from 'components/forms/AddStaffMemberForm';
+import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
 
 const mapStateToProps = (state) => ({
   session: state.session,
@@ -32,7 +34,19 @@ class StaffView extends React.Component {
     this._onFilter = this._onFilter.bind(this);
     this.onAddMember = this.onAddMember.bind(this);
     this._showForm = this._showForm.bind(this);
-    this._showSuccess = this._showSuccess.bind(this);
+    this.nullifyRequestState = this.nullifyRequestState.bind(this);
+  }
+
+  async _fetchData() {
+    const response = await API.get(
+      ['restaurants', 0, 'staff', {from: 0, to: 100}, ['id', 'firstName', 'lastName', 'position', 'verified', 'email', 'imageUrl', 'address']]
+    );
+
+    this.props.actions.staffList(response.restaurants[0].staff);
+  }
+
+  componentWillMount() {
+    this._fetchData();
   }
 
   _onFilter(data) {
@@ -40,39 +54,40 @@ class StaffView extends React.Component {
   }
 
   onAddMember(member) {
-    const response = member;
-
     console.log('\n#################\nCALL API: INVITE STAFF MEMBER\n#################\n');
 
-    response.Id = Math.random();
-
-    this.props.actions.addStaff(response);
-    this._showSuccess(member);
-    this.setState({
-      showAddForm: false
-    });
-  }
-
-  _showSuccess({FirstName = "", LastName = ""}) {
-    this.setState({
-      successMessage: `An account for ${FirstName} ${LastName} has been succesfully created`
-    }, () => {
-      setTimeout(() => {
+    API
+      .create({
+        url: ['usersById'],
+        body: member,
+        ref: ['restaurants', 0, 'staff']
+      })
+      .then((response) => {
+        this.props.actions.addStaff(new StaffMember(member));
         this.setState({
-          successMessage: ''
+          requestSuccess: `An account for ${member.firstName} ${member.lastName} has been succesfully created`,
+          showAddForm: false
         });
-      }, 10000);
-    });
+      });
   }
 
   _showForm() {
     this.setState({
       showAddForm: true
     });
+    API.$log()
+  }
+
+  nullifyRequestState() {
+    this.setState({
+      requestError: null,
+      requestSuccess: null
+    });
   }
 
   render() {
-    let staff = this.state.filteredStaff || this.props.staff;
+    const { requestSuccess, requestError } = this.state;
+    const staff = this.state.filteredStaff || this.props.staff;
     let addForm = null;
     if(this.state.showAddForm) {
       addForm = (
@@ -82,18 +97,10 @@ class StaffView extends React.Component {
       );
     }
 
-    let successBox = null;
-    if(this.state.successMessage) {
-      successBox = (
-        <p className="alert alert-success">{this.state.successMessage}</p>
-      );
-    }
-
     return (
       <div id='staffView' className="mt100 Content">
         <div className='row'>
           <div className="col-md-7">
-            {successBox}
             {addForm}
           </div>
           <div className='col-md-12' style={{paddingTop: 10, paddingBottom: 10}}>
@@ -104,8 +111,9 @@ class StaffView extends React.Component {
               label={"Add Someone"} />
 
             <Filter
+              style={{marginTop: -27}}
               data={mapHelpers.toArray(this.props.staff)}
-              filterBy='LastName'
+              filterBy='lastName'
               onFilter={this._onFilter}
               placeholder='Filter last names'
             />
@@ -113,9 +121,14 @@ class StaffView extends React.Component {
         </div>
         <div className='row'>
           <div className='col-md-12'>
-            <StaffTable staff={staff} />
+            <StaffTable staff={mapHelpers.toArray(staff)} />
           </div>
         </div>
+
+        <ErrorSuccessMsg
+          successMessage={requestSuccess}
+          errorMessage={requestError}
+          onRequestClose={this.nullifyRequestState} />
       </div>
     );
   }

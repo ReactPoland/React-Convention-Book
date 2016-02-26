@@ -19,25 +19,14 @@ function getRandomId() {
 
 export default createReducer(initialState, {
   [MENU_LIST]: (state, payload) => {
-    const keys = Object.keys(payload);
-    const pathIndex = keys.indexOf('$__path');
-
-    if(pathIndex !== -1) {
-      keys.splice(pathIndex, 1);
-    }
-
-    const items = keys.map((key) => {
-      return new Menu(payload[key]);
+    const items = payload.map((menu) => {
+      return new Menu(menu);
     });
 
-    return mapHelpers.addMultipleItems(state, items, 'id');
+    return mapHelpers.addMultipleItems(state, items);
   },
 
   [MENU_ADD]: (state, payload) => {
-    // remove it after implementing api
-    // otherwise you'll get wrong ids
-    payload.id = getRandomId();
-
     return mapHelpers.addItem(state, payload.id, new Menu(payload));
   },
 

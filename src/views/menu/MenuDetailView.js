@@ -7,6 +7,7 @@ import * as sectionActions from 'actions/section';
 import * as menuItemActions from 'actions/menuItem';
 
 import API from 'utils/API';
+import falcorUtils from 'utils/falcorUtils';
 
 import Loader from '../../decorators/Loader';
 import AddPlaceholder from 'components/menu/AddPlaceholder';
@@ -45,22 +46,32 @@ class MenuDetailView extends React.Component {
   async _fetchData(id) {
     const {actions} = this.props;
     const response = await API.get(
-      ['menusById', id, 'sections', {from: 0, to: 100}, ['id', 'title', 'items'], {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl']]
+      ['menusById', id,
+        'sections', {from: 0, to: 100}, ['id', 'title',
+          'items'], {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl']]
     );
-    const sections = response.menusById[id].sections;
-    const keys = response.menusById[id].sections ? Object.keys(response.menusById[id].sections) : [];
-    keys.splice(keys.indexOf('$__path'), 1);
 
-    const menuItems = keys.reduce((items, index) => {
-      const keys = sections[index].items ? Object.keys(sections[index].items) : [];
-      keys.splice(keys.indexOf('$__path'), 1);
+    const sections = falcorUtils.makeArray({
+      object: response.menusById[id],
+      name: 'sections'
+    });
 
-      const items2 = keys.map((index2) => sections[index].items[index2]);
-      return items.concat(items2);
+    const menuItems = sections.reduce((sections, section) => {
+      return sections.concat(falcorUtils.makeArray({
+        object: section,
+        name: 'items'
+      }));
     }, []);
 
-    actions.section.sectionList(response.menusById[id].sections);
+    actions.section.sectionList(sections);
     actions.menuItem.menuItemList(menuItems);
+  }
+
+  onAddMenu() {
+    /**
+     *
+     *  TODO
+     */
   }
 
   loader(props) {
@@ -89,13 +100,13 @@ class MenuDetailView extends React.Component {
   render() {
     const { menu } = this.state;
 
-    if(!this.state.loaded ) {
+    if(!this.state.loaded) {
       return this.props.__getLoaderMarkup();
     }
 
     if(!menu.sections || !menu.sections.length) {
       return  (
-        <AddPlaceholder />
+        <AddPlaceholder title="menu" onAdd={this.onAddMenu} />
       );
     } else {
       return (

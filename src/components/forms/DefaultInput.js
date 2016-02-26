@@ -4,8 +4,16 @@ import {TextField} from 'material-ui';
 
 export const DefaultInput = React.createClass({
   mixins: [Formsy.Mixin],
-  changeValue(event) {
-    this.setValue(event.currentTarget[this.props.type === 'checkbox' ? 'checked' : 'value']);
+
+  getDefaultProps() {
+    return {
+      onChange: () => {}
+    };
+  },
+
+  changeValue(e) {
+    this.setValue(e.target.value);
+    this.props.onChange(e);
   },
 
   render() {

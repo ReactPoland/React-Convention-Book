@@ -17,16 +17,19 @@ import {
 
 import mapHelpers from 'utils/mapHelpers';
 import API from 'utils/API';
+import falcorUtils from 'utils/falcorUtils';
 import * as menuActions from 'actions/menu';
 import * as sectionActions from 'actions/section';
 
 import SidenavList from 'components/sidenav/SidenavList';
 import SidenavListItem from 'components/sidenav/SidenavListItem';
+import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
 
 import AddMenuModal from 'components/menu/modals/AddMenuModal';
 import EditMenusModal from 'components/menu/modals/EditMenusModal';
 import ReorderMenusModal from 'components/menu/modals/ReorderMenusModal';
 import EditMenuSectionsModal from 'components/menu/modals/EditMenuSectionsModal';
+import ReorderMenuItemsModal from 'components/menu/modals/ReorderMenuItemsModal';
 import AddMenuItemModal from 'components/menu/modals/AddMenuItemModal';
 
 const mapStateToProps = (state) => ({
@@ -46,11 +49,14 @@ class MenuEntity extends React.Component {
 
     this._fetchData             = this._fetchData.bind(this);
     this._onHeaderAction        = this._onHeaderAction.bind(this);
+    this.closeModal             = this.closeModal.bind(this);
+    this.nullifyRequestState    = this.nullifyRequestState.bind(this);
     this.onAddMenu              = this.onAddMenu.bind(this);
     this.onUpdateMenu           = this.onUpdateMenu.bind(this);
     this.onDeleteMenu           = this.onDeleteMenu.bind(this);
     this.onReorderMenus         = this.onReorderMenus.bind(this);
     this.onMenuSectionsReorder  = this.onMenuSectionsReorder.bind(this);
+    this.onItemsReorder         = this.onItemsReorder.bind(this);
 
     this.state = {
       modal: null
@@ -63,7 +69,11 @@ class MenuEntity extends React.Component {
       // perhaps we'll need to fetch items partialy (pagination style)
       ['restaurants', 0, 'menus', {from: 0, to: 20}, ['id', 'title', 'description', 'sections'], {from: 0, to: 100}, 'id']
     );
-    this.props.actions.menu.menuList(response.restaurants[0].menus);
+    const menus = falcorUtils.makeArray({
+      object: response.restaurants[0],
+      name: 'menus'
+    });
+    this.props.actions.menu.menuList(menus);
   }
 
   componentDidMount() {
@@ -73,7 +83,7 @@ class MenuEntity extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
-    if(nextProps.open !== this.props.open && nextProps.open) {
+    if(nextProps.open && nextProps.open !== this.props.open) {
       this._fetchData();
     }
   }
@@ -100,62 +110,135 @@ class MenuEntity extends React.Component {
 
   onAddMenu(menu) {
     console.log('\n#################\nCALL API: ADD MENU\n#################\n');
-    // const data = menu.formatForWire();
-    // const id = Math.random().toString().substring(2);
-    const response = menu.formatForWire();
-    // const response = await API.create(
-    //   ['menus', 'add'],// ['menusById', 'add'],
-    //   ...menu.getKeysAndValues()
-    // );
-    // console.log(menu.getKeysAndValues())
-    // const res = await API.get(['menusById', id, 'title']);
-    // console.log(response)
-    /*
-        calling mock api here
-    */
-    this.props.actions.menu.add(response);
+    menu = menu.formatForWire();
+
+    API
+      .create({
+        url: ['menusById'],
+        body: menu,
+        ref: ['restaurants', 0, 'menus']
+      })
+      .then((response) => {
+        this.props.actions.menu.add(menu);
+        this.setState({
+          requestSuccess: `Menu "${menu.title}" successfully created!`
+        });
+      });
   }
 
   onUpdateMenu(menu) {
     console.log('\n#################\nCALL API: UPDATE MENU\n#################\n');
-    this.props.actions.menu.update(menu.formatForWire());
+
+    menu = menu.formatForWire();
+
+    API
+      .set({
+        url: ['menusById', menu.id],
+        body: menu
+      })
+      .then(() => {
+        this.props.actions.menu.update(menu);
+        this.setState({
+          requestSuccess: 'Saved'
+        });
+      });
   }
 
   onDeleteMenu(id) {
     console.log('\n#################\nCALL API: DELETE MENU\n#################\n');
-    this.props.actions.menu.delete(id);
+    API
+      .delete({
+        url: ['menusById', id],
+        ref: ['restaurants', 0, 'menus']
+      })
+      .then(() => {
+        this.props.actions.menu.delete(id);
+        this.setState({
+          requestSuccess: 'Deleted'
+        });
+
+        if(id === this.props.params.id) {
+          this.props.history.pushState(null, '/menu/library');
+        }
+      });
   }
 
   onReorderMenus(order) {
     console.log('\n#################\nCALL API: CHANGE MENU ORDER\n#################\n');
-    order = order.map((item) => item.id);
-    this.props.actions.menu.reorder(order);
+    order = order.map((item) => ({
+      $type: 'ref',
+      value: ['menusById', item.id]
+    }));
+
+    API
+      .set({
+        url: ['restaurants', 0, 'menus'],
+        body: order
+      })
+      .then(() => {
+        this.props.actions.menu.reorder(order.map((order) => order.value[1]));
+        API.$log()
+      });
   }
 
   onMenuSectionsReorder(newOrder) {
     console.log('\n#################\nCALL API: UPDATE MENU\n#################\n');
-    const currentMenu = this.state.menuInEdit;
+    let menu = this.state.menuInEdit;
 
-    newOrder.forEach((section) => section.id = section.id || Math.random().toString().substring(2));
+    Promise.all(newOrder.map(
+      (section, index) => {
+        if(!section.id) {
+          return API
+            .create({
+              url: ['sectionsById'],
+              body: section.formatForWire(),
+              ref: ['restaurants', 0, 'sections']
+            })
+            .then((section) => {
+              this.props.actions.section.add(section);
+              newOrder[index].id = section.id;
+            });
+        }
+      }
+    ))
+    .then(() => {
+      menu.sections = newOrder.map(
+        (section) => section.id
+      );
 
-    /**
-     * Perhaps the best solution here would be to send new sections to back end
-     * and once I get it here add them to menu in gien order
-     * but.. Will the order be preserved?
-     */
+      menu = menu.formatForWire();
 
-    /* await or something */
-    this.props.actions.section.sectionList(newOrder);
+      return API
+        .set({
+          url: ['menusById', menu.id],
+          body: menu
+        });
+    })
+    .then(() => {
+      this.props.actions.menu.update(menu);
+      this.setState({
+        requestSuccess: `${menu} successfully updated`
+      });
+    });
+  }
 
-    const response = newOrder;
-    currentMenu.sections = response.reduce((sections, item) => {
-      return sections.concat(item.id);
-    }, []);
+  onItemsReorder() {
 
-    this.props.actions.menu.update(currentMenu.formatForWire());
+  }
+
+  closeModal() {
+    this.setState({modal: null});
+  }
+
+  nullifyRequestState() {
+    this.setState({
+      requestError: null,
+      requestSuccess: null
+    });
   }
 
   render() {
+    const { requestError, requestSuccess } = this.state;
     const disable = !this.props.menu.size;
     const header = (
       <ListItem
@@ -220,7 +303,63 @@ class MenuEntity extends React.Component {
     const prepend = [
       SidenavListItem({}, {id: 'library', title: 'Library'}, 'menu', true),
     ];
-    const items = this.props.open ? this.props.items : mapHelpers.getFromRange(this.props.items, 0, 3);
+
+    let items = mapHelpers.getFromRange(this.props.items, 0, 3);
+    let openContent = null;
+
+    if(this.props.open) {
+      items = this.props.items;
+      openContent = [
+        <AddMenuModal
+          key="add-menu-modal"
+          open={this.state.modal === 'add-menu'}
+          onDone={this.onAddMenu}
+          onHide={this.closeModal} />,
+
+        <EditMenusModal
+          key="edit-menus-modal"
+          menus={this.props.menu}
+          onDelete={this.onDeleteMenu}
+          onUpdate={this.onUpdateMenu}
+          onHide={this.closeModal}
+          open={this.state.modal === 'edit-menus'} />,
+
+        <ReorderMenusModal
+          key="reorder-menus-modal"
+          open={this.state.modal === 'reorder-menus'}
+          menus={this.props.menu}
+          onHide={this.closeModal}
+          onDone={this.onReorderMenus} />,
+
+        <EditMenuSectionsModal
+          key="edit-menu-sections-modal"
+          open={this.state.modal === 'edit-menu-sections'}
+          menu={this.state.menuInEdit}
+          fullSections={this.props.section}
+          onDone={this.onMenuSectionsReorder}
+          onHide={this.closeModal} />,
+
+        <ReorderMenuItemsModal
+          key="reorder-menu-items-modal"
+          open={this.state.modal === 'reorder-menu-items'}
+          fullSections={this.props.section}
+          fullItems={this.props.menuItem}
+          menu={this.state.menuInEdit}
+          onHide={this.closeModal}
+          onDone={this.onItemsReorder} />,
+
+        <AddMenuItemModal
+          key="add-menu-item-modal"
+          onHide={this.closeModal}
+          open={this.state.modal === 'add-menu-item'} />,
+
+        <ErrorSuccessMsg
+          key="error-success-msg"
+          errorMessage={requestError}
+          successMessage={requestSuccess}
+          onRequestClose={this.nullifyRequestState} />
+      ];
+    }
 
     return (
       <SidenavList
@@ -230,34 +369,7 @@ class MenuEntity extends React.Component {
         menuComponent={itemMenuComponent}
         items={items}>
 
-        <AddMenuModal
-          open={this.state.modal === 'add-menu'}
-          onDone={this.onAddMenu}
-          onHide={this.setState.bind(this, {modal: null})} />
-
-        <EditMenusModal
-          menus={this.props.menu}
-          onDelete={this.onDeleteMenu}
-          onUpdate={this.onUpdateMenu}
-          onHide={this.setState.bind(this, {modal: null})}
-          open={this.state.modal === 'edit-menus'} />
-
-        <ReorderMenusModal
-          open={this.state.modal === 'reorder-menus'}
-          menus={this.props.menu}
-          onHide={this.setState.bind(this, {modal: null})}
-          onDone={this.onReorderMenus} />
-
-        <EditMenuSectionsModal
-          open={this.state.modal === 'edit-menu-sections'}
-          menu={this.state.menuInEdit}
-          fullSections={this.props.section}
-          onDone={this.onMenuSectionsReorder}
-          onHide={this.setState.bind(this, {modal: null})} />
-
-        <AddMenuItemModal
-          open={this.state.modal === 'add-menu-item'} />
-
+        {openContent}
       </SidenavList>
     );
   }

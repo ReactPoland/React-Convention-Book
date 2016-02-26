@@ -11,6 +11,7 @@ export default class ReorderMenusModal extends React.Component {
     super(props);
 
     this._onDone = this._onDone.bind(this);
+    this.onOrderChange = this.onOrderChange.bind(this);
 
     this.state = {
       items: mapHelpers.toArray(this.props.menus)
@@ -24,15 +25,14 @@ export default class ReorderMenusModal extends React.Component {
   }
 
   _onDone() {
-    /// context wrapper doesn't allow me to access child's
-    // methods directly. I am not sure if this .refs.child. thing can stay here
-    const order = this.refs.reorderBox.refs.child.getData();
-    this.props.onDone(order);
+    this.props.onDone(this.state.newOrder);
     this.props.onHide();
   }
 
-  onChange(order) {
-    this.setState
+  onOrderChange(newOrder) {
+    this.setState({
+      newOrder
+    });
   }
 
   render() {
@@ -47,6 +47,7 @@ export default class ReorderMenusModal extends React.Component {
         title="Reorder menus"
         open={this.props.open}>
         <ReorderItemsWrapper
+          onChange={this.onOrderChange}
           ref="reorderBox"
           items={this.state.items} />
       </Dialog>

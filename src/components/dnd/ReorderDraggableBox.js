@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
-import ItemTypes from 'constants/DNDItemTypes';
 import { DragSource, DropTarget } from 'react-dnd';
 import {
   Paper,
@@ -12,6 +11,8 @@ import {
 } from 'material-ui/lib/svg-icons';
 import Colors from 'material-ui/lib/styles/colors';
 
+import Styles from 'styles/inlineStyles';
+import ItemTypes from 'constants/DNDItemTypes';
 /**
  *
  * If you have any troubles see example on which I was basing:
@@ -27,7 +28,8 @@ const itemSource = {
   beginDrag(props) {
     return {
       id: props.id,
-      index: props.index
+      index: props.index,
+      item: props.item
     };
   }
 };
@@ -36,8 +38,10 @@ const itemTarget = {
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
+    const hoverItem = props.item;
+    const dragItem = monitor.getItem().item;
 
-    if(dragIndex === hoverIndex) {
+    if(hoverItem === dragItem) {
       return;
     }
 
@@ -54,43 +58,9 @@ const itemTarget = {
       return;
     }
 
-    props.moveItem(dragIndex, hoverIndex);
-    monitor.getItem().index = hoverIndex;
+    props.moveItem(dragItem, hoverIndex);
   }
 }
-
-const paperStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  padding: '16px',
-  position: 'relative',
-  border: '1px solid ' + Colors.grey300,
-  marginTop: -1
-};
-
-const wrapperStyles = {
-  margin: 16
-};
-
-const iconStyles = {
-  position: 'absolute',
-  left: 16,
-  height: 24,
-  overflow: 'hidden'
-};
-
-const titleStyles = {
-  display: 'inline-block',
-  lineHeight: '24px',
-  marginLeft: 40
-};
-
-const deleteBtnStyles = {
-  position: 'absolute',
-  top: 6,
-  right: 8
-};
-
 
 @DropTarget(ItemTypes.ORDER_ENTITY, itemTarget, (connect) => ({
   connectDropTarget: connect.dropTarget()
@@ -117,13 +87,14 @@ export default class ReorderDraggableBox extends React.Component {
   render() {
     const { item, connectDragSource, connectDropTarget, isDragging } = this.props;
     const zDepth = isDragging ? 2 : 0;
-    const wrapperStyle = isDragging ? wrapperStyles : {};
     const allowDelete = !!this.props.onDelete;
+    const styles = Styles.dnd.draggableBox;
+    const wrapperStyle = isDragging ? styles.wrapper : {};
     let deleteButton = null;
 
     if(allowDelete) {
       deleteButton = (
-        <IconButton style={deleteBtnStyles} onClick={this.props.onDelete.bind(this, item)}>
+        <IconButton style={styles.deleteBtn} onClick={this.props.onDelete.bind(this, item)}>
           <ActionDelete color={Colors.grey300} hoverColor={Colors.red800} />
         </IconButton>
       );
@@ -131,13 +102,13 @@ export default class ReorderDraggableBox extends React.Component {
 
     return connectDragSource(connectDropTarget(
       <div style={wrapperStyle}>
-        <Paper zDepth={zDepth} style={paperStyles}>
-          <div style={iconStyles}>
+        <Paper zDepth={zDepth} style={styles.paper}>
+          <div style={styles.icons}>
             <ActionOpenWith
               color={isDragging ? Colors.cyan500 : Colors.grey500}
               hoverColor={Colors.cyan500} />
           </div>
-          <span style={titleStyles}>{item.title}</span>
+          <span style={styles.title}>{item.title}</span>
           {deleteButton}
         </Paper>
       </div>

@@ -6,18 +6,14 @@ export default class Section extends Model {
     this.type = 'Section';
     this.category = section.category;
 
-    if(Array.isArray(section.items)) {
-      this.items = section.items.map((item) => item)
-    } else {
-      const keys = section.items ? Object.keys(section.items) : [];
-      keys.splice(keys.indexOf('$__path'), 1);
-      this.items = keys.map((key) => section.items[key].id);
-    }
+    this.items = super.prepareArray(section.items);
   }
 
   formatForWire() {
     const forWire = super.formatForWire();
-    forWire.items = this.items.map((item) => item);
+
+    forWire.items = super.makeRefs(this.items, 'menusById');
+
     return forWire;
   }
 }
