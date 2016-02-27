@@ -1,0 +1,23 @@
+{
+  "name": "React-Convention-Book",
+  "version": "1.0.0",
+  "description": "",
+  "main": "initData.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ReactConvention/React-Convention-Book.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ReactConvention/React-Convention-Book/issues"
+  },
+  "homepage": "https://github.com/ReactConvention/React-Convention-Book#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
