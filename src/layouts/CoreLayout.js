@@ -66,25 +66,6 @@ const iconStyles = {
   height: 24
 };
 
-const ConfirmEmailBox = (state, navigate) => {
-  return !state.user.verified && state.loggedIn ?
-    <Paper zDepth={1} style={warningPanelStyles} className="InfoBox">
-      <AlertWarning
-        style={iconStyles}
-        color={Colors.yellow500} />
-      <span>Please verify your email address</span>
-      <FlatButton
-        primary={false}
-        style={{marginLeft: 24}}
-        label="Resend confirmation email"
-        onClick={navigate.bind(this, '/resend-confirmation-email')} />
-      <FlatButton
-        primary={false}
-        label="Change email address"
-        onClick={navigate.bind(this, '/change-confirmation-email')} />
-    </Paper>
-    : null;
-}
 
 class CoreLayout extends React.Component {
   static propTypes = {
@@ -151,7 +132,6 @@ class CoreLayout extends React.Component {
           <Header history={this.props.history} />
           <div className={classes.join(" ")}>
             <SideNav {...this.props} />
-            {ConfirmEmailBox(this.props.session, this._navigate)}
             {this.props.children}
           </div>
         </div>

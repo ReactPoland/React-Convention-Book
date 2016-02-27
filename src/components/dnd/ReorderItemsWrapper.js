@@ -3,6 +3,7 @@ import update from 'react/lib/update';
 import { DragDropContext } from 'react-dnd';
 import { DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import Colors from 'material-ui/lib/styles/colors';
 
 import ItemTypes from 'constants/DNDItemTypes';
 
@@ -10,19 +11,34 @@ import ReorderDraggableBox from 'components/dnd/ReorderDraggableBox';
 
 const dropTarget = {
   hover(props, monitor, component) {
-    alert('kurwa mać! 1')
-    consolle.log(monitor.getItem())
+    component.setState({
+      over: monitor.isOver({shallow: true})
+    });
   },
 
-  drop() {
-    alert('kurwa mać! 2')
+  drop(props, monitor, component) {
+    const hasDroppedOnChild = monitor.didDrop();
+    if(hasDroppedOnChild) {
+      return;
+    }
+
+    component.moveItem(monitor.getItem().item, 0);
   }
 }
 
-@DropTarget(ItemTypes.DROP_FIELD, dropTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  isOverCurrent: monitor.isOver({shallow: false})
+const getStyles = (length, dye) => ({
+  overflow: length ? 'auto' : 'hidden',
+  maxHeight: 'inherit',
+  padding: '24px',
+  margin: length ? 0 : 24,
+  height: length ? 'auto' : 75,
+  borderStyle: 'dashed',
+  borderWidth: length ? 0 : 3,
+  borderColor: dye || '#e0e0e0'
+});
+
+@DropTarget(ItemTypes.ORDER_ENTITY, dropTarget, (connect) => ({
+  connectDropTarget: connect.dropTarget()
 }))
 class Inside extends React.Component {
   static defaultProps = {
@@ -39,13 +55,15 @@ class Inside extends React.Component {
 
     this.moveItem = this.moveItem.bind(this);
     this.getData = this.getData.bind(this);
+    this.dyeBorder = this.dyeBorder.bind(this);
+    this.undyeBorder = this.undyeBorder.bind(this);
 
     this.state = {
       items: this.props.items
-    }
+    };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps, nextState) {
     if(nextProps.items !== this.props.items) {
       this.setState({
         items: nextProps.items
@@ -83,10 +101,19 @@ class Inside extends React.Component {
     return this.state.items;
   }
 
+  dyeBorder() {
+    this.setState({dye: Colors.cyan500});
+  }
+
+  undyeBorder() {
+    this.setState({dye: '#e0e0e0'});
+  }
+
   render() {
     const { connectDropTarget } = this.props;
     const items = (this.state.items || []).map((item, index) => {
       /* use title as a key if item is newly created and doesn't have id yet */
+      if(!item) return null; // this cases covers when someone has removed an item
       return (
         <ReorderDraggableBox
           item={item}
@@ -97,12 +124,10 @@ class Inside extends React.Component {
           onDelete={this.props.onDelete} />
       );
     });
-    const styles = items.length
-      ? {overflow: 'auto', maxHeight: 'inherit', padding: '24px', background: this.props.isDragging ? 'red' : ''}
-      : {maxHeight: 'inherit', margin: 24, padding: '24px', height: 75, border: '3px dashed #e0e0e0', background: this.props.isDragging ? 'red' : ''}
-console.log(this.props.isOver, this.props.isOverCurrent)
+    const styles = getStyles(items.length, this.state.dye);
+
     return connectDropTarget(
-      <div style={styles}>
+      <div style={styles} onDragEnter={this.dyeBorder} onDragLeave={this.undyeBorder}>
         {
           items.length
           ? items
@@ -122,7 +147,6 @@ export default class ReorderItemsWrapper extends React.Component {
   render() {
     return (
       <Inside
-        id="2132121"
         {...this.props} />
     );
   }

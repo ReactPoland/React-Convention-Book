@@ -145,6 +145,7 @@ class MenuEntity extends React.Component {
   }
 
   onDeleteMenu(id) {
+    // .......
     console.log('\n#################\nCALL API: DELETE MENU\n#################\n');
     API
       .delete({
@@ -222,8 +223,36 @@ class MenuEntity extends React.Component {
     });
   }
 
-  onItemsReorder() {
+  onItemsReorder(sections) {
+    Promise.all(
+      sections.map((section) => {
+        console.log('\n#################\nCALL API: UPDATE SECTION\n#################\n');
+        let fullSection = this.props.section.get(section.id);
+        fullSection.items = section.items.map((item) => item.id);
+        section = fullSection.formatForWire();
 
+        return API
+          .set({
+            url: ['sectionsById', section.id],
+            body: section
+          })
+          .then(() => {
+            this.props.actions.section.update(section);
+            return section;
+          });
+      })
+    )
+    .then((menu) => {
+      this.setState({
+        requestSuccess: 'Saved',
+        modal: null
+      });
+    });
+  }
+
+  onAddMenuItem() {
+    console.log('\n#################\nCALL API: ADD MENU ITEM\n#################\n');
+    alert('add menu item')
   }
 
   closeModal() {
@@ -350,7 +379,9 @@ class MenuEntity extends React.Component {
 
         <AddMenuItemModal
           key="add-menu-item-modal"
+          title="Add Menu Item"
           onHide={this.closeModal}
+          onDone={this.onAddMenuItem}
           open={this.state.modal === 'add-menu-item'} />,
 
         <ErrorSuccessMsg

@@ -34,7 +34,9 @@ export const DefaultInput = React.createClass({
           onChange={this.changeValue}
           onBlur={this.props.onBlur}
           required={this.props.required}
-          defaultValue={this.props.value || this.getValue()} />
+          multiLine={this.props.multiLine}
+          rows={this.props.rows}
+          value={this.props.value || this.getValue()} />
         {this.props.children}
       </div>
     );

@@ -8,12 +8,13 @@ import {
 
 export default {
   get: falcorGet,
+  getValue: falcorGetValue,
   set: falcorSet,
   create: falcorCreate,
   delete: falcorDelete,
 
   // util for debugging falcor model
-  $log: () => console.log(model._root.cache)
+  $log: (msg) => console.log(msg, model._root.cache)
 };
 
 
@@ -35,6 +36,19 @@ async function falcorGet(url) {
   return response;
 }
 
+async function falcorGetValue(url) {
+  const response = await model
+    .getValue(url)
+    .then((response) => {
+      console.log('API response GET: ', response);
+      return response;
+    })
+    .catch((error) => {
+      console.error(url, error);
+    });
+
+  return response;
+}
 
 
 /**

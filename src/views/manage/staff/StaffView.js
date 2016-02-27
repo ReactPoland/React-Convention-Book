@@ -55,6 +55,8 @@ class StaffView extends React.Component {
 
   onAddMember(member) {
     console.log('\n#################\nCALL API: INVITE STAFF MEMBER\n#################\n');
+    // TODO unmock in future
+    member.imageUrl = "http://lorempixel.com/200/300/people"; 
 
     API
       .create({

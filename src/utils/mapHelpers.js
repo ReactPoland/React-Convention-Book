@@ -19,9 +19,21 @@ const addItem = (map, newKey, newItem) => {
   return newMap;
 };
 
+const checkKeyType = (mapToCheck, keyToCheck) => {
+  // this function checks if a key is an INT or STRING in order to make delete more robust
+  let firstElem = mapToCheck.values().next();
+  if(isNaN(firstElem.id) && isNaN(keyToCheck)) {
+    return keyToCheck;
+  } else if (isNaN(firstElem.id) && !isNaN(keyToCheck)) {
+    return keyToCheck.toString();
+  } else alert("mapHelpers/checkKeyType error") // just in case
+}
+
 const removeItem = (map, key) => {
+  key = checkKeyType(map, key)
   const newMap = duplicate(map);
   newMap.delete(key);
+
   return newMap;
 };
 

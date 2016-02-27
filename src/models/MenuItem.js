@@ -1,4 +1,5 @@
 import Model from './Model';
+import Allergen from './Allergen';
 
 export default class MenuItem extends Model {
   constructor(item) {
@@ -6,12 +7,18 @@ export default class MenuItem extends Model {
 
     this.type = 'MenuItem';
     this.picUrl = item.picUrl;
+    this.description2 = item.description2;
+    this.description3 = item.description3;
+    this.allergens = new Allergen(item.allergens);
   }
 
   formatForWire() {
     const forWire = super.formatForWire();
 
     forWire.picUrl = this.picUrl;
+    forWire.description2 = this.description2;
+    forWire.description3 = this.description3;
+    forWire.allergens = this.allergens.formatForWire();
 
     return forWire;
   }

@@ -35,6 +35,8 @@ export default class ReorderMenuItemsModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this._onDone = this._onDone.bind(this);
+
     this.state = {
       sections: prepareSections(this.props),
     };
@@ -49,7 +51,7 @@ export default class ReorderMenuItemsModal extends React.Component {
   }
 
   _onDone() {
-
+    this.props.onDone(this.state.sections);
   }
 
   // section - the one to which item should be added
@@ -79,8 +81,15 @@ export default class ReorderMenuItemsModal extends React.Component {
     }
   }
 
-  onDeleteSection() {
-
+  onDeleteItem(section, item) {
+    const index = this.state.sections.indexOf(section);
+    const sections = this.state.sections.slice();
+    const items = section.items.slice();
+    const itemIndex = items.indexOf(item);
+    items.splice(itemIndex, 1);
+    section.items = items;
+    sections[index] = section;
+    this.setState({sections});
   }
 
   render() {
@@ -103,7 +112,7 @@ export default class ReorderMenuItemsModal extends React.Component {
               <ReorderItemsWrapper
                 onChange={this.onUpdateOrder.bind(this, section)}
                 items={section.items}
-                onDelete={this.onDeleteSection} />
+                onDelete={this.onDeleteItem.bind(this, section)} />
             </Paper>
           );
         })}

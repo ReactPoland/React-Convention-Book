@@ -4,6 +4,7 @@ import { Section } from 'models';
 import {
   SECTION_LIST,
   SECTION_ADD,
+  SECTION_UPDATE,
   SECTION_DELETE
 } from 'constants/section';
 
@@ -21,6 +22,10 @@ export default createReducer(initialState, {
 
   [SECTION_ADD]: (state, payload) => {
     payload.id = payload.id || getRandomId();
+    return mapHelpers.addItem(state, payload.id, new Section(payload));
+  },
+
+  [SECTION_UPDATE]: (state, payload) => {
     return mapHelpers.addItem(state, payload.id, new Section(payload));
   },
 

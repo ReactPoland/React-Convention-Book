@@ -102,6 +102,7 @@ export default class MenuListItem extends React.Component {
                   primaryText="Edit Item"
                   rightIcon={<EditorModeEdit />} />
                 <MenuItem
+                  onClick={() =>{this.props.onRemoveClick(this.props.item)}}
                   primaryText="Remove Item"
                   rightIcon={<ActionDelete />} />
               </IconMenu>

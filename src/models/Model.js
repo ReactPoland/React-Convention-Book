@@ -22,7 +22,7 @@ export default class Model {
 
   prepareArray(items) {
     // if menu sections is array it can be either:
-    // aray of ids as strings
+    // array of ids as strings
     // or array of falcor $refs
     if(Array.isArray(items)) {
       return items.map((item) => {
