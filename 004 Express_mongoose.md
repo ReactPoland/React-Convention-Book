@@ -1,5 +1,6 @@
 # Express setup with Mongoose
 
+### Running MongoDB in the background
 Once you have installed MongoDB following the instructions, then you have access to run:
 ```
 mongod
@@ -64,6 +65,43 @@ local  0.078GB
 
 ### Importing the articles to the MongoDB
 Below we will use terminal (command prompt) in order to import the articles into database. Alternatively you can use Robomongo to do it via GUI as well.
+
+```
+mongoimport --db local --collection articles --jsonArray initData.js --host=127.0.0.1
+```
+
+Then you shall get in your terminal information:
+```
+connected to: 127.0.0.1
+imported 2 documents
+
+```
+
+In case if you will get an error "Failed: error connecting to db server: no reachable servers" then make sure if you have running the mongod on the given host ip (127.0.0.1).
+
+After importing those articles via the command line then you will see this reflected also in the Robomongo:
+
+[004_articles_imported_success.png]
+
+
+### Server setup with NodeJS and Express.js
+
+Once we have our articles' collection in the MongoDB, we can start working on our Express.js server in order to work on the collection.
+
+Let's create a server.js file in server directory:
+```
+mkdir server
+cd server
+touch index.js
+```
+
+
+
+
+
+
+
+
 
 
 
