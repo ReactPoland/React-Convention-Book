@@ -10,9 +10,7 @@ app.server = http.createServer(app);
 app.use(cors());
 
 // This is required by falcor-express middleware to work correctly with falcor-browser
-app.use(bodyParser.json({
-	extended: false
-}));
+app.use(bodyParser.json({extended: false}));
 
 app.get('/', (req, res) => res.send('Publishing App Initial Application!'));
 

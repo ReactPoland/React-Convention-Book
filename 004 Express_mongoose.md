@@ -81,7 +81,7 @@ In case if you will get an error "Failed: error connecting to db server: no reac
 
 After importing those articles via the command line then you will see this reflected also in the Robomongo:
 
-[004_articles_imported_success.png]
+![articles import success](http://test.przeorski.pl/book/004_articles_imported_success.png)
 
 
 ### Server setup with NodeJS and Express.js
@@ -151,9 +151,7 @@ app.server = http.createServer(app);
 app.use(cors());
 
 // This is required by falcor-express middleware to work correctly with falcor-browser
-app.use(bodyParser.json({
-	extended: false
-}));
+app.use(bodyParser.json({extended: false}));
 
 app.get('/', (req, res) => res.send('Publishing App Initial Application!'));
 
@@ -172,8 +170,8 @@ Cors is a middleware for dynamically or statically enabling CORS (Cross-Origin R
 Body-parser is a middleware for http's body parsing, it has some fancy settings that helps build us the app faster.
 
 
-
-
+This how our app should looks on that stage of our development:
+![our publishing app init screenshot](http://test.przeorski.pl/book/005_publishing_app_init.png)
 
 
 
