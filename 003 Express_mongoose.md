@@ -103,7 +103,7 @@ touch index.js
 
 Installing express:
 ```
-npm i express@4.13.4 babel@4.7.16 cors@2.7.1 body-parser@1.15.0 --save
+npm i express@4.13.4 babel@4.7.16 babel-register@6.5.2 cors@2.7.1 body-parser@1.15.0 --save
 ```
 
 @4.13.4 means that we will use this version of the Express' Framework. 
@@ -112,6 +112,7 @@ We also need libraries as following:
 1) babel - [QUESTION: DO WE NEED DESCRIPTION?]
 2) cors  - [QUESTION: DO WE NEED DESCRIPTION?]
 3) body-parser - [QUESTION: DO WE NEED DESCRIPTION?]
+4) babel-register - [QUESTION: DO WE NEED DESCRIPTION?]
 
 After this your project's files structure shall looks like:
 ```
