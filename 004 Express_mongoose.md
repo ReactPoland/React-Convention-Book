@@ -182,16 +182,52 @@ Having the working simple express.js server, now we have to add Mongoose to our 
 npm i mongoose --save
 ```
 
-Once we have installed mongoose and a running mongoDB database in the background, we can import it to our server.js file
+Once we have installed mongoose and a running mongoDB database in the background, we can import it to our server.js file and do the coding:
 
 ```
+import http from 'http';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+
+mongoose.connect('mongodb://localhost/local');
+
+var articleSchema = {
+	articleTitle:String,
+	articleContent:String
+}
+
+var Article = mongoose.model('Article', articleSchema, 'articles')
+
+
+var app = express();
+app.server = http.createServer(app);
+
+// CORS - 3rd party middleware
+app.use(cors());
+
+// This is required by falcor-express middleware to work correctly with falcor-browser
+app.use(bodyParser.json({extended: false}));
+
+app.get('/', (req, res) => { 
+	Article.find(function (err, articlesDocs) {
+
+		let ourArticles = articlesDocs.map(function(articleItem){
+			return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
+		}).join("<br/>");
+
+		res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
+	});
+});
+
+app.server.listen(process.env.PORT || 3000);
+console.log(`Started on port ${app.server.address().port}`);
+
+export default app;
+
 ```
 
-
-
-
-
-
+![articles import success](http://test.przeorski.pl/book/006_fetching_articles_from_mongoose.png)
 
 
