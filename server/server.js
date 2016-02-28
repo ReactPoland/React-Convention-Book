@@ -2,6 +2,17 @@ import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+
+mongoose.connect('mongodb://localhost/local');
+
+var articleSchema = {
+	articleTitle:String,
+	articleContent:String
+}
+
+var Article = mongoose.model('Article', articleSchema, 'articles')
+
 
 var app = express();
 app.server = http.createServer(app);
@@ -12,9 +23,18 @@ app.use(cors());
 // This is required by falcor-express middleware to work correctly with falcor-browser
 app.use(bodyParser.json({extended: false}));
 
-app.get('/', (req, res) => res.send('Publishing App Initial Application!'));
+app.get('/', (req, res) => { 
+	Article.find(function (err, articlesDocs) {
 
-app.server.listen(process.env.PORT || 8080);
+		let ourArticles = articlesDocs.map(function(articleItem){
+			return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
+		}).join("<br/>");
+
+		res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
+	});
+});
+
+app.server.listen(process.env.PORT || 3000);
 console.log(`Started on port ${app.server.address().port}`);
 
 export default app;
