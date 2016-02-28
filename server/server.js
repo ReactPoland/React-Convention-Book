@@ -13,9 +13,9 @@ app.use(bodyParser.json({
 	limit : '100kb'
 }));
 
+app.get('/', (req, res) => res.send('Publishing App Initial Application!'));
 
 app.server.listen(process.env.PORT || 8080);
 console.log(`Started on port ${app.server.address().port}`);
-
 
 export default app;

@@ -88,16 +88,83 @@ After importing those articles via the command line then you will see this refle
 
 Once we have our articles' collection in the MongoDB, we can start working on our Express.js server in order to work on the collection.
 
-Let's create an index.js file in a server directory:
+First we need in an NPM project in our directory:
+```
+npm init --yes
+```
+The --yes flag means that we will use default settings for package.json.
+
+Next let's create a server.js file in server directory:
 ```
 mkdir server
 cd server
 touch index.js
 ```
 
-and let's install the Express and save it to package.json:
+Installing express:
+```
+npm i express@4.13.4 babel@4.7.16 babel-register@6.5.2 cors@2.7.1 body-parser@1.15.0 --save
+```
 
-``
+@4.13.4 means that we will use this version of the Express' Framework. 
+
+We also need libraries as following:
+1) babel - [QUESTION: DO WE NEED DESCRIPTION?]
+2) cors  - [QUESTION: DO WE NEED DESCRIPTION?]
+3) body-parser - [QUESTION: DO WE NEED DESCRIPTION?]
+4) babel-register - [QUESTION: DO WE NEED DESCRIPTION?]
+
+After this your project's files structure shall looks like:
+```
+├── node_modules
+│   ├── *******
+├── initData.js
+├── package.json
+└── server
+    └── index.js
+```
+The ******* is a wildcard which means that there are files reqired for our project, but we don't list it here as it would be too long.
+
+### Working on our server (server.js & index.js)
+
+In the index.js we need to add babel/register in order XYZ
+
+The index.js file content:
+```
+require("babel/register");
+require('./server');
+```
+
+and
+
+The server.js file content:
+```
+import http from 'http';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+
+var app = express();
+app.server = http.createServer(app);
+
+// 3rd party middleware
+app.use(cors());
+
+app.use(bodyParser.json({
+	limit : '100kb'
+}));
+
+app.get('/', (req, res) => res.send('Publishing App Initial Application!'));
+
+app.server.listen(process.env.PORT || 8080);
+console.log(`Started on port ${app.server.address().port}`);
+
+export default app;
+```
+
+
+
+
 
 
 
