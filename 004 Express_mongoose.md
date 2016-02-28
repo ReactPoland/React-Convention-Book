@@ -1,4 +1,4 @@
-# Express setup with Mongoose
+## Express setup with Mongoose
 
 ### Running MongoDB in the background
 Once you have installed MongoDB following the instructions, then you have access to run:
@@ -101,7 +101,7 @@ cd server
 touch index.js
 ```
 
-Installing express:
+Installing express and other initial dependencies:
 ```
 npm i express@4.13.4 babel@4.7.16 babel-register@6.5.2 cors@2.7.1 body-parser@1.15.0 --save
 ```
@@ -147,11 +147,12 @@ import bodyParser from 'body-parser';
 var app = express();
 app.server = http.createServer(app);
 
-// 3rd party middleware
+// CORS - 3rd party middleware
 app.use(cors());
 
+// This is required by falcor-express middleware to work correctly with falcor-browser
 app.use(bodyParser.json({
-	limit : '100kb'
+	extended: false
 }));
 
 app.get('/', (req, res) => res.send('Publishing App Initial Application!'));
@@ -160,7 +161,16 @@ app.server.listen(process.env.PORT || 8080);
 console.log(`Started on port ${app.server.address().port}`);
 
 export default app;
+
 ```
+
+What's in the files:
+Requiring the babel/register library is for being able using ES6 syntax in our code. In the index.js file, we have a "http" module which comes from NodeJS (https://nodejs.org/api/http.html#http_http). Next we have express, cors and body-parser.
+
+Cors is a middleware for dynamically or statically enabling CORS (Cross-Origin Resource Sharing) in express applications - it will be useful in our development enviroment (we will delete it later for our production server).
+
+Body-parser is a middleware for http's body parsing, it has some fancy settings that helps build us the app faster.
+
 
 
 
