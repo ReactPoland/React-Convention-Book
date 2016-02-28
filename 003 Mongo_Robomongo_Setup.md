@@ -1,4 +1,4 @@
-# MongoDB installation
+## MongoDB installation
 
 What operation systems do you use? Windows, Linux or OS X?
 
@@ -9,7 +9,7 @@ Screenshot from the MongoDB website:
 
 All the MongoDB instructions you can find at https://docs.mongodb.org/manual/installation/
 
-# Mongo on OS X
+## Mongo on OS X
 In that OS X tutorial, we will use the guide for "Install MongoDB Community Edition with Homebrew".
 
 You need to have installed the Homebrew, if you don't have it then go to www.brew.sh and install it.
@@ -31,7 +31,7 @@ a) Install MongoDB from Binaries (on localhost enviroment, we don't need the TLS
 brew install mongodb
 ```
 
-# Robomongo GUI for MongoDB
+## Robomongo GUI for MongoDB
 
 Robomongo is a cross-platform desktop client which may be comparised to MySQL or PostgreSQL for SQL databases.
 
@@ -65,7 +65,7 @@ and after that :
 
 ![Robomongo default create a new connection](http://test.przeorski.pl/book/003_create_new_connection.png)
 
-# Summary of MongoDb & Robomongo setup
+## Summary of MongoDb & Robomongo setup
 Currently, you have a localhost database set-up finished.
 
 
