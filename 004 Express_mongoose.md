@@ -155,7 +155,7 @@ app.use(bodyParser.json({extended: false}));
 
 app.get('/', (req, res) => res.send('Publishing App Initial Application!'));
 
-app.server.listen(process.env.PORT || 8080);
+app.server.listen(process.env.PORT || 3000);
 console.log(`Started on port ${app.server.address().port}`);
 
 export default app;
@@ -171,7 +171,7 @@ Body-parser is a middleware for http's body parsing, it has some fancy settings 
 
 
 This how our app should looks on that stage of our development:
-![our publishing app init screenshot](http://test.przeorski.pl/book/005_publishing_app_init.png)
+![our publishing app init screenshot](http://test.przeorski.pl/book/005_publishing_app_init2.png)
 
 
 ## Mongoose and express
