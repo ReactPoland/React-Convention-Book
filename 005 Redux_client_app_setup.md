@@ -24,6 +24,20 @@ All changes (actions) in Redux are explicit so you can track a history of all yo
 Above is a simple example dev tool use case which you will use in your development enviroment. It will help you to track the changes of state in your app. The example shows how we have incremented the counter value in our state by +1 three times. Of course our publishing app structure will be much more complcated than this example above. You will learn more about that dev tool later in the book.
 
 
+### Immutability - actions & state tree is read only
+You cannot modify/mutate the values in your state tree the same was as it was in Facebook's FLUX (and other) implementations. 
+
+An action the same way as in other FLUX implementations is a plain object that describes the change - like adding an article (below we mock the payload for the sake of brevity):
+
+```
+{
+	type: "ADD_ARTICLE",
+	payload: "_____HERE_GOES_INFORMATION_ABOUT_THE_CHANGE_____"
+}
+```
+An action is a minimal representation of the change for our app state tree. 
+
+
 
 
 
