@@ -37,6 +37,69 @@ An action the same way as in other FLUX implementations is a plain object that d
 ```
 An action is a minimal representation of the change for our app state tree. 
 
+Let's prepare actions for our publishing app.
+
+
+### Pure and impure functions
+TODO 
+
+### The Reducer function
+TODO 
+
+
+
+### Big picture of our client-side files structure
+This is how us going to be our client-side application sturcutre for giving you big picture of what we are going to discuss:
+
+```
+├── actions
+│   └── article.js
+├── app.js
+├── components
+│   └── dumbArticleComponent.js
+├── constants
+│   └── article.js
+├── containers
+│   ├── DevTools.js
+│   ├── DevToolsWindow.js
+│   └── Root.js
+├── decorators
+│   └── Loader.js
+├── falcorModel.js
+├── index.html
+├── layouts
+│   └── CoreLayout.js
+├── models
+│   └── article.js
+├── reducers
+│   ├── article.js
+│   └── index.js
+├── routes
+│   └── index.js
+├── store
+│   └── configureStore.js
+├── styles
+│   ├── _base.scss
+│   ├── components
+│   │   ├── _add-section.scss
+│   │   ├── _excerpt.scss
+│   │   ├── _header.scss
+│   │   ├── _menu-list.scss
+│   │   └── _sidenav.scss
+│   ├── core.scss
+│   ├── inlineStyles.js
+│   └── vendor
+│       └── _normalize.scss
+├── utils
+│   ├── API.js
+│   ├── falcorUtils.js
+│   ├── index.js
+│   ├── mapHelpers.js
+│   └── roles.js
+└── views
+    └── HomeView.js
+```
+
 
 
 
