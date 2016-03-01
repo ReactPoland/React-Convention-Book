@@ -15,9 +15,12 @@ import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
 
 import AddMenuItemModal from 'components/menu/modals/AddMenuItemModal';
 
+const falcorLib = require('falcor/dist/falcor.browser');
+
 const mapStateToProps = (state) => ({
   ...state
 });
+
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
@@ -37,9 +40,15 @@ class MenuLibraryView extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log("UNDEFINIED!!!!!!");
+    console.log(this.props.menuItem);
+    console.log("UNDEFINIED!!!!!!");
+
     this.hideModal = this.hideModal.bind(this);
-    this.onAddItem = this.onAddItem.bind(this);
-    this.onRemoveClick = this.onRemoveClick.bind(this);
+    this.onAddItemDone = this.onAddItemDone.bind(this);
+    this.onRemoveItemClick = this.onRemoveItemClick.bind(this);
+    this.onEditItemClick = this.onEditItemClick.bind(this);
+    this.onEditItemDone = this.onEditItemDone.bind(this);
     this.nullifyRequestState = this.nullifyRequestState.bind(this);
 
     this._createMenuItemAndGetRef = this._createMenuItemAndGetRef.bind(this);
@@ -47,7 +56,8 @@ class MenuLibraryView extends React.Component {
     this._addItemToSections = this._addItemToSections.bind(this);
 
     this.state = {
-      modal: null
+      modal: null,
+      editItemId: null
     };
 
     this._fetchData();
@@ -75,7 +85,7 @@ class MenuLibraryView extends React.Component {
   }
 
   hideModal() {
-    this.setState({modal: null});
+    this.setState({modal: null, editItemId: null});
   }
 
   nullifyRequestState() {
@@ -150,7 +160,27 @@ class MenuLibraryView extends React.Component {
     }));
   }
 
-  onAddItem(menuItem, refMap) {
+  onEditItemDone(menuItem, refMap) {
+    /*
+        refMap is an information in what menus and sections, the item has been added
+     */
+    menuItem.picUrl = "http://lorempixel.com/700/500/food/";
+    menuItem = menuItem.formatForWire();
+
+    return API
+      .set({
+        url: ['menuItemsById', menuItem.id],
+        body: menuItem
+      })
+      .then(() => {
+        this.props.actions.menuItem.update(menuItem);
+      });
+
+
+  }
+
+  onAddItemDone(menuItem, refMap) {
+    console.info("refMap", refMap);
     // TODO temp mocking item image
     menuItem.picUrl = "http://lorempixel.com/700/500/food/";
     menuItem = menuItem.formatForWire();
@@ -184,27 +214,57 @@ class MenuLibraryView extends React.Component {
       });
   }
 
-  async onRemoveClick(itemDetail) {
-    let menuItemId = 8612184282392263; // Ham and mayo sandwich
-    
-    await API.delete({
-        url: ['menuItemsById', menuItemId],
-        ref: ['sectionsById', 7085243347100914, 'items', 0]
-      });
-
-    // deleting also from restaurants (TODO refactor)
-    await API.delete({
-        url: ['restaurants', 0, 'menuItems', 3],
-        ref: null
-    });
-
-    console.log("this.props.actions.menu.delete", this.props.actions.menuItem);
-
-    this.props.actions.menuItem.delete(menuItemId);
+  async onEditItemClick(menuItemIdToEdit) {
+    console.log("edditing item id", menuItemIdToEdit);
     this.setState({
-      requestSuccess: 'Deleted'
+      modal: 'add-modal', 
+      editItemId: menuItemIdToEdit
     });
+  }
+  
+  async onRemoveItemClick(menuItemIdToDelete) {
+    /*
+        TODO: refactoring to delete obj from reducer & falcor
+        via a model delete function! (Kamil)
+     */
+    let sectionObj = this.props.section;
+    let sectionsToUpdate = [];
+    sectionObj.forEach((section, index) => {
+      let sectionId = section.id;
+      let newItems = [];
+      section.items.forEach((itemId, index) => {
+        if(itemId !== menuItemIdToDelete) {
+          newItems.push(itemId);
+        }
+      });
+      if(section.items.length !== newItems.length) {
+        section.items = newItems;
+        sectionsToUpdate.push(section);
+      }
+    })
 
+    this.props.actions.menuItem.delete(menuItemIdToDelete);
+    Promise.all(
+      sectionsToUpdate.map((section, index) => {
+        
+        section = section.formatForWire();
+        
+        console.log("PROMISE", section.id); 
+        console.log("11KAMIL PROMISE UPDATING SECTION");     
+        console.log(section);
+        return API
+          .set({
+            url: ['sectionsById', section.id],
+            body: section
+          })
+          .then(() => {
+            console.log("22KAMIL UPDATING SECTION");
+            this.props.actions.section.update(section);
+            return section;
+          });
+      })
+    );
+    return;
   }
 
   render() {
@@ -212,9 +272,9 @@ class MenuLibraryView extends React.Component {
     const { menuItem } = this.props;
     const items = [];
 
-    menuItem.forEach((item) => {
+    menuItem.forEach((item, index) => {
       items.push(
-        <MenuListItem item={item} key={item.id} onRemoveClick={this.onRemoveClick} />
+        <MenuListItem item={item} key={item.id} onRemoveClick={this.onRemoveItemClick} onEditClick={this.onEditItemClick} />
       );
     });
 
@@ -229,11 +289,13 @@ class MenuLibraryView extends React.Component {
         </FloatingActionButton>
 
         <AddMenuItemModal
-          onDone={this.onAddItem}
+          editItemId={this.state.editItemId}
+          onDone={ this.state.editItemId ? this.onEditItemDone : this.onAddItemDone}
           onHide={this.hideModal}
           menus={this.props.menu}
+          menuItems={this.props.menuItem}
           sections={this.props.section}
-          title="Add menu item"
+          title={ this.state.editItemId ? "Edit menu item" : "Add menu item" }
           open={this.state.modal === 'add-modal'} />
 
         <ErrorSuccessMsg

@@ -36,7 +36,7 @@ export default class Allergen extends React.Component {
       vegetarian: false,
       gluten: false,
       egg: false,
-      dairy: false,
+      dairy: true,
       nut: false,
       soy: false,
       fish: false

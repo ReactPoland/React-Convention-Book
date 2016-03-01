@@ -69,14 +69,55 @@ class MenuRow extends React.Component{
 export default class AddToMenu extends React.Component {
   constructor(props) {
     super(props);
+    this.componentWillMount = this.componentWillMount.bind(this);
+    this._computeBelongingsMap = this._computeBelongingsMap.bind(this);
 
     this.state = {
-      belongingsMap: {}
+      belongingsMap: { }
     };
+  }
+
+  componentWillMount() {
+    if(this.props.editItemId) {
+      // We are in edit mode, so we need to calculate belongings to order it correctly
+      this._computeBelongingsMap();
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextState.belongingsMap !== this.state.belongingsMap;
+  }
+
+  _computeBelongingsMap() {
+    let searchedItemId = this.props.editItemId;
+    let sectionsBelongings = [];
+    this.props.sections.forEach((sectionItem, index1) => {
+      sectionItem.items.map((idItem, sectionIndex) => {
+        if(searchedItemId.toString() === idItem.toString()) {
+          sectionsBelongings.push(sectionItem.id);
+        }
+      })
+    });
+
+    let computedBelongingsMap = {};
+
+    this.props.menus.forEach((menuItem, menuIndex) => {
+      computedBelongingsMap[menuItem.id] = [];
+      let sectionsArray = menuItem.sections;
+      sectionsArray.map((secItem, secIndex) => {
+
+        if(sectionsBelongings.find(x => x === secItem) !== undefined) {
+          computedBelongingsMap[menuItem.id].push(secItem);
+        }
+      });
+
+      let foundLen = computedBelongingsMap[menuItem.id].length;
+      if(foundLen === 0) {
+        // deleting from the belingings map keys with empty arrays
+        delete computedBelongingsMap[menuItem.id];
+      }
+    });
+    this.setState({belongingsMap: computedBelongingsMap})
   }
 
   _onAddToSection(menuId, sectionId) {
@@ -101,6 +142,9 @@ export default class AddToMenu extends React.Component {
 
   render() {
     const menus = [];
+
+    console.log("belongings ->", this.state.belongingsMap);
+
     MenuRow = MenuRow.bind(this, this.state, this.props);
     if(this.props.menus.size) {
       this.props.menus.forEach((menu, key) => {

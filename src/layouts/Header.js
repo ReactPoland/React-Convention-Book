@@ -42,7 +42,7 @@ class Header extends React.Component {
 
     // let requestObj = {
     //   method: 'post',
-    //   url: 'https://iron-staging.herokuapp.com/logout'
+    //   url: 'article.js/logout'
     // }
 
     // let response = await API.post(requestObj);

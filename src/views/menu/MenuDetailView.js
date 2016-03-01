@@ -34,6 +34,9 @@ class MenuDetailView extends React.Component {
     super(props);
     const id = this.props.params.id;
 
+    console.log("HAVING");
+    console.log(this.props.menuItem);
+    console.log("HAVING");
     this._fetchData = this._fetchData.bind(this);
 
     this.state = {

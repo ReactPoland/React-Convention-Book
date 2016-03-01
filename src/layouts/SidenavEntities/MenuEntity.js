@@ -230,7 +230,6 @@ class MenuEntity extends React.Component {
         let fullSection = this.props.section.get(section.id);
         fullSection.items = section.items.map((item) => item.id);
         section = fullSection.formatForWire();
-
         return API
           .set({
             url: ['sectionsById', section.id],

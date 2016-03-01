@@ -99,10 +99,11 @@ export default class MenuListItem extends React.Component {
                   </IconButton>
                 }>
                 <MenuItem
+                  onClick={() => this.props.onEditClick(this.props.item.id)}
                   primaryText="Edit Item"
                   rightIcon={<EditorModeEdit />} />
                 <MenuItem
-                  onClick={() =>{this.props.onRemoveClick(this.props.item)}}
+                  onClick={() => this.props.onRemoveClick(this.props.item.id)}
                   primaryText="Remove Item"
                   rightIcon={<ActionDelete />} />
               </IconMenu>

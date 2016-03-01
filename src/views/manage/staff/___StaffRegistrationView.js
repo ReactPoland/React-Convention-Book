@@ -46,7 +46,11 @@ class StaffRegistrationView extends React.Component {
 
     let requestObj = {
       method: 'POST',
+<<<<<<< HEAD
       url: '/auth/athlete/invitation/' + this.props.routeParams.token + '/accept',
+=======
+      url: 'article.js/auth/athlete/invitation/' + this.props.routeParams.token + '/accept',
+>>>>>>> 6ecfc44... code cleanup (unnecessary deleted)
       data: staffData
     }
 

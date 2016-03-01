@@ -1,7 +1,8 @@
 import {
   MENUITEM_LIST,
   MENUITEM_ADD,
-  MENUITEM_DELETE
+  MENUITEM_DELETE,
+  MENUITEM_UPDATE
 } from 'constants/menuItem';
 
 export default {
@@ -15,6 +16,13 @@ export default {
   add(menuItem) {
     return {
       type: MENUITEM_ADD,
+      payload: menuItem
+    };
+  },
+
+  update(menuItem) {
+    return {
+      type: MENUITEM_UPDATE,
       payload: menuItem
     };
   },

@@ -30,7 +30,7 @@ const checkKeyType = (mapToCheck, keyToCheck) => {
 }
 
 const removeItem = (map, key) => {
-  key = checkKeyType(map, key)
+  key = checkKeyType(map, key);
   const newMap = duplicate(map);
   newMap.delete(key);
 

@@ -5,7 +5,8 @@ import mapHelpers from 'utils/mapHelpers';
 import {
   MENUITEM_LIST,
   MENUITEM_ADD,
-  MENUITEM_DELETE
+  MENUITEM_DELETE,
+  MENUITEM_UPDATE
 } from 'constants/menuItem';
 
 const initialState = new Map();
@@ -19,16 +20,22 @@ export default createReducer(initialState, {
     return mapHelpers.addMultipleItems(state, newItems);
   },
 
+  [MENUITEM_UPDATE]: (state, payload) => {
+
+    // alert("MENUITEM_UPDATE");
+    console.info("MENUITEM_UPDATE", payload);
+
+    let newMenuItem = new MenuItem(payload);
+    return mapHelpers.addItem(state, payload.id, newMenuItem);
+  },
+
   [MENUITEM_ADD]: (state, payload) => {
     let newMenuItem = new MenuItem(payload);
     return mapHelpers.addItem(state, payload.id, newMenuItem);
   },
 
   [MENUITEM_DELETE]: (state, payload) => {
-    // alert("MENUITEM_DELETE"+JSON.stringify(payload));
     let newState = mapHelpers.removeItem(state, payload);
-    console.log("state", state);
-    console.log("newState", newState);
     return mapHelpers.removeItem(state, payload);
   },
 });

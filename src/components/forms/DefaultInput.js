@@ -22,12 +22,13 @@ export const DefaultInput = React.createClass({
     return (
       <div>
         <TextField
-          floatingLabelText={this.props.title}
+          floatingLabelText={this.props.defaultValue ? '' : this.props.title}
           floatingLabelStyle={{fontWeight: 300}}
           fullWidth={(this.props.style && !this.props.style.width) || true}
           style={this.props.style}
           autoFocus={this.props.autoFocus}
           ref={this.props.name}
+          defaultValue={this.props.defaultValue || ''}
           errorText={errorMessage}
           type={this.props.type || 'text'}
           name={this.props.name}

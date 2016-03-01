@@ -42,8 +42,9 @@ export default class AddMenuItemModal extends React.Component {
   _onDone(formData) {
     const item = Object.assign({}, formData);
     item.allergens = this.state.allergens;
-
-    this.props.onDone(new MenuItem(item), this.state.sectionsMap);
+    let newMenuItem = new MenuItem(item);
+    if(this.props.editItemId) newMenuItem.id = this.props.editItemId;
+    this.props.onDone(newMenuItem, this.state.sectionsMap);
   }
 
   _enableBtn() {
@@ -68,6 +69,19 @@ export default class AddMenuItemModal extends React.Component {
   }
 
   render() {
+    let editItemId = this.props.editItemId;
+    let editedItem;
+    if(editItemId) {
+      console.log("EDIT MODE ON!!!"+this.props.editItemId);
+      editedItem = this.props.menuItems.get(editItemId);
+      console.log(this.props.menuItems);
+      console.log("menu items ^^^");
+      console.log(editedItem);
+      console.log(editedItem.date);
+      console.log("ITEM ^^^");
+      console.log("title: ", editedItem.title)
+      console.log("this.props.menus", this.props.menus);
+    }
     return (
       <Dialog
         title={this.props.title}
@@ -77,6 +91,7 @@ export default class AddMenuItemModal extends React.Component {
           <DefaultInput
             name="title"
             title="Name"
+            defaultValue={ editedItem ? editedItem.title : "" }
             required
             validations="isExisty"
             validationError="Name is required" />
@@ -94,6 +109,7 @@ export default class AddMenuItemModal extends React.Component {
           <DefaultInput
             name="description"
             title="Description (Level 1)"
+            defaultValue={ editedItem ? editedItem.description : "" }
             required
             rows={5}
             validations="isExisty"
@@ -102,6 +118,7 @@ export default class AddMenuItemModal extends React.Component {
 
           <DefaultInput
             name="description2"
+            defaultValue={ editedItem ? editedItem.description2 : "" }
             title="Description (Level 2)"
             rows={5}
             multiLine={true} />
@@ -109,16 +126,18 @@ export default class AddMenuItemModal extends React.Component {
           <DefaultInput
             name="description3"
             title="Description (Level 3)"
+            defaultValue={ editedItem ? editedItem.description3 : "" }
             rows={5}
             multiLine={true} />
 
           <h4 style={headerStyle}>Allergens</h4>
           <hr />
-          <Allergens mode="edit" onChange={this.onAllergensChange} />
+          <Allergens mode="edit" allergens={ editedItem ? editedItem.allergens : undefined /* if undefined then is using defaultProps */ }  onChange={this.onAllergensChange} />
 
           <h4 style={headerStyle}>Add to menu</h4>
           <hr />
           <AddToMenu
+            editItemId={editItemId}
             onChange={this.onSectionsChange}
             menus={this.props.menus}
             sections={this.props.sections} />
