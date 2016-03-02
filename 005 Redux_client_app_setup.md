@@ -49,7 +49,7 @@ TODO
 
 
 ### Big picture of our client-side files structure
-This is how us going to be our client-side application sturcutre for giving you big picture of what we are going to discuss:
+This is how us going to be our client-side application sturcutre for giving you big picture of what we are going to work on:
 
 ```
 ├── actions
@@ -78,18 +78,6 @@ This is how us going to be our client-side application sturcutre for giving you 
 │   └── index.js
 ├── store
 │   └── configureStore.js
-├── styles
-│   ├── _base.scss
-│   ├── components
-│   │   ├── _add-section.scss
-│   │   ├── _excerpt.scss
-│   │   ├── _header.scss
-│   │   ├── _menu-list.scss
-│   │   └── _sidenav.scss
-│   ├── core.scss
-│   ├── inlineStyles.js
-│   └── vendor
-│       └── _normalize.scss
 ├── utils
 │   ├── API.js
 │   ├── falcorUtils.js
@@ -99,6 +87,22 @@ This is how us going to be our client-side application sturcutre for giving you 
 └── views
     └── HomeView.js
 ```
+
+Let's create src/index.html file:
+```
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Mastering React full-stack development</title>
+  <meta charset="utf-8">
+
+</head>
+<body>
+  <div id="publishingAppRoot"></div>
+</body>
+</html>
+```
+
 
 
 
