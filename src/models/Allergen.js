@@ -15,6 +15,7 @@ export default class Allergen extends Model {
     this.nut        = allergens.nut         || false;
     this.soy        = allergens.soy         || false;
     this.fish       = allergens.fish        || false;
+    this.showAllergens = allergens.showAllergens || true;
   }
 
   formatForWire() {
@@ -25,7 +26,8 @@ export default class Allergen extends Model {
       dairy: this.dairy,
       nut: this.nut,
       soy: this.soy,
-      fish: this.fish
+      fish: this.fish,
+      showAllergens: this.showAllergens
     };
   }
 }

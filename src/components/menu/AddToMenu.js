@@ -4,6 +4,7 @@ import {
   MenuItem,
   Divider
 } from 'material-ui';
+import { _computeBelongingsMapUtil, _createBelongingsStringUtil } from 'utils/_computeItemMenuBelongingsUtils';
 import { NavigationArrowDropRight } from 'material-ui/lib/svg-icons';
 
 const menuStyles = {
@@ -73,7 +74,8 @@ export default class AddToMenu extends React.Component {
     this._computeBelongingsMap = this._computeBelongingsMap.bind(this);
 
     this.state = {
-      belongingsMap: { }
+      belongingsMap: { },
+      belongingsString: {}
     };
   }
 
@@ -91,33 +93,12 @@ export default class AddToMenu extends React.Component {
   _computeBelongingsMap() {
     let searchedItemId = this.props.editItemId;
     let sectionsBelongings = [];
-    this.props.sections.forEach((sectionItem, index1) => {
-      sectionItem.items.map((idItem, sectionIndex) => {
-        if(searchedItemId.toString() === idItem.toString()) {
-          sectionsBelongings.push(sectionItem.id);
-        }
-      })
-    });
 
-    let computedBelongingsMap = {};
+    let computedBelongingsMap = _computeBelongingsMapUtil(searchedItemId, this.props.sections, this.props.menus);
 
-    this.props.menus.forEach((menuItem, menuIndex) => {
-      computedBelongingsMap[menuItem.id] = [];
-      let sectionsArray = menuItem.sections;
-      sectionsArray.map((secItem, secIndex) => {
-
-        if(sectionsBelongings.find(x => x === secItem) !== undefined) {
-          computedBelongingsMap[menuItem.id].push(secItem);
-        }
-      });
-
-      let foundLen = computedBelongingsMap[menuItem.id].length;
-      if(foundLen === 0) {
-        // deleting from the belingings map keys with empty arrays
-        delete computedBelongingsMap[menuItem.id];
-      }
-    });
-    this.setState({belongingsMap: computedBelongingsMap})
+    this.setState({belongingsMap: computedBelongingsMap});
+    let belongingsString = _createBelongingsStringUtil(computedBelongingsMap, this.props.sections, this.props.menus);
+    this.setState({belongingsString: belongingsString});
   }
 
   _onAddToSection(menuId, sectionId) {
@@ -138,6 +119,10 @@ export default class AddToMenu extends React.Component {
 
     this.setState({belongingsMap});
     this.props.onChange(belongingsMap);
+
+    let belongingsString = _createBelongingsStringUtil(belongingsMap, this.props.sections, this.props.menus);
+    this.setState({belongingsString: belongingsString});
+
   }
 
   render() {
@@ -159,10 +144,31 @@ export default class AddToMenu extends React.Component {
       });
     }
 
+    let itemBelongingsJSX;
+    if(this.state.belongingsString) {
+      let itemListJSX = [];
+      for(let key in this.state.belongingsString) {
+        let arrayOfSections = this.state.belongingsString[key];
+        arrayOfSections.map((item, index) => {
+          itemListJSX.push(<li key={item+index}> {key} > {item} </li>);
+        })
+      }
+      itemBelongingsJSX = (
+        <ul>
+          {itemListJSX}
+        </ul>);
+
+    } else itemBelongingsJSX = null;
+
     return (
-      <Menu style={menuStyles}>
-        {menus}
-      </Menu>
+      <div>
+        <Menu style={menuStyles}>
+          {menus}
+        </Menu>
+        <br/>
+        Already added to:
+        {itemBelongingsJSX}
+      </div>
     );
   }
 }

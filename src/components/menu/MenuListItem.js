@@ -20,6 +20,8 @@ import {
 import Colors from 'material-ui/lib/styles/colors';
 
 import Excerpt from 'components/Excerpt';
+import Allergens from 'components/menu/Allergens';
+import { _computeBelongingsMapUtil, _createBelongingsStringUtil } from 'utils/_computeItemMenuBelongingsUtils';
 
 const mediaStyles = {
   witdh: 200,
@@ -62,6 +64,24 @@ export default class MenuListItem extends React.Component {
   render() {
     const { item } = this.props;
 
+    let computedBelongingsMap = _computeBelongingsMapUtil(this.props.item.id, this.props.sections, this.props.menus);
+    let belongingsString = _createBelongingsStringUtil(computedBelongingsMap, this.props.sections, this.props.menus);
+
+    let itemBelongingsJSX = [];
+    if(belongingsString) {
+      for(let key in belongingsString) {
+        let arrayOfSections = belongingsString[key];
+        arrayOfSections.map((item, index) => {
+          itemBelongingsJSX.push(
+            <span key={item+index} >
+              <span style={{color: '#ff0000'}}> {key}</span> <span style={{color: '#56A76F'}}>: {item}</span> 
+            </span>);
+        })
+      }
+    } else itemBelongingsJSX = null;
+
+
+
     return (
       <Card className="MenuItem">
         <div className="MenuItem-Left">
@@ -88,7 +108,7 @@ export default class MenuListItem extends React.Component {
         </div>
         <div className="MenuItem-Right">
           <h4>
-            <CardTitle title={item.title}>
+            <CardTitle title={item.title} style={{padding: 0, paddingLeft: 15, lineHeight: 6}}>
               <IconMenu
                 style={menuStyle}
                 anchorOrigin={{vertical: 'top', horizontal: 'right'}}
@@ -108,8 +128,13 @@ export default class MenuListItem extends React.Component {
                   rightIcon={<ActionDelete />} />
               </IconMenu>
             </CardTitle>
+
+            <span style={{paddingLeft: 20, fontSize: 10}}>
+              {itemBelongingsJSX}
+            </span>
+            <Allergens readOnly={true} allergensObj={item.allergens}/>
           </h4>
-          <CardText>
+          <CardText style={{padding: 3, paddingLeft: 20}}>
             <Excerpt text={item.description} />
           </CardText>
         </div>

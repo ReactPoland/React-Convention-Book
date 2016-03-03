@@ -31,7 +31,14 @@ class MenuSection extends React.Component {
           items.length
           ? items.map((item) => {
               if(!item) return null;
-              return <MenuListItem item={item} key={item.id} />
+              return (<div>
+                <MenuListItem 
+                  item={item} 
+                  key={item.id} 
+                  sections={this.props.sections} 
+                  menus={this.props.menus} /> 
+                <br/>
+              </div>)
             })
           : <AddPlaceholder />
         }

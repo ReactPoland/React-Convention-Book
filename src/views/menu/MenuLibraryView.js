@@ -4,14 +4,20 @@ import { connect } from 'react-redux';
 import { FloatingActionButton } from 'material-ui';
 import { ContentAdd } from 'material-ui/lib/svg-icons';
 
+
 import API from 'utils/API';
 import * as menuItemActions from 'actions/menuItem';
 import * as sectionActions from 'actions/section';
+import mapHelpers from 'utils/mapHelpers';
 import falcorUtils from 'utils/falcorUtils';
+import MenuSection from 'components/menu/MenuSection';
+import AddPlaceholder from 'components/menu/AddPlaceholder';
+import Allergens from 'components/menu/Allergens';
 
 import Loader from 'decorators/Loader';
 import MenuListItem from 'components/menu/MenuListItem';
 import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
+import AllergenModel from 'models/Allergen';
 
 import AddMenuItemModal from 'components/menu/modals/AddMenuItemModal';
 
@@ -160,27 +166,80 @@ class MenuLibraryView extends React.Component {
     }));
   }
 
-  onEditItemDone(menuItem, refMap) {
+  _preparingArrayOfSelectedSections(refMap) {
+    let selectedSectionsArray = [];
+    for(var menuKey in refMap) {
+      if (refMap.hasOwnProperty(menuKey)) {
+        refMap[menuKey].map((sectionItem) => {
+          selectedSectionsArray.push(sectionItem);
+
+        });
+      }
+    }
+    return selectedSectionsArray;
+  }
+
+  async onEditItemDone(menuItem, refMap) {
     /*
         refMap is an information in what menus and sections, the item has been added
      */
     menuItem.picUrl = "http://lorempixel.com/700/500/food/";
     menuItem = menuItem.formatForWire();
+    menuItem.allergens = new AllergenModel(menuItem.allergens);
+    menuItem.allergens = menuItem.allergens.formatForWire();
 
-    return API
-      .set({
-        url: ['menuItemsById', menuItem.id],
-        body: menuItem
-      })
-      .then(() => {
-        this.props.actions.menuItem.update(menuItem);
-      });
+    await API
+    .set({
+      url: ['menuItemsById', menuItem.id],
+      body: menuItem
+    })
+    .then(() => {
+      this.props.actions.menuItem.update(menuItem);
+    });
+
+    // Preparing array of selected sections
+    let selectedSectionsArray = this._preparingArrayOfSelectedSections(refMap);
+    let changedSections = [];
+    // Check what sections has been edited
+    this.props.section.forEach((secItem, secId) => {
+      // searching for edited sections' items
+      let _contains_ = selectedSectionsArray.find(x => x === secItem.id);
+      if(_contains_ !== undefined) {
+        let _contains2_ = secItem.items.find(y => y === menuItem.id);
+        // checking if a menuItemId isn't already in the secItems.items
+        if(_contains2_ === undefined) {
+          secItem.items.push(menuItem.id);
+          changedSections.push(secItem);
+        }
+      }
+    });
+
+    // TODO removing sections
+    // TODO: API.set for changedSections
 
 
+    // save section and then dispatch action to update store state
+
+    for(var k in changedSections) {
+      let sectionID = changedSections[k].id;
+      changedSections[k] = changedSections[k].formatForWire();
+
+      await API
+        .set({
+          url: ['sectionsById', sectionID],
+          body: changedSections[k]
+        })
+        .then(() => {
+          this.setState({
+            requestSuccess: 'Edit successful!',
+            modal: null
+          });
+        });
+    }
+    return;
   }
 
   onAddItemDone(menuItem, refMap) {
-    console.info("refMap", refMap);
     // TODO temp mocking item image
     menuItem.picUrl = "http://lorempixel.com/700/500/food/";
     menuItem = menuItem.formatForWire();
@@ -215,13 +274,12 @@ class MenuLibraryView extends React.Component {
   }
 
   async onEditItemClick(menuItemIdToEdit) {
-    console.log("edditing item id", menuItemIdToEdit);
     this.setState({
-      modal: 'add-modal', 
+      modal: 'add-modal',
       editItemId: menuItemIdToEdit
     });
   }
-  
+
   async onRemoveItemClick(menuItemIdToDelete) {
     /*
         TODO: refactoring to delete obj from reducer & falcor
@@ -244,13 +302,29 @@ class MenuLibraryView extends React.Component {
     })
 
     this.props.actions.menuItem.delete(menuItemIdToDelete);
+
+    let newItems = mapHelpers.toArray(this.props.menuItem);
+    newItems = newItems
+      .filter((item) => item.id !== menuItemIdToDelete)
+      .map((item) => ({
+        $type: 'ref',
+        value: ['menuItemsById', item.id]
+      }));
+
+    await API.set({
+      url: ['restaurants', 0, 'menuItems'],
+      body: newItems
+    });
+
+    API.$log('############falcor model: ')
+
     Promise.all(
       sectionsToUpdate.map((section, index) => {
-        
+
         section = section.formatForWire();
-        
-        console.log("PROMISE", section.id); 
-        console.log("11KAMIL PROMISE UPDATING SECTION");     
+
+        console.log("PROMISE", section.id);
+        console.log("11KAMIL PROMISE UPDATING SECTION");
         console.log(section);
         return API
           .set({
@@ -273,35 +347,89 @@ class MenuLibraryView extends React.Component {
     const items = [];
 
     menuItem.forEach((item, index) => {
-      items.push(
-        <MenuListItem item={item} key={item.id} onRemoveClick={this.onRemoveItemClick} onEditClick={this.onEditItemClick} />
-      );
+      if(item.id) {
+        items.push(
+          <div> 
+            <MenuListItem 
+              sections={this.props.section} 
+              menus={this.props.menu} 
+              item={item} 
+              key={item.id} 
+              onRemoveClick={this.onRemoveItemClick} 
+              onEditClick={this.onEditItemClick} /> 
+              <br/> 
+          </div>
+        );
+      }
     });
 
-    return (
-      <div className="mt100 Content">
-        <h2>Menu items library</h2>
 
-        { items }
-
+    let addingEditingItemJSX = (<div>
         <FloatingActionButton style={btnStyle} onClick={this._openModal.bind(this, 'add-modal')}>
           <ContentAdd />
         </FloatingActionButton>
 
         <AddMenuItemModal
           editItemId={this.state.editItemId}
-          onDone={ this.state.editItemId ? this.onEditItemDone : this.onAddItemDone}
+          onDone={this.state.editItemId ? this.onEditItemDone : this.onAddItemDone}
           onHide={this.hideModal}
           menus={this.props.menu}
           menuItems={this.props.menuItem}
           sections={this.props.section}
-          title={ this.state.editItemId ? "Edit menu item" : "Add menu item" }
+          title={this.state.editItemId ? "Edit menu item" : "Add menu item"}
           open={this.state.modal === 'add-modal'} />
 
         <ErrorSuccessMsg
           errorMessage={requestError}
           successMessage={requestSuccess}
           onRequestClose={this.nullifyRequestState} />
+      </div>);
+
+
+    if(this.props.isMenuDetailView) {
+      /*
+       RENDERING detailView
+      */
+      const { menu } = this.props.menuDetailProps;
+
+      if(!this.props.menuDetailProps.loaded) {
+        return this.props.menuDetailProps.__getLoaderMarkup();
+      }
+
+      if(!menu.sections || !menu.sections.length) {
+        return  (
+          <AddPlaceholder title="menu" onAdd={this.onAddMenu} />
+        );
+      } else {
+        return (
+          <div className="Content MenuList">
+          <h2>{menu.title}</h2>
+          {
+            menu.sections.map((section) => {
+              return (
+                <MenuSection
+                  sections={this.props.section} 
+                  menus={this.props.menu} 
+                  sectionId={section}
+                  key={section} />
+              );
+            })
+          }
+          {addingEditingItemJSX}
+          </div>
+        );
+      }
+    }
+
+    return (
+      <div className="mt100 Content">
+        <Allergens allergyGuide={true}/>
+        
+        <h2>Menu items library</h2>
+
+        { items }
+
+        {addingEditingItemJSX}
       </div>
     );
   }

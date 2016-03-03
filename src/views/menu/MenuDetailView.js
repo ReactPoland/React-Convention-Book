@@ -11,7 +11,8 @@ import falcorUtils from 'utils/falcorUtils';
 
 import Loader from '../../decorators/Loader';
 import AddPlaceholder from 'components/menu/AddPlaceholder';
-import MenuSection from 'components/menu/MenuSection';
+import MenuLibraryView from 'views/menu/MenuLibraryView';
+
 
 const mapStateToProps = (state) => ({
   session: state.session,
@@ -101,32 +102,15 @@ class MenuDetailView extends React.Component {
   }
 
   render() {
-    const { menu } = this.state;
 
-    if(!this.state.loaded) {
-      return this.props.__getLoaderMarkup();
+    let menuDetailProps = {
+      menu: this.state.menu,
+      loaded: this.state.loaded,
+      __getLoaderMarkup: this.props.__getLoaderMarkup
     }
 
-    if(!menu.sections || !menu.sections.length) {
-      return  (
-        <AddPlaceholder title="menu" onAdd={this.onAddMenu} />
-      );
-    } else {
-      return (
-        <div className="Content MenuList">
-        <h2>{menu.title}</h2>
-        {
-          menu.sections.map((section) => {
-            return (
-              <MenuSection
-                sectionId={section}
-                key={section} />
-            );
-          })
-        }
-        </div>
-      );
-    }
+    // DRY menu detail view
+    return <MenuLibraryView isMenuDetailView={true} menuDetailProps={menuDetailProps} />
   }
 }
 

@@ -39,8 +39,38 @@ export default class AddMenuItemModal extends React.Component {
     };
   }
 
+  componentWillMount() {
+      if(this.props.editItemId && this.state.canSubmit === false) {
+        let editedItem = this.props.menuItems.get(this.props.editItemId);
+        this._enableBtn();
+        // TODO - refactor delete setState somewhere else
+        this.setState({editedItem: editedItem});
+      }
+  }
+
+  componentWillUpdate() {
+      if(this.props.editItemId && this.state.canSubmit === false) {
+        let editedItem = this.props.menuItems.get(this.props.editItemId);
+        this._enableBtn();
+        // TODO - refactor delete setState somewhere else
+        this.setState({editedItem: editedItem});
+      }
+  }
+
   _onDone(formData) {
+    if(this.state.editedItem) {
+      // only in edit mode
+      for(var key in this.state.editedItem) {
+        let formValue = formData[key];
+        if(!formValue) {
+          // is empty / not changed - give it default value
+          formData[key] = this.state.editedItem[key];
+        }
+      }
+    }
     const item = Object.assign({}, formData);
+
+    console.info("item do ADD/EDIT", item);
     item.allergens = this.state.allergens;
     let newMenuItem = new MenuItem(item);
     if(this.props.editItemId) newMenuItem.id = this.props.editItemId;
@@ -74,6 +104,7 @@ export default class AddMenuItemModal extends React.Component {
     if(editItemId) {
       console.log("EDIT MODE ON!!!"+this.props.editItemId);
       editedItem = this.props.menuItems.get(editItemId);
+
       console.log(this.props.menuItems);
       console.log("menu items ^^^");
       console.log(editedItem);
