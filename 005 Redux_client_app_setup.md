@@ -175,7 +175,7 @@ Simply, that webpack's configs says that entry of commonJS module is at ```entry
 
 ### Rest of important dependencies installation and npm start
 ```
-npm i --save react@0.14.7 react-dom@0.14.7 react-redux@4.4.0
+npm i --save react@0.14.7 react-dom@0.14.7 react-redux@4.4.0 redux@3.3.1
 ```
 
 and
@@ -224,6 +224,7 @@ Our complete package.json should looks as following with all front-end dependenc
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^4.4.0",
+    "redux": "^3.3.1",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
   },
@@ -321,6 +322,46 @@ Let's finish our first React+Redux app. For a summary let's see our current dire
 └── webpack.config.js
 ```
 
+Now we need to create the main view of our app. We will put this into the layout directory in our first version.
+
+```
+pwd
+/Users/przeor/Desktop/React-Convention-Book/src
+mkdir layouts
+cd layouts
+touch CoreLayout.js
+```
+
+and the content of ***CoreLayout.js*** is:
+```
+
+```
+import React from 'react';
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => ({
+  ...state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+});
+
+class PublishingApp extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render () {
+  	console.log(this.props);	
+    return (
+      <div>
+          Our publishing app
+      </div>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublishingApp);
+```
 
 
 

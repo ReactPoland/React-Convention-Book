@@ -9,7 +9,7 @@ const articleMock = {
 	}
 };
 
-const articles = (state = articleMock, action) => {
+const article = (state = articleMock, action) => {
 	switch (action.type) {
 		case 'RETURN_ALL_ARTICLES':
 			return new Object.assign({}, state);
@@ -17,3 +17,5 @@ const articles = (state = articleMock, action) => {
 			return new Object.assign({}, {error: "action type hasn't been provided"});
 	}
 }
+
+export default article
