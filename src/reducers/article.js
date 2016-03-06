@@ -12,9 +12,9 @@ const articleMock = {
 const article = (state = articleMock, action) => {
 	switch (action.type) {
 		case 'RETURN_ALL_ARTICLES':
-			return new Object.assign({}, state);
+			return Object.assign({}, state);
 		default:
-			return new Object.assign({}, {error: "action type hasn't been provided"});
+			return Object.assign({}, {error: "action type hasn't been provided"});
 	}
 }
 
