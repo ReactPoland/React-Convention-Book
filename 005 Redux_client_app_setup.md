@@ -86,7 +86,7 @@ const articleMock = {
 	}
 };
 
-const articles = (state = 0, action) => {
+const articles = (state = articleMock, action) => {
 	switch (action.type) {
 		case 'RETURN_ALL_ARTICLES':
 			return new Object.assign({}, articleMock);
@@ -118,6 +118,10 @@ and the src/index.html content is:
   <title>Mastering React full-stack development</title>
   <meta charset="utf-8">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.3.1/redux.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+  
+
 </head>
 <body>
   <div id="publishingAppRoot"></div>
@@ -129,7 +133,7 @@ For the beginning we will use redux from it's CDN - later we will import it to t
 Now we can import ***createStore*** from Redux in reducers/article.js file:
 
 ```
-const articles = (state = 0, action) => {
+const articles = (state = articleMock, action) => {
 	switch (action.type) {
 		case 'RETURN_ALL_ARTICLES':
 			return new Object.assign({}, articleMock);
@@ -143,7 +147,7 @@ const store = createStore(articles);
 
 ```
 
-Above the ***const articles = (state = 0, action)*** we leave unchanged. New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
+Above the ***const articles = (state = articleMock, action)*** we leave unchanged. New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
 
 Tere are several methods on the store:
 ```
@@ -164,6 +168,8 @@ The subscribe allows you register a callback that Redux will call each time when
 
 
 
+
+### Wrapping up React + Redux application
 
 
 
