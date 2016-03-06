@@ -163,7 +163,7 @@ module.exports = {
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel',
                 query: {
-                    presets: ['es2015', 'react']
+                    presets: ['es2015', 'stage-0', 'react']
                 }
             }
         ]
@@ -181,8 +181,11 @@ npm i --save react@0.14.7 react-dom@0.14.7 react-redux@4.4.0 redux@3.3.1
 and
 
 ```
-npm i --save-dev babel-core@6.6.5 babel-loader@6.2.4 babel-preset-es2015@6.6.0 babel-preset-react@6.5.0
+npm i --save-dev babel-core@6.6.5 babel-loader@6.2.4 babel-preset-es2015@6.6.0 babel-preset-react@6.5.0 babel-preset-stage-0
 ```
+
+Explanation: we need the ***babel-preset-stage-0*** is for ES7 features. The ***babel-preset-es2015*** and ***babel-preset-react*** are required for JSX and ES6 support. All those babel tools are used by WebPack (check the config file).
+
 
 We also need to update our package.json file (add scripts):
 
