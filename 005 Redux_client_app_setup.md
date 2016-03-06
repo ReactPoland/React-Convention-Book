@@ -49,7 +49,7 @@ Pure functions are always predictable for the same X,Y arguments. In the Redux w
 In that book you will learn whole sturcture where to make API calls so if you will follow the book, then you don't have worry too much of that principle in Redux.
 
 ### The Reducer function
-Reducer from Redux can be compared to Single Store from Facebook's FLUX. Important is that a Reducer always take a previous state and returns a new reference to new object (with use of Object.assign and other like that) so we can have immutable JS that helps us build more predictable state of our application in comparision to older's FLUX implementations.
+Reducer from Redux can be compared to Single Store from Facebook's FLUX. Important is that a Reducer always take a previous state and returns a new reference to a new object (with use of Object.assign and other like that) so we can have immutable JS that helps us build more predictable state of our application in comparision to older's FLUX implementations that are mutating variables in the store.
 
 This creating a new references is optimized because redux does use old references to values from reducers that didn't change. That causes that even if each action is creating a whole new object via reducer, then non-changes values has a previous reference in the memory so we don't overuse the computation power of the machine. Everything is fast.
 
@@ -175,7 +175,7 @@ Simply, that webpack's configs says that entry of commonJS module is at ```entry
 
 ### Rest of important dependencies installation and npm start
 ```
-npm i --save react@0.14.7 react-dom@0.14.7
+npm i --save react@0.14.7 react-dom@0.14.7 react-redux@4.4.0
 ```
 
 and
@@ -223,6 +223,7 @@ Our complete package.json should looks as following with all front-end dependenc
     "mongoose": "^4.4.5",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-redux": "^4.4.0",
     "webpack": "^1.12.14",
     "webpack-dev-server": "^1.14.1"
   },
@@ -240,34 +241,51 @@ Our complete package.json should looks as following with all front-end dependenc
 
 
 
-Let's create our App.js where the main part will live at ***src/App.js***:
+Let's create our App.js where the main part of our app will live at ***src/App.js***:
 
 ```
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import todoApp from './reducers/app'
-import App from './components/App'
+import article from './reducers/article'
+import App from './components/Article'
 
-let store = createStore(todoApp)
+let store = createStore(article)
 
 render(
     <Provider store={store}>
         <App />
     </Provider>,
-    document.getElementById('app')
+    document.getElementById('publishingAppRoot')
 );
 ```
 
-
 New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
 
-Tere are several methods on the store:
+The react-redux is useful binding of Redux into React (so we will write less code and be more productive). 
+
+```
+<Provider store>
+```
+The <Provider store> help us to make the Redux store available to the connect() calls in the children components (below). 
+
+
+```
+connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
+```
+The connect will be used in any component that has to listen to the Reducer's changes in our app.
+
+
+
+
+For the store we use ```let store = createStore(article)``` - just for the sake of brevity, I will mention that there are several methods in the store that we will use in next steps of building our app from scratch:
+
 ```
 store.getState();
 ```
 The getState function gives you current's state of the application.
+
 ```
 store.dispatch({ type: 'RETURN_ALL_ARTICLES' });
 ```
@@ -284,26 +302,6 @@ The subscribe allows you register a callback that Redux will call each time when
 
 
 ### Wrapping up React + Redux application
-
-
-
-
-
-
-
-
-
-
-
-```
-pwd
-/Users/przeor/Desktop/React-Convention-Book/src/reducers
-cd ..
-mkdir constants
-cd constants
-touch article.js
-```
-
 
 
 
