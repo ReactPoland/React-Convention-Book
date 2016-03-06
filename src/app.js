@@ -1,25 +1,15 @@
-import React                  from 'react';
-import ReactDOM               from 'react-dom';
-import createBrowserHistory   from 'history/lib/createBrowserHistory';
-import { syncReduxAndRouter } from 'redux-simple-router';
-import Root                   from './containers/Root';
-import configureStore         from './store/configureStore';
-import _                      from 'lodash';
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import todoApp from './reducers/app'
+import App from './components/App'
 
-const target  = document.getElementById('root');
-const history = createBrowserHistory();
+let store = createStore(todoApp)
 
-export const store = configureStore(window.__INITIAL_STATE__, __DEBUG__);
-
-syncReduxAndRouter(history, store);
-
-const node = (
-    <Root
-      history={history}
-      store={store}
-      debug={__DEBUG__}
-      debugExternal={__DEBUG_NW__}
-    />
+render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('publishingAppRoot')
 );
-
-ReactDOM.render(node, target);

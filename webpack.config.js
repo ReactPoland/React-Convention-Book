@@ -1,14 +1,14 @@
 module.exports = {
-    entry: './app/src/App.js',
+    entry: './src/App.js',
     output: {
-        path: './app/dist',
+        path: './dist',
         filename: 'app.js',
         publicPath: '/'
     },
     devServer: {
         inline: true,
         port: 3333,
-        contentBase: './app/dist'
+        contentBase: './dist'
     },
     module: {
         loaders: [
