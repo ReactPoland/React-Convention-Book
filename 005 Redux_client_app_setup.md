@@ -268,13 +268,13 @@ The react-redux is useful binding of Redux into React (so we will write less cod
 ```
 <Provider store>
 ```
-The <Provider store> help us to make the Redux store available to the connect() calls in the children components (below). 
+The ***Provider store*** help us to make the Redux store available to the connect() calls in the children components (below). 
 
 
 ```
 connect([mapStateToProps], [mapDispatchToProps], [mergeProps], [options])
 ```
-The connect will be used in any component that has to listen to the Reducer's changes in our app.
+The ***connect*** will be used in any component that has to listen to the Reducer's changes in our app. You will see how to use it later in that chapter.
 
 
 
@@ -300,10 +300,26 @@ The subscribe allows you register a callback that Redux will call each time when
 
 
 
-
 ### Wrapping up React + Redux application
 
+Let's finish our first React+Redux app. For a summary let's see our current directories sturcture:
+```
 
+├── dist
+│   └── index.html
+├── initData.js
+├── node_modules
+│   ├── ********** (A LOT OF LIBRARIES HERE)
+├── package.json
+├── server
+│   ├── index.js
+│   └── server.js
+├── src
+│   ├── App.js
+│   └── reducers
+│       └── article.js
+└── webpack.config.js
+```
 
 
 
