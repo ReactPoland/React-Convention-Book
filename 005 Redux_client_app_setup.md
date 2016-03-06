@@ -103,17 +103,18 @@ On the above code we have our artickeMock keept in the browser memory (it's the 
 The arrow function ***const articles*** is getting action.type which will come from CONSTANTS (we will create them later) the same way as in Facebook's FLUX implementation. 
 
 
-
-Let's create a src/index.html file:
+Because of our webpack's configuration (described below) we need an index.html in dist. Let's create a dist/index.html file:
 
 ```
 pwd
 /Users/przeor/Desktop/React-Convention-Book/src/reducers
-cd ..
+cd ../..
+mkdir dist
+cd dist
 touch index.html
 ```
 
-and the src/index.html content is:
+and the dist/index.html content is:
 ```
 <!doctype html>
 <html lang="en">
@@ -129,18 +130,7 @@ and the src/index.html content is:
 ```
 
 
-```
-const articles = (state = articleMock, action) => {
-	switch (action.type) {
-		case 'RETURN_ALL_ARTICLES':
-			return new Object.assign({}, articleMock);
-		default:
-			return new Object.assign({}, {error: "action type hasn't been provided"});
-	}
-}
-```
-
-We have an article Reducer, but before we will start building our Redux's publishing app we need to configure WebPack for our built automation.
+We have ***an article Reducer and dist/index.html***, but before we will start building our Redux's publishing app we need to configure WebPack for our built automation.
 
 Install webpack first (you may need sudo root's access for it):
 ```
@@ -182,6 +172,68 @@ module.exports = {
 ```
 
 Simply, that webpack's configs says that entry of commonJS module is at ```entry: './src/App.js'``` location. Webpacks builds a whole app following all imports from the App.js and the final output is located at ***path: './dist',***. Our app that is located at ***contentBase: './dist'*** will live on ports 3333. We also configure that we will use ES2015 and react so WebPack will compile for us ES2015 into ES5 and React's JSX into javascript. If you are interested more in WebPack configuration options then please read it's documentation.
+
+### Rest of important dependencies installation and npm start
+```
+npm i --save react@0.14.7 react-dom@0.14.7
+```
+
+and
+
+```
+npm i --save-dev babel-core@6.6.5 babel-loader@6.2.4 babel-preset-es2015@6.6.0 babel-preset-react@6.5.0
+```
+
+We also need to update our package.json file (add scripts):
+
+```
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+```
+
+Our complete package.json should looks as following with all front-end dependencies:
+
+```
+{
+  "name": "React-Convention-Book",
+  "version": "1.0.0",
+  "description": "",
+  "main": "initData.js",
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ReactConvention/React-Convention-Book.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ReactConvention/React-Convention-Book/issues"
+  },
+  "homepage": "https://github.com/ReactConvention/React-Convention-Book#readme",
+  "dependencies": {
+    "babel": "^4.7.16",
+    "babel-register": "^6.5.2",
+    "body-parser": "^1.15.0",
+    "cors": "^2.7.1",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.5",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.6.5",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0"
+  }
+}
+```
 
 
 ### App.js
