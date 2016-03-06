@@ -73,10 +73,7 @@ cd reducers
 touch article.js
 ```
 
-So our first reducer's location is: 
-```src/reducers/article.js```
-
-and the content of our reducers/article.js:
+So our first reducer's location is ***src/reducers/article.js*** and the content of our reducers/article.js:
 ```
 const articleMock = {
 	"987654": {
@@ -152,14 +149,18 @@ Tere are several methods on the store:
 ```
 store.getState();
 ```
+The getState function gives you current's state of the application.
 ```
 store.dispatch({ type: 'RETURN_ALL_ARTICLES' });
 ```
+The dispatch function can help you change state of your app.
+
 ```
 store.subscribe(() => {
 	
 });
 ```
+The subscribe allows you register a callback that Redux will call each time when an action has been dispatch so the view layer can know about the change in the application state and refresh it's view. 
 
 
 
