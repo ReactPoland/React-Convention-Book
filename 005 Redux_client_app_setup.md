@@ -129,7 +129,37 @@ and the src/index.html content is:
 ```
 For the beginning we will use redux from it's CDN - later we will import it to the project from NPM.
 
-Now we can import ***createStore*** from 
+Now we can import ***createStore*** from Redux in reducers/article.js file:
+
+```
+cost articles = (state = 0, action) => {
+	switch (action.type) {
+		case 'RETURN_ALL_ARTICLES':
+			return new Object.assign({}, articleMock);
+		default:
+			return new Object.assign({}, {error: "action type hasn't been provided"});
+	}
+}
+
+const { createStore } = Redux;
+const store = createStore(articles);
+
+```
+
+Above the ***cost articles = (state = 0, action)*** we leave unchanged. New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
+
+Tere are several methods on the store:
+```
+store.getState();
+```
+```
+store.dispatch({ type: 'RETURN_ALL_ARTICLES' });
+```
+```
+store.subscribe(() => {
+	
+});
+```
 
 
 
