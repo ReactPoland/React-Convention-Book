@@ -142,7 +142,12 @@ const articles = (state = articleMock, action) => {
 
 We have an article Reducer, but before we will start building our Redux's publishing app we need to configure WebPack for our built automation.
 
-In the main directory next to the package.json and initData.js files, please follow:
+Install webpack first (you may need sudo root's access for it):
+```
+npm i --save webpack@1.12.14 webpack-dev-server@1.14.1 
+```
+
+...then in the main directory next to the package.json and initData.js files, please follow:
 ```
 touch webpack.config.js
 ```
@@ -181,11 +186,9 @@ Simply, that webpack's configs says that entry of commonJS module is at ```entry
 
 ### App.js
 
-Let's create our App.js where the main part will live in:
 
 
-
-
+Let's create our App.js where the main part will live at ***src/App.js***:
 
 ```
 import React from 'react'
@@ -206,8 +209,7 @@ render(
 ```
 
 
-
-Above the ***const articles = (state = articleMock, action)*** we leave unchanged. New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
+New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
 
 Tere are several methods on the store:
 ```
