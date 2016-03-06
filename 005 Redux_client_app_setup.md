@@ -86,7 +86,7 @@ const articleMock = {
 	}
 };
 
-cost articles = (state = 0, action) => {
+const articles = (state = 0, action) => {
 	switch (action.type) {
 		case 'RETURN_ALL_ARTICLES':
 			return new Object.assign({}, articleMock);
@@ -97,7 +97,7 @@ cost articles = (state = 0, action) => {
 ```
 On the above code we have our artickeMock keept in the browser memory the same as in initData.js for the time beeing - later we will fetch this data from our backend's database. 
 
-The arrow function ***cost articles*** is getting action.type which will come from CONSTANTS (we will create them later) the same way as in Facebook's FLUX implementation. 
+The arrow function ***const articles*** is getting action.type which will come from CONSTANTS (we will create them later) the same way as in Facebook's FLUX implementation. 
 
 
 
@@ -129,7 +129,7 @@ For the beginning we will use redux from it's CDN - later we will import it to t
 Now we can import ***createStore*** from Redux in reducers/article.js file:
 
 ```
-cost articles = (state = 0, action) => {
+const articles = (state = 0, action) => {
 	switch (action.type) {
 		case 'RETURN_ALL_ARTICLES':
 			return new Object.assign({}, articleMock);
@@ -143,7 +143,7 @@ const store = createStore(articles);
 
 ```
 
-Above the ***cost articles = (state = 0, action)*** we leave unchanged. New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
+Above the ***const articles = (state = 0, action)*** we leave unchanged. New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
 
 Tere are several methods on the store:
 ```
