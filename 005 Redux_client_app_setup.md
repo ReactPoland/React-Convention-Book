@@ -63,6 +63,9 @@ TODO
 
 
 
+
+### First Reducer and WebPack config
+
 First let's create a reducer for our publication app:
 
 ```
@@ -95,7 +98,7 @@ const articles = (state = articleMock, action) => {
 	}
 }
 ```
-On the above code we have our artickeMock keept in the browser memory the same as in initData.js for the time beeing - later we will fetch this data from our backend's database. 
+On the above code we have our artickeMock keept in the browser memory (it's the same as in initData.js) - later we will fetch this data from our backend's database. 
 
 The arrow function ***const articles*** is getting action.type which will come from CONSTANTS (we will create them later) the same way as in Facebook's FLUX implementation. 
 
@@ -115,12 +118,8 @@ and the src/index.html content is:
 <!doctype html>
 <html lang="en">
 <head>
-  <title>Mastering React full-stack development</title>
+  <title>Publishing App</title>
   <meta charset="utf-8">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.3.1/redux.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
-  
 
 </head>
 <body>
@@ -128,9 +127,7 @@ and the src/index.html content is:
 </body>
 </html>
 ```
-For the beginning we will use redux from it's CDN - later we will import it to the project from NPM.
 
-Now we can import ***createStore*** from Redux in reducers/article.js file:
 
 ```
 const articles = (state = articleMock, action) => {
@@ -141,11 +138,74 @@ const articles = (state = articleMock, action) => {
 			return new Object.assign({}, {error: "action type hasn't been provided"});
 	}
 }
+```
 
-const { createStore } = Redux;
-const store = createStore(articles);
+We have an article Reducer, but before we will start building our Redux's publishing app we need to configure WebPack for our built automation.
+
+In the main directory next to the package.json and initData.js files, please follow:
+```
+touch webpack.config.js
+```
+
+and then please create the webpack's configs:
+```
+module.exports = {
+    entry: './src/App.js',
+    output: {
+        path: './dist',
+        filename: 'app.js',
+        publicPath: '/'
+    },
+    devServer: {
+        inline: true,
+        port: 3333,
+        contentBase: './dist'
+    },
+    module: {
+        loaders: [
+            {
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015', 'react']
+                }
+            }
+        ]
+    }
+}
+```
+
+Simply, that webpack's configs says that entry of commonJS module is at ```entry: './src/App.js'``` location. Webpacks builds a whole app following all imports from the App.js and the final output is located at ***path: './dist',***. Our app that is located at ***contentBase: './dist'*** will live on ports 3333. We also configure that we will use ES2015 and react so WebPack will compile for us ES2015 into ES5 and React's JSX into javascript. If you are interested more in WebPack configuration options then please read it's documentation.
+
+
+### App.js
+
+Let's create our App.js where the main part will live in:
+
+
+
+
 
 ```
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import todoApp from './reducers/app'
+import App from './components/App'
+
+let store = createStore(todoApp)
+
+render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('app')
+);
+```
+
+
 
 Above the ***const articles = (state = articleMock, action)*** we leave unchanged. New part is the ***store = createStore(articles);*** part - this utility from Redux lets you keep application state object, dipatch an action and as an argument you give a reducer that tells how the app is updated with actions. 
 
