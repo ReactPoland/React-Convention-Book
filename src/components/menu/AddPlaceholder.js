@@ -14,12 +14,7 @@ export default class AddSectionPlaceholder extends React.Component {
     return (
       <div className="AddSection">
         <Paper className="AddSection-Sheet" zDepth={2}>
-          <h3 className="AddSection-CTAHeader">Add stuff to this menu</h3>
-          <FlatButton
-            primary={true}
-            style={{float: 'right'}}
-            label="Add"
-            labelPosition="after" />
+          <h3 className="AddSection-CTAHeader">{this.props.title === 'menu' ? "Add section to this menu" : "Add item to this section"}</h3>
         </Paper>
       </div>
     );

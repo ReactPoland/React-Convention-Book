@@ -51,6 +51,7 @@ class RegisterView extends React.Component {
 
     console.log('\n#################\nCALL API: REGISTER NEW USER\n#################\n');
 
+
     setTimeout(() => {
       this.setState({
         sendingRequest: false,

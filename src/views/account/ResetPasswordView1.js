@@ -28,6 +28,7 @@ class ResetPasswordView1 extends React.Component {
       sendingRequest: true
     });
 
+
     console.log('\n#################\nCALL API: SEND PASSWORD EMAIL\n#################\n');
 
     setTimeout(() => {

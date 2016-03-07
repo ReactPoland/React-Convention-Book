@@ -39,14 +39,6 @@ class Header extends React.Component {
       sendingRequest: true
     });
 
-
-    // let requestObj = {
-    //   method: 'post',
-    //   url: 'article.js/logout'
-    // }
-
-    // let response = await API.post(requestObj);
-
     ////// mock
     this.props.sessionActions.logout();
     delete sessionStorage.magicToken;

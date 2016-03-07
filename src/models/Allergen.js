@@ -5,20 +5,20 @@ import Model from './Model';
 export default class Allergen extends Model {
   constructor(allergens = {}) {
     super(allergens);
-
     this.type = 'Allergens';
 
-    this.vegetarian = allergens.vegetarian  || false;
-    this.gluten     = allergens.gluten      || false;
-    this.egg        = allergens.egg         || false;
-    this.dairy      = allergens.dairy       || false;
-    this.nut        = allergens.nut         || false;
-    this.soy        = allergens.soy         || false;
-    this.fish       = allergens.fish        || false;
-    this.showAllergens = allergens.showAllergens || true;
+    this.vegetarian = typeof(allergens.vegetarian) !== 'undefined' ? allergens.vegetarian : true;
+    this.gluten     = typeof(allergens.gluten) !== 'undefined' ?     allergens.gluten     : true;
+    this.egg        = typeof(allergens.egg) !== 'undefined' ?        allergens.egg  : true;
+    this.dairy      = typeof(allergens.dairy) !== 'undefined' ?      allergens.dairy  : true;
+    this.nut        = typeof(allergens.nut) !== 'undefined' ?        allergens.nut  : true;
+    this.soy        = typeof(allergens.soy) !== 'undefined' ?        allergens.soy  : true;
+    this.fish       = typeof(allergens.fish) !== 'undefined' ?       allergens.fish  : true;
+    this.showAllergens = typeof(allergens.showAllergens) !== 'undefined' ? allergens.showAllergens : true;
   }
 
   formatForWire() {
+    console.info("\n\nformatForWire \n\n", this.vegetarian, "\n\n\n\n");
     return {
       vegetarian: this.vegetarian,
       gluten: this.gluten,

@@ -76,33 +76,24 @@ class AllergyGuide extends React.Component {
 export default class Allergen extends React.Component {
   static defaultProps = {
     mode: 'display',
-    onChange: () => {},
-    allergens: {
-      vegetarian: false,
-      gluten: false,
-      egg: false,
-      dairy: false,
-      nut: false,
-      soy: false,
-      fish: false
-    }
+    onChange: () => {}
   }
 
   constructor(props) {
     super(props);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.allergens !== nextProps.allergens;
+  componentWillMount() {
+    if(this.props.allergens)
+      this.setState({allergens: this.props.allergens});
   }
 
   _toggleAllergen(alergen) {
-    const allergens = Object.assign({}, this.props.allergens);
-    allergens[alergen] = !allergens[alergen];
-    this.props.onChange(allergens);
+    this.props.onChange(alergen);
   }
 
   _renderAllergens(allergensObj) {
+    console.info("allergensObj", allergensObj);
     let allergensJSX = [];
 
     let currentAllergen = allergensDetails.filter((obj) => obj.value === "vegetarian");
@@ -122,14 +113,18 @@ export default class Allergen extends React.Component {
   }
 
   render() {
+    console.info("TRIGGERED Allergens");
 
     if(this.props.allergyGuide === true) {
       return <AllergyGuide />;
     }
-
+    console.info(1);
+    console.info("this.props", this.props);
     if(this.props.readOnly === true) {
-      console.info("showAllergens", this.props.allergensObj.showAllergens);
+      console.info(2);
+      
       if(this.props.allergensObj.showAllergens === true) {
+        console.info(3);
         return <div style={{paddingLeft: 15}}>{this._renderAllergens(this.props.allergensObj)}</div>;
       } else {
         return null;
@@ -143,11 +138,13 @@ export default class Allergen extends React.Component {
         <div className="row">
           {
             allergensDetails.map((alergen) => {
+              console.info("alergen", alergen);
+              console.info(">>> allergens", allergens);
               return (
                 <div className="col-lg-4" style={wrapperStyles} key={alergen.value}>
                   <Checkbox
-                    defaultChecked={allergens[alergen.value]}
-                    label={alergen.title}
+                    defaultChecked={allergens ? allergens[alergen.value] : null}
+                    label={<span style={{color: alergen.color}}>{alergen.icon} {alergen.title}</span>}
                     onCheck={this._toggleAllergen.bind(this, alergen.value)} />
                 </div>
               );
@@ -156,7 +153,7 @@ export default class Allergen extends React.Component {
           <br/> 
           <Checkbox
             style={{paddingLeft: 15, paddingTop: 40}}
-            defaultChecked={allergens['showAllergens']}
+            defaultChecked={allergens ? allergens['showAllergens'] : null}
             label="Show allergens next to the menu items"
             onCheck={this._toggleAllergen.bind(this, 'showAllergens')} />
         </div>

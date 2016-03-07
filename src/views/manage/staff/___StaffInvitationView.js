@@ -37,11 +37,6 @@ class StaffInvitationView extends React.Component {
       sendingRequest: true
     })
 
-    let requestObj = {
-      method: 'post',
-      url: '/v1/trainer/invite-athlete',
-      data: credentials
-    }
 
     /*** TEMPORARY ***/
     console.log('credentials', JSON.stringify(credentials, null, 2))

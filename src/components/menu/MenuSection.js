@@ -33,6 +33,8 @@ class MenuSection extends React.Component {
               if(!item) return null;
               return (<div>
                 <MenuListItem 
+                  onDeleteClick={this.props.onDeleteClick} 
+                  onEditClick={this.props.onEditClick}
                   item={item} 
                   key={item.id} 
                   sections={this.props.sections} 

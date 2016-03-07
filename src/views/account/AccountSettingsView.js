@@ -41,7 +41,6 @@ class AccountSettingsView extends React.Component {
       sendingAccountRequest: true
     });
 
-
     console.log('\n#################\nCALL API: UPDATE USER DETAILS\n#################\n');
 
     this.props.actions.updateUserSettings(formData);
@@ -58,7 +57,6 @@ class AccountSettingsView extends React.Component {
       requestError: null,
       sendingPasswordRequest: true
     });
-
 
     console.log('\n#################\nCALL API: CHANGE PASSWORD\n#################\n');
 

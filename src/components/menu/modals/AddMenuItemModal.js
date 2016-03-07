@@ -5,12 +5,13 @@ import {
 } from 'material-ui';
 import { Form } from 'formsy-react';
 
-import { MenuItem } from 'models';
+import { MenuItem, Allergen } from 'models';
 
 import Allergens from 'components/menu/Allergens';
 import AddToMenu from 'components/menu/AddToMenu';
 import { DefaultInput } from 'components/forms/DefaultInput';
 import { DefaultDatePicker } from 'components/forms/DefaultDatePicker';
+import CloseClearModalIcon from 'react-material-icons/icons/content/clear';
 
 const d = new Date();
 const today = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
@@ -44,7 +45,7 @@ export default class AddMenuItemModal extends React.Component {
         let editedItem = this.props.menuItems.get(this.props.editItemId);
         this._enableBtn();
         // TODO - refactor delete setState somewhere else
-        this.setState({editedItem: editedItem});
+        this.setState({editedItem: editedItem, allergens: editedItem.allergens});
       }
   }
 
@@ -68,12 +69,10 @@ export default class AddMenuItemModal extends React.Component {
         }
       }
     }
-    const item = Object.assign({}, formData);
+    formData.allergens = this.state.allergens;
+    if(this.props.editItemId) formData.id = this.props.editItemId;
+    const newMenuItem = new MenuItem(formData);
 
-    console.info("item do ADD/EDIT", item);
-    item.allergens = this.state.allergens;
-    let newMenuItem = new MenuItem(item);
-    if(this.props.editItemId) newMenuItem.id = this.props.editItemId;
     this.props.onDone(newMenuItem, this.state.sectionsMap);
   }
 
@@ -82,7 +81,6 @@ export default class AddMenuItemModal extends React.Component {
   }
 
   _disableBtn() {
-
     this.setState({canSubmit: false});
   }
 
@@ -92,9 +90,12 @@ export default class AddMenuItemModal extends React.Component {
     });
   }
 
-  onAllergensChange(allergens) {
+  onAllergensChange(allergenName) {
+    let allergensState = this.state.allergens;
+    allergensState[allergenName] = !allergensState[allergenName];
+
     this.setState({
-      allergens
+      allergensState
     });
   }
 
@@ -102,23 +103,19 @@ export default class AddMenuItemModal extends React.Component {
     let editItemId = this.props.editItemId;
     let editedItem;
     if(editItemId) {
-      console.log("EDIT MODE ON!!!"+this.props.editItemId);
       editedItem = this.props.menuItems.get(editItemId);
-
-      console.log(this.props.menuItems);
-      console.log("menu items ^^^");
-      console.log(editedItem);
-      console.log(editedItem.date);
-      console.log("ITEM ^^^");
-      console.log("title: ", editedItem.title)
-      console.log("this.props.menus", this.props.menus);
     }
+
     return (
-      <Dialog
+      <div style={{position: 'relative'}}>
+      <Dialog  
         title={this.props.title}
         open={this.props.open}
         autoScrollBodyContent>
-        <Form onSubmit={this._onDone} ref="form" onValid={this._enableBtn} onInvalid={this._disableBtn}>
+        <CloseClearModalIcon 
+          style={{position: 'absolute', top: 0, right: 0, cursor: 'pointer'}} 
+          onClick={this.props.onHide} />
+        <Form onSubmit={this._onDone.bind(this)} ref="form" onValid={this._enableBtn} onInvalid={this._disableBtn}>
           <DefaultInput
             name="title"
             title="Name"
@@ -133,7 +130,6 @@ export default class AddMenuItemModal extends React.Component {
             defaultValue={today}
             container="dialog"
             mode="landscape"
-            required
             validations="isExisty"
             validationError="Invalid date" />
 
@@ -163,7 +159,11 @@ export default class AddMenuItemModal extends React.Component {
 
           <h4 style={headerStyle}>Allergens</h4>
           <hr />
-          <Allergens mode="edit" allergens={ editedItem ? editedItem.allergens : undefined /* if undefined then is using defaultProps */ }  onChange={this.onAllergensChange} />
+
+          <Allergens 
+            mode="edit" 
+            allergens={ editedItem ? editedItem.allergens : undefined /* if undefined then is using defaultProps */ }  
+            onChange={this.onAllergensChange} />
 
           <h4 style={headerStyle}>Add to menu</h4>
           <hr />
@@ -175,10 +175,11 @@ export default class AddMenuItemModal extends React.Component {
 
           <div style={footerStyles}>
             <FlatButton label="Close" onClick={this.props.onHide} />
-            <FlatButton label="Create" primary={true} disabled={!this.state.canSubmit} type="submit" />
+            <FlatButton label={ editedItem ? "Edit" : "Create" } primary={true} disabled={!this.state.canSubmit} type="submit" />
           </div>
         </Form>
       </Dialog>
+      </div>
     );
   }
 }

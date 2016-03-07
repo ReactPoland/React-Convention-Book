@@ -21,8 +21,8 @@ export default createReducer(initialState, {
   },
 
   [MENUITEM_UPDATE]: (state, payload) => {
-
     let newMenuItem = new MenuItem(payload);
+    newMenuItem.allergens = Object.assign({}, payload.allergens);
     return mapHelpers.addItem(state, payload.id, newMenuItem);
   },
 

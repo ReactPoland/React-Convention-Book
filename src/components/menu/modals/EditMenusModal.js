@@ -51,6 +51,13 @@ export default class EditMenusModal extends React.Component {
 
   _lockInputAndSave() {
     const title = this.refs[this.state.menuInEdit].getValue();
+    if(title === undefined) { 
+      this.setState({
+        menuInEdit: null
+      });
+      return;
+    }
+
     const originMenu = this.props.menus.get(this.state.menuInEdit);
     const newMenu = new Menu(originMenu.formatForWire());
     newMenu.title = title;
@@ -87,24 +94,30 @@ export default class EditMenusModal extends React.Component {
     const actionBtns = (
       <FlatButton primary={true} label="Done" onTouchTap={this.props.onHide} />
     );
-
+    let nameNodeEdit = null;
+    let topPadding = 30;
     const rows = [];
     this.props.menus.forEach((menu, index) => {
       const { menuInEdit } = this.state;
       let nameNode = menu.title;
 
+
       if(menuInEdit === menu.id) {
-        nameNode = (
+        topPadding = 0;
+        nameNodeEdit = (
           <Form>
-            <DefaultInput
-              value={menu.title}
-              name={menu.id}
-              ref={menu.id}
-              autoFocus
-              required
-              onBlur={this._lockInputAndSave} />
+            <div>
+              <DefaultInput
+                defaultValue={menu.title}
+                name={menu.id}
+                ref={menu.id}
+                autoFocus
+                required
+                onEnterKeyDown={this._lockInputAndSave} />
+            </div>
           </Form>
         );
+        nameNode = <span style={{color: 'red', topPadding: 10}}>{menu.title} [editing - ENTER to submit changes] </span>;
       }
 
       rows.push(
@@ -128,7 +141,10 @@ export default class EditMenusModal extends React.Component {
         title="Edit menus"
         actions={actionBtns}>
 
-        <Table fixedHeader height="50vh">
+        <div style={{height: 30}}>
+          {nameNodeEdit}
+        </div>
+        <Table fixedHeader height="50vh" style={{topPadding: topPadding}}>
           <TableHeader>
             <TableRow className="TableRow--no_checkbox">
               <TableHeaderColumn>Name</TableHeaderColumn>

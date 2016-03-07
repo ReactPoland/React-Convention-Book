@@ -24,10 +24,6 @@ class StaffRegistrationView extends React.Component {
 
   async _getStaffData (token) {
     console.log('token', token)
-    let requestObj = {
-      method: 'GET',
-      url: '/auth/athlete/invitation/' + token + '/data'
-    }
 
     /*** TEMPORARY ***/
     let staffData = { firstName: 'test123', lastName: 'test123', email: 'test123@email.com', gender: 'male' }
@@ -42,13 +38,7 @@ class StaffRegistrationView extends React.Component {
       error: null,
       invitationAccepted: false,
       sendingRequest: true
-    })
-
-    let requestObj = {
-      method: 'POST',
-      url: '/auth/athlete/invitation/' + this.props.routeParams.token + '/accept',
-      data: staffData
-    }
+    });
 
     /*** TEMPORARY ***/
     console.log('SENDING staffData', JSON.stringify(staffData, null, 2))

@@ -62,11 +62,12 @@ export default class MenuListItem extends React.Component {
   }
 
   render() {
+    console.info(100);
     const { item } = this.props;
 
     let computedBelongingsMap = _computeBelongingsMapUtil(this.props.item.id, this.props.sections, this.props.menus);
     let belongingsString = _createBelongingsStringUtil(computedBelongingsMap, this.props.sections, this.props.menus);
-
+    console.info(101);
     let itemBelongingsJSX = [];
     if(belongingsString) {
       for(let key in belongingsString) {
@@ -79,10 +80,16 @@ export default class MenuListItem extends React.Component {
         })
       }
     } else itemBelongingsJSX = null;
+    
+    let AllergensJSX = (
+      <Allergens 
+        readOnly={true} 
+        allergensObj={item.allergens}/>)
+
+    console.info("102 ---> ", AllergensJSX);
 
 
-
-    return (
+    let returnJSXtemp = (
       <Card className="MenuItem">
         <div className="MenuItem-Left">
           <CardMedia style={mediaStyles}>
@@ -123,8 +130,8 @@ export default class MenuListItem extends React.Component {
                   primaryText="Edit Item"
                   rightIcon={<EditorModeEdit />} />
                 <MenuItem
-                  onClick={() => this.props.onRemoveClick(this.props.item.id)}
-                  primaryText="Remove Item"
+                  onClick={() => this.props.onDeleteClick(this.props.item.id)}
+                  primaryText={ this.props.isFromLibraryDelete ? "Delete Item" : "Remove Item" }
                   rightIcon={<ActionDelete />} />
               </IconMenu>
             </CardTitle>
@@ -132,7 +139,7 @@ export default class MenuListItem extends React.Component {
             <span style={{paddingLeft: 20, fontSize: 10}}>
               {itemBelongingsJSX}
             </span>
-            <Allergens readOnly={true} allergensObj={item.allergens}/>
+            {AllergensJSX}
           </h4>
           <CardText style={{padding: 3, paddingLeft: 20}}>
             <Excerpt text={item.description} />
@@ -140,5 +147,7 @@ export default class MenuListItem extends React.Component {
         </div>
       </Card>
     );
+
+    return returnJSXtemp;
   }
 }

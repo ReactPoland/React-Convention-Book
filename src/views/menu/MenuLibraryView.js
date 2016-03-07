@@ -52,7 +52,7 @@ class MenuLibraryView extends React.Component {
 
     this.hideModal = this.hideModal.bind(this);
     this.onAddItemDone = this.onAddItemDone.bind(this);
-    this.onRemoveItemClick = this.onRemoveItemClick.bind(this);
+    this.onDeleteItemClick = this.onDeleteItemClick.bind(this);
     this.onEditItemClick = this.onEditItemClick.bind(this);
     this.onEditItemDone = this.onEditItemDone.bind(this);
     this.nullifyRequestState = this.nullifyRequestState.bind(this);
@@ -70,6 +70,7 @@ class MenuLibraryView extends React.Component {
   }
 
   componentDidMount() {
+    console.info("\n\n componentDidMount \n\n");
     this._fetchData();
   }
 
@@ -185,9 +186,7 @@ class MenuLibraryView extends React.Component {
      */
     menuItem.picUrl = "http://lorempixel.com/700/500/food/";
     menuItem = menuItem.formatForWire();
-    menuItem.allergens = new AllergenModel(menuItem.allergens);
-    menuItem.allergens = menuItem.allergens.formatForWire();
-
+    
     await API
     .set({
       url: ['menuItemsById', menuItem.id],
@@ -196,6 +195,17 @@ class MenuLibraryView extends React.Component {
     .then(() => {
       this.props.actions.menuItem.update(menuItem);
     });
+
+
+    if(refMap === undefined) { 
+      // no changes in the menuItem's sections
+      this.setState({
+        requestSuccess: 'Edit successful! Without sections changing.',
+        modal: null
+      });
+      this._fetchData();
+      return;
+    }
 
     // Preparing array of selected sections
     let selectedSectionsArray = this._preparingArrayOfSelectedSections(refMap);
@@ -216,8 +226,6 @@ class MenuLibraryView extends React.Component {
 
     // TODO removing sections
     // TODO: API.set for changedSections
-
-
     // save section and then dispatch action to update store state
 
     for(var k in changedSections) {
@@ -236,13 +244,14 @@ class MenuLibraryView extends React.Component {
           });
         });
     }
+    this._fetchData();
     return;
   }
 
   onAddItemDone(menuItem, refMap) {
     // TODO temp mocking item image
     menuItem.picUrl = "http://lorempixel.com/700/500/food/";
-    menuItem = menuItem.formatForWire();
+    // menuItem = menuItem.formatForWire(); TO-ASK
 
     this._createMenuItemAndGetRef(menuItem)
       // make $ref to it in restaurant.menuItems
@@ -280,7 +289,7 @@ class MenuLibraryView extends React.Component {
     });
   }
 
-  async onRemoveItemClick(menuItemIdToDelete) {
+  async onDeleteItemClick(menuItemIdToDelete) {
     /*
         TODO: refactoring to delete obj from reducer & falcor
         via a model delete function! (Kamil)
@@ -355,7 +364,7 @@ class MenuLibraryView extends React.Component {
               menus={this.props.menu} 
               item={item} 
               key={item.id} 
-              onRemoveClick={this.onRemoveItemClick} 
+              onDeleteClick={this.onDeleteItemClick} 
               onEditClick={this.onEditItemClick} /> 
               <br/> 
           </div>
@@ -363,28 +372,32 @@ class MenuLibraryView extends React.Component {
       }
     });
 
+    let addingEditingItemJSX;
 
-    let addingEditingItemJSX = (<div>
-        <FloatingActionButton style={btnStyle} onClick={this._openModal.bind(this, 'add-modal')}>
-          <ContentAdd />
-        </FloatingActionButton>
+    if(this.state.modal === 'add-modal') {
+      addingEditingItemJSX = (<div>
+          <AddMenuItemModal
+            editItemId={this.state.editItemId}
+            onDone={this.state.editItemId ? this.onEditItemDone : this.onAddItemDone}
+            onHide={this.hideModal}
+            menus={this.props.menu}
+            menuItems={this.props.menuItem}
+            sections={this.props.section}
+            title={this.state.editItemId ? "Edit menu item" : "Add menu item"}
+            open={this.state.modal === 'add-modal'} />
 
-        <AddMenuItemModal
-          editItemId={this.state.editItemId}
-          onDone={this.state.editItemId ? this.onEditItemDone : this.onAddItemDone}
-          onHide={this.hideModal}
-          menus={this.props.menu}
-          menuItems={this.props.menuItem}
-          sections={this.props.section}
-          title={this.state.editItemId ? "Edit menu item" : "Add menu item"}
-          open={this.state.modal === 'add-modal'} />
-
-        <ErrorSuccessMsg
-          errorMessage={requestError}
-          successMessage={requestSuccess}
-          onRequestClose={this.nullifyRequestState} />
-      </div>);
-
+          <ErrorSuccessMsg
+            errorMessage={requestError}
+            successMessage={requestSuccess}
+            onRequestClose={this.nullifyRequestState} />
+        </div>);
+    } else {
+        addingEditingItemJSX = (
+          <FloatingActionButton style={btnStyle} onClick={this._openModal.bind(this, 'add-modal')}>
+            <ContentAdd />
+          </FloatingActionButton>
+        );
+    }
 
     if(this.props.isMenuDetailView) {
       /*
@@ -397,8 +410,11 @@ class MenuLibraryView extends React.Component {
       }
 
       if(!menu.sections || !menu.sections.length) {
-        return  (
-          <AddPlaceholder title="menu" onAdd={this.onAddMenu} />
+        return (
+          <div style={{paddingTop: 200}}>
+            <AddPlaceholder title="menu" onAdd={this.onAddMenu} />
+            {addingEditingItemJSX}
+          </div>
         );
       } else {
         return (
@@ -408,6 +424,9 @@ class MenuLibraryView extends React.Component {
             menu.sections.map((section) => {
               return (
                 <MenuSection
+                  isFromLibraryDelete={true}
+                  onDeleteClick={this.onDeleteItemClick} 
+                  onEditClick={this.onEditItemClick}
                   sections={this.props.section} 
                   menus={this.props.menu} 
                   sectionId={section}
@@ -423,12 +442,9 @@ class MenuLibraryView extends React.Component {
 
     return (
       <div className="mt100 Content">
-        <Allergens allergyGuide={true}/>
-        
+        <Allergens allergyGuide={true} />
         <h2>Menu items library</h2>
-
-        { items }
-
+        {items}
         {addingEditingItemJSX}
       </div>
     );
