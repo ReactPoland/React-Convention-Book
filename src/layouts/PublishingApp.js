@@ -13,10 +13,16 @@ class PublishingApp extends React.Component {
     super(props);
   }
   render () {
-  	console.log(this.props);	
+  	let articlesJSX = [];
+  	for(let articleKey in this.props) {
+  		let articleDetails = this.props[articleKey];
+  		let currentArticleJSX = <div key={articleKey}><h2>{articleDetails.articleTitle}</h2><h3>{articleDetails.articleContent}</h3></div>
+  		articlesJSX.push(currentArticleJSX);
+  	}
     return (
       <div>
-          Our publishing app2
+          <h1>Our publishing app</h1>
+          {articlesJSX}
       </div>
     );
   }

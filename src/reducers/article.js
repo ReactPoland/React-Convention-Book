@@ -14,7 +14,7 @@ const article = (state = articleMock, action) => {
 		case 'RETURN_ALL_ARTICLES':
 			return Object.assign({}, state);
 		default:
-			return Object.assign({}, {error: "action type hasn't been provided"});
+			return state;
 	}
 }
 

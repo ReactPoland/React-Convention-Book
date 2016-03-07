@@ -228,7 +228,7 @@ Our complete package.json should looks as following with all front-end dependenc
 ```
 
 
-### Working on src/App.js, src/views/CoreLayout.js
+### Working on src/App.js, src/views/PublishingApp.js
 
 Let's create our App.js where the main part of our app will live at ***src/App.js***:
 
@@ -317,10 +317,10 @@ pwd
 /Users/przeor/Desktop/React-Convention-Book/src
 mkdir layouts
 cd layouts
-touch CoreLayout.js
+touch PublishingApp.js
 ```
 
-and the content of ***CoreLayout.js*** is:
+and the content of ***PublishingApp.js*** is:
 ```
 import React from 'react';
 import { connect } from 'react-redux';
@@ -355,7 +355,7 @@ const mapStateToProps = (state) => ({
   ...state
 });
 ```
-... is a spread operator which is on Mozilla's Documentation described as "an expression to be expanded in places where multiple arguments (for function calls) or multiple elements (for array literals) are expected"... and in another words this operator spreads one object ***state*** into second one in our case empty object { }. It's written like this here because in future we will specify more specifically which Reducer has to be mapped from our state in reducers into the component ***this.props***.
+... is a spread operator which is well described on the Mozilla's Documentation as "an expression to be expanded in places where multiple arguments (for function calls) or multiple elements (for array literals) are expected"... in our case this ***...*** operator spreads one object ***state*** into second one (in our case empty object { }). It's written like this here because in future we will specify multiple reducers that has to be mapped from our app's ***state*** into the component ***this.props***.
 
 
 
