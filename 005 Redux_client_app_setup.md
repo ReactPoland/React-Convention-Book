@@ -362,4 +362,59 @@ const mapStateToProps = (state) => ({
 ... is a spread operator which is well described on the Mozilla's Documentation as "an expression to be expanded in places where multiple arguments (for function calls) or multiple elements (for array literals) are expected"... in our case this ***...*** operator spreads one object ***state*** into second one (in our case empty object { }). It's written like this here because in future we will specify multiple reducers that has to be mapped from our app's ***state*** into the component ***this.props***.
 
 
+### Finishing our first static publishing app
+The only last thing to finish our static app is to
+render the articles that comes from ***this.props***.
 
+Thanks to redux the object mocked in the reducer is 
+available so if you will check console.log(this.props)
+in the render function of the PublishingApp.js then
+you would be able to access our articles object:
+```
+const articleMock = {
+	"987654": {
+		articleTitle: "Lorem ipsum - article one",
+		articleContent: "Here goes the content of the article"
+	},
+	"123456": {
+		articleTitle: "Lorem ipsum - article two",
+		articleContent: "Sky is the limit, the content goes here."
+	}
+};
+```
+
+... in our case, we need to change the React's render function
+as following (in src/views/PublishingApp.js):
+```
+  render () {
+  	let articlesJSX = [];
+  	for(let articleKey in this.props) {
+  		let articleDetails = this.props[articleKey];
+  		let currentArticleJSX = (
+  			<div key={articleKey}>
+  				<h2>{articleDetails.articleTitle}</h2>
+  				<h3>{articleDetails.articleContent}</h3>
+  			</div>);
+  		articlesJSX.push(currentArticleJSX);
+  	}
+    return (
+      <div>
+          <h1>Our publishing app</h1>
+          {articlesJSX}
+      </div>
+    );
+  }
+```
+On the above's code snippet we are iterating ***for(let articleKey in this.props)*** over the MockArticles object and creating an array of articles (in JSX) with ***articlesJSX.push(currentArticleJSX);***. After it is created, then we have added the articlesJSX into the return statement: 
+```
+      <div>
+          <h1>Our publishing app</h1>
+          {articlesJSX}
+      </div>
+```
+
+After you will check the localhost:3333, the new static redux's app shall be looking as following:
+![our first redux publishing app](http://test.przeorski.pl/book/008_first_redux_publishing_app.png)
+
+
+Great, so we have a static app in Redux! It's time to fetch data from our MongoDB database with use of Falcor. Please follow the instructions in next sub-chapter.
