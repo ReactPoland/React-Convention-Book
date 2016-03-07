@@ -1,16 +1,3 @@
-Preparation:
-1) make iron project copy
-2) make from it a publishing app (simple)
-3) Delete from backwards 
-4) based on the deleted commits history from our preparation publishing app start describing steps of making it
-
-REDUX - steps:
-1) First Action (fetchArticles)
-2) Store/Reducers - mock data from initData.js (MOCKED MODEL)
-3) React View
-4) Adding action trigger to the view
-
-
 ## Redux basics concepts
 
 ### The Single Immutable State Tree
@@ -241,9 +228,7 @@ Our complete package.json should looks as following with all front-end dependenc
 ```
 
 
-### App.js
-
-
+### Working on src/App.js, src/views/CoreLayout.js
 
 Let's create our App.js where the main part of our app will live at ***src/App.js***:
 
@@ -253,13 +238,13 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import article from './reducers/article'
-import App from './components/Article'
+import PublishingApp from './layouts/PublishingApp'
 
 let store = createStore(article)
 
 render(
     <Provider store={store}>
-        <App />
+        <PublishingApp />
     </Provider>,
     document.getElementById('publishingAppRoot')
 );
@@ -337,8 +322,6 @@ touch CoreLayout.js
 
 and the content of ***CoreLayout.js*** is:
 ```
-
-```
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -366,7 +349,7 @@ class PublishingApp extends React.Component {
 export default connect(mapStateToProps, mapDispatchToProps)(PublishingApp);
 ```
 
-The ES7 syntax ***...*** next to ...
+The above introduces the ES7 syntax ***...*** next to ...
 ```
 const mapStateToProps = (state) => ({
   ...state
