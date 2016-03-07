@@ -366,6 +366,13 @@ class PublishingApp extends React.Component {
 export default connect(mapStateToProps, mapDispatchToProps)(PublishingApp);
 ```
 
+The ES7 syntax ***...*** next to ...
+```
+const mapStateToProps = (state) => ({
+  ...state
+});
+```
+... is a spread operator which is on Mozilla's Documentation described as "an expression to be expanded in places where multiple arguments (for function calls) or multiple elements (for array literals) are expected"... and in another words this operator spreads one object ***state*** into second one in our case empty object { }. It's written like this here because in future we will specify more specifically which Reducer has to be mapped from our state in reducers into the component ***this.props***.
 
 
 

@@ -16,7 +16,7 @@ class PublishingApp extends React.Component {
   	console.log(this.props);	
     return (
       <div>
-          Our publishing app
+          Our publishing app2
       </div>
     );
   }
