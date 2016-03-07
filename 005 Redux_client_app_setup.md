@@ -76,18 +76,22 @@ const articleMock = {
 	}
 };
 
-const articles = (state = articleMock, action) => {
+const article = (state = articleMock, action) => {
 	switch (action.type) {
 		case 'RETURN_ALL_ARTICLES':
-			return new Object.assign({}, articleMock);
+			return Object.assign({}, state);
 		default:
-			return new Object.assign({}, {error: "action type hasn't been provided"});
+			return state;
 	}
 }
+
+export default article
 ```
 On the above code we have our artickeMock keept in the browser memory (it's the same as in initData.js) - later we will fetch this data from our backend's database. 
 
 The arrow function ***const articles*** is getting action.type which will come from CONSTANTS (we will create them later) the same way as in Facebook's FLUX implementation. 
+
+For the default return in the switch statement, we provide the ***state*** from ***state = articleMock*** (***return state;*** part above). This will return the initial state on the our first publishing app startup before any other action will occur. To be exact, the default in our case will do exactly the same as the action ***RETURN_ALL_ARTICLES*** before we will start fetching data from the backend (after the articles' fetching mechanism from backend will be implemented, then the default will return an empty object).
 
 
 Because of our webpack's configuration (described below) we need an index.html in dist. Let's create a dist/index.html file:
