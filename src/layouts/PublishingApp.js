@@ -1,3 +1,5 @@
+"use strict";
+
 import React from 'react';
 import Falcor from 'falcor';
 import falcorModel from '../falcorModel.js';
@@ -16,7 +18,19 @@ class PublishingApp extends React.Component {
   }
 
   componentWillMount() {
-    falcorModel.
+
+
+  }
+
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    console.info("articlesLength", articlesLength);
+    await falcorModel.
       getValue("articles[987654].articleTitle").
       then(function(response1) {  
         console.info(response1);
