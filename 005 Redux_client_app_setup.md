@@ -1,5 +1,14 @@
 ## Redux basics concepts
 
+In that first chapter we will cover only most basics concepts of Redux that will help us to make our simple publishing app. The app will be only in "read only" mode for that chapter, later in the book we will add more functionality like adding/edditing an article. You will discover all Redux's important rules and princibles during the whole book.
+
+Basic topics covered in that sub-chapter:
+- what is state tree
+- how immutability works in Redux
+- concept and basic use of Reducers
+
+Let's start with the basics.
+
 ### The Single Immutable State Tree
 The most important principle of Redux is that you are going to represent whole 
 state of your application as a single javascript object. 
@@ -12,6 +21,9 @@ Above is a simple example dev tool use case which you will use in your developme
 
 
 ### Immutability - actions & state tree is read only
+
+TODO more description of immutability (for less experienced readers)
+
 You cannot modify/mutate the values in your state tree the same was as it was in Facebook's FLUX (and other) implementations. 
 
 An action the same way as in other FLUX implementations is a plain object that describes the change - like adding an article (below we mock the payload for the sake of brevity):
