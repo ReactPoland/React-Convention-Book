@@ -18,7 +18,7 @@ class PublishingApp extends React.Component {
   }
 
   componentWillMount() {
-
+    this._fetch();
 
   }
 
@@ -29,12 +29,15 @@ class PublishingApp extends React.Component {
         return length;
       });
 
-    console.info("articlesLength", articlesLength);
-    await falcorModel.
-      getValue("articles[987654].articleTitle").
-      then(function(response1) {  
-        console.info(response1);
+
+    let articles = await falcorModel.
+      get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+      then(function(articlesResponse) {  
+        console.info(articlesResponse);
+        return articlesResponse;
       });
+
+
   }
 
   render () {
