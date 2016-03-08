@@ -37,6 +37,17 @@ class PublishingApp extends React.Component {
         return articlesResponse;
       });
 
+      // TODO
+      // 1) stworzyc akcje: articleList i odpalac ja po fetchu tutaj
+      // 2) dodac handler do reducera
+      // 3) odmockowac defaultowy state jako pusty
+      // 4) mamy dzialajace fetchowanie falcora na froncie
+
+      // 5) przesunac model falcora na backend
+      // 6) dodac falcor-express i falcor-router
+      // 7) stworzyc pierwszy route do przykladu
+      // 8) ??? chyba wszystko ???
+
 
   }
 
