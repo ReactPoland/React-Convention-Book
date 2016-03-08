@@ -14,6 +14,15 @@ class PublishingApp extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  componentWillMount() {
+    falcorModel.
+      getValue("articles[987654].articleTitle").
+      then(function(response1) {  
+        console.info(response1);
+      });
+  }
+
   render () {
   	let articlesJSX = [];
   	for(let articleKey in this.props) {
