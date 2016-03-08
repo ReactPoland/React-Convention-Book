@@ -21,9 +21,9 @@ Why do we use OLD REST API requests (like in 2005) in apps written in 2016+? Thi
 
 ### Tight-coupling (and latency) versus one model everywhere
 
-If you are familiar with front-end development, you know how to make requests to an API. This old way of doing things always force you to tight cople backend API with frontend API utilities. It's always like that:
+If you are familiar with front-end development, you know how to make requests to an API. This old way of doing things always force you to tight couple backend API with frontend API utilities. It's always like that:
 
-- 1) You make an API endpoint for example:
+1) You make an API endpoint for example:
 https://applicationDomain.com/api/recordDetails?id=92
 
 2)  and on the front-end you consume the data with HTTP API requests:
@@ -35,9 +35,9 @@ https://applicationDomain.com/api/recordDetails?id=92
 }
 ```
 
-In large applications it's ***hard*** to maintain real DRY RESTful API and that problem causes to have plenty of endpoints which are not optimized - so the front-end sometimes has to do many round-trip in order to fetch the data required for a certain view (and sometimes it fetches much more than it needs)
+In large applications it's ***hard*** to maintain real DRY RESTful API and that problem causes to have plenty of endpoints which are not optimized - so the front-end sometimes has to do many round-trips in order to fetch the data required for a certain view (and sometimes it fetches much more than it needs which causes even more latency for the end user of our application).
 
-Imagine that you have a large aplications with 50+ different API ENDPOINTS. After your first version of your application is finished, your client or boss finds a better way to structure the user-flow in the app. What that means? That you have to work on changing both front-end and backend endpoints in order to satisfy the changes in the user interface layer. That's called tight coupling between front-end and back-end.
+Imagine that you have a large aplications with 50+ different API ENDPOINTS. After your first version of your application is finished, your client or boss finds a better way to structure the user-flow in the app. What does it mean? That you have to work on changing both front-end and backend endpoints in order to satisfy the changes in the user interface layer. That's called tight coupling between front-end and back-end.
 
 What Falcor improves in those two areas that cause the ineficiency in working with RESTful APIs?
 
@@ -56,6 +56,42 @@ When coding client, Falcor makes you feel as if the whole JSON model of your app
 Because of Falcor's library for browsers and a falcor-express middleware you can retrieve your data from the model as on demand from the cloud.
 
 Falcor transparently handles all the network communication and keep your client-side app in sync with the server and databases.
+
+In that chapter we will also learn how to use falcor-router.
+
+
+# Client side Falcor
+
+Let's install the Falcor from NPM first.
+```
+pwd
+/Users/przeor/Desktop/React-Convention-Book
+npm i --save falcor@0.1.16 falcor-http-datasource@0.1.3
+```
+
+The falcor-http-datasource helps us to retrieve data from server to client-side out of the box (without worring about http API requests) - we will use this later when moving client-side model to backend.
+
+Let's create our app's Falcor model on the client-side:
+```
+cd src
+touch falcorModel.js
+```
+
+and then the content of the falcorModel.js will be:
+```
+var Falcor = require('falcor'),
+    FalcorDataSource = require('falcor-http-datasource'),
+    model = new Falcor.Model({
+        source: new FalcorDataSource('/model.json')
+    })
+
+module.exports = Model
+```
+
+
+
+
+
 
 
 
