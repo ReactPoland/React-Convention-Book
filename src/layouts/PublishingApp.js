@@ -3,9 +3,9 @@
 import React from 'react';
 import Falcor from 'falcor';
 import falcorModel from '../falcorModel.js';
-import articleActions from '../actions/article.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import articleActions from '../actions/article.js';
 
 const mapStateToProps = (state) => ({
 	...state
