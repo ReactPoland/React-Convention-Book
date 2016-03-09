@@ -30,7 +30,7 @@ const $atom = falcor.Model.atom;
 
 const model = new falcor.Model({
   // "cache": cache
-  source: new FalcorDataSource('/model.json')
+  source: new FalcorDataSource('http://localhost:3000/model.json')
 });
 
 export default model;
