@@ -140,7 +140,7 @@ class PublishingApp extends React.Component {
       });
 
     let articles = await falcorModel.
-      get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+      get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
       then(function(articlesResponse) {  
         return articlesResponse.json.articles;
       });
@@ -170,17 +170,17 @@ In the articlesLength variable we will have a count of articles.length from our 
 2) After we know that we have two articles in our model, then the next block of code is executing:
 ```
 let articles = await falcorModel.
-  get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+  get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
   then(function(articlesResponse) {  
     return articlesResponse.json.articles;
   });
 ```
 
-The get's method on falcorModel ***get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]).*** is also an asynchronous operation (the same way asynchronous as a http request). In that get's paramether we provide the location of our articles in our model (in src/falcorModel.js), so we are proviting the path:
+The get's method on falcorModel ***get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]).*** is also an asynchronous operation (the same way asynchronous as a http request). In that get's paramether we provide the location of our articles in our model (in src/falcorModel.js), so we are proviting the path:
 
 ```
 falcorModel.get(
-["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
+['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
 )
 ```
 
@@ -204,16 +204,16 @@ Explanation of the above's falcor path below based on our model, let's recall it
 What we are saying to falcor
 1) First give find articles get in our object with: 
 ```
-["articles"]
+['articles']
 ```
 2) Next please find in that articles, all the articles it has with a range ***{from: 0, to: articlesLength-1}*** (the ***articlesLength*** we have fetched earlier) with path:
 ```
-["articles", {from: 0, to: articlesLength-1}]
+['articles', {from: 0, to: articlesLength-1}]
 ```
 
 3) The last step you need to say to falcor what properities from the object you want to fetch from our model, so the complete path in that falcorModel.get query is:
 ```
-["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
+['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
 ```
 The array of ***['id','articleTitle', 'articleContent']*** says that you want those three properties out of every article.
 
@@ -221,7 +221,33 @@ In the end, we receive from Falcor an array of articles objects:
 ![falcor's first response](http://test.przeorski.pl/book/009_falcor_response_object.png)
 
 
+After we have fetched the data from our Falcor's model, we need to dispatch an action that will change accordingly the article's reducer and ultimately re-render our list of articles from our Falcor's model instead from the ***const articleMock*** (in src/reducers/article.js).
 
+But before we will be able to dispatch an action we need:
+
+1) Create actions directory with article.js:
+```
+pwd
+$ /Users/przeor/Desktop/React-Convention-Book
+cd src
+mkdir actions
+cd actions
+touch article.js
+```
+
+and create the content for our actions/article.js files as following:
+
+```
+export default {
+  articlesList: (response) => {
+    return {
+      type: 'ARTICLES_LIST_ADD',
+      payload: { response: response }
+    }
+  }
+}
+```
+There isn't too much in that file, if you are familiar to FLUX already then it's very similar. ***One important rule for actions in Redux is that it has to be PURE FUNCTION***. For now we will hard-code a constant called ***ARTICLES_LIST_ADD*** into actions/article.js (later in the book we will create a separate constants directory).
 
 
 
