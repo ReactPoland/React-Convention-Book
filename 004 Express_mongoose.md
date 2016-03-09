@@ -210,6 +210,8 @@ app.use(cors());
 // This is required by falcor-express middleware to work correctly with falcor-browser
 app.use(bodyParser.json({extended: false}));
 
+app.use(express.static('dist'));
+
 app.get('/', (req, res) => { 
 	Article.find(function (err, articlesDocs) {
 

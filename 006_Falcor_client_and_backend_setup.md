@@ -353,7 +353,79 @@ We also need to update our package.json file:
   },
 ```
 
-Because we are starting full-stack development part, we need to add npm start
+Because we are starting full-stack development part, we need to add "npm start" to our scripts in package.json - this will help compile client-side, put them into the ***dist*** folder (generated via webpack) and then create static files in the dist and use this folder as the source of static files (check server/server.js for ***app.use(express.static('dist'));***).
+
+Next important thing is to install new dependencies that are required for Falcor's on the backend:
+
+```
+npm i --save falcor-express@0.1.2 falcor-router@0.3.0
+```
+
+When you finnaly have installed new dependencies and configured the basic scripts for running the backend and frontend on the same port, then edit the ***server/server.js*** as following:
+
+1) On top of our file import new libraries in the ***server/server.js***:
+```
+import falcor from 'falcor';
+import falcorExpress from 'falcor-express';
+import Router from 'falcor-router';
+```
+
+
+2) and then between the two:
+- ***app.use(bodyParser.json({extended: false}));***
+- and ***app.use(bodyParser.json({extended: false}));***
+
+add a new code for managing Falcor's on the backend:
+```
+app.use(bodyParser.json({extended: false}));
+
+let cache = {
+  articles: [
+    {
+        id: 987654,
+        articleTitle: "Lorem ipsum - article one",
+        articleContent: "Here goes the content of the article"
+    },
+    {
+        id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here."
+    }
+  ]
+};
+
+var model = new falcor.Model({
+  cache: cache
+});
+
+app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
+    return model.asDataSource();
+}));
+
+
+app.use(express.static('dist'));
+```
+
+The above code is almost the same as the one in the src/falcorModel.js file. The only difference will be that now the Falcor will fetch data from backend's mocked object called cache in ***server.js***.
+
+If you will run your app with:
+```
+npm start
+```
+
+then you will see in your browser's dev tools a new http request made by Falcor as for example in our case:
+![falcor dev tool network](http://test.przeorski.pl/book/010_falcor_dev_tool_network_screenshot.png)
+
+
+If you follow all the instructions correctly, then you can also make a request to your server directly from your browser by:
+```
+http://localhost:3000/model.json?paths=[["articles",{"from":0,"to":1},["articleContent","articleTitle","id"]]]&method=get
+```
+then you shall see a jsonGraph in the response:
+![falcor dev tool network](http://test.przeorski.pl/book/011_falcor_get_example_from_server.png)
+
+You don't have too worry about those two above. It's just an example how Falcor is communicating between backend and frontend in the falcor's language. You don't have to worry anymore about exposing API endpoints and programming front-end to understand what data the backend's providing. Falcor is doing all this out-of-the-box and you will learn more details during making this publishing application.
+
 
 
 
