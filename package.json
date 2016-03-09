@@ -4,7 +4,9 @@
   "description": "",
   "main": "initData.js",
   "scripts": {
-    "start": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "start": "npm run webpack; node server",
+    "webpack": "webpack --config ./webpack.config.js"
   },
   "repository": {
     "type": "git",

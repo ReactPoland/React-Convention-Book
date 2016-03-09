@@ -42,12 +42,15 @@ app.use('/model.json', falcor.dataSourceRoute(function(req, res) {
 	  route: 'model',
 	  get: () => {
 	    return {
-	      path: ['v1', 'user', 'me'],
+	      path: ['v1'],
 	      value: "kamil2222eeeee test"
 	    };
 	  }
   }]);
 }));
+
+
+app.use(express.static('dist'));
 
 
 app.server.listen(process.env.PORT || 3000);
