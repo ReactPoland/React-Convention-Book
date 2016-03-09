@@ -3,6 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import falcor               from 'falcor-express';
+import Router               from 'falcor-router';
 
 mongoose.connect('mongodb://localhost/local');
 
