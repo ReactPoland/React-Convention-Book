@@ -3,8 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import falcor               from 'falcor-express';
-import Router               from 'falcor-router';
+import falcor from 'falcor';
+import falcorExpress from 'falcor-express';
+import Router from 'falcor-router';
 
 mongoose.connect('mongodb://localhost/local');
 
@@ -25,28 +26,39 @@ app.use(cors());
 // This is required by falcor-express middleware to work correctly with falcor-browser
 app.use(bodyParser.json({extended: false}));
 
-// app.get('/', (req, res) => { 
-// 	Article.find(function (err, articlesDocs) {
+app.get('/', (req, res) => { 
+	Article.find(function (err, articlesDocs) {
 
-// 		let ourArticles = articlesDocs.map(function(articleItem){
-// 			return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
-// 		}).join("<br/>");
+		let ourArticles = articlesDocs.map(function(articleItem){
+			return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
+		}).join("<br/>");
 
-// 		res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
-// 	});
-// });
+		res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
+	});
+});
 
 
-app.use('/model.json', falcor.dataSourceRoute(function(req, res) {
- return new Router([{
-	  route: 'model',
-	  get: () => {
-	    return {
-	      path: ['v1'],
-	      value: "kamil2222eeeee test"
-	    };
-	  }
-  }]);
+let cache = {
+  articles: [
+    {
+        id: 987654,
+        articleTitle: "Lorem ipsum - article one",
+        articleContent: "Here goes the content of the article"
+    },
+    {
+        id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here."
+    }
+  ]
+};
+
+var model = new falcor.Model({
+  cache: cache
+});
+
+app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
+    return model.asDataSource();
 }));
 
 

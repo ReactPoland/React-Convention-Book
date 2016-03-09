@@ -28601,22 +28601,11 @@
 /* 465 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	var articleMock = {
-		"987654": {
-			articleTitle: "Lorem ipsum - article one",
-			articleContent: "Here goes the content of the article"
-		},
-		"123456": {
-			articleTitle: "Lorem ipsum - article two",
-			articleContent: "Sky is the limit, the content goes here."
-		}
-	};
-
 	var article = function article() {
 		var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 		var action = arguments[1];
@@ -28625,7 +28614,8 @@
 			case 'RETURN_ALL_ARTICLES':
 				return Object.assign({}, state);
 			case 'ARTICLES_LIST_ADD':
-				return Object.assign({}, articleMock);
+				console.info("ARTICLES_LIST_ADD", action.payload.response);
+				return Object.assign({}, action.payload.response);
 			default:
 				return state;
 		}
@@ -37023,39 +37013,17 @@
 /* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	// var Falcor = require('falcor'),
-	//     FalcorDataSource = require('falcor-http-datasource');
-
-	var cache = {
-	  articles: [{
-	    id: 987654,
-	    articleTitle: "Lorem ipsum - article one",
-	    articleContent: "Here goes the content of the article"
-	  }, {
-	    id: 123456,
-	    articleTitle: "Lorem ipsum - article two",
-	    articleContent: "Sky is the limit, the content goes here."
-	  }]
-	};
-
-	// const model = new Falcor.Model({
-	//   "cache": cache
-	// });
-
-	// module.exports = model;
-
 	var falcor = __webpack_require__(467);
 	var FalcorDataSource = __webpack_require__(608);
 	var $ref = falcor.Model.ref;
 	var $atom = falcor.Model.atom;
 
 	var model = new falcor.Model({
-	  // "cache": cache
 	  source: new FalcorDataSource('/model.json')
 	});
 
