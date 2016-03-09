@@ -228,6 +228,49 @@ export default app;
 
 ```
 
+### A summary how to run the project
+Make sure that you have mongoDB running in the background on your machine with:
+```
+mongod
+```
+
+then you shall see in your console something like:
+```
+$ mongod
+2016-03-09T10:49:02.943+0100 W -        [initandlisten] Detected unclean shutdown - /data/db/mongod.lock is not empty.
+2016-03-09T10:49:02.952+0100 I JOURNAL  [initandlisten] journal dir=/data/db/journal
+2016-03-09T10:49:02.952+0100 I JOURNAL  [initandlisten] recover begin
+2016-03-09T10:49:02.952+0100 I JOURNAL  [initandlisten] info no lsn file in journal/ directory
+2016-03-09T10:49:02.952+0100 I JOURNAL  [initandlisten] recover lsn: 0
+2016-03-09T10:49:02.952+0100 I JOURNAL  [initandlisten] recover /data/db/journal/j._0
+2016-03-09T10:49:02.954+0100 I JOURNAL  [initandlisten] recover cleaning up
+2016-03-09T10:49:02.954+0100 I JOURNAL  [initandlisten] removeJournalFiles
+2016-03-09T10:49:02.954+0100 I JOURNAL  [initandlisten] recover done
+2016-03-09T10:49:02.966+0100 I JOURNAL  [durability] Durability thread started
+2016-03-09T10:49:02.966+0100 I CONTROL  [initandlisten] MongoDB starting : pid=2322 port=27017 dbpath=/data/db 64-bit host=Kamils-MBP
+2016-03-09T10:49:02.967+0100 I JOURNAL  [journal writer] Journal writer thread started
+2016-03-09T10:49:02.967+0100 I CONTROL  [initandlisten] 
+2016-03-09T10:49:02.967+0100 I CONTROL  [initandlisten] ** WARNING: soft rlimits too low. Number of files is 256, should be at least 1000
+2016-03-09T10:49:02.967+0100 I CONTROL  [initandlisten] db version v3.0.6
+2016-03-09T10:49:02.967+0100 I CONTROL  [initandlisten] git version: nogitversion
+2016-03-09T10:49:02.967+0100 I CONTROL  [initandlisten] build info: Darwin Kamils-MacBook-Pro.local 14.5.0 Darwin Kernel Version 14.5.0: Wed Jul 29 02:26:53 PDT 2015; root:xnu-2782.40.9~1/RELEASE_X86_64 x86_64 BOOST_LIB_VERSION=1_49
+2016-03-09T10:49:02.967+0100 I CONTROL  [initandlisten] allocator: system
+2016-03-09T10:49:02.967+0100 I CONTROL  [initandlisten] options: {}
+2016-03-09T10:49:03.087+0100 I NETWORK  [initandlisten] waiting for connections on port 27017
+2016-03-09T10:49:08.501+0100 I NETWORK  [initandlisten] connection accepted from 127.0.0.1:50490 #1 (1 connection now open)
+```
+
+and then in the main directory run node with:
+```
+node server/index.js 
+```
+and your terminal shall show something like:
+```
+$ node server/index.js 
+Started on port 3000
+```
+
 ![articles import success](http://test.przeorski.pl/book/006_fetching_articles_from_mongoose.png)
+
 
 

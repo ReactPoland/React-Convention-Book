@@ -1,5 +1,5 @@
-var Falcor = require('falcor'),
-    FalcorDataSource = require('falcor-http-datasource');
+// var Falcor = require('falcor'),
+//     FalcorDataSource = require('falcor-http-datasource');
 
 const cache = {
   articles: [
@@ -16,8 +16,21 @@ const cache = {
   ]
 }
 
-const model = new Falcor.Model({
-  "cache": cache
+// const model = new Falcor.Model({
+//   "cache": cache
+// });
+
+// module.exports = model;
+
+const falcor = require('falcor');
+const FalcorDataSource = require('falcor-http-datasource');
+const $ref = falcor.Model.ref;
+const $atom = falcor.Model.atom;
+
+
+const model = new falcor.Model({
+  // "cache": cache
+  source: new FalcorDataSource('/model.json')
 });
 
-module.exports = model;
+export default model;
