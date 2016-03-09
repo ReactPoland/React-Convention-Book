@@ -1,5 +1,11 @@
 ## Falcor basics concepts
 
+Falcor is like a glue between:
+- BACKEND and it's database structure (remember importing initData.js into the mongodb)
+- and FRONTEND Redux single state tree container
+
+It glues the pieces the way that it's much more effective than building an old fashioned REST API for a single-page-application.
+
 Like in the previous' Redux sub-chapter, in that one we will also learn only most basics concepts of Falcor that will help us build full-stack simple application with "read only" mode. Later during the book you will learn how to make an add/edit article with Falcor. 
 
 Below we will focus on most important aspects as:
@@ -103,6 +109,74 @@ const model = new falcor.Model({
 
 export default model;
 ```
+
+Above you can find an well known brief and readable model of our publishing application with two articles in it. 
+
+
+Now we will fetch that data from frontend's Falcor's model in our ***src/layouts/PublishingApp.js*** React's component, we will add a new function called *_fetch()* which will be responsible to fetch the all articles on our application start.
+
+We need to import our falcor's model first so in the top of the PublishingApp.js file we need to add:
+```
+import falcorModel from '../falcorModel.js';
+```
+
+and in our ***PublishingApp*** app we need to add two following functions ***componentWillMount*** and ***_fetch*** (more explanation below):
+
+```
+class PublishingApp extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentWillMount() {
+    this._fetch();
+  }
+
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+      then(function(articlesResponse) {  
+        return articlesResponse.json.articles;
+      });
+
+    this.props.articleActions.articlesList(articles);
+  }
+```
+Above you see the asynchronous function called _fetch. This is special syntax which allows you to use await keyword like we do at ***let articlesLength = await falcorModel*** and ***let articles = await falcorModel***.
+
+Using ***async await*** allows us using them over Promises - that causes our code to be more readable and avoid callback's hell.
+
+The async/await feature is taken from EcmaScript 7 inspired by C#. It allows you to write functions that appear to be block at each asynchronous operation that is waiting for the reasult before continuing next operation. 
+
+In our example, the code will execute as following:
+
+1) First it will call Falcor's mode for articles count with: 
+```
+let articlesLength = await falcorModel.
+  getValue("articles.length").
+  then(function(length) {  
+    return length;
+  });
+```
+
+In the articlesLength variable we will have a count of articles.length from our model (in our case it will be number two).
+
+2) After we know that we have two articles in our model, then the next block of code is executing:
+```
+let articles = await falcorModel.
+  get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+  then(function(articlesResponse) {  
+    return articlesResponse.json.articles;
+  });
+```
+
+The get's method on falcorModel ***get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]).*** is also an asynchronous operation (the same way asynchronous as a http request). In that get's paramether we provide the location of our articles in our model (in src/falcorModel.js)
 
 
 
