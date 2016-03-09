@@ -21,7 +21,6 @@ class PublishingApp extends React.Component {
   }
   componentWillMount() {
     this._fetch();
-
   }
   async _fetch() {
     let articlesLength = await falcorModel.

@@ -145,6 +145,7 @@ class PublishingApp extends React.Component {
         return articlesResponse.json.articles;
       });
   }
+  // below here are next methods o the PublishingApp
 ```
 Above you see the asynchronous function called _fetch. This is special syntax which allows you to use await keyword like we do at ***let articlesLength = await falcorModel*** and ***let articles = await falcorModel***.
 
@@ -302,8 +303,48 @@ and also don't forget about calling _fetch from ComponentWillMount:
 
 At this point, we shall be able to receive an action in our Redux's reducer. Let's improve our ***src/reducers/article.js*** file:
 ```
+const article = (state = {}, action) => {
+	switch (action.type) {
+		case 'RETURN_ALL_ARTICLES':
+			return Object.assign({}, state);
+		case 'ARTICLES_LIST_ADD':
+			console.info("ARTICLES_LIST_ADD", action.payload.response);
+			return Object.assign({}, action.payload.response);
+		default:
+			return state;
+	}
+}
 
+export default article
 ```
+
+1) As you can find out we don't need ***articleMock*** anymore so we have deleted it from the src/reducers/article.js
+
+2) We have added a new case ***ARTICLES_LIST_ADD***:
+```
+	case 'ARTICLES_LIST_ADD':
+		let articlesList = action.payload.response;
+		return Object.assign({}, articlesList);
+```
+
+and it returns a new articlesList object (with a new reference in the memory thanks to Object.assign).
+
+
+### A summary of client-side Falcor + Redux
+If you will run ***http://localhost:3000/index.html*** then you will see:
+
+Currently, we have a two separate applications:
+1) one in front-end with use of Redux and client-side Falcor
+2) one in back-end with use of MongoDB, Mongoose and Express
+
+We need to stick both together, so we will have one source of state for our applications (that comes from MongoDB).
+
+
+
+
+
+
+
 
 
 

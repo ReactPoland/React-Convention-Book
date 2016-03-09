@@ -420,7 +420,7 @@ as following (in src/views/PublishingApp.js):
     );
   }
 ```
-On the above's code snippet we are iterating ***for(let articleKey in this.props)*** over the MockArticles object and creating an array of articles (in JSX) with ***articlesJSX.push(currentArticleJSX);***. After it is created, then we have added the articlesJSX into the return statement: 
+On the above's code snippet we are iterating ***for(let articleKey in this.props)*** over the articleMock object (passed from reducer's state in this.props) and creating an array of articles (in JSX) with ***articlesJSX.push(currentArticleJSX);***. After it is created, then we have added the articlesJSX into the return statement: 
 ```
       <div>
           <h1>Our publishing app</h1>

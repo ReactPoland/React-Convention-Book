@@ -3,8 +3,8 @@ const article = (state = {}, action) => {
 		case 'RETURN_ALL_ARTICLES':
 			return Object.assign({}, state);
 		case 'ARTICLES_LIST_ADD':
-			console.info("ARTICLES_LIST_ADD", action.payload.response);
-			return Object.assign({}, action.payload.response);
+			let articlesList = action.payload.response;
+			return Object.assign({}, articlesList);
 		default:
 			return state;
 	}
