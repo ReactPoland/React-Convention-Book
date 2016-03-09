@@ -9,7 +9,7 @@ let store = createStore(article)
 
 render(
     <Provider store={store}>
-        <PublishingApp />
+        <PublishingApp store={store} />
     </Provider>,
     document.getElementById('publishingAppRoot')
 );

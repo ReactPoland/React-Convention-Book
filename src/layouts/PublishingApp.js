@@ -3,13 +3,16 @@
 import React from 'react';
 import Falcor from 'falcor';
 import falcorModel from '../falcorModel.js';
+import articleActions from '../actions/article.js';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const mapStateToProps = (state) => ({
 	...state
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  articleActions: bindActionCreators(articleActions, dispatch)
 });
 
 class PublishingApp extends React.Component {
@@ -29,13 +32,13 @@ class PublishingApp extends React.Component {
         return length;
       });
 
-
     let articles = await falcorModel.
       get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
       then(function(articlesResponse) {  
-        console.info(articlesResponse);
-        return articlesResponse;
+        return articlesResponse.json.articles;
       });
+
+    this.props.articleActions.articlesList(articles);
 
       // TODO
       // 1) stworzyc akcje: articleList i odpalac ja po fetchu tutaj
