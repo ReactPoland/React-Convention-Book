@@ -1,5 +1,5 @@
 const falcor = require('falcor/dist/falcor.browser');
-
+const FalcorDataSource = require('falcor-http-datasource');
 const $ref = falcor.Model.ref;
 const $atom = falcor.Model.atom;
 
@@ -19,7 +19,6 @@ const cache = {
     }
   },
   usersById: {
-    length: 3,
     1162953910005334: {
       "id": "1162953910005334",
       "createdAt": "2016-01-15T05:48:51.112472-05:00",
@@ -64,7 +63,6 @@ const cache = {
     }
   },
   menuItemsById: {
-    length: 6,
     7975821618456393: {
       id: "7975821618456393",
       title: "Spaghetti Bolognese",
@@ -112,7 +110,6 @@ const cache = {
     }
   },
   sectionsById: {
-    length: 4,
     7085243347100914: {
       id: "7085243347100914",
       title: "Breakfast",
@@ -126,7 +123,6 @@ const cache = {
       id: "320549983298406",
       title: "Lunch",
       category: "Brunch",
-      itemsLength: 1,
       items: [
         $ref(['menuItemsById', 7003244936931878])
       ]
@@ -135,14 +131,12 @@ const cache = {
       id: "49486919422633946",
       title: "Salads",
       category: "Lunch",
-      itemsLength: 0,
       items: null
     },
     3741015521809459: {
       id: "3741015521809459",
       title: "Mains",
       category: "Lunch",
-      itemsLength: 3,
       items: [
         $ref(['menuItemsById', 6603445904329419]),
         $ref(['menuItemsById', 7003244936931878]),
@@ -153,14 +147,12 @@ const cache = {
       id: "1543075663503259",
       title: "Prix Fixe",
       category: "Dinner",
-      itemsLength: 0,
       items: null
     },
     7557792635634542: {
       id: "7557792635634542",
       title: "Appetizers",
       category: "Dinner",
-      itemsLength: 2,
       items: [
         $ref(['menuItemsById', 7975821618456393]),
         $ref(['menuItemsById', 7270940095186234])
@@ -168,14 +160,12 @@ const cache = {
     }
   },
   menusById: {
-    length: 8,
     2732418433297425: {
       id: "2732418433297425",
       createdAt: "Wed Jan 27 2016 16:45:00 GMT+0100 (CET)",
       updatedAt: "Wed Jan 27 2016 16:45:00 GMT+0100 (CET)",
       title: "Vegetarian menu",
       description: "Lorem ipsum Ex ad officia pariatur nisi qui officia elit mollit laborum.",
-      sectionsLength: 0,
       sections: null
     },
     5042458197567612: {
@@ -184,7 +174,6 @@ const cache = {
       updatedAt: "Wed Jan 22 2016 16:45:00 GMT+0100 (CET)",
       title: "Chef recommends",
       description: "Lorem ipsum Consectetur anim Duis tempor quis pariatur aute est magna in qui dolore.",
-      sectionsLength: 3,
       sections: [
         $ref(['sectionsById', 7085243347100914]),
         $ref(['sectionsById', 7557792635634542]),
@@ -197,7 +186,6 @@ const cache = {
       updatedAt: "Wed Dec 17 2015 16:45:00 GMT+0100 (CET)",
       title: "Mock Menu 1",
       description: "Lorem ipsum Ex ad officia pariatur nisi qui officia elit mollit laborum.",
-      sectionsLength: 1,
       sections: [
         $ref(['sectionsById', 320549983298406])
       ]
@@ -208,7 +196,6 @@ const cache = {
       updatedAt: "Wed Dec 17 2015 16:45:00 GMT+0100 (CET)",
       title: "Mock Menu 2",
       description: "Lorem ipsum Ex ad officia pariatur nisi qui officia elit mollit laborum.",
-      sectionsLength: 0,
       sections: null
     },
     8058349746279418: {
@@ -217,7 +204,6 @@ const cache = {
       updatedAt: "Wed Dec 17 2015 16:45:00 GMT+0100 (CET)",
       title: "Mock Menu 3",
       description: "Lorem ipsum Ex ad officia pariatur nisi qui officia elit mollit laborum.",
-      sectionsLength: 0,
       sections: null
     },
     7171383046079427: {
@@ -226,7 +212,6 @@ const cache = {
       updatedAt: "Wed Dec 17 2015 16:45:00 GMT+0100 (CET)",
       title: "Mock Menu 4",
       description: "Lorem ipsum Ex ad officia pariatur nisi qui officia elit mollit laborum.",
-      sectionsLength: 3,
       sections: [
         $ref(['sectionsById', 3741015521809459]),
         $ref(['sectionsById', 320549983298406]),
@@ -239,7 +224,6 @@ const cache = {
       updatedAt: "Wed Dec 17 2015 16:45:00 GMT+0100 (CET)",
       title: "Mock Menu 5",
       description: "Lorem ipsum Ex ad officia pariatur nisi qui officia elit mollit laborum.",
-      sectionsLength: 0,
       sections: null
     },
     8333667400293052: {
@@ -248,16 +232,13 @@ const cache = {
       updatedAt: "Wed Dec 17 2015 16:45:00 GMT+0100 (CET)",
       title: "Mock Menu 6",
       description: "Lorem ipsum Ex ad officia pariatur nisi qui officia elit mollit laborum.",
-      sectionsLength: 0,
       sections: null
     }
   },
   restaurants: {
-    length: 1,
     0: {
       id: 0,
       name: "My awesome testing restaurant",
-      menusLength: 8,
       menus: [
         $ref(['menusById', 2732418433297425]),
         $ref(['menusById', 5042458197567612]),
@@ -268,7 +249,6 @@ const cache = {
         $ref(['menusById', 3937371058855206]),
         $ref(['menusById', 8333667400293052])
       ],
-      sectionsLength: 6,
       sections: [
         $ref(['sectionsById', 7085243347100914]),
         $ref(['sectionsById', 320549983298406]),
@@ -277,7 +257,6 @@ const cache = {
         $ref(['sectionsById', 1543075663503259]),
         $ref(['sectionsById', 7557792635634542])
       ],
-      menuItemsLength: 6,
       menuItems: [
         $ref(['menuItemsById', 7975821618456393]),
         $ref(['menuItemsById', 7003244936931878]),
@@ -286,7 +265,6 @@ const cache = {
         $ref(['menuItemsById', 6603445904329419]),
         $ref(['menuItemsById', 7270940095186234])
       ],
-      staffLength: 3,
       staff: [
         $ref(['usersById', 1162953910005334]),
         $ref(['usersById', 1162953910005337]),
@@ -296,7 +274,8 @@ const cache = {
   }
 }
 const model = new falcor.Model({
-  "cache": cache
+  // "cache": cache
+  source: new FalcorDataSource('/model.json')
 });
 
 export default model;

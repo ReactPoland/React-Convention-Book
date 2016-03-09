@@ -53,7 +53,7 @@ class AllergyGuide extends React.Component {
 
   _renderAllergyGuide() {
     let allergyGuideJSX = allergensDetails.map((allergenItem, index) => {
-      return <span style={{paddingRight: 4, color: allergenItem.color}}>{allergenItem.icon}-{allergenItem.title}</span>
+      return <span key={index} style={{paddingRight: 4, color: allergenItem.color}}>{allergenItem.icon}-{allergenItem.title}</span>
     });
     return allergyGuideJSX;
   }

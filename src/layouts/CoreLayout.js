@@ -90,9 +90,11 @@ class CoreLayout extends React.Component {
   }
 
   async _checkIfLoggedIn() {
+    console.info("IMPLEMENTED #1");
     let response = await API.get(
       ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email']]
     );
+    console.info("RESULT #1", response);
 
     /////////// mock
     if(sessionStorage.magicToken === 'magic-login-token') {

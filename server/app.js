@@ -8,6 +8,7 @@ import chalk                from 'chalk';
 import config               from '../config';
 import webpackConfig        from '../build/webpack/development_hot';
 import Router               from 'falcor-router';
+import routes               from './routes';
 
 const paths = config.get('utils_paths');
 const compiler = webpack(webpackConfig);
@@ -17,16 +18,10 @@ app.use(historyApiFallback({
   verbose : false
 }));
 
-app.use('src/model.json', falcor.dataSourceRoute(function(req, res) {
- return new Router([{
-  route: 'model',
-  get: () => {
-    return {
-      path: ['model'],
-      value: "0"
-    };
-  }
- }]);
+app.use('/static', express.static('static'));
+
+app.use('/model.json', falcor.dataSourceRoute(function(req, res) {
+ return new Router(routes);
 }));
 
 // Enable webpack middleware if the application is being

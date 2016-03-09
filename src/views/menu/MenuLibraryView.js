@@ -75,12 +75,23 @@ class MenuLibraryView extends React.Component {
   }
 
   async _fetchData() {
+
+    console.info("IMPLEMENTED #3");
+
     const response = await API.get(
-      ['restaurants', 0, 'menuItems', {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl']]
+      ['restaurants', 0, 'menuItems', {from: 0, to: 5}, ['id', 'title', 'description', 'picUrl']]
     );
+
+    console.info("RESULT #3", response);
+
+
+    console.info("IMPLEMENTED #4");
     const response2 = await API.get(
       ['restaurants', 0, 'sections', {from: 0, to: 100}, ['id', 'title', 'items'], {from: 0, to: 100}, 'id']
     );
+
+    console.info("RESULT #4", response2);
+
     const items = falcorUtils.makeArray({object: response.restaurants[0], name: 'menuItems'});
     const sections = falcorUtils.makeArray({object: response2.restaurants[0], name: 'sections'});
     this.props.actions.menuItem.menuItemList(items);
