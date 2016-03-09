@@ -26,18 +26,6 @@ app.use(cors());
 // This is required by falcor-express middleware to work correctly with falcor-browser
 app.use(bodyParser.json({extended: false}));
 
-app.get('/', (req, res) => { 
-	Article.find(function (err, articlesDocs) {
-
-		let ourArticles = articlesDocs.map(function(articleItem){
-			return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
-		}).join("<br/>");
-
-		res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
-	});
-});
-
-
 let cache = {
   articles: [
     {
@@ -63,6 +51,19 @@ app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
 
 
 app.use(express.static('dist'));
+
+
+app.get('/', (req, res) => { 
+    Article.find(function (err, articlesDocs) {
+
+        let ourArticles = articlesDocs.map(function(articleItem){
+            return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
+        }).join("<br/>");
+
+        res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
+    });
+});
+
 
 
 app.server.listen(process.env.PORT || 3000);
