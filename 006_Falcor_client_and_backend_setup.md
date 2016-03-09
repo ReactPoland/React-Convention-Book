@@ -341,9 +341,19 @@ We need to stick both together, so we will have one source of state for our appl
 
 
 
+### Moving Falcor's model to backend:
 
+We also need to update our package.json file:
 
+```
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "start": "npm run webpack; node server",
+    "webpack": "webpack --config ./webpack.config.js"
+  },
+```
 
+Because we are starting full-stack development part, we need to add npm start
 
 
 

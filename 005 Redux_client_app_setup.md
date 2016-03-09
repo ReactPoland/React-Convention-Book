@@ -176,7 +176,7 @@ module.exports = {
 
 Simply, that webpack's configs says that entry of commonJS module is at ```entry: './src/App.js'``` location. Webpacks builds a whole app following all imports from the App.js and the final output is located at ***path: './dist',***. Our app that is located at ***contentBase: './dist'*** will live on ports 3333. We also configure that we will use ES2015 and react so WebPack will compile for us ES2015 into ES5 and React's JSX into javascript. If you are interested more in WebPack configuration options then please read it's documentation.
 
-### Rest of important dependencies installation and npm start
+### Rest of important dependencies installation and "npm dev"
 ```
 npm i --save react@0.14.7 react-dom@0.14.7 react-redux@4.4.0 redux@3.3.1
 ```
@@ -194,7 +194,7 @@ We also need to update our package.json file (add scripts):
 
 ```
   "scripts": {
-    "start": "webpack-dev-server"
+    "dev": "webpack-dev-server"
   },
 ```
 
@@ -207,7 +207,7 @@ Our complete package.json should looks as following with all front-end dependenc
   "description": "",
   "main": "initData.js",
   "scripts": {
-    "start": "webpack-dev-server"
+    "dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -426,6 +426,11 @@ On the above's code snippet we are iterating ***for(let articleKey in this.props
           <h1>Our publishing app</h1>
           {articlesJSX}
       </div>
+```
+
+This comment will start your project on 3333 ports:
+```
+npm dev
 ```
 
 After you will check the localhost:3333, the new static redux's app shall be looking as following:
