@@ -144,8 +144,6 @@ class PublishingApp extends React.Component {
       then(function(articlesResponse) {  
         return articlesResponse.json.articles;
       });
-
-    this.props.articleActions.articlesList(articles);
   }
 ```
 Above you see the asynchronous function called _fetch. This is special syntax which allows you to use await keyword like we do at ***let articlesLength = await falcorModel*** and ***let articles = await falcorModel***.
@@ -250,18 +248,18 @@ export default {
 There isn't too much in that actions/article.js file ... if you are familiar to FLUX already then it's very similar. ***One important rule for actions in Redux is that it has to be PURE FUNCTION***. For now we will hard-code a constant called ***ARTICLES_LIST_ADD*** into actions/article.js (later in the book we will create a separate constants directory).
 
 
-In the ***src/layouts/PublishingApp.js*** file we need add in top of the file two new imports:
+In the ***src/layouts/PublishingApp.js*** file we need add in top of the file's a new import code:
 ```
 import { bindActionCreators } from 'redux';
 import articleActions from '../actions/article.js';
 ```
 
-and modify our exsiting function in that file from:
+when you have added the two above in our PublishingApp then  modify our exsiting function in the same file from:
 ```
 const mapDispatchToProps = (dispatch) => ({
 });
 ```
-into
+and add ***articleActions: bindActionCreators(articleActions, dispatch)*** so we will be able to bind article's actions into our component ***this.props***:
 ```
 const mapDispatchToProps = (dispatch) => ({
   articleActions: bindActionCreators(articleActions, dispatch)
@@ -271,7 +269,41 @@ const mapDispatchToProps = (dispatch) => ({
 Thanks to the aboves  changes (***articleActions: bindActionCreators(articleActions, dispatch)***), in our component will be able to dispatch an action from props because now when you will do ***this.props.articleActions.articlesList(articles)*** then the articles object fetched from falcor will be available in our Reducer (and from there, there is only one step to make our app fetch data working).
 
 
+Now, after you are done with this changes then add an action into our component in _fetch function: 
+```
+this.props.articleActions.articlesList(articles);
+```
 
+so our whole function for fetching shall be looking as following:
+```
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+      then(function(articlesResponse) {  
+        return articlesResponse.json.articles;
+      });
+
+    this.props.articleActions.articlesList(articles);
+  }
+```
+
+and also don't forget about calling _fetch from ComponentWillMount:
+```
+  componentWillMount() {
+    this._fetch();
+  }
+```
+
+At this point, we shall be able to receive an action in our Redux's reducer. Let's improve our ***src/reducers/article.js*** file:
+```
+
+```
 
 
 
