@@ -28709,6 +28709,7 @@
 	                articlesLength = _context.sent;
 	                _context.next = 5;
 	                return _falcorModel2.default.get(["articles", { from: 0, to: articlesLength - 1 }, ['id', 'articleTitle', 'articleContent']]).then(function (articlesResponse) {
+	                  console.info(articlesResponse);
 	                  return articlesResponse.json.articles;
 	                });
 
@@ -28717,17 +28718,6 @@
 
 
 	                this.props.articleActions.articlesList(articles);
-
-	                // TODO
-	                // 1) stworzyc akcje: articleList i odpalac ja po fetchu tutaj
-	                // 2) dodac handler do reducera
-	                // 3) odmockowac defaultowy state jako pusty
-	                // 4) mamy dzialajace fetchowanie falcora na froncie
-
-	                // 5) przesunac model falcora na backend
-	                // 6) dodac falcor-express i falcor-router
-	                // 7) stworzyc pierwszy route do przykladu
-	                // 8) ??? chyba wszystko ???
 
 	              case 7:
 	              case 'end':

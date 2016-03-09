@@ -66,7 +66,7 @@ Falcor transparently handles all the network communication and keep your client-
 In that chapter we will also learn how to use falcor-router.
 
 
-# Client side Falcor
+### Client side Falcor
 
 Let's install the Falcor from NPM first.
 ```
@@ -176,7 +176,50 @@ let articles = await falcorModel.
   });
 ```
 
-The get's method on falcorModel ***get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]).*** is also an asynchronous operation (the same way asynchronous as a http request). In that get's paramether we provide the location of our articles in our model (in src/falcorModel.js)
+The get's method on falcorModel ***get(["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]).*** is also an asynchronous operation (the same way asynchronous as a http request). In that get's paramether we provide the location of our articles in our model (in src/falcorModel.js), so we are proviting the path:
+
+```
+falcorModel.get(
+["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
+)
+```
+
+Explanation of the above's falcor path below based on our model, let's recall it again:
+```
+{
+  articles: [
+    {
+        id: 987654,
+        articleTitle: "Lorem ipsum - article one",
+        articleContent: "Here goes the content of the article"
+    },
+    {
+        id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here."
+    }
+  ]
+}
+```
+What we are saying to falcor
+1) First give find articles get in our object with: 
+```
+["articles"]
+```
+2) Next please find in that articles, all the articles it has with a range ***{from: 0, to: articlesLength-1}*** (the ***articlesLength*** we have fetched earlier) with path:
+```
+["articles", {from: 0, to: articlesLength-1}]
+```
+
+3) The last step you need to say to falcor what properities from the object you want to fetch from our model, so the complete path in that falcorModel.get query is:
+```
+["articles", {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
+```
+The array of ***['id','articleTitle', 'articleContent']*** says that you want those three properties out of every article.
+
+In the end, we receive from Falcor an array of articles objects:
+![falcor's first response](http://test.przeorski.pl/book/009_falcor_response_object.png)
+
 
 
 
