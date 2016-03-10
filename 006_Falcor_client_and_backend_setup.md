@@ -606,6 +606,8 @@ npm start
 
 and on ports 3333 you will see:
 
+![falcor router wrap up - app's screenshot](http://test.przeorski.pl/book/012_falcor_router_wrapup.png)
+
 
 
 
