@@ -599,6 +599,13 @@ The above will work only when the falcor-router has been already installed and i
 
 Also as you can see, the new Router takes an arguments of our routes - ***return new Router(routes);***.
 
+If you followed the instructions correctly, you will be able to run the project:
+```
+npm start
+```
+
+and on ports 3333 you will see:
+
 
 
 
