@@ -540,14 +540,43 @@ iterate over requested indexes:
     });
 ```
 
-EXPLANATION: 
+EXPLANATION: in above code snipped we iterate over array of requested indexes (do you remember about ***{from: 0, to: articlesLength-1}*** in PublishingApp.js?). Based on the indexes (***[0, 1]***) we fetch mocked data via ***let singleArticleObject = articlesCountInDB[index];***. Later we put into the ***path*** and index  (***path: ['articles', index],***) so Falcor knows to what path in our JSON graph object, the ***value: singleArticleObject*** belongs to.
 
 
-
-and return that array of articles:
+... and return that array of articles:
 ```
+    console.info(results)
     return results;
 ```
+
+that console.info will show us what has been returned by that path:
+```
+[{
+  path: ['articles', 0],
+  value: {
+    articleId: '987654',
+    articleTitle: 'BACKEND Lorem ipsum - article one',
+    articleContent: 'BACKEND Here goes the content of the article'
+  }
+}, {
+  path: ['articles', 1],
+  value: {
+    articleId: '123456',
+    articleTitle: 'BACKEND Lorem ipsum - article two',
+    articleContent: 'BACKEND Sky is the limit, the content goes here.'
+  }
+}]
+```
+
+
+### Last thing to make full-stack's Falcor run
+
+Currently, we still have a mocked data in our routes, but before we will start making calls to MongoDB we need to wrap-up the current setup, so you will be able to see it running in your browser.
+
+
+
+
+
 
 
 
