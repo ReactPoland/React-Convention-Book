@@ -1,4 +1,4 @@
-## Express setup with Mongoose
+### Express setup with Mongoose
 
 ### Running MongoDB in the background
 Once you have installed MongoDB following the instructions, then you have access to run:

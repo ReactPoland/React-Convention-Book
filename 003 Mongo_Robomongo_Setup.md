@@ -1,4 +1,4 @@
-## MongoDB installation
+### MongoDB installation
 
 What operation systems do you use? Windows, Linux or OS X?
 
