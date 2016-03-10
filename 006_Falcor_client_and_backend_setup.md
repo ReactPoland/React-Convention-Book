@@ -457,10 +457,12 @@ let PublishingAppRoutes = [{
 export default PublishingAppRoutes;
 ```
 
-Above we have definied our first articles.length route. For the sake of brevity we have hard-coded our articles' count (as 2). 
 
-The return statement provides two properties:
+As you can see, we have created our first route in the that will match the articles.length from our ***_fetch*** function (in layouts/PublishingApp.js).
 
+We have hardcoded number two in ***articlesCountInDB***, later we will make a query to our database there.
+
+The new stuff above are: 
 1) ***route: 'articles.length',*** this is simply a route for match by falcor.
 
 To be more precise, the falcor routes' paths are exactly the same stuff that you have provided in your src/layouts/PublishingApp.js (_fetch function) as for example to match this front-end call:
@@ -478,32 +480,7 @@ To be more precise, the falcor routes' paths are exactly the same stuff that you
 3) ***value: articlesCountInDB*** is a return value. In this case it is an INT number, but it can also be an object with several properties as you will learn later.
 
 
-
-
-
-Let's create a complete route for fetching articles' length in our MongoDB collection.
-
-We will hard-code/mock our response data, and later after we will have complete routes definied at the same end of that chapter, we will add MongoDB/Mongoose call to query for real data (finnaly :-) ...).
-
-This is the syntax for our first route:
-
-```
-let PublishingAppRouter = Router.createClass([
-  {
-    route: 'articles.length',
-    get: () => {
-      let articlesCountInDB = 2; // hardcoded for example
-      return {
-        path: ['articles', 'length'],
-        value: articlesCountInDB
-      };
-    }
-  }
-]);
-```
-As you can see, we have created our first route in the that will match the articles.length from our ***_fetch*** function (in layouts/PublishingApp.js).
-
-We have hardcoded number two in ***articlesCountInDB***, later we will make a query to our database there.
+### Second route for returning our two articles from backend
 
 Our second route (and last one in chapter #1) will be:
 
