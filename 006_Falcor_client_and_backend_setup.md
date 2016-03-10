@@ -614,7 +614,7 @@ and on ports 3333 you will see:
 
 Let's get back to our ***server/routes.js*** file:
 
-We need to copy over this code from server.js into routes.js:
+We need to move over (delete from server.js and move into routes.js) this code:
 ```
 // this goes to server/routes.js
 import mongoose from 'mongoose';

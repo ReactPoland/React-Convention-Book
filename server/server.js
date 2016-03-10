@@ -8,16 +8,6 @@ import falcorExpress from 'falcor-express';
 import Router from 'falcor-router';
 import routes from './routes.js';
 
-mongoose.connect('mongodb://localhost/local');
-
-var articleSchema = {
-	articleTitle:String,
-	articleContent:String
-}
-
-var Article = mongoose.model('Article', articleSchema, 'articles');
-
-
 var app = express();
 app.server = http.createServer(app);
 

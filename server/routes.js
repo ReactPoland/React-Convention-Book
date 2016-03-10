@@ -9,12 +9,17 @@ var articleSchema = {
 
 var Article = mongoose.model('Article', articleSchema, 'articles');
 
-
-
 let PublishingAppRoutes = [{
   route: 'articles.length',
-  get: () => {
-    let articlesCountInDB = 2; // hardcoded for example
+    get: async () => {
+
+    let articlesCountInDB = await Article.count({}, function(err, count) {
+      return count;
+    }
+
+    console.info("await DB articlesCountInDB", articlesCountInDB);
+
+
     return {
       path: ['articles', 'length'],
       value: articlesCountInDB
