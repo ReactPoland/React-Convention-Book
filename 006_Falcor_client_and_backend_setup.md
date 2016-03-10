@@ -630,6 +630,75 @@ var Article = mongoose.model('Article', articleSchema, 'articles');
 ```
 
 
+... and in first ***route articles.length*** you need to replace the mocked number two (articles count) into Mongoose's count method:
+```
+  route: 'articles.length',
+    get: () => {
+    return Article.count({}, function(err, count) {
+      return count;
+    }).then ((articlesCountInDB) => {
+      return {
+        path: ['articles', 'length'],
+        value: articlesCountInDB
+      }
+    })
+  }
+```
+
+IMPORTANT: please note that we are returning in ***get*** a promise (Mongoose from it's asynchronous nature, always return a promise during making any database's request as on that example Article.count).
+
+
+The method ***Article.count*** simply retrieves the integer number of articles' count from our ***Article model*** (that was prepared in the beggining of that book in MongoDB/Mongoose sub-chapter).
+
+
+The second route ***route: 'articles[{integers}]["id","articleTitle","articleContent"]',*** has to be changed as following:
+
+```
+{
+  route: 'articles[{integers}]["id","articleTitle","articleContent"]',
+  get: (pathSet) => {
+    let articlesIndex = pathSet[1];
+
+    return Article.find({}, function(err, articlesDocs) {
+      return articlesDocs;
+    }).then ((articlesArrayFromDB) => {
+      let results = [];
+      articlesIndex.forEach((index) => {
+        let singleArticleObject = articlesArrayFromDB[index].toObject();
+        let falcorSingleArticleResult = {
+          path: ['articles', index],
+          value: singleArticleObject
+        };
+        results.push(falcorSingleArticleResult);
+      });
+      console.info(">>>> results", results);
+      return results;
+    })
+  }
+}
+```
+We return a promise again with ***Article.find***. Also we have deleted mocked response from database and instead of that we are using ***Article.find*** method.
+
+The array of articles is returned in ***}).then ((articlesArrayFromDB) => {*** where next we simply iterate and create a results' array.
+
+Please note that on ***let singleArticleObject = articlesArrayFromDB[index].toObject();*** we use a method ***.toObject***. This is very important to make this work.
+
+
+### First working full-stack app
+After that you shall have complete full-stack version of the app working:
+
+![final full-stack app](http://test.przeorski.pl/book/013_chapter_final_app.png)
+
+Almost on everystep the UI part of our app is identical. The above screenshot is taken on the publishing app which:
+
+1) Fetch data from DB with use of Falcor-Express && Falcor-Router
+2) The data moves from backend (source is MongoDB) to frontend we populate Redux's src/reducers/article.js state tree
+3) We render the DOM elements based on our single state tree.
+
+
+Let's expand on that simple publishing app in next chapters. We also will make that application looking nicer with Material Design CSS (http://material-ui.com).
+
+
 
 
 
