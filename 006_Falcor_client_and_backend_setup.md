@@ -428,6 +428,10 @@ You don't have too worry about those two above. It's just an example how Falcor 
 
 
 
+### Configuring Falcor's router (ExpressJS)
+
+Currently, our model on the backend is hard coded so it keeps in the RAM memory of a server. We need to add ability to read the data from our MongoDB's articles collection - this is where the falcor-router comes handy.
+
 
 
 
