@@ -573,18 +573,34 @@ that console.info will show us what has been returned by that path:
 
 Currently, we still have a mocked data in our routes, but before we will start making calls to MongoDB we need to wrap-up the current setup, so you will be able to see it running in your browser.
 
+Open your server/server.js and make sure you import those two things:
+```
+import Router from 'falcor-router';
+import routes from './routes.js';
+```
+
+OK, so we have imported our falcor-router and routes.js - now we need to use them, so modify this old code:
+```
+// THIS IS OLD CODE
+app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
+    return model.asDataSource();
+}));
+```
+
+the above replace into new code as following:
+
+```
+app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
+ return new Router(routes);
+}));
+```
+
+The above will work only when the falcor-router has been already installed and imported in server.js' file. This is a library for DataSource which creates a Virtual JSON Graph document on your app server. As you see in server.js so far, we have DataSource provided by our hard-coded model ***return model.asDataSource();***. The router above will make the same, but now you will be able to match routes based on your app requirements.
+
+Also as you can see, the new Router takes an arguments of our routes - ***return new Router(routes);***.
 
 
 
-
-
-
-
-
-<!-- The falcor-router has been already installed, this is a library for DataSource which creates a Virtual JSON Graph document on your app server. As you see in server.js so far, we have DataSource provided by our hard-coded model ***return model.asDataSource();***. The router above will make the same, but now you will be able to match routes based on your app requirements. -->
-
-
-['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
 
 
 
