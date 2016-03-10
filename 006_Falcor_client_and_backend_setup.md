@@ -367,7 +367,6 @@ When you finnaly have installed new dependencies and configured the basic script
 ```
 import falcor from 'falcor';
 import falcorExpress from 'falcor-express';
-import Router from 'falcor-router';
 ```
 
 
@@ -433,9 +432,97 @@ You don't have too worry about those two above. It's just an example how Falcor 
 Currently, our model on the backend is hard coded so it keeps in the RAM memory of a server. We need to add ability to read the data from our MongoDB's articles collection - this is where the falcor-router comes handy.
 
 
+We need to create a router file first with:
+```
+$ pwd
+/Users/przeor/Desktop/React-Convention-Book
+$ cd server
+$ touch router.js
+```
 
+We have created the server/router.js file, the content for that router will be as following:
 
+```
+import Router from 'falcor-router';
 
+let PublishingAppRouter = Router.createClass([
+
+]);
+
+export default PublishingAppRouter;
+```
+
+The falcor-router has been already installed, this is a library for DataSource which creates a Virtual JSON Graph document on your app server. As you see in server.js so far, we have DataSource provided by our hard-coded model ***return model.asDataSource();***. The router above will make the same, but now you will be able to match routes based on your app requirements.
+
+You will learn more advanced concepts about Router further in this book.
+
+If you will check our Router right, it has ZERO routes in it:
+```
+let PublishingAppRouter = Router.createClass([
+
+]);
+```
+
+The falcor routes are exactly the same stuff that you have provided in your src/layouts/PublishingApp.js (_fetch function) as for example to match this front-end call:
+```
+  // location of that code snipper: src/layouts/PublishingApp.js
+  let articlesLength = await falcorModel.
+    getValue("articles.length").
+    then(function(length) {  
+      return length;
+    });
+```
+
+Let's create a complete route for fetching articles' length in our MongoDB collection.
+
+We will hard-code/mock our response data, and later after we will have complete routes definied at the same end of that chapter, we will add MongoDB/Mongoose call to query for real data (finnaly :-) ...).
+
+This is the syntax for our first route:
+
+```
+let PublishingAppRouter = Router.createClass([
+  {
+    route: 'articles.length',
+    get: () => {
+      let articlesCountInDB = 2; // hardcoded for example
+      return {
+        path: ['articles', 'length'],
+        value: articlesCountInDB
+      };
+    }
+  }
+]);
+```
+As you can see, we have created our first route in the that will match the articles.length from our ***_fetch*** function (in layouts/PublishingApp.js).
+
+We have hardcoded number two in ***articlesCountInDB***, later we will make a query to our database there.
+
+Our second route (and last one in chapter #1) will be:
+
+```
+let PublishingAppRouter = Router.createClass([
+  {
+    route: 'articles.length',
+    get: () => {
+      let articlesCountInDB = 2; // hardcoded for example
+      return {
+        path: ['articles', 'length'],
+        value: articlesCountInDB
+      };
+    }
+  }, 
+  {
+    route: 'articles[{integers}]["id","articleTitle","articleContent"]',
+    get: () => {
+      /*
+        __RETURN__WILL_GO_HERE
+      */ 
+    }
+  }
+]);
+```
+
+['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
 
 
 
