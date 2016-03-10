@@ -485,35 +485,71 @@ To be more precise, the falcor routes' paths are exactly the same stuff that you
 Our second route (and last one in chapter #1) will be:
 
 ```
-let PublishingAppRouter = Router.createClass([
-  {
-    route: 'articles.length',
-    get: () => {
-      let articlesCountInDB = 2; // hardcoded for example
-      return {
-        path: ['articles', 'length'],
-        value: articlesCountInDB
+{
+  route: 'articles[{integers}]["id","articleTitle","articleContent"]',
+  get: (pathSet) => {
+    let articlesIndex = pathSet[1];
+    let articlesCountInDB = [{
+      "articleId": "987654",
+      "articleTitle": "BACKEND Lorem ipsum - article one",
+      "articleContent": "BACKEND Here goes the content of the article"
+    }, {
+      "articleId": "123456",
+      "articleTitle": "BACKEND Lorem ipsum - article two",
+      "articleContent": "BACKEND Sky is the limit, the content goes here."
+    }]; // That are our mocked articles from MongoDB
+
+    let results = [];
+    articlesIndex.forEach((index) => {
+      let singleArticleObject = articlesCountInDB[index];
+      let falcorSingleArticleResult = {
+        path: ['articles', index],
+        value: singleArticleObject
       };
-    }
-  }, 
-  {
-    route: 'articles[{integers}]["id","articleTitle","articleContent"]',
-    get: () => {
-      /*
-        __RETURN__WILL_GO_HERE
-      */ 
-    }
+      results.push(falcorSingleArticleResult);
+    });
+
+    return results;
   }
-]);
+}
 ```
 
-
-Pathset is:
+New thing on the second route is Pathset, if you will log that into console then you will see in our case (when trying to run our full-stack app):
 ```
-[ 'articles',
+[ 
+  'articles',
   [ 0, 1 ],
-  [ 'articleContent', 'articleTitle', 'id' ] ]
+  [ 'articleContent', 'articleTitle', 'id' ] 
+]
 ```
+The Pathset says to us what are indexes request from client-side (***[ 0, 1 ],*** in our example). 
+
+Because in this case we are returning an array of articles (multiple articles), then we need to create a result variable:
+```
+    let results = [];
+```
+iterate over requested indexes:
+```
+    articlesIndex.forEach((index) => {
+      let singleArticleObject = articlesCountInDB[index];
+      let falcorSingleArticleResult = {
+        path: ['articles', index],
+        value: singleArticleObject
+      };
+      results.push(falcorSingleArticleResult);
+    });
+```
+
+EXPLANATION: 
+
+
+
+and return that array of articles:
+```
+    return results;
+```
+
+
 
 
 <!-- The falcor-router has been already installed, this is a library for DataSource which creates a Virtual JSON Graph document on your app server. As you see in server.js so far, we have DataSource provided by our hard-coded model ***return model.asDataSource();***. The router above will make the same, but now you will be able to match routes based on your app requirements. -->
