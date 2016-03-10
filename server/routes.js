@@ -1,3 +1,16 @@
+import mongoose from 'mongoose';
+
+mongoose.connect('mongodb://localhost/local');
+
+var articleSchema = {
+  articleTitle:String,
+  articleContent:String
+}
+
+var Article = mongoose.model('Article', articleSchema, 'articles');
+
+
+
 let PublishingAppRoutes = [{
   route: 'articles.length',
   get: () => {

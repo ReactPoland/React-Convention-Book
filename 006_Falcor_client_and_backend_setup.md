@@ -610,6 +610,28 @@ and on ports 3333 you will see:
 
 
 
+### Adding MongoDB/Mongoose calls based on Falcor's routes
+
+Let's get back to our ***server/routes.js*** file:
+
+We need to copy over this code from server.js into routes.js:
+```
+// this goes to server/routes.js
+import mongoose from 'mongoose';
+
+mongoose.connect('mongodb://localhost/local');
+
+var articleSchema = {
+  articleTitle:String,
+  articleContent:String
+}
+
+var Article = mongoose.model('Article', articleSchema, 'articles');
+```
+
+
+
+
 
 
 
