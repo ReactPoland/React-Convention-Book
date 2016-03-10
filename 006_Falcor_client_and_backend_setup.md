@@ -522,6 +522,15 @@ let PublishingAppRouter = Router.createClass([
 ]);
 ```
 
+
+Pathset is:
+```
+[ 'articles',
+  [ 0, 1 ],
+  [ 'articleContent', 'articleTitle', 'id' ] ]
+```
+
+
 ['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
 
 

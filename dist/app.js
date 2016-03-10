@@ -28614,8 +28614,8 @@
 			case 'RETURN_ALL_ARTICLES':
 				return Object.assign({}, state);
 			case 'ARTICLES_LIST_ADD':
-				console.info("ARTICLES_LIST_ADD", action.payload.response);
-				return Object.assign({}, action.payload.response);
+				var articlesList = action.payload.response;
+				return Object.assign({}, articlesList);
 			default:
 				return state;
 		}
@@ -28649,13 +28649,13 @@
 
 	var _falcorModel2 = _interopRequireDefault(_falcorModel);
 
-	var _article = __webpack_require__(613);
-
-	var _article2 = _interopRequireDefault(_article);
-
 	var _reactRedux = __webpack_require__(444);
 
 	var _redux = __webpack_require__(450);
+
+	var _article = __webpack_require__(613);
+
+	var _article2 = _interopRequireDefault(_article);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28708,7 +28708,7 @@
 	              case 2:
 	                articlesLength = _context.sent;
 	                _context.next = 5;
-	                return _falcorModel2.default.get(["articles", { from: 0, to: articlesLength - 1 }, ['id', 'articleTitle', 'articleContent']]).then(function (articlesResponse) {
+	                return _falcorModel2.default.get(['articles', { from: 0, to: articlesLength - 1 }, ['id', 'articleTitle', 'articleContent']]).then(function (articlesResponse) {
 	                  console.info(articlesResponse);
 	                  return articlesResponse.json.articles;
 	                });

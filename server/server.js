@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import falcor from 'falcor';
 import falcorExpress from 'falcor-express';
 import Router from 'falcor-router';
+import routes from './routes.js';
 
 mongoose.connect('mongodb://localhost/local');
 
@@ -14,7 +15,7 @@ var articleSchema = {
 	articleContent:String
 }
 
-var Article = mongoose.model('Article', articleSchema, 'articles')
+var Article = mongoose.model('Article', articleSchema, 'articles');
 
 
 var app = express();
@@ -26,32 +27,12 @@ app.use(cors());
 // This is required by falcor-express middleware to work correctly with falcor-browser
 app.use(bodyParser.json({extended: false}));
 
-let cache = {
-  articles: [
-    {
-        id: 987654,
-        articleTitle: "Lorem ipsum - article one",
-        articleContent: "Here goes the content of the article"
-    },
-    {
-        id: 123456,
-        articleTitle: "Lorem ipsum - article two from backend",
-        articleContent: "Sky is the limit, the content goes here."
-    }
-  ]
-};
-
-var model = new falcor.Model({
-  cache: cache
-});
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
-    return model.asDataSource();
+ return new Router(routes);
 }));
 
-
 app.use(express.static('dist'));
-
 
 app.get('/', (req, res) => { 
     Article.find(function (err, articlesDocs) {
