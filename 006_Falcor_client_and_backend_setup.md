@@ -489,7 +489,7 @@ Our second route (and last one in chapter #1) will be:
   route: 'articles[{integers}]["id","articleTitle","articleContent"]',
   get: (pathSet) => {
     let articlesIndex = pathSet[1];
-    let articlesCountInDB = [{
+    let articlesArrayFromDB = [{
       "articleId": "987654",
       "articleTitle": "BACKEND Lorem ipsum - article one",
       "articleContent": "BACKEND Here goes the content of the article"
@@ -501,7 +501,7 @@ Our second route (and last one in chapter #1) will be:
 
     let results = [];
     articlesIndex.forEach((index) => {
-      let singleArticleObject = articlesCountInDB[index];
+      let singleArticleObject = articlesArrayFromDB[index];
       let falcorSingleArticleResult = {
         path: ['articles', index],
         value: singleArticleObject
@@ -531,7 +531,7 @@ Because in this case we are returning an array of articles (multiple articles), 
 iterate over requested indexes:
 ```
     articlesIndex.forEach((index) => {
-      let singleArticleObject = articlesCountInDB[index];
+      let singleArticleObject = articlesArrayFromDB[index];
       let falcorSingleArticleResult = {
         path: ['articles', index],
         value: singleArticleObject
@@ -540,7 +540,7 @@ iterate over requested indexes:
     });
 ```
 
-EXPLANATION: in above code snipped we iterate over array of requested indexes (do you remember about ***{from: 0, to: articlesLength-1}*** in PublishingApp.js?). Based on the indexes (***[0, 1]***) we fetch mocked data via ***let singleArticleObject = articlesCountInDB[index];***. Later we put into the ***path*** and index  (***path: ['articles', index],***) so Falcor knows to what path in our JSON graph object, the ***value: singleArticleObject*** belongs to.
+EXPLANATION: in above code snipped we iterate over array of requested indexes (do you remember about ***{from: 0, to: articlesLength-1}*** in PublishingApp.js?). Based on the indexes (***[0, 1]***) we fetch mocked data via ***let singleArticleObject = articlesArrayFromDB[index];***. Later we put into the ***path*** and index  (***path: ['articles', index],***) so Falcor knows to what path in our JSON graph object, the ***value: singleArticleObject*** belongs to.
 
 
 ... and return that array of articles:
@@ -581,7 +581,7 @@ import routes from './routes.js';
 
 OK, so we have imported our falcor-router and routes.js - now we need to use them, so modify this old code:
 ```
-// THIS IS OLD CODE
+// THIS IS OLD CODE, remove it and replace with new
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
     return model.asDataSource();
 }));
