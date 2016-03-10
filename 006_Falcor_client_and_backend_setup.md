@@ -432,38 +432,38 @@ You don't have too worry about those two above. It's just an example how Falcor 
 Currently, our model on the backend is hard coded so it keeps in the RAM memory of a server. We need to add ability to read the data from our MongoDB's articles collection - this is where the falcor-router comes handy.
 
 
-We need to create a router file first with:
+We need to create our routes definition file that will be consumed by falcor-router's lib:
 ```
 $ pwd
 /Users/przeor/Desktop/React-Convention-Book
 $ cd server
-$ touch router.js
+$ touch routes.js
 ```
 
-We have created the server/router.js file, the content for that router will be as following:
+We have created the server/routes.js file, the content for that router will be as following:
 
 ```
-import Router from 'falcor-router';
+let PublishingAppRoutes = [{
+  route: 'articles.length',
+  get: () => {
+    let articlesCountInDB = 2; // hardcoded for example
+    return {
+      path: ['articles', 'length'],
+      value: articlesCountInDB
+    };
+  }
+}];
 
-let PublishingAppRouter = Router.createClass([
-
-]);
-
-export default PublishingAppRouter;
+export default PublishingAppRoutes;
 ```
 
-The falcor-router has been already installed, this is a library for DataSource which creates a Virtual JSON Graph document on your app server. As you see in server.js so far, we have DataSource provided by our hard-coded model ***return model.asDataSource();***. The router above will make the same, but now you will be able to match routes based on your app requirements.
+Above we have definied our first articles.length route. For the sake of brevity we have hard-coded our articles' count (as 2). 
 
-You will learn more advanced concepts about Router further in this book.
+The return statement provides two properties:
 
-If you will check our Router right, it has ZERO routes in it:
-```
-let PublishingAppRouter = Router.createClass([
+1) ***route: 'articles.length',*** this is simply a route for match by falcor.
 
-]);
-```
-
-The falcor routes are exactly the same stuff that you have provided in your src/layouts/PublishingApp.js (_fetch function) as for example to match this front-end call:
+To be more precise, the falcor routes' paths are exactly the same stuff that you have provided in your src/layouts/PublishingApp.js (_fetch function) as for example to match this front-end call:
 ```
   // location of that code snipper: src/layouts/PublishingApp.js
   let articlesLength = await falcorModel.
@@ -472,6 +472,14 @@ The falcor routes are exactly the same stuff that you have provided in your src/
       return length;
     });
 ```
+
+2) ***path: ['articles', 'length'],*** - this property tell's falcor's path (it's consumed by Falcor on backend and frontend). We need to provide that because sometimes, one route can return many different objects as server articles (***you will see it in next route, we will create***).
+
+3) ***value: articlesCountInDB*** is a return value. In this case it is an INT number, but it can also be an object with several properties as you will learn later.
+
+
+
+
 
 Let's create a complete route for fetching articles' length in our MongoDB collection.
 
@@ -529,6 +537,9 @@ Pathset is:
   [ 0, 1 ],
   [ 'articleContent', 'articleTitle', 'id' ] ]
 ```
+
+
+<!-- The falcor-router has been already installed, this is a library for DataSource which creates a Virtual JSON Graph document on your app server. As you see in server.js so far, we have DataSource provided by our hard-coded model ***return model.asDataSource();***. The router above will make the same, but now you will be able to match routes based on your app requirements. -->
 
 
 ['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]
