@@ -14,7 +14,7 @@ export default {
   delete: falcorDelete,
 
   // util for debugging falcor model
-  $log: (msg) => console.log(msg, model._root.cache)
+  $log: (msg) => console.info(msg, model._root.cache)
 };
 
 

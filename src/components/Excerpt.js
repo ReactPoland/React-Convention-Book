@@ -7,7 +7,7 @@ export default class Excerpt extends React.Component {
   constructor(props) {
     super(props);
 
-    const content = this.props.text;
+    let content = this.props.text;
     const open = this.props.open || false;
     const excerpt = content.substring(0, maxLength) + '...';
     const longEnough = content.length > maxLength;
@@ -24,8 +24,7 @@ export default class Excerpt extends React.Component {
 
   _toggle() {
     const open = !this.state.open;
-    const { content, excerpt } = this.state;
-
+    let { content, excerpt } = this.state;
     this.setState({
       text: open ? content : excerpt,
       open
@@ -36,7 +35,7 @@ export default class Excerpt extends React.Component {
     let btn = null;
     let classes = ["Excerpt-Content"];
 
-    if(this.state.content.length > maxLength) {
+    if(this.state.content.length > maxLength || this.props.descriptionTwo || this.props.descriptionThree) {
       if(this.state.open) {
         classes.push("Excerpt-Content--open");
         btn = (
@@ -57,9 +56,26 @@ export default class Excerpt extends React.Component {
       }
     }
 
+    let levelTwoThreeJSX = null;
+    if(this.state.open && (this.props.descriptionTwo || this.props.descriptionThree)) {
+      let levelTwoJSX = this.props.descriptionTwo ? <div><b>LEVEL TWO:</b> {this.props.descriptionTwo} </div> : null;
+      let levelThreeJSX = this.props.descriptionThree ? <div><b>LEVEL THREE:</b> {this.props.descriptionThree} </div> : null;
+      levelTwoThreeJSX = (
+        <div>
+          <br/>
+          {levelTwoJSX}
+          <br/>
+          {levelThreeJSX}
+        </div>
+      );
+    }
+
     return (
       <div className="Excerpt">
-        <p className={classes.join(' ')}>{this.state.content}</p>
+        <p className={classes.join(' ')}>
+          {this.state.content}
+          {levelTwoThreeJSX}
+        </p>
         {btn}
       </div>
     );

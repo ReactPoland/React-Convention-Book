@@ -189,7 +189,8 @@ const cache = {
         $ref(['sectionsById', 7085243347100914]),
         $ref(['sectionsById', 7557792635634542]),
         $ref(['sectionsById', 1543075663503259])
-      ]
+      ],
+      showAllergensInMenu: true
     },
     6918394977692515: {
       id: "6918394977692515",

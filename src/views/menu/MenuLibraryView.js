@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { FloatingActionButton } from 'material-ui';
 import { ContentAdd } from 'material-ui/lib/svg-icons';
 
-
 import API from 'utils/API';
 import * as menuItemActions from 'actions/menuItem';
 import * as sectionActions from 'actions/section';
@@ -41,6 +40,9 @@ const btnStyle = {
   right: 48
 };
 
+
+
+
 @Loader()
 class MenuLibraryView extends React.Component {
   constructor(props) {
@@ -56,6 +58,7 @@ class MenuLibraryView extends React.Component {
     this.onEditItemClick = this.onEditItemClick.bind(this);
     this.onEditItemDone = this.onEditItemDone.bind(this);
     this.nullifyRequestState = this.nullifyRequestState.bind(this);
+    this.onRemoveItemClick = this.onRemoveItemClick.bind(this);
 
     this._createMenuItemAndGetRef = this._createMenuItemAndGetRef.bind(this);
     this._getItemsLengthsInSections = this._getItemsLengthsInSections.bind(this);
@@ -70,7 +73,6 @@ class MenuLibraryView extends React.Component {
   }
 
   componentDidMount() {
-    console.info("\n\n componentDidMount \n\n");
     this._fetchData();
   }
 
@@ -350,6 +352,56 @@ class MenuLibraryView extends React.Component {
     return;
   }
 
+
+
+  async onRemoveItemClick(menuItemIdToDelete, sectionIdOfRemovedItem = null) {
+    if(sectionIdOfRemovedItem === null) {
+      console.warn("sectionIdOfRemovedItem can't be null");
+      alert("error: sectionIdOfRemovedItem can't be null")
+      return;
+    }
+
+    let sectionObj = this.props.section;
+    let sectionsToUpdate = [];
+    sectionObj.forEach((section, index) => {
+      let sectionId = section.id;
+      let newItems = [];
+      section.items.forEach((itemId, index) => {
+        let notForRemovalFromSection = sectionId !== sectionIdOfRemovedItem;
+        let notForRemovalItem = itemId !== menuItemIdToDelete;
+
+        if(notForRemovalFromSection || notForRemovalItem) {
+          // OK it's not the removal item and section, so let's push it
+          newItems.push(itemId);
+        }
+      });
+      if(section.items.length !== newItems.length) {
+        section.items = newItems;
+        sectionsToUpdate.push(section);
+      }
+    })
+
+    Promise.all(
+      sectionsToUpdate.map((section, index) => {
+
+        section = section.formatForWire();
+        console.log(section);
+        return API
+          .set({
+            url: ['sectionsById', section.id],
+            body: section
+          })
+          .then(() => {
+            this.props.actions.section.update(section);
+            return section;
+          });
+      })
+    );
+    return;
+  }
+
+
+
   render() {
     const { requestError, requestSuccess } = this.state;
     const { menuItem } = this.props;
@@ -371,6 +423,7 @@ class MenuLibraryView extends React.Component {
         );
       }
     });
+
 
     let addingEditingItemJSX;
 
@@ -424,8 +477,9 @@ class MenuLibraryView extends React.Component {
             menu.sections.map((section) => {
               return (
                 <MenuSection
+                  currentMenuId={this.props.currentMenuId}
                   isFromLibraryDelete={true}
-                  onDeleteClick={this.onDeleteItemClick} 
+                  onDeleteClick={this.onRemoveItemClick} 
                   onEditClick={this.onEditItemClick}
                   sections={this.props.section} 
                   menus={this.props.menu} 

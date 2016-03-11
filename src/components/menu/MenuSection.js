@@ -15,7 +15,7 @@ class MenuSection extends React.Component {
   }
 
   render() {
-    const { sectionId, menuItem, section } = this.props;
+    const { sectionId, menuItem, section, currentMenuId } = this.props;
     if(!sectionId || !menuItem || !section) return <span />;
     const currentSection = this.props.section.get(sectionId);
     if(!currentSection) return <span />
@@ -36,6 +36,8 @@ class MenuSection extends React.Component {
                   onDeleteClick={this.props.onDeleteClick} 
                   onEditClick={this.props.onEditClick}
                   item={item} 
+                  currentMenuId={this.props.currentMenuId}
+                  currentSectionId={sectionId}
                   key={item.id} 
                   sections={this.props.sections} 
                   menus={this.props.menus} /> 

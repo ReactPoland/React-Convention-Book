@@ -102,7 +102,7 @@ class MenuDetailView extends React.Component {
   }
 
   render() {
-
+    let currentMenuId = this.props.params.id;
     let menuDetailProps = {
       menu: this.state.menu,
       loaded: this.state.loaded,
@@ -110,7 +110,10 @@ class MenuDetailView extends React.Component {
     }
 
     // DRY menu detail view
-    return <MenuLibraryView isMenuDetailView={true} menuDetailProps={menuDetailProps} />
+    return <MenuLibraryView
+      currentMenuId={currentMenuId}
+      isMenuDetailView={true} 
+      menuDetailProps={menuDetailProps} />
   }
 }
 

@@ -31,7 +31,10 @@ export default createReducer(initialState, {
   },
 
   [MENU_UPDATE]: (state, payload) => {
-    return mapHelpers.addItem(state, payload.id, new Menu(payload))
+    let newState = mapHelpers.addItem(state, payload.id, new Menu(payload))
+    return newState;
+
+
   },
 
   [MENU_DELETE]: (state, payload) => {

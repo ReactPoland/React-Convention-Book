@@ -8,6 +8,9 @@ import {
   IconMenu,
   IconButton,
   MenuItem,
+  RaisedButton, 
+  Dialog, 
+  FlatButton,
   Popover
 } from 'material-ui';
 import {
@@ -35,16 +38,21 @@ const menuStyle = {
   marginRight: -8
 };
 
+
 export default class MenuListItem extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      imgOpen: false
+      imgOpen: false,
+      open: false,
     };
 
     this._handleOpenImg = this._handleOpenImg.bind(this);
     this._handleCloseImg = this._handleCloseImg.bind(this);
+    this.deleteOrRemoveActionModal = this.deleteOrRemoveActionModal.bind(this);
+    this.onDeleteWithModal = this.onDeleteWithModal.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   _handleOpenImg(event) {
@@ -61,13 +69,44 @@ export default class MenuListItem extends React.Component {
     });
   }
 
+  deleteOrRemoveActionModal() {
+    // alert("deleteOrRemoveActionModal");
+    if(this.props.currentSectionId) {
+      this.props.onDeleteClick(this.props.item.id, this.props.currentSectionId);
+    } else {
+      this.setState({open: true});
+    }
+    // 
+  }
+
+  onDeleteWithModal() {
+    this.props.onDeleteClick(this.props.item.id, this.props.currentSectionId);
+    this.setState({open: false});
+  }
+
+  handleClose() {
+    this.setState({open: false});
+  }
+
   render() {
-    console.info(100);
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        secondary={true}
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={this.onDeleteWithModal}
+      />,
+    ];
+
     const { item } = this.props;
 
     let computedBelongingsMap = _computeBelongingsMapUtil(this.props.item.id, this.props.sections, this.props.menus);
     let belongingsString = _createBelongingsStringUtil(computedBelongingsMap, this.props.sections, this.props.menus);
-    console.info(101);
     let itemBelongingsJSX = [];
     if(belongingsString) {
       for(let key in belongingsString) {
@@ -81,16 +120,34 @@ export default class MenuListItem extends React.Component {
       }
     } else itemBelongingsJSX = null;
     
-    let AllergensJSX = (
+    let currentMenuDetails = this.props.menus.get(this.props.currentMenuId);
+
+    let AllergensJSX;
+
+    if(currentMenuDetails && currentMenuDetails.showAllergensInMenu) {
+      AllergensJSX = (
       <Allergens 
         readOnly={true} 
         allergensObj={item.allergens}/>)
+    } else if (typeof(currentMenuDetails) === 'undefined') {
+      AllergensJSX = (
+      <Allergens 
+        readOnly={true} 
+        allergensObj={item.allergens}/>)
+    } else AllergensJSX = null;
 
-    console.info("102 ---> ", AllergensJSX);
-
-
-    let returnJSXtemp = (
+    return (
       <Card className="MenuItem">
+        <div>
+          <Dialog
+            title="Are you sure?"
+            actions={actions}
+            modal={false}
+            open={this.state.open}
+            onRequestClose={this.handleClose}>
+            Are you sure that you want to delete this item permamently from the library?
+          </Dialog>
+        </div>
         <div className="MenuItem-Left">
           <CardMedia style={mediaStyles}>
             <div
@@ -130,8 +187,8 @@ export default class MenuListItem extends React.Component {
                   primaryText="Edit Item"
                   rightIcon={<EditorModeEdit />} />
                 <MenuItem
-                  onClick={() => this.props.onDeleteClick(this.props.item.id)}
-                  primaryText={ this.props.isFromLibraryDelete ? "Delete Item" : "Remove Item" }
+                  onClick={this.deleteOrRemoveActionModal}
+                  primaryText={ !this.props.currentSectionId ? "Delete Item" : "Remove Item" }
                   rightIcon={<ActionDelete />} />
               </IconMenu>
             </CardTitle>
@@ -142,12 +199,10 @@ export default class MenuListItem extends React.Component {
             {AllergensJSX}
           </h4>
           <CardText style={{padding: 3, paddingLeft: 20}}>
-            <Excerpt text={item.description} />
+            <Excerpt text={item.description} descriptionTwo={item.description2} descriptionThree={item.description3} />
           </CardText>
         </div>
       </Card>
     );
-
-    return returnJSXtemp;
   }
 }

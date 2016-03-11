@@ -18,7 +18,6 @@ export default class Allergen extends Model {
   }
 
   formatForWire() {
-    console.info("\n\nformatForWire \n\n", this.vegetarian, "\n\n\n\n");
     return {
       vegetarian: this.vegetarian,
       gluten: this.gluten,

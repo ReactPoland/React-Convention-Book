@@ -57,6 +57,7 @@ class MenuEntity extends React.Component {
     this.onReorderMenus         = this.onReorderMenus.bind(this);
     this.onMenuSectionsReorder  = this.onMenuSectionsReorder.bind(this);
     this.onItemsReorder         = this.onItemsReorder.bind(this);
+    this.toggleAlergensInMenu   = this.toggleAlergensInMenu.bind(this);
 
     this.state = {
       modal: null
@@ -265,6 +266,42 @@ class MenuEntity extends React.Component {
     });
   }
 
+  toggleAlergensInMenu() {
+    console.log('\n#################\nCALL API: toggleAlergensInMenu\n#################\n');
+
+    let menuID = this.props.params.id;
+    let updatedMenu = this.props.menu.get(menuID);
+    updatedMenu.showAllergensInMenu = !updatedMenu.showAllergensInMenu;
+
+    API
+      .set({
+        url: ['menusById', menuID, 'showAllergensInMenu'],
+        body: updatedMenu.showAllergensInMenu
+      })
+      .then(() => {
+        this.props.actions.menu.update(updatedMenu);
+        API.$log();
+      });
+
+
+
+    return;
+    order = order.map((item) => ({
+      $type: 'ref',
+      value: ['menusById', item.id]
+    }));
+
+    API
+      .set({
+        url: ['restaurants', 0, 'menus'],
+        body: order
+      })
+      .then(() => {
+        this.props.actions.menu.reorder(order.map((order) => order.value[1]));
+        API.$log()
+      });
+  }
+
   render() {
     const { requestError, requestSuccess } = this.state;
     const disable = !this.props.menu.size;
@@ -297,10 +334,6 @@ class MenuEntity extends React.Component {
                 primaryText="Reorder Menus"
                 disabled={disable}
                 rightIcon={<ActionSwapVert />} />
-              <MenuItem
-                value="manage"
-                primaryText="Manage Sections"
-                rightIcon={<ActionBuild />} />
             </IconMenu>
           : null
         }
@@ -316,6 +349,10 @@ class MenuEntity extends React.Component {
         <MenuItem
           primaryText="Edit Sections"
           value="edit-menu-sections"
+          rightIcon={<EditorModeEdit />} />
+        <MenuItem
+          primaryText="Show/hide Allergens"
+          onClick={() => this.toggleAlergensInMenu()}
           rightIcon={<EditorModeEdit />} />
         <MenuItem
           primaryText="Reorder Items"
