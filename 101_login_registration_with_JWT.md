@@ -29,8 +29,39 @@ In our case the resource is a falcor-router's routes which has close relationshi
 Remember that the JWT tokens are similar to private's keys - you must keep them secure!
 
 
+### Structure of JWT token
+
+1) The header has information that are required on the backend for recognizing what cryptographic operation to do based on that information (metadata, what algorithms & keys are used)
+
+```
+{
+	"typ": "JWT",
+	"alg": "HS256"
+}
+```
+
+In general, that part is done 100% out of the box for us, so we don't have to care too much about headers while implementing it.
 
 
+2) The second part are claims provided in the JSON format, as for example:
+
+a) Issuer - so we know who has issued the token
+b) Audience - so we know that this token has to be consumed by our application
+c) Issue's date - when the token has been created
+d) Expiration's date - when the token is expiring so we have to generate a new one
+e) Subject - so an app can know which part of the app can use the token (useful in bigger application)
+
+Besides the claims provided above, we can create custom one that are specific definied by the app's creator.
+
+```
+{
+"iss": "http://theIssuerAddress",
+"exp": "1450819372",
+"aud": "http://myAppAddress",
+"sub": "publishingApp",
+"scope": ["read"]
+}
+```
 
 
 
