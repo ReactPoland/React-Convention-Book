@@ -14,21 +14,6 @@ export const DefaultInput = React.createClass({
     };
   },
 
-  componentWillUpdate() {
-    let uniqueName = this.props.name;
-    if(unmountTextFieldHandler && uniqueName !== unmountTextFieldHandler) {
-      /*
-        TO-DO: fix change edited menu bug!
-       */
-      console.warn("IMPORTANT: Here you need to find a method to change value in TextField")
-      console.error("IMPORTANT: Here you need to find a method to change value in TextField")
-      console.info(2);
-      console.info("refs", this.refs);
-      return;
-    }
-    unmountTextFieldHandler = this.props.name;
-  },
-
   changeValue(e) {
     this.setValue(e.target.value);
     this.props.onChange(e);

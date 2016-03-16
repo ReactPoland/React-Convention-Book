@@ -354,10 +354,6 @@ class MenuEntity extends React.Component {
           value="edit-menu-sections"
           rightIcon={<EditorModeEdit />} />
         <MenuItem
-          primaryText="Show/hide Allergens"
-          onClick={() => this.toggleAlergensInMenu()}
-          rightIcon={<EditorModeEdit />} />
-        <MenuItem
           primaryText="Reorder Items"
           value="reorder-menu-items"
           rightIcon={<ActionSwapVert />} />

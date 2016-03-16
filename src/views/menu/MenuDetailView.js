@@ -111,13 +111,15 @@ class MenuDetailView extends React.Component {
     }
 
     let currentMenuDetails = this.props.menu.get(currentMenuId);
-    let showAllergens = currentMenuDetails && (currentMenuDetails.showAllergensInMenu === true);
+    let dontShowAllergens = currentMenuDetails && (currentMenuDetails.showAllergensInMenu === true);
+    console.info("\n\n showAllergens \n\n\n", dontShowAllergens, "\n\n showAllergens \n\n\n");
 
-    return (<div style={{margin: '5px 5px 5px 5px'}}>
-      { showAllergens ? <Allergens allergyGuide={true} /> : <span /> }
+    return (<div>
+      <div style={{margin: '0px 0px 0px 45px'}}>
+        { dontShowAllergens !== true  ? <Allergens allergyGuide={true} /> : <span /> }
+      </div>
       <MenuLibraryView
         currentMenuId={currentMenuId}
-        showAllergyGuide={showAllergens}
         isMenuDetailView={true} 
         menuDetailProps={menuDetailProps} />
     </div>);
