@@ -12,6 +12,7 @@ import falcorUtils from 'utils/falcorUtils';
 import Loader from '../../decorators/Loader';
 import AddPlaceholder from 'components/menu/AddPlaceholder';
 import MenuLibraryView from 'views/menu/MenuLibraryView';
+import Allergens from 'components/menu/Allergens';
 
 
 const mapStateToProps = (state) => ({
@@ -109,11 +110,17 @@ class MenuDetailView extends React.Component {
       __getLoaderMarkup: this.props.__getLoaderMarkup
     }
 
-    // DRY menu detail view
-    return <MenuLibraryView
-      currentMenuId={currentMenuId}
-      isMenuDetailView={true} 
-      menuDetailProps={menuDetailProps} />
+    let currentMenuDetails = this.props.menu.get(currentMenuId);
+    let showAllergens = currentMenuDetails && (currentMenuDetails.showAllergensInMenu === true);
+
+    return (<div style={{margin: '5px 5px 5px 5px'}}>
+      { showAllergens ? <Allergens allergyGuide={true} /> : <span /> }
+      <MenuLibraryView
+        currentMenuId={currentMenuId}
+        showAllergyGuide={showAllergens}
+        isMenuDetailView={true} 
+        menuDetailProps={menuDetailProps} />
+    </div>);
   }
 }
 

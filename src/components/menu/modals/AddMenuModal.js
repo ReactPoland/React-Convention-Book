@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, FlatButton } from 'material-ui';
+import { Dialog, FlatButton, Checkbox } from 'material-ui';
 import { Menu } from 'models';
 import { Form } from 'formsy-react';
 
@@ -10,7 +10,8 @@ export default class AddMenuModal extends React.Component {
     super(props);
 
     this.state = {
-      open: false
+      open: false,
+      showAllergensInMenu: false
     };
 
     this._enableButton = this._enableButton.bind(this);
@@ -32,6 +33,7 @@ export default class AddMenuModal extends React.Component {
   }
 
   _onDone(menu) {
+    menu.showAllergensInMenu = this.state.showAllergensInMenu;
     menu = new Menu(menu);
     this.props.onHide && this.props.onHide();
     this.props.onDone && this.props.onDone(menu);
@@ -62,6 +64,11 @@ export default class AddMenuModal extends React.Component {
             validations="isExisty"
             validationError="Invalid name"
             name="title" />
+            <Checkbox
+              defaultChecked={this.state.showAllergensInMenu}
+              name="checkboxShowAllergensInMenu"
+              label={<span>Don't show allergen guide</span>}
+              onCheck={() => {this.setState({ showAllergensInMenu: !this.state.showAllergensInMenu})}} />
         </Form>
       </Dialog>
     );

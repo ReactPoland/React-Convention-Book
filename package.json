@@ -25,9 +25,11 @@
   "dependencies": {
     "axios": "^0.7.0",
     "babel": "^5.8.23",
+    "backdraft-js": "0.0.1",
     "chalk": "^1.1.1",
     "cssnano": "^3.3.2",
     "dotenv": "^1.2.0",
+    "draft-js": "^0.2.2",
     "falcor": "^0.1.16",
     "formsy-react": "^0.17.0",
     "history": "1.13.1",

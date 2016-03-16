@@ -22,7 +22,7 @@ import {
 } from 'material-ui/lib/svg-icons';
 import Colors from 'material-ui/lib/styles/colors';
 
-import Excerpt from 'components/Excerpt';
+import DraftExcerpt from 'components/DraftExcerpt';
 import Allergens from 'components/menu/Allergens';
 import { _computeBelongingsMapUtil, _createBelongingsStringUtil } from 'utils/_computeItemMenuBelongingsUtils';
 
@@ -120,21 +120,10 @@ export default class MenuListItem extends React.Component {
       }
     } else itemBelongingsJSX = null;
     
-    let currentMenuDetails = this.props.menus.get(this.props.currentMenuId);
-
-    let AllergensJSX;
-
-    if(currentMenuDetails && currentMenuDetails.showAllergensInMenu) {
-      AllergensJSX = (
+    let AllergensJSX = (
       <Allergens 
         readOnly={true} 
-        allergensObj={item.allergens}/>)
-    } else if (typeof(currentMenuDetails) === 'undefined') {
-      AllergensJSX = (
-      <Allergens 
-        readOnly={true} 
-        allergensObj={item.allergens}/>)
-    } else AllergensJSX = null;
+        allergensObj={item.allergens}/>);
 
     return (
       <Card className="MenuItem">
@@ -194,12 +183,12 @@ export default class MenuListItem extends React.Component {
             </CardTitle>
 
             <span style={{paddingLeft: 20, fontSize: 10}}>
-              {itemBelongingsJSX}
+              { this.props.currentSectionId ? null : itemBelongingsJSX}
             </span>
             {AllergensJSX}
           </h4>
           <CardText style={{padding: 3, paddingLeft: 20}}>
-            <Excerpt text={item.description} descriptionTwo={item.description2} descriptionThree={item.description3} />
+            <DraftExcerpt descriptionOne={item.description} descriptionTwo={item.description2} descriptionThree={item.description3} />
           </CardText>
         </div>
       </Card>

@@ -462,6 +462,8 @@ class MenuLibraryView extends React.Component {
         return this.props.menuDetailProps.__getLoaderMarkup();
       }
 
+      // ....
+
       if(!menu.sections || !menu.sections.length) {
         return (
           <div style={{paddingTop: 200}}>

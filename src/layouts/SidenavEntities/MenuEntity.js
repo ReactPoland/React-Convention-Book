@@ -111,6 +111,9 @@ class MenuEntity extends React.Component {
 
   onAddMenu(menu) {
     console.log('\n#################\nCALL API: ADD MENU\n#################\n');
+    
+    console.info("1) menu", menu);
+
     menu = menu.formatForWire();
 
     API
