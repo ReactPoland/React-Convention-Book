@@ -1,15 +1,8 @@
 import React from 'react';
 import { FlatButton } from 'material-ui';
-import {Editor, EditorState, ContentState, RichUtils, convertToRaw, convertFromRaw} from 'draft-js';
 import backdraft  from 'backdraft-js';
 import { NavigationChevronRight } from 'material-ui/lib/svg-icons';
-
-var supportedMarkup = {
-    'BOLD': ['<strong>', '</strong>'],
-    'ITALIC': ['<em>', '</em>']
-};
-
-const maxLength = 100;
+import ViewerOfRichEditor from 'components/wyswig-draftjs/ViewerOfRichEditor';
 
 export default class DraftExcerpt extends React.Component {
   constructor(props) {
@@ -23,47 +16,6 @@ export default class DraftExcerpt extends React.Component {
 
   }
 
-  _convertJSXFromJSON(contentJSON) {
-    let JSXmarkup;
-    if(typeof contentJSON === "object") {
-      let markedUpBlocks = backdraft(contentJSON, supportedMarkup);
-      JSXmarkup = <div dangerouslySetInnerHTML={{ "__html": markedUpBlocks.join("<br />") }} />;
-      return JSXmarkup;
-
-    } else {
-      JSXmarkup = <div dangerouslySetInnerHTML={{ "__html": "<p>"+contentJSON+"</p>" }} />;
-      return JSXmarkup;
-    }
-  }
-
-  _plainTextLength(contentJSON) {
-    let JSXmarkup;
-    if(typeof contentJSON === "object") {
-      let draftBlock = convertFromRaw(contentJSON);
-      let contentState = ContentState.createFromBlockArray(draftBlock);
-      let currentLen = contentState.getPlainText().length;
-
-      return currentLen;
-
-    } else {
-      JSXmarkup = <div dangerouslySetInnerHTML={{ "__html": contentJSON }} />;
-      return contentJSON.length;
-    }
-  }
-
-  _getPlainText(contentJSON) {
-    let plainText;
-    if(typeof contentJSON === "object") {
-      let draftBlock = convertFromRaw(contentJSON);
-      let contentState = ContentState.createFromBlockArray(draftBlock);
-      plainText = contentState.getPlainText();
-    } else {
-      plainText = contentJSON;
-    }
-
-    return plainText;
-  }
-
   _toggle() {
     this.setState({showMoreText: !this.state.showMoreText});
   }
@@ -72,11 +24,19 @@ export default class DraftExcerpt extends React.Component {
     let classes = ["Excerpt-Content"];
     let buttonJSX;
 
-    let descOneLen = this._plainTextLength(this.props.descriptionOne);
-    let notCollapsedNotation = descOneLen < maxLength && (typeof this.props.descriptionTwo === 'undefined' || typeof this.props.descriptionThree === 'undefined');
+    let notCollapsedNotation = (typeof this.props.descriptionTwo === 'undefined' && typeof this.props.descriptionThree === 'undefined');
+
+
+    let descriptionOneDivJSX = (<ViewerOfRichEditor 
+      tabIndexProp="100003"
+      initialValue={ this.props.descriptionOne }
+      name="description"
+      title="Description (Level 1)"
+      onChangeTextJSON={() => {}} />);
+
+
 
     if(!this.state.showMoreText) {
-      let currentShortMainDesc;
       if(notCollapsedNotation) {
         buttonJSX = <span />;
       } else {
@@ -88,16 +48,12 @@ export default class DraftExcerpt extends React.Component {
             label="Show more" />
         );
       }
-      let descPlainText = this._getPlainText(this.props.descriptionOne);
-      let shortDescText = descPlainText.substring(0, maxLength);
-      if(!notCollapsedNotation) {
-        shortDescText = shortDescText + '...';
-      }
 
-      currentShortMainDesc = <div>{shortDescText}</div>;
+      classes.push("Excerpt-Content--open");
+
       let currentDescJSX = (        
         <div className={classes.join(' ')}>
-          {currentShortMainDesc}
+          {descriptionOneDivJSX}
         </div>);
 
       return (
@@ -117,9 +73,20 @@ export default class DraftExcerpt extends React.Component {
 
       classes.push("Excerpt-Content--open");
 
-      let descriptionOneDivJSX = this._convertJSXFromJSON(this.props.descriptionOne);
-      let descriptionTwoDivJSX = this.props.descriptionTwo ? this._convertJSXFromJSON(this.props.descriptionTwo) : <span />;
-      let descriptionThreeDivJSX = this.props.descriptionThree ? this._convertJSXFromJSON(this.props.descriptionThree) : <span />;
+      let descriptionTwoDivJSX = this.props.descriptionTwo ? (<ViewerOfRichEditor 
+            tabIndexProp="100004"
+            initialValue={ this.props.descriptionTwo }
+            name="description"
+            title="Description (Level 2)"
+            onChangeTextJSON={() => {}} />) : <span />;
+
+      let descriptionThreeDivJSX = this.props.descriptionThree ? (<ViewerOfRichEditor 
+            tabIndexProp="100005"
+            initialValue={ this.props.descriptionThree }
+            name="description"
+            title="Description (Level 3)"
+            onChangeTextJSON={() => {}} />) : <span />;
+
 
       return (
         <div className="Excerpt">

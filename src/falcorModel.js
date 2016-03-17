@@ -79,7 +79,8 @@ const cache = {
         soy: true,
         fish: true
       }
-    },
+    }
+    ,
     7003244936931878: {
       id: "7003244936931878",
       title: "Barbarian Sandwich",

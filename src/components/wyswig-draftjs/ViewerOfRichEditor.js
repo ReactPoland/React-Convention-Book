@@ -9,7 +9,7 @@ import {
 } from 'draft-js';
 
 
-export default class  RichEditor extends React.Component {
+export default class  ViewerOfRichEditor extends React.Component {
     constructor(props) {
       super(props);
 
@@ -42,6 +42,25 @@ export default class  RichEditor extends React.Component {
       this.handleKeyCommand = (command) => this._handleKeyCommand(command);
       this.toggleBlockType = (type) => this._toggleBlockType(type);
       this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+    }
+
+    componentWillReceiveProps(nextProps) {
+      let initialEditorFromProps;
+      if(typeof nextProps.initialValue === 'undefined') {
+        initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));
+      } else {
+        if(typeof nextProps.initialValue === 'string') {
+          initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(nextProps.initialValue));
+        } else {
+          let draftBlock = convertFromRaw(nextProps.initialValue);
+          let contentToConsume = ContentState.createFromBlockArray(draftBlock);
+          initialEditorFromProps = EditorState.createWithContent(contentToConsume);
+        }
+
+      }
+      this.state = {
+        editorState: initialEditorFromProps
+      };
     }
 
     _handleKeyCommand(command) {
@@ -89,22 +108,12 @@ export default class  RichEditor extends React.Component {
         <div>
           <h4>{this.props.title}</h4>
           <div className="RichEditor-root">
-            <BlockStyleControls
-              editorState={editorState}
-              onToggle={this.toggleBlockType}
-            />
-            <InlineStyleControls
-              editorState={editorState}
-              onToggle={this.toggleInlineStyle}
-            />
             <div className={className} onClick={this.focus}>
               <Editor
                 tabIndex={this.props.tabIndexProp}
                 blockStyleFn={getBlockStyle}
                 customStyleMap={styleMap}
                 editorState={editorState}
-                handleKeyCommand={this.handleKeyCommand}
-                onChange={this.onChange}
                 ref="editor"
                 spellCheck={true}
               />
@@ -156,11 +165,12 @@ export default class  RichEditor extends React.Component {
   }
 
   const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one'},
-    {label: 'H2', style: 'header-two'},
-    {label: 'Blockquote', style: 'blockquote'},
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'}
+    // {label: 'H1', style: 'header-one'},
+    // {label: 'H2', style: 'header-two'},
+    // {label: 'Blockquote', style: 'blockquote'},
+    // {label: 'UL', style: 'unordered-list-item'},
+    // {label: 'OL', style: 'ordered-list-item'},
+    // {label: 'Code Block', style: 'code-block'},
   ];
 
   const BlockStyleControls = (props) => {
@@ -189,7 +199,8 @@ export default class  RichEditor extends React.Component {
   var INLINE_STYLES = [
     {label: 'Bold', style: 'BOLD'},
     {label: 'Italic', style: 'ITALIC'},
-    {label: 'Underline', style: 'UNDERLINE'}
+    // {label: 'Underline', style: 'UNDERLINE'},
+    // {label: 'Monospace', style: 'CODE'},
   ];
 
   const InlineStyleControls = (props) => {
@@ -208,6 +219,9 @@ export default class  RichEditor extends React.Component {
       </div>
     );
   };
+
+
+
 
 
 
