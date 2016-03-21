@@ -14,7 +14,11 @@ export default {
   delete: falcorDelete,
 
   // util for debugging falcor model
-  $log: (msg) => console.log(msg, model._root.cache)
+  $log: (msg) => {
+    console.info("\n\n\n MODEL IS BELOW\n\n\n ");
+    console.info(msg, model._root.cache);
+    console.info("\n\n\n MODEL IS ABOVE\n\n\n ");
+  }
 };
 
 

@@ -62,12 +62,11 @@ export default class MenuListItem extends React.Component {
   }
 
   render() {
-    console.info(100);
     const { item } = this.props;
 
     let computedBelongingsMap = _computeBelongingsMapUtil(this.props.item.id, this.props.sections, this.props.menus);
     let belongingsString = _createBelongingsStringUtil(computedBelongingsMap, this.props.sections, this.props.menus);
-    console.info(101);
+
     let itemBelongingsJSX = [];
     if(belongingsString) {
       for(let key in belongingsString) {
@@ -85,9 +84,6 @@ export default class MenuListItem extends React.Component {
       <Allergens 
         readOnly={true} 
         allergensObj={item.allergens}/>)
-
-    console.info("102 ---> ", AllergensJSX);
-
 
     let returnJSXtemp = (
       <Card className="MenuItem">

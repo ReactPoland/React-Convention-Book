@@ -27,6 +27,8 @@ export default createReducer(initialState, {
   },
 
   [MENUITEM_ADD]: (state, payload) => {
+    console.info("MENUITEM_ADD", payload);
+    
     let newMenuItem = new MenuItem(payload);
     return mapHelpers.addItem(state, payload.id, newMenuItem);
   },

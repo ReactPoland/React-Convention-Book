@@ -93,7 +93,6 @@ export default class Allergen extends React.Component {
   }
 
   _renderAllergens(allergensObj) {
-    console.info("allergensObj", allergensObj);
     let allergensJSX = [];
 
     let currentAllergen = allergensDetails.filter((obj) => obj.value === "vegetarian");
@@ -113,18 +112,12 @@ export default class Allergen extends React.Component {
   }
 
   render() {
-    console.info("TRIGGERED Allergens");
-
     if(this.props.allergyGuide === true) {
       return <AllergyGuide />;
     }
-    console.info(1);
-    console.info("this.props", this.props);
+
     if(this.props.readOnly === true) {
-      console.info(2);
-      
       if(this.props.allergensObj.showAllergens === true) {
-        console.info(3);
         return <div style={{paddingLeft: 15}}>{this._renderAllergens(this.props.allergensObj)}</div>;
       } else {
         return null;
@@ -138,8 +131,6 @@ export default class Allergen extends React.Component {
         <div className="row">
           {
             allergensDetails.map((alergen) => {
-              console.info("alergen", alergen);
-              console.info(">>> allergens", allergens);
               return (
                 <div className="col-lg-4" style={wrapperStyles} key={alergen.value}>
                   <Checkbox

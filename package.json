@@ -25,6 +25,7 @@
   "dependencies": {
     "axios": "^0.7.0",
     "babel": "^5.8.23",
+    "body-parser": "^1.15.0",
     "chalk": "^1.1.1",
     "cssnano": "^3.3.2",
     "dotenv": "^1.2.0",
@@ -35,6 +36,7 @@
     "history": "1.13.1",
     "material-ui": "^0.14.4",
     "moment": "^2.11.1",
+    "mongoose": "^4.4.7",
     "react": "^0.14.0",
     "react-addons-css-transition-group": "^0.14.6",
     "react-day-picker": "^1.2.0",

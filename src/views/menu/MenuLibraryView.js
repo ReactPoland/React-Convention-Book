@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FloatingActionButton } from 'material-ui';
 import { ContentAdd } from 'material-ui/lib/svg-icons';
-
+import falcorModel from '../../falcorModel.js';
 
 import API from 'utils/API';
 import * as menuItemActions from 'actions/menuItem';
@@ -18,6 +18,7 @@ import Loader from 'decorators/Loader';
 import MenuListItem from 'components/menu/MenuListItem';
 import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
 import AllergenModel from 'models/Allergen';
+import MenuItemModel from 'models/MenuItem';
 
 import AddMenuItemModal from 'components/menu/modals/AddMenuItemModal';
 
@@ -70,20 +71,15 @@ class MenuLibraryView extends React.Component {
   }
 
   componentDidMount() {
-    console.info("\n\n componentDidMount \n\n");
     this._fetchData();
   }
 
   async _fetchData() {
-
     console.info("IMPLEMENTED #3");
-
     const response = await API.get(
       ['restaurants', 0, 'menuItems', {from: 0, to: 5}, ['id', 'title', 'description', 'picUrl']]
     );
-
     console.info("RESULT #3", response);
-
 
     console.info("IMPLEMENTED #4");
     const response2 = await API.get(
@@ -259,38 +255,34 @@ class MenuLibraryView extends React.Component {
     return;
   }
 
-  onAddItemDone(menuItem, refMap) {
-    // TODO temp mocking item image
-    menuItem.picUrl = "http://lorempixel.com/700/500/food/";
-    // menuItem = menuItem.formatForWire(); TO-ASK
+  async onAddItemDone(newMenuItem, refMap) {
+    // .... TODO IMPORTANT: prepare frontend steps
+    let MOCKitem = {"title":"test222","description":"1","type":"MenuItem","description2":"2","description3":"3","allergens":{"type":"Allergens","vegetarian":true,"gluten":true,"egg":true,"dairy":true,"nut":true,"soy":true,"fish":true,"showAllergens":true}};
+    newMenuItem = MOCKitem;
 
-    this._createMenuItemAndGetRef(menuItem)
-      // make $ref to it in restaurant.menuItems
-      .then(({size, ref}) => {
-        console.log('first chained function', size, ref)
-        return API
-          .set({
-            url: ['restaurants', 0, 'menuItems', size],
-            body: ref
-          })
-          .then(() => ref);
-      })
-      // get items count within each needed section
-      .then((ref) => {
-        console.log('second chained function', ref, refMap)
-        return this._getItemsLengthsInSections(ref, refMap);
-      })
-      // UPDATE ALL DA SECTIONZ!!!
-      .then(({lengths, sections, ref}) => {
-        console.log('third chained function', lengths, sections, ref)
-        return this._addItemToSections({lengths, sections, ref});
-      })
-      .then(() => {
-        this.setState({
-          requestSuccess: 'Saved!',
-          modal: null
-        });
+    /*
+      adding an item with .call on Model
+     */
+    let result = await falcorModel
+      .call(
+            ['restaurants', 0, 'menuItems','add'],
+            [newMenuItem]          
+          ).
+      then((result) => {
+        return result;
       });
+
+    const menuItemsLen = await falcorModel.getValue(
+      ['restaurants', 0, 'menuItems', 'length']
+    );
+
+    let newResElem = result.json.restaurants[0].menuItems[menuItemsLen-1];
+    newMenuItem.id = newResElem[1];
+
+    console.info("BACKEND ???????", newMenuItem);
+    this.props.actions.menuItem.add(newMenuItem);
+    API.$log('!!!!!!!!!! API LOG CHECK:s ');
+
   }
 
   async onEditItemClick(menuItemIdToEdit) {
@@ -404,7 +396,7 @@ class MenuLibraryView extends React.Component {
         </div>);
     } else {
         addingEditingItemJSX = (
-          <FloatingActionButton style={btnStyle} onClick={this._openModal.bind(this, 'add-modal')}>
+          <FloatingActionButton style={btnStyle} onClick={ this.onAddItemDone.bind(this, "test", "test") /*this._openModal.bind(this, 'add-modal')*/}>
             <ContentAdd />
           </FloatingActionButton>
         );

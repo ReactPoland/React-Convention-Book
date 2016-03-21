@@ -9,10 +9,18 @@ import config               from '../config';
 import webpackConfig        from '../build/webpack/development_hot';
 import Router               from 'falcor-router';
 import routes               from './routes';
+import bodyParser           from 'body-parser';
+
+console.info("ROUTES");
+console.info(routes);
+console.info("ROUTES");
 
 const paths = config.get('utils_paths');
 const compiler = webpack(webpackConfig);
 const app = express();
+
+
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(historyApiFallback({
   verbose : false
