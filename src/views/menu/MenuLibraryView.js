@@ -77,9 +77,8 @@ class MenuLibraryView extends React.Component {
   async _fetchData() {
     console.info("IMPLEMENTED #3");
     const response = await API.get(
-      ['restaurants', 0, 'menuItems', {from: 0, to: 5}, ['id', 'title', 'description', 'picUrl']]
+      ['restaurants', 0, 'menuItems', {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl', 'allergens']]
     );
-    console.info("RESULT #3", response);
 
     console.info("IMPLEMENTED #4");
     const response2 = await API.get(
@@ -88,8 +87,14 @@ class MenuLibraryView extends React.Component {
 
     console.info("RESULT #4", response2);
 
+
+    console.info("\n\n\n\n &&&& response \n\n\n\n ", response, "\n\n\n\n ");
+
     const items = falcorUtils.makeArray({object: response.restaurants[0], name: 'menuItems'});
-    const sections = falcorUtils.makeArray({object: response2.restaurants[0], name: 'sections'});
+    let sections = falcorUtils.makeArray({object: response2.restaurants[0], name: 'sections'});
+    
+    console.info("\n\n\n\n &&&& items \n\n\n\n ", items, "\n\n\n\n ");
+
     this.props.actions.menuItem.menuItemList(items);
     this.props.actions.section.sectionList(sections);
   }
@@ -256,10 +261,6 @@ class MenuLibraryView extends React.Component {
   }
 
   async onAddItemDone(newMenuItem, refMap) {
-    // .... TODO IMPORTANT: prepare frontend steps
-    let MOCKitem = {"title":"test222","description":"1","type":"MenuItem","description2":"2","description3":"3","allergens":{"type":"Allergens","vegetarian":true,"gluten":true,"egg":true,"dairy":true,"nut":true,"soy":true,"fish":true,"showAllergens":true}};
-    newMenuItem = MOCKitem;
-
     /*
       adding an item with .call on Model
      */
@@ -276,12 +277,15 @@ class MenuLibraryView extends React.Component {
       ['restaurants', 0, 'menuItems', 'length']
     );
 
+
     let newResElem = result.json.restaurants[0].menuItems[menuItemsLen-1];
     newMenuItem.id = newResElem[1];
-
-    console.info("BACKEND ???????", newMenuItem);
     this.props.actions.menuItem.add(newMenuItem);
-    API.$log('!!!!!!!!!! API LOG CHECK:s ');
+
+    this.setState({
+      requestSuccess: 'Added new item - successful!',
+      modal: null
+    });
 
   }
 
@@ -297,6 +301,26 @@ class MenuLibraryView extends React.Component {
         TODO: refactoring to delete obj from reducer & falcor
         via a model delete function! (Kamil)
      */
+
+
+    /*
+      adding an item with .call on Model
+     */
+    alert("CHECK IF DELETED IN DB: not working on .call");
+    let result = await falcorModel
+      .call(
+            ['restaurants', 0, 'menuItems','delete'],
+            [menuItemIdToDelete]          
+          ).
+      then((result) => {
+        return result;
+      });
+
+
+    alert("CHECK IF DELETED IN DB");
+    return;
+
+
     let sectionObj = this.props.section;
     let sectionsToUpdate = [];
     sectionObj.forEach((section, index) => {
@@ -396,7 +420,7 @@ class MenuLibraryView extends React.Component {
         </div>);
     } else {
         addingEditingItemJSX = (
-          <FloatingActionButton style={btnStyle} onClick={ this.onAddItemDone.bind(this, "test", "test") /*this._openModal.bind(this, 'add-modal')*/}>
+          <FloatingActionButton style={btnStyle} onClick={this._openModal.bind(this, 'add-modal')}>
             <ContentAdd />
           </FloatingActionButton>
         );

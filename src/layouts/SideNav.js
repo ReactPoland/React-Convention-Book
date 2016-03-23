@@ -123,7 +123,7 @@ class SideNav extends React.Component {
     if(!menu.length) {
       console.info("IMPLEMENTED #2");
       const response = await API.get(
-        ['restaurants', 0, 'menus', {from: 0, to: 5}, ['title', 'id', 'description']]
+        ['restaurants', 0, 'menus', {from: 0, to: 100}, ['title', 'id', 'description']]
       );
       console.info("RESULT #2", response);
       const menus = falcorUtils.makeArray({object: response.restaurants[0], name: 'menus'});

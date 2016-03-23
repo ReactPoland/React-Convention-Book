@@ -69,10 +69,14 @@ class MenuEntity extends React.Component {
       // perhaps we'll need to fetch items partialy (pagination style)
       ['restaurants', 0, 'menus', {from: 0, to: 20}, ['id', 'title', 'description', 'sections'], {from: 0, to: 100}, 'id']
     );
-    const menus = falcorUtils.makeArray({
+    console.info("\n\n\n 1 dziala? >>>", response, " \n\n\n ");
+
+    let menus = falcorUtils.makeArray({
       object: response.restaurants[0],
       name: 'menus'
     });
+
+    console.info("\n\n\n 2>>>", menus, " \n\n\n ");
     this.props.actions.menu.menuList(menus);
   }
 

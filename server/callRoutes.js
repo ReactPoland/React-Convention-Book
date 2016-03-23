@@ -3,66 +3,67 @@ var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
 
 
+module.exports = [
+  {
+  route: 'restaurants[{integers}].menuItems.remove',
+  call: (callPath, args) => 
+    {
+      let toDeleteMenuItemId = args[0];
+      
 
-var MOCKitemID = "backend123456IDMOCKitemID";
-var MOCKitem = {
-  "id": MOCKitemID,
-  "title": "test BAZA",
-  "description": "1",
-  "type": "MenuItem",
-  "description2": "2",
-  "description3": "3",
-  "allergens": {
-    "type": "Allergens",
-    "vegetarian": true,
-    "gluten": true,
-    "egg": true,
-    "dairy": true,
-    "nut": true,
-    "soy": true,
-    "fish": true,
-    "showAllergens": true
-  }
-};
-
-// ..... TODO IMPORTANT: prepare backend steps
-// TODO IMPORTANT: prepare backend steps
-// TODO IMPORTANT: prepare backend steps
-// TODO IMPORTANT: prepare backend steps
-
-module.exports = [{
+    }
+  },
+  {
   route: 'restaurants[{integers}].menuItems.add',
-  call: (callPath, args) => {
-      let NewMenuItemRef = $ref(['menuItemsById', MOCKitemID]);
+  call: (callPath, args) => 
+    {
+      let newMenuItemObj = args[0];
+      var menuItem = new models.MenuItemCollection(newMenuItemObj);
+      return menuItem.save(function (err, data) {
+          if (err) {
+            console.info("ERROR", err);
+            return err;
+          }
+          else {
+            return data;
+          }
+        }).then ((data) => {
+          /*
+            got new obj data, now let's get count:
+           */
+          return models.MenuItemCollection.count({}, function(err, count) {
+          }).then((count) => {
+            return { count, data };
+          });
 
-      // the INDEX somehow has to be calculated from mongoDB
-      // (prawdopodobnie musi byc pole w obiekcie z index'em obok id)
-      MOCKitem.orderNumber = 6;
+        }).then ((res) => {
+          let newItemDetail = res.data.toObject();
+          let NewMenuItemRef = $ref(['menuItemsById', newItemDetail["_id"]]);
+          
+          let results = [
+            {
+              path: ['restaurants', 0, 'menuItems', res.count-1],
+              value: NewMenuItemRef
+            },
+            {
+              path: ['restaurants', 0, 'menuItems', 'length'],
+              value: res.count
+            }
+          ];
 
-      let results = [
-        {
-          path: ['restaurants', 0, 'menuItems', MOCKitem.orderNumber],
-          value: NewMenuItemRef
-        },
-        {
-          path: ['restaurants', 0, 'menuItems', 'length'],
-          value: 7
-        }
-      ];
-
-      console.log(JSON.stringify(results, null, 5));
-      return results;
+          return results;
+        });
     }
   },
   {
     route: 'restaurants[{integers}].menuItems.length',
     get: (callPath, args) => {
-      return models.MenuItem.count({}, function(err, count) {
+      return models.MenuItemCollection.count({}, function(err, count) {
         return count;
       }).then ((count) => {
         return {
           path: ['restaurants', 0, 'menuItems', 'length'],
-          value: count+1
+          value: count
         }
       });
     }

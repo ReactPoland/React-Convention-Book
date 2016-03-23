@@ -2,22 +2,6 @@ import mongoose from 'mongoose';
 
 mongoose.connect('mongodb://localhost/test');
 
-
-
-var articleSchema = {
-  articleTitle:String,
-  articleContent:String
-}
-
-var Article = mongoose.model('Article', articleSchema, 'articles');
-
-Article.count({}, function(err, count) {
-    return count;
-  }).then ((articlesCountInDB) => {
-    console.info("articlesCountInDB", articlesCountInDB);
-  })
-
-
 var menuItemSchema = {
   title: String,
   description: String,
@@ -25,10 +9,30 @@ var menuItemSchema = {
   description2: String,
   description3: String,
   allergens: Array
-}
+};
+var MenuItemCollection = mongoose.model('MenuItemCollection', menuItemSchema, 'menuItems');
 
-var MenuItem = mongoose.model('MenuItem', menuItemSchema, 'menuItems');
+
+
+var sectionSchema = {
+  title: String,
+  category: String,
+  items: Array
+};
+var SectionCollection = mongoose.model('SectionCollection', sectionSchema, 'sections');
+
+
+var menuSchema = {
+  title: String,
+  description: String,
+  sectionsById: Array
+};
+var MenuCollection = mongoose.model('MenuCollection', menuSchema, 'menus');
+
+
 
 module.exports = { 
-  MenuItem
+  MenuCollection,
+  MenuItemCollection,
+  SectionCollection
 };
