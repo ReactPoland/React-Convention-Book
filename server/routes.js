@@ -2,17 +2,21 @@ import models from './modelsMongoose';
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
 var $error = jsonGraph.error;
-var callRoutes = require('./callRoutes.js');
+var itemsCallRoutes = require('./itemsCallRoutes.js');
+var sectionsCallRoutes = require('./sectionsCallRoutes.js');
 var sectionsRoutes = require('./sectionsRoutes.js');
 var menusRoutes = require('./menusRoutes.js');
+var menusCallRoutes = require('./menusCallRoutes.js');
 var itemsRoutes = require('./itemsRoutes.js');
 
 
 let routes = [
-  ...callRoutes, 
-  ...sectionsRoutes,
-  ...menusRoutes,
+  ...itemsCallRoutes, 
   ...itemsRoutes,
+  ...sectionsRoutes,
+  ...sectionsCallRoutes,
+  ...menusRoutes,
+  ...menusCallRoutes,
   {
     /*
         USED on frontend in layouts/CoreLayout.js 

@@ -24,16 +24,14 @@ module.exports = [
             sectionsById = resObj.sectionsById;
             delete resObj.sectionsById;
 
-
-
             results.push({
               path: ["menusById", resObj.id],
               value: resObj
             });
 
-            sectionsById.map((sectionID) => {
+            sectionsById.map((sectionID, index) => {
               results.push({
-                  path: ["menusById", resObj.id, "sections", 0],
+                  path: ["menusById", resObj.id, "sections", index],
                   value: $ref(['sectionsById', sectionID])
                 });
             });
@@ -51,7 +49,6 @@ module.exports = [
     route: 'restaurants[0].menus[{integers}]',
     get: (pathSet) => {
       let menusIndexes = pathSet[3];
-      
       return models.MenuCollection.find({}, '_id', function(err, menusDocs) {
           return menusDocs;
         }).then ((menusArrayFromDB) => {
@@ -66,6 +63,7 @@ module.exports = [
               results.push(res);
               return;
             }
+
             let menuObject = menusArrayFromDB[index].toObject();
             let currentMongoID = String(menuObject["_id"]);
             let menuItemRef = $ref(['menusById', currentMongoID]);

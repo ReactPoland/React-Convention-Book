@@ -42,6 +42,7 @@ const btnStyle = {
   right: 48
 };
 
+
 @Loader()
 class MenuLibraryView extends React.Component {
   constructor(props) {
@@ -88,12 +89,8 @@ class MenuLibraryView extends React.Component {
     console.info("RESULT #4", response2);
 
 
-    console.info("\n\n\n\n &&&& response \n\n\n\n ", response, "\n\n\n\n ");
-
     const items = falcorUtils.makeArray({object: response.restaurants[0], name: 'menuItems'});
     let sections = falcorUtils.makeArray({object: response2.restaurants[0], name: 'sections'});
-    
-    console.info("\n\n\n\n &&&& items \n\n\n\n ", items, "\n\n\n\n ");
 
     this.props.actions.menuItem.menuItemList(items);
     this.props.actions.section.sectionList(sections);
@@ -260,10 +257,8 @@ class MenuLibraryView extends React.Component {
     return;
   }
 
+
   async onAddItemDone(newMenuItem, refMap) {
-    /*
-      adding an item with .call on Model
-     */
     let result = await falcorModel
       .call(
             ['restaurants', 0, 'menuItems','add'],
@@ -277,10 +272,42 @@ class MenuLibraryView extends React.Component {
       ['restaurants', 0, 'menuItems', 'length']
     );
 
-
-    let newResElem = result.json.restaurants[0].menuItems[menuItemsLen-1];
-    newMenuItem.id = newResElem[1];
+    let newMenuItemId = result.json.restaurants[0].menuItems[menuItemsLen-1][1];
+    newMenuItemId = newMenuItemId ? newMenuItemId : alert("error with newMenuItemId");
+    newMenuItem.id = newMenuItemId;
     this.props.actions.menuItem.add(newMenuItem);
+    /*
+        UPDATING SECTIONS refMap below:
+     */
+
+    let updatedSections = Object.keys(refMap).map((menuID) => {
+      return refMap[menuID];
+    }).map((sectionsIDarray) => {
+      return sectionsIDarray.map((sectionID) => {
+        let currentSection = this.props.section.get(sectionID);
+        currentSection.items.push(newMenuItemId);
+        return currentSection;
+      })
+    });
+
+    let sectionUpdateResult = await falcorModel
+      .call(
+            ['restaurants', 0, 'sections','update'],
+            [updatedSections[0]]          
+          ).
+      then((result) => {
+        console.info("sectionUpdateResult", result);
+        return result;
+      });
+
+    console.info("sectionUpdateResult");
+    console.info(sectionUpdateResult);
+    console.info("sectionUpdateResult");
+
+    updatedSections[0].map((updatedSection) => {
+      console.info("updatedSection", updatedSection);
+      this.props.actions.section.update(updatedSection);
+    });
 
     this.setState({
       requestSuccess: 'Added new item - successful!',
@@ -301,79 +328,58 @@ class MenuLibraryView extends React.Component {
         TODO: refactoring to delete obj from reducer & falcor
         via a model delete function! (Kamil)
      */
-
-
     /*
-      adding an item with .call on Model
+        UPDATING SECTIONS refMap below:
      */
-    alert("CHECK IF DELETED IN DB: not working on .call");
+    let allSections = this.props.section;
+
+    let toUpdateSections = [];
+    allSections.forEach((sectionItem, key) => { 
+      let itemsArray = sectionItem.items;
+
+      let newSectionItems = itemsArray.filter((id) => {
+        return menuItemIdToDelete !== id;
+      });
+
+      if(newSectionItems.length !== itemsArray.length) {
+        sectionItem.items = newSectionItems;
+        toUpdateSections.push(sectionItem);
+      }
+    });
+    console.info("\n\n\n\n\n toUpdateSections", toUpdateSections);
+
+
+
+    let sectionUpdateResult = await falcorModel
+      .call(
+            ['restaurants', 0, 'sections','update'],
+            [toUpdateSections]          
+          ).
+      then((result) => {
+        console.info("sectionUpdateResult", result);
+        return result;
+      });
+
+    console.info("\n\n sectionUpdateResult \n\n\n ");
+    console.info(sectionUpdateResult);
+    console.info("\n\n\n\n sectionUpdateResult \n\n\n ");
+
     let result = await falcorModel
       .call(
-            ['restaurants', 0, 'menuItems','delete'],
+            ['restaurants', 0, 'menuItems', 'delete'],
             [menuItemIdToDelete]          
           ).
       then((result) => {
         return result;
       });
 
-
-    alert("CHECK IF DELETED IN DB");
-    return;
-
-
-    let sectionObj = this.props.section;
-    let sectionsToUpdate = [];
-    sectionObj.forEach((section, index) => {
-      let sectionId = section.id;
-      let newItems = [];
-      section.items.forEach((itemId, index) => {
-        if(itemId !== menuItemIdToDelete) {
-          newItems.push(itemId);
-        }
-      });
-      if(section.items.length !== newItems.length) {
-        section.items = newItems;
-        sectionsToUpdate.push(section);
-      }
-    })
-
     this.props.actions.menuItem.delete(menuItemIdToDelete);
 
-    let newItems = mapHelpers.toArray(this.props.menuItem);
-    newItems = newItems
-      .filter((item) => item.id !== menuItemIdToDelete)
-      .map((item) => ({
-        $type: 'ref',
-        value: ['menuItemsById', item.id]
-      }));
-
-    await API.set({
-      url: ['restaurants', 0, 'menuItems'],
-      body: newItems
+    this.setState({
+      requestSuccess: 'Menu item deleted',
+      modal: null
     });
 
-    API.$log('############falcor model: ')
-
-    Promise.all(
-      sectionsToUpdate.map((section, index) => {
-
-        section = section.formatForWire();
-
-        console.log("PROMISE", section.id);
-        console.log("11KAMIL PROMISE UPDATING SECTION");
-        console.log(section);
-        return API
-          .set({
-            url: ['sectionsById', section.id],
-            body: section
-          })
-          .then(() => {
-            console.log("22KAMIL UPDATING SECTION");
-            this.props.actions.section.update(section);
-            return section;
-          });
-      })
-    );
     return;
   }
 
@@ -420,7 +426,7 @@ class MenuLibraryView extends React.Component {
         </div>);
     } else {
         addingEditingItemJSX = (
-          <FloatingActionButton style={btnStyle} onClick={this._openModal.bind(this, 'add-modal')}>
+          <FloatingActionButton style={btnStyle} onClick={ /* this.onAddItemDone.bind(this, "this","this")*/ this._openModal.bind(this, 'add-modal')}>
             <ContentAdd />
           </FloatingActionButton>
         );

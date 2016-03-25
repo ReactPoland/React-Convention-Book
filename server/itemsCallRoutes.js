@@ -5,12 +5,19 @@ var $ref = jsonGraph.ref;
 
 module.exports = [
   {
-  route: 'restaurants[{integers}].menuItems.remove',
+  route: 'restaurants[{integers}].menuItems.delete',
   call: (callPath, args) => 
     {
       let toDeleteMenuItemId = args[0];
-      
-
+      return models.MenuItemCollection.find({ _id: toDeleteMenuItemId }).remove((err) => {
+        console.info("REMOVED");
+        return [
+          {
+            path: ["menuItemsById", toDeleteMenuItemId],
+            invalidate: true
+          }
+        ]
+      });
     }
   },
   {
@@ -18,6 +25,7 @@ module.exports = [
   call: (callPath, args) => 
     {
       let newMenuItemObj = args[0];
+
       var menuItem = new models.MenuItemCollection(newMenuItemObj);
       return menuItem.save(function (err, data) {
           if (err) {
