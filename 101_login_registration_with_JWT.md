@@ -76,6 +76,10 @@ TODO - review above.
 
 
 
+PLAN PISANIA:
+0) dodanie kolekcji users w bazie mongodb
+1) stworzenie route'a do logowania usera
+2) dodanie formularza na front'cie
 
 
 

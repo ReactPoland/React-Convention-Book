@@ -45,6 +45,22 @@ app.get('/fake-user', (req, res) => {
 });
 
 
+app.get('/login', authenticate, (req, res) => {
+  var user = faker.helpers.userCard();
+  user.avatar = faker.image.avatar();
+  res.json(user);
+});
+
+// UTIL FUNCTIONS
+const authenticate = (req, res, next) => {
+  console.info("TEST");
+  let body = req.body;
+  if (!body.username || !body.password) {
+    res.status(400).end('Username or password is missing');
+  }
+
+  
+}
 
 app.server.listen(process.env.PORT || 3000);
 console.log(`Started on port ${app.server.address().port}`);

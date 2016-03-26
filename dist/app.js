@@ -76054,6 +76054,9 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	/*
+		to refactor and use ES6
+	 */
 	var DefaultInput = exports.DefaultInput = _react2.default.createClass({
 	  displayName: 'DefaultInput',
 
