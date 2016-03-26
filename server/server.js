@@ -9,6 +9,7 @@ import Router from 'falcor-router';
 import faker from 'faker';
 import routes from './routes.js';
 
+
 var app = express();
 app.server = http.createServer(app);
 
@@ -36,6 +37,9 @@ const authenticate = (req, res, next) => {
     res.status(400).end('Username or password is missing');
     return;
   }
+  console.info("IS HERE?");
+  console.info("IS HERE?");
+  console.info("IS HERE?");
   if(body.username !== mockedUser.username || body.password !== mockedUser.password) {
     res.status(401).end('Username or password is incorrect');
     return;

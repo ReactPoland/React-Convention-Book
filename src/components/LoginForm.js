@@ -2,9 +2,9 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import { RaisedButton, Paper } from 'material-ui';
 import { DefaultInput } from './DefaultInput';
+import axios from 'axios';
 
-
-
+// alert("1111");
 
 export class LoginForm extends React.Component {
   constructor() {
@@ -14,8 +14,18 @@ export class LoginForm extends React.Component {
   }
 
   _submit(model) {
+    console.info("1111");
     console.info("data submited", model);
-
+    axios.post('/login', {
+        username: 'Fred',
+        password: 'Flintstone'
+      })
+      .then(function (response) {
+        console.info(response);
+      })
+      .catch(function (response) {
+        console.info(response);
+      });
   }
 
   render() {

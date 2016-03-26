@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ReactConvention/React-Convention-Book#readme",
   "dependencies": {
+    "axios": "^0.9.1",
     "babel": "^4.7.16",
     "babel-register": "^6.5.2",
     "body-parser": "^1.15.0",
