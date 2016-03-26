@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import falcor from 'falcor';
 import falcorExpress from 'falcor-express';
 import Router from 'falcor-router';
+import faker from 'faker';
 import routes from './routes.js';
 
 var app = express();
@@ -15,24 +16,32 @@ app.server = http.createServer(app);
 app.use(cors());
 
 // This is required by falcor-express middleware to work correctly with falcor-browser
-app.use(bodyParser.json({extended: false}));
+app.use(bodyParser.json({
+  extended: false
+}));
 
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
- return new Router(routes);
+  return new Router(routes);
 }));
 
 app.use(express.static('dist'));
 
-app.get('/', (req, res) => { 
-    Article.find(function (err, articlesDocs) {
+app.get('/', (req, res) => {
+  Article.find(function(err, articlesDocs) {
 
-        let ourArticles = articlesDocs.map(function(articleItem){
-            return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
-        }).join("<br/>");
+    let ourArticles = articlesDocs.map(function(articleItem) {
+      return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
+    }).join("<br/>");
 
-        res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
-    });
+    res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
+  });
+});
+
+app.get('/fake-user', (req, res) => {
+  var user = faker.helpers.userCard();
+  user.avatar = faker.image.avatar();
+  res.json(user);
 });
 
 
