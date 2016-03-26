@@ -50,7 +50,6 @@ export class LoginForm extends React.Component {
             <RaisedButton
               secondary={true}
               type="submit"
-              disabled={!this.state.canSubmit}
               style={{margin: '0 auto', display: 'block', width: 150}}
               label={this.props.sendingRequest ? 'Logging in...' : 'Log in'} />
           </div>

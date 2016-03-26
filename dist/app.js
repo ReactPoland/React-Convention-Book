@@ -28970,7 +28970,6 @@
 	        );
 	        articlesJSX.push(currentArticleJSX);
 	      }
-	      console.info("LoginForm", _LoginForm.LoginForm);
 
 	      return _react2.default.createElement(
 	        'div',
@@ -37778,14 +37777,13 @@
 	            _react2.default.createElement(_materialUi.RaisedButton, {
 	              secondary: true,
 	              type: 'submit',
-	              disabled: !this.state.canSubmit,
+	              disabled: this.state.canSubmit,
 	              style: { margin: '0 auto', display: 'block', width: 150 },
 	              label: this.props.sendingRequest ? 'Logging in...' : 'Log in' })
 	          )
 	        )
 	      );
 
-	      console.info("JSXtoReturn", JSXtoReturn);
 	      return JSXtoReturn;
 	    }
 	  }]);
