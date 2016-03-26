@@ -44,11 +44,13 @@ app.get('/fake-user', (req, res) => {
   res.json(user);
 });
 
+var mockedUser = {
+  username: 'kamil',
+  password: '123'
+};
 
 app.get('/login', authenticate, (req, res) => {
-  var user = faker.helpers.userCard();
-  user.avatar = faker.image.avatar();
-  res.json(user);
+  res.json(mockedUser);
 });
 
 // UTIL FUNCTIONS
@@ -58,8 +60,10 @@ const authenticate = (req, res, next) => {
   if (!body.username || !body.password) {
     res.status(400).end('Username or password is missing');
   }
-
-  
+  if(body.username !== mockedUser.username || body.password !== mockedUser.password) {
+    res.status(401).end('Username or password is incorrect')
+  }
+  next();
 }
 
 app.server.listen(process.env.PORT || 3000);
