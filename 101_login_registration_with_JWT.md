@@ -5,6 +5,14 @@
 
 JWT is a security tokens format which is relatively new, but works very well. It's an open standard (RFC 7519) that improves oAuth2 and OpenID Connect in problem of passing claims between parties in web application environment.
 
+More in practise the flow is as follwoing:
+1) the server assigns an encoded JSON object
+2) after client's knows it, then it sends that encoded token with every request to the server
+3) based on that token, the server knows who is sending a request
+
+It's worth to visit the http://jwt.io/ website and play with it because you can play with it even before you will start working with them:
+
+![screenshot http://jwt.io/](http://test.przeorski.pl/book/101_jwt_io.png)
 
 After successful login, the JWT's solution provides an object to our front-end application that tell's us about current's user authorization:
 
@@ -62,6 +70,10 @@ Besides the claims provided above, we can create custom one that are specific de
 "scope": ["read"]
 }
 ```
+
+
+TODO - review above.
+
 
 
 

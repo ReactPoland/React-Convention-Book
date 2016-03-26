@@ -28,20 +28,20 @@ let PublishingAppRoutes = [{
     let articlesIndex = pathSet[1];
 
     return Article.find({}, function(err, articlesDocs) {
-      return articlesDocs;
-    }).then ((articlesArrayFromDB) => {
-      let results = [];
-      articlesIndex.forEach((index) => {
-        let singleArticleObject = articlesArrayFromDB[index].toObject();
-        let falcorSingleArticleResult = {
-          path: ['articles', index],
-          value: singleArticleObject
-        };
-        results.push(falcorSingleArticleResult);
-      });
-      console.info(">>>> results", results);
-      return results;
-    })
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let singleArticleObject = articlesArrayFromDB[index].toObject();
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: singleArticleObject
+          };
+          results.push(falcorSingleArticleResult);
+        });
+        console.info(">>>> results", results);
+        return results;
+      })
   }
 }];
 
