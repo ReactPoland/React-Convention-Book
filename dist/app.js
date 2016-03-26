@@ -37735,8 +37735,8 @@
 	      console.info("1111");
 	      console.info("data submited", model);
 	      _axios2.default.post('/login', {
-	        username: 'Fred',
-	        password: 'Flintstone'
+	        username: model.email,
+	        password: model.password
 	      }).then(function (response) {
 	        console.info(response);
 	      }).catch(function (response) {

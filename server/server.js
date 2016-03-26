@@ -37,9 +37,7 @@ const authenticate = (req, res, next) => {
     res.status(400).end('Username or password is missing');
     return;
   }
-  console.info("IS HERE?");
-  console.info("IS HERE?");
-  console.info("IS HERE?");
+
   if(body.username !== mockedUser.username || body.password !== mockedUser.password) {
     res.status(401).end('Username or password is incorrect');
     return;
@@ -48,8 +46,7 @@ const authenticate = (req, res, next) => {
 }
 
 
-app.get('/login', authenticate, (req, res) => {
-  console.info("TEST", 3);
+app.post('/login', authenticate, (req, res) => {
   res.json(mockedUser);
 });
 
