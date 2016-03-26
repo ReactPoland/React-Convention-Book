@@ -37700,6 +37700,8 @@
 
 	var _materialUi = __webpack_require__(630);
 
+	var _DefaultInput = __webpack_require__(898);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37718,32 +37720,21 @@
 
 	    _this.state = { canSubmit: false };
 	    _this._submit = _this._submit.bind(_this);
-	    _this._enableButton = _this._enableButton.bind(_this);
-	    _this._disableButton = _this._disableButton.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(LoginForm, [{
 	    key: '_submit',
-	    value: function _submit(data) {
-	      console.info("data submited", data);
-	    }
-	  }, {
-	    key: '_enableButton',
-	    value: function _enableButton() {
-	      this.setState({ canSubmit: true });
-	    }
-	  }, {
-	    key: '_disableButton',
-	    value: function _disableButton() {
-	      this.setState({ canSubmit: false });
+	    value: function _submit(model) {
+	      console.info("data submited", model);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+
 	      var JSXtoReturn = _react2.default.createElement(
 	        _formsyReact2.default.Form,
-	        { onSubmit: this._submit, onValid: this._enableButton, onInvalid: this._disableButton },
+	        { onSubmit: this._submit },
 	        _react2.default.createElement(
 	          _materialUi.Paper,
 	          { zDepth: 1, style: { padding: 32 } },
@@ -37752,32 +37743,14 @@
 	            null,
 	            'Log in'
 	          ),
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(_materialUi.TextField, {
-	              floatingLabelText: 'Email (admin)',
-	              ref: 'email',
-	              name: 'email',
-	              required: true })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(_materialUi.TextField, {
-	              floatingLabelText: 'Password (test)',
-	              ref: 'password',
-	              name: 'password',
-	              type: 'password',
-	              required: true })
-	          ),
+	          _react2.default.createElement(_DefaultInput.DefaultInput, { name: 'email', title: 'Email (admin)', required: true }),
+	          _react2.default.createElement(_DefaultInput.DefaultInput, { type: 'password', name: 'password', title: 'Password (test)', required: true }),
 	          _react2.default.createElement(
 	            'div',
 	            { style: { marginTop: 24 } },
 	            _react2.default.createElement(_materialUi.RaisedButton, {
 	              secondary: true,
 	              type: 'submit',
-	              disabled: this.state.canSubmit,
 	              style: { margin: '0 auto', display: 'block', width: 150 },
 	              label: this.props.sendingRequest ? 'Logging in...' : 'Log in' })
 	          )
@@ -76057,6 +76030,72 @@
 	});
 
 	exports.default = Step;
+
+/***/ },
+/* 898 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.DefaultInput = undefined;
+
+	var _react = __webpack_require__(295);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _formsyReact = __webpack_require__(623);
+
+	var _formsyReact2 = _interopRequireDefault(_formsyReact);
+
+	var _materialUi = __webpack_require__(630);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var DefaultInput = exports.DefaultInput = _react2.default.createClass({
+	  displayName: 'DefaultInput',
+
+	  mixins: [_formsyReact2.default.Mixin],
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      onChange: function onChange() {}
+	    };
+	  },
+	  changeValue: function changeValue(e) {
+	    this.setValue(e.target.value);
+	    this.props.onChange(e);
+	  },
+	  render: function render() {
+	    var errorMessage = this.getErrorMessage();
+
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(_materialUi.TextField, {
+	        floatingLabelText: this.props.defaultValue ? '' : this.props.title,
+	        floatingLabelStyle: { fontWeight: 300 },
+	        fullWidth: this.props.style && !this.props.style.width || true,
+	        style: this.props.style,
+	        autoFocus: this.props.autoFocus,
+	        ref: this.props.name,
+	        defaultValue: this.props.defaultValue || '',
+	        errorText: errorMessage,
+	        type: this.props.type || 'text',
+	        name: this.props.name,
+	        onChange: this.changeValue,
+	        onBlur: this.props.onBlur,
+	        onEnterKeyDown: this.props.onEnterKeyDown,
+	        required: this.props.required,
+	        multiLine: this.props.multiLine,
+	        rows: this.props.rows,
+	        value: this.props.value || this.getValue() }),
+	      this.props.children
+	    );
+	  }
+	});
 
 /***/ }
 /******/ ]);
