@@ -21,6 +21,36 @@ app.use(bodyParser.json({
 }));
 
 
+var mockedUser = {
+  username: 'kamil',
+  password: '123'
+};
+
+
+// UTIL FUNCTIONS
+const authenticate = (req, res, next) => {
+  console.info("TEST", 1);
+  let body = req.body;
+  if (!body.username || !body.password) {
+    console.info("TEST", 2);
+    res.status(400).end('Username or password is missing');
+    return;
+  }
+  if(body.username !== mockedUser.username || body.password !== mockedUser.password) {
+    res.status(401).end('Username or password is incorrect');
+    return;
+  }
+  next();
+}
+
+
+app.get('/login', authenticate, (req, res) => {
+  console.info("TEST", 3);
+  res.json(mockedUser);
+});
+
+
+
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
   return new Router(routes);
 }));
@@ -44,27 +74,6 @@ app.get('/fake-user', (req, res) => {
   res.json(user);
 });
 
-var mockedUser = {
-  username: 'kamil',
-  password: '123'
-};
-
-app.get('/login', authenticate, (req, res) => {
-  res.json(mockedUser);
-});
-
-// UTIL FUNCTIONS
-const authenticate = (req, res, next) => {
-  console.info("TEST");
-  let body = req.body;
-  if (!body.username || !body.password) {
-    res.status(400).end('Username or password is missing');
-  }
-  if(body.username !== mockedUser.username || body.password !== mockedUser.password) {
-    res.status(401).end('Username or password is incorrect')
-  }
-  next();
-}
 
 app.server.listen(process.env.PORT || 3000);
 console.log(`Started on port ${app.server.address().port}`);
