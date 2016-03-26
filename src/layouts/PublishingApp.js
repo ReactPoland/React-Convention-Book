@@ -6,6 +6,7 @@ import falcorModel from '../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import articleActions from '../actions/article.js';
+import { LoginForm } from '../components/LoginForm.js';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -18,6 +19,12 @@ const mapDispatchToProps = (dispatch) => ({
 class PublishingApp extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      error: null,
+      sendingRequest: false
+    };
+
   }
   componentWillMount() {
     this._fetch();
@@ -39,6 +46,13 @@ class PublishingApp extends React.Component {
     this.props.articleActions.articlesList(articles);
   }
 
+  async login(credentials) {
+    this.setState({
+      error: null,
+      sendingRequest: true
+    });
+  }
+
   render () {
   	let articlesJSX = [];
   	for(let articleKey in this.props) {
@@ -50,8 +64,14 @@ class PublishingApp extends React.Component {
   			</div>);
   		articlesJSX.push(currentArticleJSX);
   	}
+
     return (
       <div>
+        <div style={{maxWidth: 450, margin: '0 auto'}}>
+          <LoginForm
+            onSubmit={this.login}
+            sendingRequest={this.state.sendingRequest} />
+        </div>
           <h1>Our publishing app</h1>
           {articlesJSX}
       </div>
