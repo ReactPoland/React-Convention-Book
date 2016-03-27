@@ -28955,7 +28955,7 @@
 
 	              case 2:
 	                _context2.next = 4;
-	                return _axios2.default.get('/fake-user').then(function (response) {
+	                return _axios2.default.get('/me').then(function (response) {
 	                  alert("user " + JSON.stringify(response));
 	                }).catch(function (response) {
 	                  alert(response.data);

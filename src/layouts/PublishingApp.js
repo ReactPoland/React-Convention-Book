@@ -70,7 +70,7 @@ class PublishingApp extends React.Component {
         console.info(response);
       });
 
-    await axios.get('/fake-user')
+    await axios.get('/me')
       .then((response) => {
         alert("user "+JSON.stringify(response));
 
