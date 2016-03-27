@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import articleActions from '../actions/article.js';
 import { LoginForm } from '../components/LoginForm.js';
+import axios from 'axios';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -47,10 +48,26 @@ class PublishingApp extends React.Component {
   }
 
   async login(credentials) {
-    this.setState({
-      error: null,
-      sendingRequest: true
-    });
+
+    axios.post('/login', {
+        username: credentials.email,
+        password: credentials.password
+      })
+      .then((response) => {
+        alert(JSON.stringify("works "+response.data.token));
+        localStorage.setItem("token", "Smith");
+        console.info(this.setState);
+
+        // TUTAJ AKCJA DO REDUXA
+        // this.setState({
+        //   error: false,
+        //   sendingRequest: true
+        // });
+      })
+      .catch((response) => {
+        alert(response.data);
+        console.info(response);
+      });
   }
 
   render () {
