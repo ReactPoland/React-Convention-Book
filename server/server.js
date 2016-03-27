@@ -9,6 +9,7 @@ import Router from 'falcor-router';
 import faker from 'faker';
 import routes from './routes.js';
 import jwt from 'jsonwebtoken';
+import expressJwt from 'express-jwt';
 
 let jwtSecret = 'here_goes_the_secret_normally_it_lives_in_an_enviroment_variable';
 
@@ -22,6 +23,8 @@ app.use(cors());
 app.use(bodyParser.json({
   extended: false
 }));
+
+app.use(expressJwt({ secret: jwtSecret}).unless({ path: ['/login']}));
 
 
 var mockedUser = {
