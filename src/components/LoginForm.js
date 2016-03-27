@@ -4,8 +4,6 @@ import { RaisedButton, Paper } from 'material-ui';
 import { DefaultInput } from './DefaultInput';
 import axios from 'axios';
 
-// alert("1111");
-
 export class LoginForm extends React.Component {
   constructor() {
     super();
@@ -21,6 +19,7 @@ export class LoginForm extends React.Component {
         password: model.password
       })
       .then(function (response) {
+        alert(JSON.stringify(response.data.token));
         console.info(response);
       })
       .catch(function (response) {

@@ -8,7 +8,9 @@ import falcorExpress from 'falcor-express';
 import Router from 'falcor-router';
 import faker from 'faker';
 import routes from './routes.js';
+import jwt from 'jsonwebtoken';
 
+let jwtSecret = 'here_goes_the_secret_normally_it_lives_in_an_enviroment_variable';
 
 var app = express();
 app.server = http.createServer(app);
@@ -47,7 +49,13 @@ const authenticate = (req, res, next) => {
 
 
 app.post('/login', authenticate, (req, res) => {
-  res.json(mockedUser);
+  let token = jwt.sign({
+    username: mockedUser.username
+  }, jwtSecret);
+  res.send({
+    token: token,
+    user: mockedUser
+  });
 });
 
 

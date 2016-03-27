@@ -37714,8 +37714,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// alert("1111");
-
 	var LoginForm = exports.LoginForm = function (_React$Component) {
 	  _inherits(LoginForm, _React$Component);
 
@@ -37738,6 +37736,7 @@
 	        username: model.email,
 	        password: model.password
 	      }).then(function (response) {
+	        alert(JSON.stringify(response.data.token));
 	        console.info(response);
 	      }).catch(function (response) {
 	        console.info(response);
