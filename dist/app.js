@@ -28929,30 +28929,40 @@
 	    key: 'login',
 	    value: function () {
 	      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(credentials) {
-	        var _this2 = this;
-
 	        return regeneratorRuntime.wrap(function _callee2$(_context2) {
 	          while (1) {
 	            switch (_context2.prev = _context2.next) {
 	              case 0:
-
-	                _axios2.default.post('/login', {
+	                _context2.next = 2;
+	                return _axios2.default.post('/login', {
 	                  username: credentials.email,
 	                  password: credentials.password
 	                }).then(function (response) {
-	                  alert(JSON.stringify("works " + response.data.token));
-	                  localStorage.setItem("token", "Smith");
-	                  console.info(_this2.setState);
-	                  _this2.setState({
-	                    error: false,
-	                    sendingRequest: true
-	                  });
+	                  alert("works " + JSON.stringify(response.data.token));
+
+	                  if (response.data.token) {
+	                    _axios2.default.interceptors.request.use(function (config) {
+	                      config.headers['authorization'] = 'Bearer ' + response.data.token;
+	                      return config;
+	                    });
+
+	                    localStorage.setItem("token", response.data.token);
+	                  }
 	                }).catch(function (response) {
 	                  alert(response.data);
 	                  console.info(response);
 	                });
 
-	              case 1:
+	              case 2:
+	                _context2.next = 4;
+	                return _axios2.default.get('/fake-user').then(function (response) {
+	                  alert("user " + JSON.stringify(response));
+	                }).catch(function (response) {
+	                  alert(response.data);
+	                  console.info(response);
+	                });
+
+	              case 4:
 	              case 'end':
 	                return _context2.stop();
 	            }
@@ -37255,6 +37265,18 @@
 	var FalcorDataSource = __webpack_require__(616);
 	var $ref = falcor.Model.ref;
 	var $atom = falcor.Model.atom;
+
+	var headers = void 0;
+
+	if (localStorage.token) {
+	  headers = {
+	    headers: {
+	      'Authorization': 'Bearer' + localStorage.token
+	    }
+	  };
+	}
+
+	// const model = new FalcorDataSource('/model.json');
 
 	var model = new falcor.Model({
 	  source: new FalcorDataSource('/model.json')

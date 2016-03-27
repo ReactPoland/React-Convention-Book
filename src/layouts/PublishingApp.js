@@ -49,13 +49,31 @@ class PublishingApp extends React.Component {
 
   async login(credentials) {
 
-    axios.post('/login', {
+    await axios.post('/login', {
         username: credentials.email,
         password: credentials.password
       })
       .then((response) => {
-        alert(JSON.stringify("works "+response.data.token));
-        localStorage.setItem("token", response.data.token);
+        alert("works "+JSON.stringify(response.data.token));
+
+        if(response.data.token) {
+          axios.interceptors.request.use((config) => {
+            config.headers['authorization'] = 'Bearer ' + response.data.token;
+            return config;
+          });
+
+          localStorage.setItem("token", response.data.token);
+        }
+      })
+      .catch((response) => {
+        alert(response.data);
+        console.info(response);
+      });
+
+    await axios.get('/fake-user')
+      .then((response) => {
+        alert("user "+JSON.stringify(response));
+
       })
       .catch((response) => {
         alert(response.data);

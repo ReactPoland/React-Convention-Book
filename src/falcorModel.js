@@ -13,6 +13,12 @@ if(localStorage.token) {
     };
 }
 
-const model = new FalcorDataSource('/model.json', headers);
+
+
+// const model = new FalcorDataSource('/model.json');
+
+const model = new falcor.Model({    
+  source: new FalcorDataSource('/model.json')
+});
 
 export default model;
