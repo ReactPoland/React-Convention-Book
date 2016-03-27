@@ -55,14 +55,7 @@ class PublishingApp extends React.Component {
       })
       .then((response) => {
         alert(JSON.stringify("works "+response.data.token));
-        localStorage.setItem("token", "Smith");
-        console.info(this.setState);
-
-        // TUTAJ AKCJA DO REDUXA
-        // this.setState({
-        //   error: false,
-        //   sendingRequest: true
-        // });
+        localStorage.setItem("token", response.data.token);
       })
       .catch((response) => {
         alert(response.data);
