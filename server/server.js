@@ -27,7 +27,7 @@ app.use(bodyParser.json({
 
 
 
-app.use('/api', expressJwt({secret: jwtSecret}).unless({path: ['/api/me']}));
+app.use('/api', expressJwt({secret: jwtSecret}).unless({path: []}));
 
 
 var mockedUser = {
