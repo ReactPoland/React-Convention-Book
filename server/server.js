@@ -24,7 +24,10 @@ app.use(bodyParser.json({
   extended: false
 }));
 
-// app.use(expressJwt({ secret: jwtSecret}).unless({ path: ['/site', '/model.json', '/login']}));
+
+
+
+app.use('/api', expressJwt({secret: jwtSecret}).unless({path: ['/api/me']}));
 
 
 var mockedUser = {
@@ -86,7 +89,7 @@ app.get('/fake-user', (req, res) => {
   res.json(user);
 });
 
-app.get('/me', (req, res) => {
+app.get('/api/me', (req, res) => {
   res.send({ user: req.user, works: "yes" });
 });
 

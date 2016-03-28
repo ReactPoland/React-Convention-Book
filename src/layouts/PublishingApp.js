@@ -70,7 +70,7 @@ class PublishingApp extends React.Component {
         console.info(response);
       });
 
-    await axios.get('/me')
+    await axios.get('/api/me')
       .then((response) => {
         alert("user "+JSON.stringify(response));
 
