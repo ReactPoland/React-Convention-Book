@@ -194,66 +194,69 @@ class MenuLibraryView extends React.Component {
         refMap is an information in what menus and sections, the item has been added
      */
     menuItem.picUrl = "http://lorempixel.com/700/500/food/";
-    menuItem = menuItem.formatForWire();
-    
-    await API
-    .set({
-      url: ['menuItemsById', menuItem.id],
-      body: menuItem
-    })
-    .then(() => {
-      this.props.actions.menuItem.update(menuItem);
-    });
 
-
-    if(refMap === undefined) { 
-      // no changes in the menuItem's sections
-      this.setState({
-        requestSuccess: 'Edit successful! Without sections changing.',
-        modal: null
+    let menuItemArray = [menuItem] ; //.formatForWire();
+    let resultUpdateMenuItems = await falcorModel
+      .call(
+            ['restaurants', 0, 'menuItems','update'],
+            [menuItemArray] // update requries an array
+          ).
+      then((result) => {
+        return result;
       });
-      this._fetchData();
-      return;
+
+    this.props.actions.menuItem.update(menuItem);
+
+
+    if(refMap !== undefined) {
+      /* 
+       there was an update in refMap! let's update sections
+       */
+
+      let currentITEMID = menuItem.id;
+      let allSECTIONS = this.props.section;
+      // STEPS:
+      // 0. prepare currentITEMID
+      // 1. prepare allSECTIONS
+      // 2. delete all currentITEMID from all sections (in case if someone has unselected)
+      let purgedSections = [];
+      allSECTIONS.forEach((sectionItem) => {
+        sectionItem.items = sectionItem.items.filter((itemID) => itemID !== currentITEMID);
+        purgedSections.push(sectionItem);
+      });
+      // 3. OK, now let's add fresh new selected items selectedSectionsArray
+      let selectedSectionsArray = this._preparingArrayOfSelectedSections(refMap);
+
+      purgedSections.map((secItem, index) => {
+        let __contains__ = selectedSectionsArray.filter((selectedID) => selectedID === secItem.id).length;
+        /*
+          __contains__ === OK, this is selected by user, we need push it into array
+         */
+        if(__contains__) {
+          secItem.items.push(currentITEMID);
+        }
+        return secItem;
+      });
+
+      let sectionUpdateResult = await falcorModel
+        .call(
+              ['restaurants', 0, 'sections','update'],
+              [purgedSections]          
+            ).
+        then((result) => {
+          return result;
+        });
+
+      purgedSections.forEach((item) => {
+        this.props.actions.section.update(item);
+      });
     }
 
-    // Preparing array of selected sections
-    let selectedSectionsArray = this._preparingArrayOfSelectedSections(refMap);
-    let changedSections = [];
-    // Check what sections has been edited
-    this.props.section.forEach((secItem, secId) => {
-      // searching for edited sections' items
-      let _contains_ = selectedSectionsArray.find(x => x === secItem.id);
-      if(_contains_ !== undefined) {
-        let _contains2_ = secItem.items.find(y => y === menuItem.id);
-        // checking if a menuItemId isn't already in the secItems.items
-        if(_contains2_ === undefined) {
-          secItem.items.push(menuItem.id);
-          changedSections.push(secItem);
-        }
-      }
+    this.setState({
+      requestSuccess: 'Edit successful!',
+      modal: null
     });
 
-    // TODO removing sections
-    // TODO: API.set for changedSections
-    // save section and then dispatch action to update store state
-
-    for(var k in changedSections) {
-      let sectionID = changedSections[k].id;
-      changedSections[k] = changedSections[k].formatForWire();
-
-      await API
-        .set({
-          url: ['sectionsById', sectionID],
-          body: changedSections[k]
-        })
-        .then(() => {
-          this.setState({
-            requestSuccess: 'Edit successful!',
-            modal: null
-          });
-        });
-    }
-    this._fetchData();
     return;
   }
 

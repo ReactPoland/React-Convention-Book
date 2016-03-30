@@ -22,9 +22,13 @@ export default class EditMenuSectionsModal extends React.Component {
     this._onDone = this._onDone.bind(this);
     this._enableButton = this._enableButton.bind(this);
     this._disableButton = this._disableButton.bind(this);
+    this._unlockInput         = this._unlockInput.bind(this);
+    this._lockInputAndSave         = this._lockInputAndSave.bind(this);
+    this.onSectionEdit         = this.onSectionEdit.bind(this);
 
     this.state = {
-      sections: this._getSections(this.props)
+      sections: this._getSections(this.props),
+      sectionInEdit: null
     };
   }
 
@@ -41,6 +45,12 @@ export default class EditMenuSectionsModal extends React.Component {
       return this.props.fullSections.get(section);
     });
     return sections;
+  }
+
+  _unlockInput(section) {
+    this.setState({
+      sectionInEdit: section.id
+    });
   }
 
   _onDone() {
@@ -67,6 +77,30 @@ export default class EditMenuSectionsModal extends React.Component {
     this.setState({sections});
   }
 
+  onSectionEdit(section) {
+    this._unlockInput(section)
+
+  }
+
+  _lockInputAndSave() {
+    const title = this.refs[this.state.sectionInEdit].getValue();
+    if(title === undefined) { 
+      this.setState({
+        sectionInEdit: null
+      });
+      return;
+    }
+
+    const originSection = this.props.section.get(this.state.sectionInEdit);
+    const newSection = new Section(originSection.formatForWire());
+    newSection.title = title;
+
+    this.props.onUpdate(newSection);
+    this.setState({
+      sectionInEdit: null
+    });
+  }
+
   updateOrder(newOrder) {
     this.setState({sections: newOrder});
   }
@@ -83,6 +117,30 @@ export default class EditMenuSectionsModal extends React.Component {
     const { fullSections } = this.props;
     const currentSections = this.state.sections;
     const availableSections = [];
+    let nameNodeEdit = <span />;
+    let topPadding = 30;
+
+    let sectionID = this.state.sectionInEdit;
+    if(sectionID) {
+      let section = this.props.section.get(sectionID);
+      topPadding = 0;
+      nameNodeEdit = (
+        <Form>
+          <div>
+            <DefaultInput
+              defaultValue={section.title}
+              name={section.id}
+              ref={section.id}
+              autoFocus
+              required
+              onEnterKeyDown={this._lockInputAndSave} />
+          </div>
+        </Form>
+      );
+      // let nameNode = <span style={{color: 'red', topPadding: 10}}>{section.title} [editing - ENTER to submit changes] </span>;
+    }
+
+
     const actionBtns = [
       <FlatButton label="Cancel" onClick={this.props.onHide} />,
       <FlatButton label="Save" primary={true} onClick={this._onDone} />
@@ -103,11 +161,12 @@ export default class EditMenuSectionsModal extends React.Component {
         open={this.props.open}
         title="Edit menu sections"
         actions={actionBtns}>
-
+        {nameNodeEdit}
         <ReorderItemsWrapper
           onChange={this.updateOrder.bind(this)}
           items={this.state.sections}
-          onDelete={this.onSectionDelete.bind(this)} />
+          onDelete={this.onSectionDelete.bind(this)} 
+          onEdit={this.onSectionEdit.bind(this)} />
 
         <div style={{
             position: 'absolute',

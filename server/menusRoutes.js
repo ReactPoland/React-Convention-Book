@@ -2,6 +2,20 @@ import models from './modelsMongoose';
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
 
+
+
+
+
+
+// models.MenuCollection.find({ }, function(err, menusDocs) {
+//       return menusDocs;
+//     })
+//       .sort({orderNumber: 1})
+//       .then ((menusArrayFromDB) => {
+//       console.info("SORTED", menusArrayFromDB);
+
+//     });
+
 module.exports = [
   { 
     route: 'menusById[{keys}]',
@@ -12,7 +26,8 @@ module.exports = [
             '_id': { $in: menusIDs}
         }, function(err, menusDocs) {
           return menusDocs;
-        }).then ((menusArrayFromDB) => {
+        })
+          .then ((menusArrayFromDB) => {
           let results = [];
           let sectionsById;
           menusArrayFromDB.map((menuObject) => {
@@ -51,7 +66,10 @@ module.exports = [
       let menusIndexes = pathSet[3];
       return models.MenuCollection.find({}, '_id', function(err, menusDocs) {
           return menusDocs;
-        }).then ((menusArrayFromDB) => {
+        })
+          .sort({orderNumber: 1})
+          .then ((menusArrayFromDB) => {
+          console.info("111 SORTED", menusArrayFromDB);
           let results = [];
           menusIndexes.map((index) => {
             let res;

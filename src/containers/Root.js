@@ -46,10 +46,11 @@ export default class Root extends React.Component {
               // http://localhost:3000/#/ - specificaly we are talking about this /#/ that helps
               // run the app 100% client side
           }
+          {this.renderDevTools()}
           <Router history={noQueryKeyHistory}>
             {routes}
           </Router>
-          {this.renderDevTools()}
+          
         </div>
       </Provider>
     );

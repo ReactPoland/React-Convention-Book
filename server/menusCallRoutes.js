@@ -83,6 +83,9 @@ module.exports = [
   call: async (callPath, args) => 
     {
       let updatedMenus = args[0];
+
+      console.info("-------> ", updatedMenus);
+      console.info("<-------");
       let results = [];
 
       for(var key in updatedMenus) {

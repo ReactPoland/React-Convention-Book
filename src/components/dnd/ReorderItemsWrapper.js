@@ -121,7 +121,8 @@ class Inside extends React.Component {
           id={item.id || item.title}
           key={item.id || item.title}
           moveItem={this.moveItem}
-          onDelete={this.props.onDelete} />
+          onDelete={this.props.onDelete}
+          onEdit={this.props.onEdit} />
       );
     });
     const styles = getStyles(items.length, this.state.dye);

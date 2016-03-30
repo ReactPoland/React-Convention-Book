@@ -38,11 +38,42 @@ class MenuDetailView extends React.Component {
     console.log("HAVING");
     console.log(this.props.menuItem);
     console.log("HAVING");
+    this._fetchData = this._fetchData.bind(this);
 
     this.state = {
       menu: this.props.menu.get(id)
     };
+
+    this._fetchData(id);
   }
+
+
+  async _fetchData(id) {
+    const {actions} = this.props;
+    console.info("KEEPING IT below");
+    
+    // const response = await API.get(
+    //   ['menusById', id,
+    //     'sections', {from: 0, to: 100}, ['id', 'title',
+    //       'items'], {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl']]
+    // );
+
+    // const sections = falcorUtils.makeArray({
+    //   object: response.menusById[id],
+    //   name: 'sections'
+    // });
+
+    // const menuItems = sections.reduce((sections, section) => {
+    //   return sections.concat(falcorUtils.makeArray({
+    //     object: section,
+    //     name: 'items'
+    //   }));
+    // }, []);
+
+    // actions.section.sectionList(sections);
+    // actions.menuItem.menuItemList(menuItems);
+  }
+
 
   onAddMenu() {
     /**

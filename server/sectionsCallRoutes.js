@@ -28,6 +28,10 @@ module.exports = [
       let updatedSections = args[0];
       let results = [];
 
+      console.info("updatedSections ^^^^^");
+      console.info(updatedSections);
+      console.info("updatedSections ^^^^^");
+
       for(var key in updatedSections) {
         let updatedSection = updatedSections[key];
         console.info("updatedSection", updatedSection);

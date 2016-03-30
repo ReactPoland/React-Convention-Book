@@ -25,6 +25,7 @@ var SectionCollection = mongoose.model('SectionCollection', sectionSchema, 'sect
 var menuSchema = {
   title: String,
   description: String,
+  orderNumber: Number,
   sectionsById: Array
 };
 var MenuCollection = mongoose.model('MenuCollection', menuSchema, 'menus');
