@@ -93,6 +93,11 @@ export default class ReorderDraggableBox extends React.Component {
     const wrapperStyle = isDragging ? styles.wrapper : {};
     let deleteButton = null;
 
+    console.info("\n\n\n\n\n\n 7777 this.props.onEdit \n\n\n "
+      ,this.props.onEdit
+      ,"\n\n\n\n\n\n 77777 this.props.onEdit \n\n\n ");
+
+
     if(allowDelete) {
       console.info("styles.deleteBtn", styles.deleteBtn);
       deleteButton = (

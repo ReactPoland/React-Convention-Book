@@ -1,20 +1,6 @@
-import models from './modelsMongoose';
+import models from '../modelsMongoose';
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
-
-
-
-
-
-
-// models.MenuCollection.find({ }, function(err, menusDocs) {
-//       return menusDocs;
-//     })
-//       .sort({orderNumber: 1})
-//       .then ((menusArrayFromDB) => {
-//       console.info("SORTED", menusArrayFromDB);
-
-//     });
 
 module.exports = [
   { 

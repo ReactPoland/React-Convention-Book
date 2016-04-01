@@ -1,4 +1,4 @@
-import models from './modelsMongoose';
+import models from '../modelsMongoose';
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
 

@@ -41,7 +41,11 @@ class Header extends React.Component {
 
     ////// mock
     this.props.sessionActions.logout();
-    delete sessionStorage.magicToken;
+    delete localStorage.token;
+    delete localStorage.username;
+    delete localStorage.role;
+    delete localStorage.userid;
+    // alert("logout to fix");
     ////// endof mock
 
     // if (response.status === 200 && response.statusText === 'OK') {

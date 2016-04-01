@@ -8,6 +8,7 @@ var sectionsRoutes = require('./sectionsRoutes.js');
 var menusRoutes = require('./menusRoutes.js');
 var menusCallRoutes = require('./menusCallRoutes.js');
 var itemsRoutes = require('./itemsRoutes.js');
+var loginRoutes = require('./loginRoutes.js');
 
 
 let routes = [
@@ -17,6 +18,7 @@ let routes = [
   ...sectionsCallRoutes,
   ...menusRoutes,
   ...menusCallRoutes,
+  ...loginRoutes,
   {
     /*
         USED on frontend in layouts/CoreLayout.js 
@@ -37,7 +39,8 @@ let routes = [
         }
       };
     }
-  }, {
+  },
+  {
     route: 'model',
     get: () => {
       return {

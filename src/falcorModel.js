@@ -273,9 +273,23 @@ const cache = {
     }
   }
 }
+
+
+let headers;
+if(localStorage.token) {
+    headers = {
+      headers: {
+        'Authorization': localStorage.token,
+        'role': localStorage.role,
+        'username': localStorage.username
+      }
+    };
+}
+
+
 const model = new falcor.Model({
   // "cache": cache
-  source: new FalcorDataSource('/model.json')
+  source: new FalcorDataSource('/model.json', headers)
 });
 
 export default model;

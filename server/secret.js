@@ -1,0 +1,1 @@
+module.exports = 'here_goes_the_secret_normally_it_lives_in_an_enviroment_variable';

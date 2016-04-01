@@ -19,6 +19,8 @@ const mapStateToProps = (state) => ({
   ...state
 });
 
+alert("1) pobierz wszystkie dane ze stora przez ['v1', 'user', 'me' \n\n 2) w zaleznosci od usera wyswietlaj inne dane (imie i zdjecie) \n\n 3) ukryj dla waitera z localstorage dodawanie \n\n\n 4) zabezpiecz backend \n\n\n\n\n\n");
+
 const mapDispatchToProps = (dispatch) => ({
   sessionActions: bindActionCreators(sessionActions, dispatch)
 });
@@ -90,23 +92,23 @@ class CoreLayout extends React.Component {
   }
 
   async _checkIfLoggedIn() {
-    console.info("IMPLEMENTED #1");
-    let response = await API.get(
-      ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email']]
-    );
-    console.info("RESULT #1", response);
-
     /////////// mock
-    if(sessionStorage.magicToken === 'magic-login-token') {
+    if(localStorage.token) {
+      console.info("IMPLEMENTED #1");
+      let response = await API.get(
+        ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email']]
+      );
+
+      // check if token is valid
+
+      console.info("response.v1.user.me", response.v1.user.me);
+
+      console.info("RESULT #1", response);
       return this.props.sessionActions.login(response.v1.user.me);
     }
     /////////// endof mock
 
-    if (response.status === 200 && response.statusText === 'OK') {
-      this.props.sessionActions.login(response.data);
-    } else {
-      this.props.history.pushState(null, '/login');
-    }
+    this.props.history.pushState(null, '/login');
   }
 
   _navigate(route) {

@@ -156,6 +156,14 @@ export default class EditMenuSectionsModal extends React.Component {
       value: section.id
     }));
 
+
+    console.info("\n\n\n\n\n\n 5555 this.onSectionEdit \n\n\n "
+      ,this.onSectionEdit
+      ,"\n\n\n\n\n\n 5555 this.onSectionEdit \n\n\n ");
+
+
+
+
     return (
       <Dialog
         open={this.props.open}

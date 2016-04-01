@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import Formsy from 'formsy-react';
 import { RaisedButton, Paper } from 'material-ui';
 
@@ -30,13 +30,13 @@ export class LoginForm extends React.Component {
       <Formsy.Form onSubmit={this._submit} onValid={this._enableButton} onInvalid={this._disableButton}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Log in</h3>
-          <DefaultInput name='email' title='Email (admin)' required />
-          <DefaultInput type='password' name='password' title='Password (test)' required />
+          <DefaultInput defaultValue="rradmin" name='username' title='Username (rradmin)' required />
+          <DefaultInput defaultValue="1" type='password' name='password' title='Password (test)' required />
           <div style={{marginTop: 24}}>
             <RaisedButton
               secondary={true}
               type="submit"
-              disabled={!this.state.canSubmit}
+              disabled={ false /* !this.state.canSubmit */}
               style={{margin: '0 auto', display: 'block', width: 150}}
               label={this.props.sendingRequest ? 'Logging in...' : 'Log in'} />
           </div>
