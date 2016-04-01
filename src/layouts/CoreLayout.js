@@ -19,8 +19,6 @@ const mapStateToProps = (state) => ({
   ...state
 });
 
-alert("1) pobierz wszystkie dane ze stora przez ['v1', 'user', 'me' \n\n 2) w zaleznosci od usera wyswietlaj inne dane (imie i zdjecie) \n\n 3) ukryj dla waitera z localstorage dodawanie \n\n\n 4) zabezpiecz backend \n\n\n\n\n\n");
-
 const mapDispatchToProps = (dispatch) => ({
   sessionActions: bindActionCreators(sessionActions, dispatch)
 });

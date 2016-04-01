@@ -1,20 +1,36 @@
 import mongoose from 'mongoose';
 let Schema = mongoose.Schema;
 
+// const conf = {
+//   hostname: process.env.MONGO_HOSTNAME || 'localhost',
+//   port: process.env.MONGO_PORT || 27017,
+//   env: process.env.MONGO_ENV || 'test',
+// };
+
 const conf = {
-  hostname: process.env.MONGO_HOSTNAME || 'localhost',
-  port: process.env.MONGO_PORT || 27017,
-  env: process.env.MONGO_ENV || 'test',
+  hostname: process.env.MONGO_HOSTNAME || 'ds011890.mlab.com',
+  port: process.env.MONGO_PORT || 11890,
+  env: process.env.MONGO_ENV || 'rrtest',
 };
 
-mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
+// test / test123
+// 
+let dbUser
+if(process.env.MONGO_USER && process.env.MONGO_PASS) {
+  dbUser = {user: process.env.MONGO_USER, pass: process.env.MONGO_PASS}
+} else {
+  dbUser = undefined; // on local dev not required
+}
+// ds011890.mlab.com:11890/rrtest
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`, dbUser);
 
 var menuItemSchema = {
   title: String,
   description: String,
-  type: String,
   description2: String,
   description3: String,
+  type: String,
   allergens: Array
 };
 var MenuItemCollection = mongoose.model('MenuItemCollection', menuItemSchema, 'menuItems');

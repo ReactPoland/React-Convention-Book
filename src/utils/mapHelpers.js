@@ -7,11 +7,15 @@
  *
  */
 
+
 const duplicate = (map) => {
   const newMap = new Map();
-  map.forEach((item, key) => newMap.set(key, item));
+  map.forEach((item, key) => { 
+    newMap.set(key, item);
+  });
   return newMap;
 };
+
 
 const addItem = (map, newKey, newItem) => {
   const newMap = duplicate(map);

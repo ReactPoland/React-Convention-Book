@@ -123,7 +123,7 @@ class SideNav extends React.Component {
     if(!menu.length) {
       console.info("IMPLEMENTED #2");
       const response = await API.get(
-        ['restaurants', 0, 'menus', {from: 0, to: 100}, ['title', 'id', 'description']]
+        ['restaurants', 0, 'menus', {from: 0, to: 100}, ['title', 'id', 'description', 'showAllergensInMenu']]
       );
 
       console.info("RESULT #2", response);

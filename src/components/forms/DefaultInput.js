@@ -1,6 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Formsy from 'formsy-react'
 import {TextField} from 'material-ui';
+
+var unmountTextFieldHandler = null;
 
 export const DefaultInput = React.createClass({
   mixins: [Formsy.Mixin],
@@ -15,19 +18,18 @@ export const DefaultInput = React.createClass({
     this.setValue(e.target.value);
     this.props.onChange(e);
   },
-
   render() {
     const errorMessage = this.getErrorMessage();
-
+    
     return (
       <div>
         <TextField
+          tabIndex={this.props.tabIndexProp}
           floatingLabelText={this.props.defaultValue ? '' : this.props.title}
           floatingLabelStyle={{fontWeight: 300}}
           fullWidth={(this.props.style && !this.props.style.width) || true}
           style={this.props.style}
           autoFocus={this.props.autoFocus}
-          ref={this.props.name}
           defaultValue={this.props.defaultValue || ''}
           errorText={errorMessage}
           type={this.props.type || 'text'}
@@ -42,5 +44,10 @@ export const DefaultInput = React.createClass({
         {this.props.children}
       </div>
     );
+  },
+  componentWillUnmount() {
+    console.info("componentWillUnmount");
+    console.info("componentWillUnmount");
   }
 });
+

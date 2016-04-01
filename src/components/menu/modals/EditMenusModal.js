@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {
   Dialog,
   FlatButton,
@@ -9,7 +10,8 @@ import {
   TableRow,
   TableRowColumn,
   IconButton,
-  Popover
+  Popover,
+  Checkbox
 } from 'material-ui'
 import {
   EditorModeEdit,
@@ -20,6 +22,8 @@ import { Form } from 'formsy-react';
 import { Menu } from 'models';
 
 import { DefaultInput } from 'components/forms/DefaultInput';
+
+var unmountTextFieldHandler = null;
 
 export default class EditMenusModal extends React.Component {
   static defaultProps = {
@@ -37,34 +41,38 @@ export default class EditMenusModal extends React.Component {
     this._openDeletePopup     = this._openDeletePopup.bind(this);
     this._closeDeletePopup    = this._closeDeletePopup.bind(this);
     this._onDelete            = this._onDelete.bind(this);
+    this._onChangeEditTitleInput = this._onChangeEditTitleInput.bind(this);
 
     this.state = {
-      menuInEdit: null
+      menuInEdit: null,
+      showAllergensInEditMenu: null
     };
   }
 
   _unlockInput(menu) {
     this.setState({
-      menuInEdit: menu.id
+      menuInEdit: menu.id,
+      changedEditTitleValue: menu.title
     });
   }
 
-  _lockInputAndSave() {
-    const title = this.refs[this.state.menuInEdit].getValue();
+  _lockInputAndSave(menuTitleDefault) {
+    let title = this.refs[this.state.menuInEdit].getValue();
     if(title === undefined) { 
-      this.setState({
-        menuInEdit: null
-      });
-      return;
+      // we need to do it, because maybe a checkbox has been changed
+      title = menuTitleDefault;
     }
 
-    const originMenu = this.props.menus.get(this.state.menuInEdit);
+    let originMenu = this.props.menus.get(this.state.menuInEdit);
+    originMenu.showAllergensInMenu = this.state.showAllergensInEditMenu;
+
     const newMenu = new Menu(originMenu.formatForWire());
     newMenu.title = title;
 
     this.props.onUpdate(newMenu);
     this.setState({
-      menuInEdit: null
+      menuInEdit: null,
+      showAllergensInEditMenu: null
     });
   }
 
@@ -90,10 +98,17 @@ export default class EditMenusModal extends React.Component {
     });
   }
 
+  _onChangeEditTitleInput(e) {
+    this.setState({
+      changedEditTitleValue: e.target.value
+    });
+  }
+
   render() {
     const actionBtns = (
       <FlatButton primary={true} label="Done" onTouchTap={this.props.onHide} />
     );
+
     let nameNodeEdit = null;
     let topPadding = 30;
     const rows = [];
@@ -104,17 +119,29 @@ export default class EditMenusModal extends React.Component {
 
       if(menuInEdit === menu.id) {
         topPadding = 0;
+
+        let editShowAllergens = (<Checkbox
+            defaultChecked={this.state.showAllergensInEditMenu}
+            name="checkboxEditShowAllergensInMenu"
+            label={<span>Don't show allergen guide</span>}
+            onCheck={() => { this.setState({ showAllergensInEditMenu: !this.state.showAllergensInEditMenu}) }} />);
+
         nameNodeEdit = (
           <Form>
-            <div>
               <DefaultInput
-                defaultValue={menu.title}
-                name={menu.id}
+                value={ this.state.changedEditTitleValue ? this.state.changedEditTitleValue : menu.title}
+                name={menu.title}
                 ref={menu.id}
                 autoFocus
                 required
-                onEnterKeyDown={this._lockInputAndSave} />
-            </div>
+                onChange={this._onChangeEditTitleInput}
+                onEnterKeyDown={this._lockInputAndSave.bind(this, menu.title)} />
+                {editShowAllergens}
+                <FlatButton 
+                  primary={true} 
+                  label="Save changes" 
+                  onTouchTap={this._lockInputAndSave.bind(this, menu.title)} />
+
           </Form>
         );
         nameNode = <span style={{color: 'red', topPadding: 10}}>{menu.title} [editing - ENTER to submit changes] </span>;
@@ -141,7 +168,7 @@ export default class EditMenusModal extends React.Component {
         title="Edit menus"
         actions={actionBtns}>
 
-        <div style={{height: 30}}>
+        <div style={{height: 60+(topPadding===0 ? 30 : 0)}}>
           {nameNodeEdit}
         </div>
         <Table fixedHeader height="50vh" style={{topPadding: topPadding}}>

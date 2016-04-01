@@ -42,15 +42,10 @@ const btnStyle = {
   right: 48
 };
 
-
 @Loader()
 class MenuLibraryView extends React.Component {
   constructor(props) {
     super(props);
-
-    console.log("UNDEFINIED!!!!!!");
-    console.log(this.props.menuItem);
-    console.log("UNDEFINIED!!!!!!");
 
     this.hideModal = this.hideModal.bind(this);
     this.onAddItemDone = this.onAddItemDone.bind(this);
@@ -58,6 +53,7 @@ class MenuLibraryView extends React.Component {
     this.onEditItemClick = this.onEditItemClick.bind(this);
     this.onEditItemDone = this.onEditItemDone.bind(this);
     this.nullifyRequestState = this.nullifyRequestState.bind(this);
+    this.onRemoveItemClick = this.onRemoveItemClick.bind(this);
 
     this._createMenuItemAndGetRef = this._createMenuItemAndGetRef.bind(this);
     this._getItemsLengthsInSections = this._getItemsLengthsInSections.bind(this);
@@ -78,8 +74,10 @@ class MenuLibraryView extends React.Component {
   async _fetchData() {
     console.info("IMPLEMENTED #3");
     const response = await API.get(
-      ['restaurants', 0, 'menuItems', {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl', 'allergens']]
+      ['restaurants', 0, 'menuItems', {from: 0, to: 100}, ['id', 'title', 'description', 'description2', 'description3', 'picUrl', 'allergens']]
     );
+
+    console.info("RESULT #4", response);
 
     console.info("IMPLEMENTED #4");
     const response2 = await API.get(
@@ -89,8 +87,8 @@ class MenuLibraryView extends React.Component {
     console.info("RESULT #4", response2);
 
 
-    const items = falcorUtils.makeArray({object: response.restaurants[0], name: 'menuItems'});
-    let sections = falcorUtils.makeArray({object: response2.restaurants[0], name: 'sections'});
+    const items = response ? falcorUtils.makeArray({object: response.restaurants[0], name: 'menuItems'}) : [];
+    let sections = response2 ? falcorUtils.makeArray({object: response2.restaurants[0], name: 'sections'}) : [];
 
     this.props.actions.menuItem.menuItemList(items);
     this.props.actions.section.sectionList(sections);
@@ -194,7 +192,10 @@ class MenuLibraryView extends React.Component {
         refMap is an information in what menus and sections, the item has been added
      */
     menuItem.picUrl = "http://lorempixel.com/700/500/food/";
-
+    // menuItem.description = menuItem.description;
+    console.info(" \n\n\n\n\n menuItem \n\n\n\n\n ");
+    console.info(menuItem);
+    console.info(" \n\n\n\n\n menuItem \n\n\n\n\n ");
     let menuItemArray = [menuItem] ; //.formatForWire();
     let resultUpdateMenuItems = await falcorModel
       .call(
@@ -386,6 +387,56 @@ class MenuLibraryView extends React.Component {
     return;
   }
 
+
+
+  async onRemoveItemClick(menuItemIdToDelete, sectionIdOfRemovedItem = null) {
+    if(sectionIdOfRemovedItem === null) {
+      console.warn("sectionIdOfRemovedItem can't be null");
+      alert("error: sectionIdOfRemovedItem can't be null")
+      return;
+    }
+
+    let sectionObj = this.props.section;
+    let sectionsToUpdate = [];
+    sectionObj.forEach((section, index) => {
+      let sectionId = section.id;
+      let newItems = [];
+      section.items.forEach((itemId, index) => {
+        let notForRemovalFromSection = sectionId !== sectionIdOfRemovedItem;
+        let notForRemovalItem = itemId !== menuItemIdToDelete;
+
+        if(notForRemovalFromSection || notForRemovalItem) {
+          // OK it's not the removal item and section, so let's push it
+          newItems.push(itemId);
+        }
+      });
+      if(section.items.length !== newItems.length) {
+        section.items = newItems;
+        sectionsToUpdate.push(section);
+      }
+    })
+
+    Promise.all(
+      sectionsToUpdate.map((section, index) => {
+
+        section = section.formatForWire();
+        console.log(section);
+        return API
+          .set({
+            url: ['sectionsById', section.id],
+            body: section
+          })
+          .then(() => {
+            this.props.actions.section.update(section);
+            return section;
+          });
+      })
+    );
+    return;
+  }
+
+
+
   render() {
     const { requestError, requestSuccess } = this.state;
     const { menuItem } = this.props;
@@ -408,6 +459,7 @@ class MenuLibraryView extends React.Component {
       }
     });
 
+
     let addingEditingItemJSX;
 
     if(this.state.modal === 'add-modal') {
@@ -428,11 +480,16 @@ class MenuLibraryView extends React.Component {
             onRequestClose={this.nullifyRequestState} />
         </div>);
     } else {
-        addingEditingItemJSX = (
-          <FloatingActionButton style={btnStyle} onClick={ /* this.onAddItemDone.bind(this, "this","this")*/ this._openModal.bind(this, 'add-modal')}>
-            <ContentAdd />
-          </FloatingActionButton>
-        );
+        addingEditingItemJSX = 
+          localStorage.role !== 'admin' 
+        ? 
+          <span /> 
+        :
+          (
+            <FloatingActionButton style={btnStyle} onClick={ /* this.onAddItemDone.bind(this, "this","this")*/ this._openModal.bind(this, 'add-modal')}>
+              <ContentAdd />
+            </FloatingActionButton>
+          );
     }
 
     if(this.props.isMenuDetailView) {
@@ -444,6 +501,8 @@ class MenuLibraryView extends React.Component {
       if(!this.props.menuDetailProps.loaded) {
         return this.props.menuDetailProps.__getLoaderMarkup();
       }
+
+      // ....
 
       if(!menu.sections || !menu.sections.length) {
         return (
@@ -460,8 +519,9 @@ class MenuLibraryView extends React.Component {
             menu.sections.map((section) => {
               return (
                 <MenuSection
+                  currentMenuId={this.props.currentMenuId}
                   isFromLibraryDelete={true}
-                  onDeleteClick={this.onDeleteItemClick} 
+                  onDeleteClick={this.onRemoveItemClick} 
                   onEditClick={this.onEditItemClick}
                   sections={this.props.section} 
                   menus={this.props.menu} 

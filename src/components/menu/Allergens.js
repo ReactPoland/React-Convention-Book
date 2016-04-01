@@ -116,12 +116,9 @@ export default class Allergen extends React.Component {
       return <AllergyGuide />;
     }
 
-    if(this.props.readOnly === true) {
-      if(this.props.allergensObj.showAllergens === true) {
-        return <div style={{paddingLeft: 15}}>{this._renderAllergens(this.props.allergensObj)}</div>;
-      } else {
-        return null;
-      }
+    if(this.props.readOnly === true) { 
+      return <div style={{paddingLeft: 15}}>{this._renderAllergens(this.props.allergensObj)}</div>;
+
     }
 
     if(this.props.mode === 'edit') {
@@ -141,12 +138,6 @@ export default class Allergen extends React.Component {
               );
             })
           }
-          <br/> 
-          <Checkbox
-            style={{paddingLeft: 15, paddingTop: 40}}
-            defaultChecked={allergens ? allergens['showAllergens'] : null}
-            label="Show allergens next to the menu items"
-            onCheck={this._toggleAllergen.bind(this, 'showAllergens')} />
         </div>
       )
     } else {

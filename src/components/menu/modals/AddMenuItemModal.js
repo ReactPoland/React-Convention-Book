@@ -13,6 +13,11 @@ import { DefaultInput } from 'components/forms/DefaultInput';
 import { DefaultDatePicker } from 'components/forms/DefaultDatePicker';
 import CloseClearModalIcon from 'react-material-icons/icons/content/clear';
 
+import RichEditor from 'components/wyswig-draftjs/RichEditor';
+
+
+
+
 const d = new Date();
 const today = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
 
@@ -34,9 +39,11 @@ export default class AddMenuItemModal extends React.Component {
     this._disableBtn = this._disableBtn.bind(this);
     this.onSectionsChange = this.onSectionsChange.bind(this);
     this.onAllergensChange = this.onAllergensChange.bind(this);
+    this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
 
     this.state = {
-      canSubmit: false
+      canSubmit: false,
+      contentJSON: {}
     };
   }
 
@@ -70,6 +77,19 @@ export default class AddMenuItemModal extends React.Component {
       }
     }
     formData.allergens = this.state.allergens;
+
+    if(this.state.contentJSON["description"]) {
+      formData.description = this.state.contentJSON["description"];
+    }
+
+    if(this.state.contentJSON["description2"]) {
+      formData.description2 = this.state.contentJSON["description2"];
+    }
+
+    if(this.state.contentJSON["description3"]) {
+      formData.description3 = this.state.contentJSON["description3"];
+    }
+
     if(this.props.editItemId) formData.id = this.props.editItemId;
     const newMenuItem = new MenuItem(formData);
 
@@ -99,6 +119,13 @@ export default class AddMenuItemModal extends React.Component {
     });
   }
 
+  _onchangeDraftJSON(contentJSON, descriptionName) {
+    // ....
+    let newContentJSON = this.state.contentJSON;
+    newContentJSON[descriptionName] = contentJSON;
+    this.setState({ contentJSON: newContentJSON});
+  }
+
   render() {
     let editItemId = this.props.editItemId;
     let editedItem;
@@ -116,14 +143,15 @@ export default class AddMenuItemModal extends React.Component {
           style={{position: 'absolute', top: 0, right: 0, cursor: 'pointer'}} 
           onClick={this.props.onHide} />
         <Form onSubmit={this._onDone.bind(this)} ref="form" onValid={this._enableBtn} onInvalid={this._disableBtn}>
-          <DefaultInput
-            name="title"
-            title="Name"
-            defaultValue={ editedItem ? editedItem.title : "" }
-            required
-            validations="isExisty"
-            validationError="Name is required" />
-
+          
+            <DefaultInput
+              tabIndexProp="100000"
+              name="title"
+              title="Name"
+              defaultValue={ editedItem ? editedItem.title : "" }
+              required
+              validations="isExisty"
+              validationError="Name is required" />
           <DefaultDatePicker
             name="date"
             autoOk
@@ -133,29 +161,26 @@ export default class AddMenuItemModal extends React.Component {
             validations="isExisty"
             validationError="Invalid date" />
 
-          <DefaultInput
+          <RichEditor 
+            tabIndexProp="100003"
+            initialValue={ editedItem ? editedItem.description : "" }
             name="description"
             title="Description (Level 1)"
-            defaultValue={ editedItem ? editedItem.description : "" }
-            required
-            rows={5}
-            validations="isExisty"
-            validationError="Description is required"
-            multiLine={true} />
+            onChangeTextJSON={this._onchangeDraftJSON} />
 
-          <DefaultInput
+          <RichEditor 
+            tabIndexProp="100005"
+            initialValue={ editedItem && typeof editedItem.description2 !== 'undefined' ? editedItem.description2 : "" }
             name="description2"
-            defaultValue={ editedItem ? editedItem.description2 : "" }
             title="Description (Level 2)"
-            rows={5}
-            multiLine={true} />
+            onChangeTextJSON={this._onchangeDraftJSON} />
 
-          <DefaultInput
+          <RichEditor 
+            tabIndexProp="100010"
+            initialValue={ editedItem && typeof editedItem.description3 !== 'undefined' ? editedItem.description3 : "" }
             name="description3"
             title="Description (Level 3)"
-            defaultValue={ editedItem ? editedItem.description3 : "" }
-            rows={5}
-            multiLine={true} />
+            onChangeTextJSON={this._onchangeDraftJSON} />
 
           <h4 style={headerStyle}>Allergens</h4>
           <hr />

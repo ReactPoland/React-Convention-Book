@@ -10,7 +10,6 @@ module.exports = [
     {
       let toDeleteMenuItemId = args[0];
       return models.MenuItemCollection.find({ _id: toDeleteMenuItemId }).remove((err) => {
-        console.info("REMOVED");
         return [
           {
             path: ["menuItemsById", toDeleteMenuItemId],
@@ -25,7 +24,10 @@ module.exports = [
     call: (callPath, args) => 
       {
         let newMenuItemObj = args[0];
-
+        newMenuItemObj.description = JSON.stringify(newMenuItemObj.description);
+        newMenuItemObj.description2 = JSON.stringify(newMenuItemObj.description2);
+        newMenuItemObj.description3 = JSON.stringify(newMenuItemObj.description3);
+        
         var menuItem = new models.MenuItemCollection(newMenuItemObj);
         return menuItem.save(function (err, data) {
             if (err) {
@@ -81,26 +83,23 @@ module.exports = [
     call: async (callPath, args) => 
       {
         let updatedMenuItems = args[0];
-
-        console.info("-------> ", updatedMenuItems);
-        console.info("<-------");
         let results = [];
 
         for(var key in updatedMenuItems) {
           let updatedMenuItem = updatedMenuItems[key];
-          console.info("updatedMenuItem", updatedMenuItem);
           let menuItemID = updatedMenuItem.id;
           updatedMenuItem.sectionsById = updatedMenuItem.sections;
           let menuItem = new models.MenuItemCollection(updatedMenuItem);
           let menuItemData = menuItem.toObject();
           delete menuItemData._id;
+
+          menuItemData.description = JSON.stringify(updatedMenuItem.description);
+          menuItemData.description2 = JSON.stringify(updatedMenuItem.description2);
+          menuItemData.description3 = JSON.stringify(updatedMenuItem.description3);
+
           /*
             to-do: not ideal because it doesn't handle when it fails adding to DB
            */
-          console.info("111------------&****");
-          console.info(JSON.stringify(menuItemData, null, 4));
-          console.info("111------------&****");
-
           models.MenuItemCollection.update(
             { _id: menuItemID }, 
             menuItemData, 
