@@ -94,7 +94,13 @@ First step is that we need to create a collection.
 
 You can do it from GUI in Robomongo (introduced at the beginning of the book), but we here will use the command line.
 
-First of all we need to create a file called initPubUsers.js with the content as following:
+First of all we need to create a file called initPubUsers.js:
+```
+$ [[you are in the root directory of your project]]
+$ touch initPubUsers.js
+```
+
+then add the content following content to the initPubUsers.js:
 ```
 [
   {
@@ -113,11 +119,28 @@ First of all we need to create a file called initPubUsers.js with the content as
 ##### Explanation:
 The SHA256 string c5a0df4e293953d6048e78bd9849ec0ddce811f0b29f72564714e474615a7852 is a equilavent of a password 123456 with a salt's string equalt to "pubApp".
 
-If you want to generate this salted password hash, then go to:
+If you want to generate this salted password hash yourself, then go to:
 http://www.xorbin.com/tools/sha256-hash-calculator
 
 and type ***123456pubApp*** on their website so you will get as following:
 ![sha256 salted password online](http://test.przeorski.pl/book/102_salted_password_sha256.png)
+
+
+These steps are required only on the beginning, later we need to program a registration form that is salting the password for our own.
+
+
+##### Importing the initPubUsers.js file into MongoDB
+After we have the correct content in our initPubUsers.js then we can run a command line as following in order to import that new pubUsers collection to our database:
+```
+mongoimport --db local --collection pubUsers --jsonArray initPubUsers.js --host=127.0.0.1
+```
+
+and you will get the same terminal's output as we were importing the article in the first chapter similar to this:
+```
+2009-04-03T11:36:00.566+0200  connected to: 127.0.0.1
+2009-04-03T11:36:00.569+0200  imported 1 document
+```
+
 
 
 
