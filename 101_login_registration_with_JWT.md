@@ -559,6 +559,9 @@ $ touch Root.js
 
 The Root.js is going to be our main root file - the content of this file is as following:
 
+
+TODO install history -> import createHashHistory        from 'history/lib/createHashHistory';
+
 ```
 import React                    from 'react';
 import { Provider }             from 'react-redux';
