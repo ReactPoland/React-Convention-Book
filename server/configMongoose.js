@@ -13,4 +13,8 @@ var articleSchema = {
   articleContent:String
 }
 
-var Article = mongoose.model('Article', articleSchema, 'articles');
+var ArticleCollection = mongoose.model('Article', articleSchema, 'articles');
+
+export default {
+  ArticleCollection
+}

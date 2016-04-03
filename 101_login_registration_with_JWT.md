@@ -242,7 +242,11 @@ var articleSchema = {
   articleContent:String
 }
 
-var Article = mongoose.model('Article', articleSchema, 'articles');
+var ArticleCollection = mongoose.model('Article', articleSchema, 'articles');
+
+export default {
+  ArticleCollection
+}
 ```
 
 #### Explanation:
@@ -272,9 +276,22 @@ var Article = mongoose.model('Article', articleSchema, 'articles');
 
 and replace it with new:
 ```
-import models from './configMongoose';
+import { ArticleCollection } from './configMongoose';
 import sessionRoutes from './routesSession';
 ```
+
+also we need to spread the sessionRoutes into our current PublishingAppRoutes as following:
+```
+let PublishingAppRoutes = [
+    ...sessionRoutes,
+  {
+  route: 'articles.length',
+```
+At the beginning of PublishingAppRoutes you need to spread ***...sessionRoutes,*** routes, so the login route will be available to use accross the Falcor's routes.
+
+#### Explanation
+We got rid off old code that was helping us to run the first mongoose query that were fetching the articles, we moved everyting to ***configMongoose*** so then we can use it in different files around our project. We have also imported the ***sessionRoutes*** and later spreaded them with the ***...*** spread operation into the array called ***PublishingAppRoutes***.
+
 
 
 
