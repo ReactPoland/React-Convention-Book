@@ -469,12 +469,84 @@ After we are fine here the only thing that needs to be done on the backend is re
 
 The next step is to use this route on the Front-end.
 
-Please run the app if everything is working for you, and after it works for you then let's to start the front-end codings' fun right now!
+Please run the app and then if everything is working for you, and after it works for you then let's to start the front-end codings' fun right now!
 
 
 
+### Front-end side and Falcor
 
+Let's create a new route for login in our redux application. In order to do that, we need to introduce the ***react-router***:
+```
+$ npm i --save react-router@2.0.1 redux-simple-router@2.0.4
+```
 
+After we have installed them, we need to add routes in the src:
+```
+$ cd src
+$ mkdir routes
+$ touch index.js
+```
+
+then make the content of this index.js file as following:
+```
+import React                        from 'react';
+import { Route, IndexRoute }        from 'react-router';
+
+/* wrappers */
+import PublishingApp                   from 'layouts/PublishingApp';
+
+/* authorization views */
+import LoginView                    from 'views/account/LoginView';
+
+export default (
+  <Route component={CoreLayout} path='/'>
+    <IndexRoute component={HomeView} name='home' />
+
+    /* authorization related routes */
+    <Route component={LoginView}  path='/login' name='login' />
+  </Route>
+);
+```
+
+At this points we are missing one component for our app called CoreLayout.
+
+#### CoreLayout
+The CoreLayout is the a for our whole application.
+
+Create it by doing as following:
+```
+cd ../layouts/
+touch CoreLayout.js
+```
+
+... and then populate it with the following content:
+```
+import React from 'react';
+
+class CoreLayout extends React.Component {
+  static propTypes = {
+    children : React.PropTypes.element
+  }
+
+  constructor(props) {
+    super(props);
+
+  }
+
+  render () {
+    return (
+      <div>
+        <span>[In future there will be a header]</span>
+          <br/>
+          {this.props.children}
+      </div>
+    );
+  }
+}
+
+export default CoreLayout;
+```
+As you probably know, the all content of a current route will go into the ***{this.props.children}***'s target (that is basic's React.JS concept you must to know beforehand).
 
 
 
