@@ -426,17 +426,50 @@ In case if result.length === 0 then we have mocked return statement, then we are
 
 As you will learn later, we will ask for that token's path on the front-end (later in this chapter) ***['login', 'token']***. In this case we haven't found the correct username and the password provided so we return ***"INVALID"*** string, instead of a JWT token. The path ***['login', 'error']*** is describing the error's type in more details so that message can be shown to a user that has provided invalid login's credentials.
 
-!!! SALT MISSING improve!
 
-
-
-
-
-
+#### Successful login on falcor-route
+We need to improve successful login path. We have a case for handling an invalid login, we need to make a case that will handle a successful login, so please replace this code:
 ```
 return null; // SUCCESSFUL LOGIN mocked now (will implement next)
 ```
-We will improve this in a moment.
+
+with this code that is returning successful login's details:
+```
+let role = result[0].role;
+let userDetailsToHash = username+role;
+let token = jwt.sign(userDetailsToHash, jwtSecret, { expiresIn: '1h' });
+return [
+  {
+    path: ['login', 'token'],
+    value: token
+  },
+  {
+    path: ['login', 'username'],
+    value: username
+  },
+  {
+    path: ['login', 'role'],
+    value: role
+  },
+  {
+    path: ['login', 'error'],
+    value: false
+  }
+];
+```
+
+#### Explanation:
+As you can see, the only thing that we fetch from DB right now is the role value === ***result[0].role***. We need add this to hash, because we don't want our app to be vulnerable so a normal user can get an admin role with some hacking. The value of the ***token*** is calculated based on ***userDetailsToHash = username+role*** - that's enough for now. We also added as a third argument in the jwt.sign an information about how long the token shall be valid (***{ expiresIn: '1h' }***).
+
+After we are fine here the only thing that needs to be done on the backend is returning the paths with values:
+1) The login token with: ['login', 'token']
+2) The username with ['login', 'username']
+3) The logged user's role with: ['login', 'role']
+4) ... and an information that there were no errors' at all with: ['login', 'error']
+
+The next step is to use this route on the Front-end.
+
+Please run the app if everything is working for you, and after it works for you then let's to start the front-end codings' fun right now!
 
 
 

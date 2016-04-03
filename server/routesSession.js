@@ -17,11 +17,35 @@ export default [
           ]
         }
 
-        return User.find(userStatementQuery, function(err, user) {
+        /* 
+          findOne MAY NOT WORK! double-check!
+         */
+        return User.findOne(userStatementQuery, function(err, user) {
           if (err) throw err;
         }).then((result) => {
           if(result.length) {
-            return null; // SUCCESSFUL LOGIN mocked now (will implement next)
+            console.info("1) ", result);
+            let role = result[0].role;
+            let userDetailsToHash = username+role;
+            let token = jwt.sign(userDetailsToHash, jwtSecret, { expiresIn: '1h' });
+            return [
+              {
+                path: ['login', 'token'],
+                value: token
+              },
+              {
+                path: ['login', 'username'],
+                value: username
+              },
+              {
+                path: ['login', 'role'],
+                value: role
+              },
+              {
+                path: ['login', 'error'],
+                value: false
+              }
+            ];
           } else {
             // INVALID LOGIN
             return [
