@@ -353,30 +353,33 @@ First step is to export our User's model into the routesSession's scope by addin
 import { User } from './configMongoose';
 ````
 
-Installing the jsonwebtoken:
+Installing the jsonwebtoken & crypto (for SHA256):
 ```
-$ npm i --save jsonwebtoken
+$ npm i --save jsonwebtoken crypto
 ```
 
 After you have installed jsonwebtoken, the we need to import it to the ***routesSession.js***:
 ```
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import jwtSecret from './configSecret';
 ```
 
 After you have imported everything in the routesSession, then let's
 continue on working with the ***route: ['login']***.
 
-Below the query's statement that we already have added:
+Below you need to improve the userStatementQuery, so it will have the saltedPassword instead of plain text:
 ```
-// this already shall be added in your login route, if you followed the instructions
+let saltedPassword = password+"pubApp"; // pubApp is our salt string
+let saltedPassHash = crypto.createHash('sha256').update(saltedPassword).digest('hex');
 let userStatementQuery = {
   $and: [
       { 'username': username },
-      { 'password': password }
+      { 'password': saltedPassHash }
   ]
 }
 ``` 
+... so instead of plain text, then we will query a salted SHA256 password.
 
 ... under this ***userStatementQuery*** please return a Promise, with following details:
 ```

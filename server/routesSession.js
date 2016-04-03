@@ -8,11 +8,12 @@ export default [
     call: (callPath, args) => 
       {
         let { username, password } = args[0];
-
+        let saltedPassword = password+"pubApp"; // pubApp is our salt string
+        let saltedPassHash = crypto.createHash('sha256').update(saltedPassword).digest('hex');
         let userStatementQuery = {
           $and: [
               { 'username': username },
-              { 'password': password }
+              { 'password': saltedPassHash }
           ]
         }
 
