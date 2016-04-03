@@ -141,6 +141,30 @@ and you will get the same terminal's output as we were importing the article in 
 2009-04-03T11:36:00.569+0200  imported 1 document
 ```
 
+#### Working on the login's falcor-route
+
+Now we need to start working with the falcor-router in order to create a new endpoint that will use the jwt library to provide a unique tokens for the client-side app.
+
+The first thing that we need to do is to provide a "secret" on the backend.
+
+Let's create that secret's config file:
+```
+$ cd server
+$ touch configSecret.js
+```
+
+Now we need to put a content of this secret:
+```
+export default {
+  'secret': process.env.JWT_SECRET || 'devSecretGoesHere'
+}
+```
+In future we will use enviroment variables on the production server, so this notation ***process.env.JWT_SECRET  || 'devSecretGoesHere'*** means that the enviroment variable of JWT_SECRET doesn't exsit then please use deafult secret's string ('devSecretGoesHere'). At this point we don't need any development enviroment variables.
+
+
+
+
+
 
 
 
