@@ -319,8 +319,50 @@ app.js  1.9 MB       0  [emitted]  main
 Started on port 3000
 ```
 
+#### Creating a Mongoose users' model
+
+In the file ***configMongoose.js*** we need to create and export a User model. Please add following code to that file:
+```
+var userSchema = {
+  "username" : String,
+  "password" : String,
+  "firstName" : String,
+  "lastName" : String,
+  "email" : String,
+  "role" : String,
+  "verified" : Boolean,
+  "imageUrl" : String
+}
+
+var User = mongoose.model('User', userSchema, 'pubUsers');
+
+
+export default {
+  Article,
+  User
+}
+```
+#### Explanation
+The ***userSchema*** described our user's json model, next the ***User*** is our mongoose's model that is pointing to the 'pubUsers' collection in our MongoDB. At the end, we are exporting the ***User*** model by adding it to the ***export default***'s object. 
+
 
 #### Implementing JWT in the routesSession.js file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

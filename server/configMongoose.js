@@ -15,6 +15,21 @@ var articleSchema = {
 
 var Article = mongoose.model('Article', articleSchema, 'articles');
 
+var userSchema = {
+  "username" : String,
+  "password" : String,
+  "firstName" : String,
+  "lastName" : String,
+  "email" : String,
+  "role" : String,
+  "verified" : Boolean,
+  "imageUrl" : String
+}
+
+var User = mongoose.model('User', userSchema, 'pubUsers');
+
+
 export default {
-  Article
+  Article,
+  User
 }
