@@ -548,7 +548,48 @@ export default CoreLayout;
 ```
 As you probably know, the all content of a current route will go into the ***{this.props.children}***'s target (that is basic's React.JS concept you must to know beforehand).
 
+#### A container for our app
 
+Because our is getting more complicated, we need to create a container that it will live in, in order to do that let's do as following the in ***src*** location:
+```
+$ mkdir containers
+$ cd container
+$ touch Root.js
+```
+
+The Root.js is going to be our main root file - the content of this file is as following:
+
+```
+import React                    from 'react';
+import { Provider }             from 'react-redux';
+import { Router }               from 'react-router';
+import routes                   from '../routes';
+import createHashHistory        from 'history/lib/createHashHistory';
+
+let noQueryKeyHistory = createHashHistory({
+  queryKey: false
+});
+
+export default class Root extends React.Component {
+  static propTypes = {
+    history : React.PropTypes.object.isRequired,
+    store   : React.PropTypes.object.isRequired
+  }
+
+  render () {
+    return (
+      <Provider store={this.props.store}>
+        <div>
+          <Router history={noQueryKeyHistory}>
+            {routes}
+          </Router>
+          
+        </div>
+      </Provider>
+    );
+  }
+}
+```
 
 
 
