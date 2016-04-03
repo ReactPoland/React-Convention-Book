@@ -1,4 +1,4 @@
-import { ArticleCollection } from './configMongoose';
+import { Article } from './configMongoose';
 import sessionRoutes from './routesSession';
 
 let PublishingAppRoutes = [

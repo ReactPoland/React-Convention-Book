@@ -13,8 +13,8 @@ var articleSchema = {
   articleContent:String
 }
 
-var ArticleCollection = mongoose.model('Article', articleSchema, 'articles');
+var Article = mongoose.model('Article', articleSchema, 'articles');
 
 export default {
-  ArticleCollection
+  Article
 }
