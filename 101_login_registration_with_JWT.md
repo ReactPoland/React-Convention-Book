@@ -196,7 +196,7 @@ module.exports = [
 ];
 ```
 
-#### Explanation how are working call routes:
+#### Explanation how works the call routes:
 Above we have created an initial call login route in the ***routesSession.js*** file. You can find that instead of using 'get' method, we are going to use a 'call' (***call: async (callPath, args) => ***). That is equivalent of POST for old RESTful approach. 
 
 The difference between call and get method in falcor's routes is that we can provide arguments with ***args***. That allows us to get from the client-side the username and the password. 
@@ -252,12 +252,29 @@ The ***`mongodb://${conf.hostname}:${conf.port}/${conf.env}`*** is using templat
 
 Rest of the configMongoose.js config shall be known for you as we introduced it in the chapter 1.
 
+#### Improving the routes.js file
+After we have two new files: configMongoose.js and routesSession.js then we have to improve our ***server/routes.js*** file in order to make everything cooperate together.
 
 
+First step, delete from routes.js the following code:
+```
+import mongoose from 'mongoose';
 
+mongoose.connect('mongodb://localhost/local');
 
+var articleSchema = {
+  articleTitle:String,
+  articleContent:String
+}
 
+var Article = mongoose.model('Article', articleSchema, 'articles');
+```
 
+and replace it with new:
+```
+import models from './configMongoose';
+import sessionRoutes from './routesSession';
+```
 
 
 
