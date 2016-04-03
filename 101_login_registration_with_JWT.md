@@ -162,10 +162,61 @@ export default {
 In future we will use enviroment variables on the production server, so this notation ***process.env.JWT_SECRET  || 'devSecretGoesHere'*** means that the enviroment variable of JWT_SECRET doesn't exsit then please use deafult secret's string ('devSecretGoesHere'). At this point we don't need any development enviroment variables.
 
 
+#### Creating a falcor-router's login (backend)
 
+In order to make our codebase more organized, instead of adding one more route to our ***server/routes.js*** file, we will make a new file called ***routesSession.js*** and in that file we will keep all endpoints related to the current logged user's session:
 
+Make sure you are in the server dir:
+```
+$ cd server
+```
 
+then create a new file:
+```
+$ touch routesSession.js
+```
 
+And put this initial content into the ***routesSession.js*** file:
+
+```
+module.exports = [
+  { 
+    route: ['login'] ,
+    call: async (callPath, args) => 
+      {
+        let { username, password } = args[0];
+
+        let userStatementQuery = {
+          $and: [
+              { 'username': username },
+              { 'password': password }
+          ]
+        }
+  }
+];
+```
+
+#### Explanation how are working call routes:
+Above we have created an initial call login route in the ***routesSession.js*** file. You can find that instead of using 'get' method, we are going to use a 'call' (***call: async (callPath, args) => ***). That is equivalent of POST for old RESTful approach. 
+
+The difference between call and get method in falcor's routes is that we can provide arguments with ***args***. That allows us to get from the client-side the username and the password. 
+
+The plan is that after we receive credentials with this:
+```
+let { username, password } = args[0];
+```
+
+then we will check them against our database with one user admin. A user will need to know that the real plaintext password is ***123456*** in order to get a correct login jwt token.
+
+We also have prepared in this step a ***userStatementQuery*** - this will be used later when querying a database:
+```
+let userStatementQuery = {
+  $and: [
+      { 'username': username },
+      { 'password': password }
+  ]
+}
+```
 
 
 
