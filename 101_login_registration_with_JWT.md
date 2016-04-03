@@ -343,10 +343,27 @@ export default {
 }
 ```
 #### Explanation
-The ***userSchema*** described our user's json model, next the ***User*** is our mongoose's model that is pointing to the 'pubUsers' collection in our MongoDB. At the end, we are exporting the ***User*** model by adding it to the ***export default***'s object. 
+The ***userSchema*** describes our user's json model, next the ***User*** is our mongoose's model that is pointing to the 'pubUsers' collection in our MongoDB. At the end, we are exporting the ***User*** model by adding it to the ***export default***'s object. 
 
 
 #### Implementing JWT in the routesSession.js file
+
+First step is to export our User's model into the routesSession's scope by adding at the top of that file an import statement:
+```
+import { User } from './configMongoose';
+````
+
+Installing the jsonwebtoken:
+```
+$ npm i --save jsonwebtoken
+```
+
+After you have installed jsonwebtoken, the we need to import it to the ***routesSession.js***:
+```
+import jwt from 'jsonwebtoken';
+import jwtSecret from './configSecret';
+```
+
 
 
 

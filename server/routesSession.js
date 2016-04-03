@@ -1,3 +1,7 @@
+import { User } from './configMongoose';
+import jwt from 'jsonwebtoken';
+import jwtSecret from './configSecret';
+
 export default [
   { 
     route: ['login'] ,
