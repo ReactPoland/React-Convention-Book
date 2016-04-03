@@ -1,7 +1,7 @@
-module.exports = [
+export default [
   { 
     route: ['login'] ,
-    call: async (callPath, args) => 
+    call: (callPath, args) => 
       {
         let { username, password } = args[0];
 
@@ -11,5 +11,6 @@ module.exports = [
               { 'password': password }
           ]
         }
+      }
   }
 ];
