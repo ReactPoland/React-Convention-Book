@@ -5,6 +5,14 @@
 
 JWT is a security tokens format which is relatively new, but works very well. It's an open standard (RFC 7519) that improves oAuth2 and OpenID Connect in problem of passing claims between parties in web application environment.
 
+More in practise the flow is as follwoing:
+1) the server assigns an encoded JSON object
+2) after client's knows it, then it sends that encoded token with every request to the server
+3) based on that token, the server knows who is sending a request
+
+It's worth to visit the http://jwt.io/ website and play with it because you can play with it even before you will start working with them:
+
+![screenshot http://jwt.io/](http://test.przeorski.pl/book/101_jwt_io.png)
 
 After successful login, the JWT's solution provides an object to our front-end application that tell's us about current's user authorization:
 
@@ -29,11 +37,49 @@ In our case the resource is a falcor-router's routes which has close relationshi
 Remember that the JWT tokens are similar to private's keys - you must keep them secure!
 
 
+### Structure of JWT token
+
+1) The header has information that are required on the backend for recognizing what cryptographic operation to do based on that information (metadata, what algorithms & keys are used)
+
+```
+{
+	"typ": "JWT",
+	"alg": "HS256"
+}
+```
+
+In general, that part is done 100% out of the box for us, so we don't have to care too much about headers while implementing it.
+
+
+2) The second part are claims provided in the JSON format, as for example:
+
+a) Issuer - so we know who has issued the token
+b) Audience - so we know that this token has to be consumed by our application
+c) Issue's date - when the token has been created
+d) Expiration's date - when the token is expiring so we have to generate a new one
+e) Subject - so an app can know which part of the app can use the token (useful in bigger application)
+
+Besides the claims provided above, we can create custom one that are specific definied by the app's creator.
+
+```
+{
+"iss": "http://theIssuerAddress",
+"exp": "1450819372",
+"aud": "http://myAppAddress",
+"sub": "publishingApp",
+"scope": ["read"]
+}
+```
+
+
+TODO - review above.
 
 
 
-
-
+PLAN PISANIA:
+0) dodanie kolekcji users w bazie mongodb
+1) stworzenie route'a do logowania usera
+2) dodanie formularza na front'cie
 
 
 
