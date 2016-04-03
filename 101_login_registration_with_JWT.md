@@ -293,7 +293,34 @@ At the beginning of PublishingAppRoutes you need to spread ***...sessionRoutes,*
 #### Explanation
 We got rid off old code that was helping us to run the first mongoose query that were fetching the articles, we moved everyting to ***configMongoose*** so then we can use it in different files around our project. We have also imported the ***sessionRoutes*** and later spreaded them with the ***...*** spread operation into the array called ***PublishingAppRoutes***.
 
+#### Double-check if app works, before implementing JWT
+At this point, when doing ***npm start*** the app shall be working and showing the list of articles:
+```
+Our publishing app
 
+Lorem ipsum - article one
+
+Here goes the content of the article
+
+Lorem ipsum - article two
+
+Sky is the limit, the content goes here.
+```
+
+when running with ***npm start*** you shall get the following information that everything works correctly:
+```
+Hash: eeeb09711c820a7978d5
+Version: webpack 1.12.14
+Time: 2609ms
+ Asset    Size  Chunks             Chunk Names
+app.js  1.9 MB       0  [emitted]  main
+   [0] multi main 40 bytes {0} [built]
+    + 634 hidden modules
+Started on port 3000
+```
+
+
+#### Implementing JWT in the routesSession.js file
 
 
 
