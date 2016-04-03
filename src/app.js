@@ -5,7 +5,7 @@ import { createStore } from 'redux'
 import article from './reducers/article'
 import PublishingApp from './layouts/PublishingApp'
 
-let store = createStore(article)
+let store = createStore(article);
 
 render(
     <Provider store={store}>
