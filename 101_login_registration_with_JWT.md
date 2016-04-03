@@ -82,6 +82,47 @@ PLAN PISANIA:
 2) dodanie formularza na front'cie
 
 
+### New MongoDB's users collection
+
+We need create a users collection in our database. The users will have privilages to:
+1) Add new articles in our publishing application
+2) Edit existing articles in our publishing application
+3) Delete articles in our publishing application.
+
+
+First step is that we need to create a collection.
+
+You can do it from GUI in Robomongo (introduced at the beginning of the book), but we here will use the command line.
+
+First of all we need to create a file called initPubUsers.js with the content as following:
+```
+[
+  {
+    "username" : "admin",
+    "password" : "c5a0df4e293953d6048e78bd9849ec0ddce811f0b29f72564714e474615a7852",
+    "firstName" : "Kamil",
+    "lastName" : "Przeorski",
+    "email" : "kamil@mobilewebpro.pl",
+    "role" : "admin",
+    "verified" : false,
+    "imageUrl" : "http://lorempixel.com/100/100/people/"
+  }
+]
+```
+
+##### Explanation:
+The SHA256 string c5a0df4e293953d6048e78bd9849ec0ddce811f0b29f72564714e474615a7852 is a equilavent of a password 123456 with a salt's string equalt to "pubApp".
+
+If you want to generate this salted password hash, then go to:
+http://www.xorbin.com/tools/sha256-hash-calculator
+
+and type ***123456pubApp*** on their website so you will get as following:
+![sha256 salted password online](http://test.przeorski.pl/book/102_salted_password_sha256.png)
+
+
+
+
+
 
 
 
