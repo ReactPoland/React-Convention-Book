@@ -5,7 +5,7 @@ module.exports = [
       {
         let { username, password } = args[0];
 
-        let andStatementQuery = {
+        let userStatementQuery = {
           $and: [
               { 'username': username },
               { 'password': password }

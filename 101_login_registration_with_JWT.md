@@ -218,6 +218,43 @@ let userStatementQuery = {
 }
 ```
 
+#### Separating the DB configs - configMongoose.js
+
+We need to separate DB configs from routes.js:
+```
+$ touch configMongoose.js
+```
+
+and it's new content:
+```
+import mongoose from 'mongoose';
+
+const conf = {
+  hostname: process.env.MONGO_HOSTNAME || 'localhost',
+  port: process.env.MONGO_PORT || 27017,
+  env: process.env.MONGO_ENV || 'local',
+};
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
+
+var articleSchema = {
+  articleTitle:String,
+  articleContent:String
+}
+
+var Article = mongoose.model('Article', articleSchema, 'articles');
+```
+
+#### Explanation:
+Above we have introduced new env variables as following: MONGO_HOSTNAME, MONGO_PORT, MONGO_ENV. We will use them when preparing a production enviroment. 
+
+The ***`mongodb://${conf.hostname}:${conf.port}/${conf.env}`*** is using templating feature available since EcmaScript6.
+
+Rest of the configMongoose.js config shall be known for you as we introduced it in the chapter 1.
+
+
+
+
 
 
 
