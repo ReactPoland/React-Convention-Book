@@ -744,9 +744,13 @@ Do you see the difference? The old ***for(let articleKey in this.props)*** has c
 
 Currently when you do ***npm start*** then you will see as following two routes:
 
-1) Home Page:
+#### Home Page:
+
 ![screenshot home view](http://test.przeorski.pl/book/103_homeview.png)
-2) Login's View:
+
+
+#### Login's View:
+
 ![screenshot login view](http://test.przeorski.pl/book/104_loginview.png)
 
 
