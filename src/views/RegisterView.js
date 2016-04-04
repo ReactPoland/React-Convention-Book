@@ -13,6 +13,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 });
 
+alert("DEBUG kamilek123:kamilek123 (with Robomongo)");
+
 class RegisterView extends React.Component {
   constructor(props) {
     super(props);
@@ -26,21 +28,19 @@ class RegisterView extends React.Component {
 
     let registerResult = await falcorModel
       .call(
-            ['login'],
+            ['register'],
             [newUserModel]
           ).
       then((result) => {
         return result;
       });
 
-    let newUserId = await falcorModel.getValue('register.newUserId');
+    let newUserId = await falcorModel.getValue(['register', 'newUserId']);
     if(newUserId === "INVALID") {
       let errorRes = await falcorModel.getValue('register.error');
       this.setState({error: errorRes});
-      alert(JSON.stringify(errorRes));
       return;
     }
-
 
     if(newUserId) {
       this.props.history.pushState(null, '/login');
@@ -48,7 +48,6 @@ class RegisterView extends React.Component {
     } else {
       alert("Fatal registration error, please contact an admin");
     }
-
   }
 
   render () {

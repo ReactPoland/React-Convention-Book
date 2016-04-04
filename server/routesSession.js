@@ -1,3 +1,5 @@
+"use strict";
+
 import { User } from './configMongoose';
 import jwt from 'jsonwebtoken';
 import jwtSecret from './configSecret';
@@ -65,22 +67,21 @@ export default [
     call: (callPath, args) => 
       {
         let newUserObj = args[0];
-        newUserObj.password = newUser.password+'pubApp'+newUser.username;
-        newUserObj.password = crypto.createHash('sha256').update(newUser.password).digest('hex')
+        newUserObj.password = newUserObj.password+"pubApp";
+        newUserObj.password = crypto.createHash('sha256').update(newUserObj.password).digest('hex')
         let newUser = new User(newUserObj);
-
         return newUser.save((err, data) => { if (err) return err; })
           .then ((newRes) => {
             /*
               got new obj data, now let's get count:
              */
             let newUserDetail = newRes.toObject();
-
             if(newUserDetail._id) {
+              let newUserId = newUserDetail._id.toString();
               return [
                 {
                   path: ['register', 'newUserId'], 
-                  value: newUserDetail._id
+                  value: newUserId
                 },
                 {
                   path: ['register', 'error'], 
@@ -88,6 +89,7 @@ export default [
                 }
               ];
             } else {
+              console.info(5);
               // registration failed
               return [
                 {
@@ -100,6 +102,7 @@ export default [
                 }
               ];
             }
+            console.info(5);
             return;
           }).catch((reason) => console.error(reason));
       }
