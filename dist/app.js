@@ -99301,11 +99301,12 @@
 	        null,
 	        _react2.default.createElement(_materialUi.TextField, {
 	          ref: this.props.name,
-	          floatingLabelText: this.state.currentText ? '' : this.props.title,
+	          floatingLabelText: this.props.title,
 	          name: this.props.name,
 	          onChange: this.changeValue,
 	          required: this.props.required,
-	          value: this.props.value }),
+	          value: this.state.currentText ? this.state.currentText : this.props.value,
+	          defaultValue: this.props.defaultValue }),
 	        this.props.children
 	      );
 	    }

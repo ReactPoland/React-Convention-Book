@@ -795,7 +795,64 @@ The ***formsy-react***'s library will help you to write more efficient forms cod
 
 #### Working on LoginForm and DefaultInput components
 
-After we are done with installing the
+After we are done with installing our new dependencies then let's create a folder that will keep files related to dumb components (the components that don't have access to any stores etc. they communicate with the other parts of our application with help of callbacks - you will learn more about it later).
+
+$ pwd 
+$ [[[you shall be at the src folder]]]
+$ mkdir components
+$ cd components
+$ touch DefaultInput.js
+```
+
+and then please make a content of this file as following:
+```
+import React from 'react';
+import {TextField} from 'material-ui';
+import {HOC} from 'formsy-react';
+
+class DefaultInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.changeValue = this.changeValue.bind(this);
+    this.state = { currentText: null }
+  }
+
+  changeValue(e) {
+    this.setState({currentText: e.target.value})
+    this.props.setValue(e.target.value);
+    this.props.onChange(e);
+  }
+
+  render() {
+    return (<div>
+        <TextField ref={this.props.name}
+          floatingLabelText={this.props.title}
+          name={this.props.name}
+          onChange={this.changeValue}
+          required={this.props.required}
+          value={this.state.currentText ? this.state.currentText : this.props.value}
+          defaultValue={this.props.defaultValue} />
+        {this.props.children}
+      </div>);
+  }
+};
+export default HOC(DefaultInput);
+```
+
+#### Explanation
+The ***{HOC}*** from ***formsy-react*** is another way of decorating the component (aka mixin in React's EcmaScript5) with ***export default HOC(DefaultInput)*** - you can find more information about this here: https://github.com/christianalfoni/formsy-react/blob/master/API.md#formsyhoc
+
+We are using here also the ***TextField*** from material-ui - then it takes different properties - short explanation:
+1) ref: we want a ref for each input with it's name (username and email)
+2) floatingLabelText: this is a nice looking floating text (aka label)
+3) onChange: this tells the function's name that has to be called when someone is typing into the TextField
+4) required: helps us to manage required inputs in our form
+5) value: is of course current value of our TextField
+6) defaultValue: is a value that is initial. Very important to remember is that it's called just once when a component is calling a constructor of the component
+
+
+
+
 
 
 
