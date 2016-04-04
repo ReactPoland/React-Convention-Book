@@ -64,46 +64,47 @@ export default [
     route: ['register'],
     call: (callPath, args) => 
       {
-        let newUser = args[0];
-        newUser.password = newUser.password+'pubApp'+newUser.username;
-        newUser.password = crypto.createHash('sha256').update(newUser.password).digest('hex')
-
-        let newUser = new User(newUser);
+        let newUserObj = args[0];
+        newUserObj.password = newUser.password+'pubApp'+newUser.username;
+        newUserObj.password = crypto.createHash('sha256').update(newUser.password).digest('hex')
+        let newUser = new User(newUserObj);
 
         return newUser.save(function (err, data) {
-            if (err) {
-              return err;
-            }
-            else {
-              return data;
-            }
-          }).then ((data) => {
+            if (err) return err;
+          }).then ((newRes) => {
             /*
               got new obj data, now let's get count:
              */
-            return data;
-          }).then ((res) => {
-            let newUserDetail = res.toObject();
+            let newUserDetail = newRes.toObject();
 
+            if(newUserDetail._id) {
+              return [
+                {
+                  path: ['register', 'newUserId'], 
+                  value: newUserDetail._id
+                },
+                {
+                  path: ['register', 'error'], 
+                  value: false 
+                }
+              ];
+            } else {
+              // registration failed
+              return [
+                {
+                  path: ['register', 'newUserId'], 
+                  value: 'INVALID'
+                },
+                {
+                  path: ['register', 'error'], 
+                  value: 'Registration failed - no id has been created'
+                }
+              ];
+            }
             return;
-
-            let newItemDetail = res.data.toObject();
-            let NewMenuItemRef = $ref(['menuItemsById', newItemDetail["_id"]]);
-                        
-            let results = [
-              {
-                path: ['restaurants', 0, 'menuItems', res.count-1],
-                value: NewMenuItemRef
-              },
-              {
-                path: ['restaurants', 0, 'menuItems', 'length'],
-                value: res.count
-              }
-            ];
-
-            return results;
-          });
-
+          }).catch(err) {
+            console.error(err);
+          };
 
 
 
