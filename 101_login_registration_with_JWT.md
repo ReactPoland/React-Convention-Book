@@ -463,7 +463,7 @@ with this code that is returning successful login's details:
 ```
 let role = result[0].role;
 let userDetailsToHash = username+role;
-let token = jwt.sign(userDetailsToHash, jwtSecret);
+let token = jwt.sign(userDetailsToHash, jwtSecret.secret);
 return [
   {
     path: ['login', 'token'],

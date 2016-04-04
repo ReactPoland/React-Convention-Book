@@ -21,20 +21,10 @@ export default [
         return User.find(userStatementQuery, function(err, user) {
           if (err) throw err;
         }).then((result) => {
-          console.info(JSON.stringify(result, null, 4))
-          console.info(2);
           if(result.length) {
-            console.info(2);
-            console.info("result", JSON.stringify(result));
-
             let role = result[0].role;
-            console.info("role", role);
             let userDetailsToHash = username+role;
-            console.info("userDetailsToHash", userDetailsToHash);
-            console.info(3);
-            let token = jwt.sign(userDetailsToHash, jwtSecret);
-            console.info(4);
-            console.info("token", token);
+            let token = jwt.sign(userDetailsToHash, jwtSecret.secret);
             return [
               {
                 path: ['login', 'token'],
