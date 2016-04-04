@@ -19,8 +19,7 @@ class LoginView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
-      sendingRequest: false
+      error: null
     };
     this.login = this.login.bind(this);
   }
@@ -77,8 +76,7 @@ class LoginView extends React.Component {
           <h1>Login view</h1>
           <div style={{maxWidth: 450, margin: '0 auto'}}>
             <LoginForm
-              onSubmit={this.login}
-              sendingRequest={() => alert("works")} />
+              onSubmit={this.login} />
           </div>
       </div>
     );

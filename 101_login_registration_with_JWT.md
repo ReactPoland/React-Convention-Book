@@ -826,11 +826,13 @@ class DefaultInput extends React.Component {
 
   render() {
     return (<div>
-        <TextField ref={this.props.name}
+        <TextField 
+          ref={this.props.name}
           floatingLabelText={this.props.title}
           name={this.props.name}
           onChange={this.changeValue}
           required={this.props.required}
+          type={this.props.type}
           value={this.state.currentText ? this.state.currentText : this.props.value}
           defaultValue={this.props.defaultValue} />
         {this.props.children}
@@ -881,8 +883,8 @@ export class LoginForm extends React.Component {
       <Formsy.Form onSubmit={this.props.onSubmit}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Log in</h3>
-          <DefaultInput onChange={(newText) => console.info("email"+newText)} name='username' title='Username (admin)' required />
-          <DefaultInput onChange={(newText) => console.info("pass"+newText)} type='password' name='password' title='Password (123456)' required />
+          <DefaultInput onChange={(newText) => {}} name='username' title='Username (admin)' required />
+          <DefaultInput onChange={(newText) => {}} type='password' name='password' title='Password (123456)' required />
           <div style={{marginTop: 24}}>
             <RaisedButton
               secondary={true}
@@ -898,6 +900,92 @@ export class LoginForm extends React.Component {
 ```
 Above we have our LoginForm's component that is using the DefaultInput's component. It's simple React.js' form that after submit is calling the ***this.props.onSubmit*** - this onSubmit function will be definied in ***src/views/LoginView.js***'s smart component in a moment. I won't talk too much about attached styles on that component because it's up to you how you will style it - you will see a screenshot of aplied styles of our app in a moment.
 
+
+#### Improving the src/views/LoginView.js
+
+The last part at our development at this stage before running our application is to improve the LoginView's component.
+
+In src/views/LoginView.js change as following:
+
+1) Import our new LoginForm component:
+```
+import { LoginForm } from '../components/LoginForm.js';
+```
+
+2) then improve our constructor from:
+```
+  // this is old constructor
+  constructor(props) {
+    super(props);
+  }
+```
+
+to new one:
+```
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null
+    };
+    this.login = this.login.bind(this);
+  }
+```
+
+3) then after you are done with imports and constructors, then you need a new function called login:
+```
+
+```
+  async login(credentials) {
+    console.info("credentials", credentials);
+
+    let loginResult = await falcorModel
+      .call(
+            ['login'],
+            [credentials]
+          ).
+      then((result) => {
+        return loginResult;
+      });
+
+    let tokenRes = await falcorModel.getValue('login.token');
+    console.info("tokenRes", tokenRes);
+    return;
+  }
+````
+At this point, the login function only prints our new JWT token to the console - it's enough for now, later we will build more on top of it.
+
+4) last step here is to improve our render function from:
+```
+  render () {
+    return (
+      <div>
+          <h1>Login view</h1>
+          FORM GOES HERE
+      </div>
+    );
+  }
+```
+
+to the new one, that is following:
+```
+  render () {
+    return (
+      <div>
+          <h1>Login view</h1>
+          <div style={{maxWidth: 450, margin: '0 auto'}}>
+            <LoginForm
+              onSubmit={this.login} />
+          </div>
+      </div>
+    );
+  }
+```
+
+Great! Now we are done! Below you can find what you shall see after running ***npm start*** and running it in your browser:
+
+![screenshot after filling and submiting login form](http://test.przeorski.pl/book/105_screenshot_after_submit_login_form.png)
+
+As you can see in the browser's console - we can see the submited credential's object (***credentials Object {username: "admin", password: "123456"}***) and also a token that has been fetched from the backend (***tokenRes eyJhbGciOiJIUzI1NiJ9.YWRtaW5hZG1pbg.NKmrphxbqNcL_jFLBdTWGM6Y_Q78xks5E2TxBZRyjDA***) - all that tells us that we are on good track in order to implement login in our publishing application.
 
 
 

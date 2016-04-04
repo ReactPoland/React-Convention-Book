@@ -10,8 +10,6 @@ const history = createBrowserHistory();
 
 export const store = configureStore(window.__INITIAL_STATE__);
 
-console.info("store", store);
-
 syncReduxAndRouter(history, store); // TO IMPROVE! for newer versions
 const node = (
   <Root

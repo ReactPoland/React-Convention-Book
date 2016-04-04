@@ -7792,8 +7792,6 @@
 
 	var store = exports.store = (0, _configureStore2.default)(window.__INITIAL_STATE__);
 
-	console.info("store", store);
-
 	(0, _reduxSimpleRouter.syncReduxAndRouter)(history, store); // TO IMPROVE! for newer versions
 	var node = _react2.default.createElement(_Root2.default, {
 	  history: history,
@@ -60530,8 +60528,7 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LoginView).call(this, props));
 
 	    _this.state = {
-	      error: null,
-	      sendingRequest: false
+	      error: null
 	    };
 	    _this.login = _this.login.bind(_this);
 	    return _this;
@@ -60621,10 +60618,7 @@
 	          'div',
 	          { style: { maxWidth: 450, margin: '0 auto' } },
 	          _react2.default.createElement(_LoginForm.LoginForm, {
-	            onSubmit: this.login,
-	            sendingRequest: function sendingRequest() {
-	              return alert("works");
-	            } })
+	            onSubmit: this.login })
 	        )
 	      );
 	    }
@@ -60693,12 +60687,8 @@
 	            null,
 	            'Log in'
 	          ),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {
-	              return console.info("email" + newText);
-	            }, name: 'username', title: 'Username (admin)', required: true }),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {
-	              return console.info("pass" + newText);
-	            }, type: 'password', name: 'password', title: 'Password (123456)', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'username', title: 'Username (admin)', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, type: 'password', name: 'password', title: 'Password (123456)', required: true }),
 	          _react2.default.createElement(
 	            'div',
 	            { style: { marginTop: 24 } },
@@ -99282,7 +99272,6 @@
 
 	    _this.changeValue = _this.changeValue.bind(_this);
 	    _this.state = { currentText: null };
-
 	    return _this;
 	  }
 
@@ -99299,11 +99288,11 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_materialUi.TextField, {
-	          ref: this.props.name,
+	        _react2.default.createElement(_materialUi.TextField, { ref: this.props.name,
 	          floatingLabelText: this.props.title,
 	          name: this.props.name,
 	          onChange: this.changeValue,
+	          type: this.props.type,
 	          required: this.props.required,
 	          value: this.state.currentText ? this.state.currentText : this.props.value,
 	          defaultValue: this.props.defaultValue }),

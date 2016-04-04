@@ -21,6 +21,7 @@ class DefaultInput extends React.Component {
           floatingLabelText={this.props.title}
           name={this.props.name}
           onChange={this.changeValue}
+          type={this.props.type}
           required={this.props.required}
           value={this.state.currentText ? this.state.currentText : this.props.value}
           defaultValue={this.props.defaultValue} />
