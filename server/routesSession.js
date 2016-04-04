@@ -14,15 +14,9 @@ export default [
     route: ['login'],
     call: (callPath, args) => 
       {
-        console.info("args");
-        console.info(args);
-        console.info("args");
         let { username, password } = args[0];
-        console.info(1);
         let saltedPassword = password+"pubApp"; // pubApp is our salt string
-        console.info(2);
         let saltedPassHash = crypto.createHash('sha256').update(saltedPassword).digest('hex');
-        console.info(3);
         let userStatementQuery = {
           $and: [
               { 'username': username },
@@ -30,22 +24,10 @@ export default [
           ]
         }
 
-        console.info(JSON.stringify(userStatementQuery, null, 4));
-        console.info(4);
-
-        /* 
-          findOne MAY NOT WORK! double-check!
-         */
         return User.find({}, function(err, user) {
-          console.info(5);
           if (err) throw err;
-          console.info(6);
         }).then((result) => {
-          console.info(JSON.stringify(result, null, 4));
-          console.info(7);
           if(result && result.length) {
-            console.info(8);
-            console.info("1) ", result);
             let role = result[0].role;
             let userDetailsToHash = username+role;
             let token = jwt.sign(userDetailsToHash, jwtSecret);
