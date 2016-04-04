@@ -60584,7 +60584,7 @@
 
 	              case 14:
 	                if (!tokenRes) {
-	                  _context.next = 30;
+	                  _context.next = 28;
 	                  break;
 	                }
 
@@ -60603,18 +60603,17 @@
 	                localStorage.setItem("token", tokenRes);
 	                localStorage.setItem("username", username);
 	                localStorage.setItem("role", role);
-	                console.info("this.props", this.props);
-	                console.info("this.props.history", this.props.history);
+
 	                this.props.history.pushState(null, '/dashboard');
 	                return _context.abrupt('return');
 
-	              case 30:
+	              case 28:
 	                alert("Fatal login error, please contact an admin");
 
-	              case 31:
+	              case 29:
 	                return _context.abrupt('return');
 
-	              case 32:
+	              case 30:
 	              case 'end':
 	                return _context.stop();
 	            }

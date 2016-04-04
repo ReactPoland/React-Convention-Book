@@ -1157,4 +1157,25 @@ At the same end we are sending our user's to the /dashboard route with use of **
 
 
 
+#### Few important notes about DashboardView and security
+
+At this point we won't secure DashboardView as there aren't any important stuff to secure - we will do it later when we will put more assets/features into this route which at the end of our book will be an editor's dashboard that will give a control over all articles in the system.
+
+The only remaining step for us is to make a RegistrationView component, this route also will be available for everyone at this point, later  in the book we will make a mechanism that only the main admin will be able to add new editors into the system (and manage them).
+
+
+
+#### Starting working on the new editor's registration
+
+
+
+
+
+
+
+
+
+
+
+
 
