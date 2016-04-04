@@ -25,7 +25,7 @@ class LoginView extends React.Component {
           <h1>Login view</h1>
           <div style={{maxWidth: 450, margin: '0 auto'}}>
             <LoginForm
-              onSubmit={() => alert("this.login")}
+              onSubmit={(model) => alert(JSON.stringify(model))}
               sendingRequest={() => alert("works")} />
           </div>
       </div>

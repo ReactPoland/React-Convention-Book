@@ -60543,8 +60543,8 @@
 	          'div',
 	          { style: { maxWidth: 450, margin: '0 auto' } },
 	          _react2.default.createElement(_LoginForm.LoginForm, {
-	            onSubmit: function onSubmit() {
-	              return alert("this.login");
+	            onSubmit: function onSubmit(model) {
+	              return alert(JSON.stringify(model));
 	            },
 	            sendingRequest: function sendingRequest() {
 	              return alert("works");
@@ -60604,17 +60604,11 @@
 	  }
 
 	  _createClass(LoginForm, [{
-	    key: '_submit',
-	    value: function _submit(model) {
-	      console.info("data submited", model);
-	      this.props.onSubmit(model);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        _formsyReact2.default.Form,
-	        { onSubmit: this._submit },
+	        { onSubmit: this.props.onSubmit },
 	        _react2.default.createElement(
 	          _materialUi.Paper,
 	          { zDepth: 1, style: { padding: 32 } },
@@ -60625,10 +60619,10 @@
 	          ),
 	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {
 	              return console.info("email" + newText);
-	            }, name: 'email', title: 'Email (admin)', required: true }),
+	            }, name: 'email', title: 'Username (admin)', required: true }),
 	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {
 	              return console.info("pass" + newText);
-	            }, type: 'password', name: 'password', title: 'Password (test)', required: true }),
+	            }, type: 'password', name: 'password', title: 'Password (123456)', required: true }),
 	          _react2.default.createElement(
 	            'div',
 	            { style: { marginTop: 24 } },
@@ -99201,8 +99195,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import Formsy from 'formsy-react'
-
 
 	var DefaultInput = function (_React$Component) {
 	  _inherits(DefaultInput, _React$Component);
@@ -99213,6 +99205,7 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DefaultInput).call(this, props));
 
 	    _this.changeValue = _this.changeValue.bind(_this);
+	    _this.state = { currentText: null };
 
 	    return _this;
 	  }
@@ -99220,6 +99213,7 @@
 	  _createClass(DefaultInput, [{
 	    key: 'changeValue',
 	    value: function changeValue(e) {
+	      this.setState({ currentText: e.target.value });
 	      this.props.setValue(e.target.value);
 	      this.props.onChange(e);
 	    }
@@ -99231,6 +99225,7 @@
 	        null,
 	        _react2.default.createElement(_materialUi.TextField, {
 	          ref: this.props.name,
+	          floatingLabelText: this.state.currentText ? '' : this.props.title,
 	          name: this.props.name,
 	          onChange: this.changeValue,
 	          required: this.props.required,
