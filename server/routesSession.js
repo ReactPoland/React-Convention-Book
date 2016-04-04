@@ -1,6 +1,8 @@
 import { User } from './configMongoose';
 import jwt from 'jsonwebtoken';
 import jwtSecret from './configSecret';
+import crypto from 'crypto';
+
 console.info(1);
 console.info(1);
 console.info(1);
@@ -16,14 +18,20 @@ export default [
         console.info(args);
         console.info("args");
         let { username, password } = args[0];
+        console.info(1);
         let saltedPassword = password+"pubApp"; // pubApp is our salt string
+        console.info(2);
         let saltedPassHash = crypto.createHash('sha256').update(saltedPassword).digest('hex');
+        console.info(3);
         let userStatementQuery = {
           $and: [
               { 'username': username },
               { 'password': saltedPassHash }
           ]
         }
+
+        console.info(JSON.stringify(userStatementQuery, null, 4));
+        console.info(4);
 
         /* 
           findOne MAY NOT WORK! double-check!
