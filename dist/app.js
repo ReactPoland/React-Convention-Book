@@ -60695,7 +60695,7 @@
 	          ),
 	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {
 	              return console.info("email" + newText);
-	            }, name: 'email', title: 'Username (admin)', required: true }),
+	            }, name: 'username', title: 'Username (admin)', required: true }),
 	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {
 	              return console.info("pass" + newText);
 	            }, type: 'password', name: 'password', title: 'Password (123456)', required: true }),

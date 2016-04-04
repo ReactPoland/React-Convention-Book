@@ -14,7 +14,7 @@ export class LoginForm extends React.Component {
       <Formsy.Form onSubmit={this.props.onSubmit}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Log in</h3>
-          <DefaultInput onChange={(newText) => console.info("email"+newText)} name='email' title='Username (admin)' required />
+          <DefaultInput onChange={(newText) => console.info("email"+newText)} name='username' title='Username (admin)' required />
           <DefaultInput onChange={(newText) => console.info("pass"+newText)} type='password' name='password' title='Password (123456)' required />
           <div style={{marginTop: 24}}>
             <RaisedButton
