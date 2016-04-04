@@ -5,6 +5,7 @@ import Falcor from 'falcor';
 import falcorModel from '../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { LoginForm } from '../components/LoginForm.js';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -23,7 +24,11 @@ class LoginView extends React.Component {
     return (
       <div>
           <h1>Login view</h1>
-          FORM GOES HERE
+          <div style={{maxWidth: 450, margin: '0 auto'}}>
+            <LoginForm
+              onSubmit={() => alert("this.login")}
+              sendingRequest={() => alert("works")} />
+          </div>
       </div>
     );
   }

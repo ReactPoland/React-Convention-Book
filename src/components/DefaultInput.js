@@ -54,7 +54,6 @@ import {HOC} from 'formsy-react';
 
 class DefaultInput extends React.Component {
   render() {
-    const errorMessage = this.getErrorMessage();
 
     return (
       <div>
@@ -66,7 +65,6 @@ class DefaultInput extends React.Component {
           autoFocus={this.props.autoFocus}
           ref={this.props.name}
           defaultValue={this.props.defaultValue || ''}
-          errorText={errorMessage}
           type={this.props.type || 'text'}
           name={this.props.name}
           onChange={this.changeValue}
@@ -75,7 +73,7 @@ class DefaultInput extends React.Component {
           required={this.props.required}
           multiLine={this.props.multiLine}
           rows={this.props.rows}
-          value={this.props.value || this.getValue()} />
+          value={this.props.value} />
         {this.props.children}
       </div>
     );
