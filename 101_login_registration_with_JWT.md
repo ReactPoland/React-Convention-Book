@@ -1163,7 +1163,7 @@ At this point we won't secure DashboardView as there aren't any important stuff 
 
 The only remaining step for us is to make a RegistrationView component, this route also will be available for everyone at this point, later  in the book we will make a mechanism that only the main admin will be able to add new editors into the system (and manage them).
 
-
+![dashboard v1](http://test.przeorski.pl/book/106_dashboard_v1.png)
 
 #### Starting working on the new editor's registration
 
