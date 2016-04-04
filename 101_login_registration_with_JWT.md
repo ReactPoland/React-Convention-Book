@@ -797,6 +797,7 @@ The ***formsy-react***'s library will help you to write more efficient forms cod
 
 After we are done with installing our new dependencies then let's create a folder that will keep files related to dumb components (the components that don't have access to any stores etc. they communicate with the other parts of our application with help of callbacks - you will learn more about it later).
 
+```
 $ pwd 
 $ [[[you shall be at the src folder]]]
 $ mkdir components
@@ -849,6 +850,18 @@ We are using here also the ***TextField*** from material-ui - then it takes diff
 4) required: helps us to manage required inputs in our form
 5) value: is of course current value of our TextField
 6) defaultValue: is a value that is initial. Very important to remember is that it's called just once when a component is calling a constructor of the component
+
+Also the only state of this component is ***this.state.currentText*** in order to keep a current's text value of the component so it can know about yourself in order to behave correctly.
+
+
+#### LoginForm and making it works with LoginView
+
+Next step is to create LoginForm, that will use this DefaultInput's component with following commands:
+```
+$ pwd 
+$ [[[you shall be at the components folder]]]
+$ touch LoginForm.js
+```
 
 
 
