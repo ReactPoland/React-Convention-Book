@@ -639,8 +639,33 @@ For now it's only simple container, but later we will implement into it more fut
 
 #### Remaining configuration for: configureStore & rootReducer
 
+Let's create a rootReducer first. Why we need it? Because in bigger applications you always endup with many different reducers, for example in our app we will have reducers as:
+1) Article's reducer: which is keeps stuff related to articles (RETURN_ALL_ARTICLES etc.)
+2) Session's reducer: which will be keeping related to our users' sessions (LOGIN, REGISTER etc.)
+3) Editor's reducer: which will be related to editor's actions (EDIT_ARTICLE, DELETE_ARTICLE, ADD_NEW_ARTICLE etc.)
+4) Routing's reducer: that will manage state of our routes (out of the box, because it is managed by redux-simple-router's external lib)
 
+Let's create an index.js file in our reducers directory:
+```
+$ pwd 
+$ [[[you shall be at the src folder]]]
+$ cd reducers
+$ touch index.js
+```
 
+... and the content for the index.js is as following:
+```
+import { combineReducers }    from 'redux';
+import { routeReducer }       from 'redux-simple-router';
+
+import article  from './article';
+
+export default combineReducers({
+  routing: routeReducer,
+  article
+});
+```
+The new thing is that we are introducing a combineReducers' function from Redux. This is exactly, what I've written before: we will have more than one reducers - in our case we have also introducing the routeReducer from a redux-simple-router's library.
 
 
 
