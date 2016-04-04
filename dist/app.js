@@ -60505,6 +60505,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -60525,10 +60527,109 @@
 	  function LoginView(props) {
 	    _classCallCheck(this, LoginView);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LoginView).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LoginView).call(this, props));
+
+	    _this.state = {
+	      error: null,
+	      sendingRequest: false
+	    };
+	    _this.login = _this.login.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(LoginView, [{
+	    key: 'login',
+	    value: function () {
+	      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(credentials) {
+	        var loginResult, tokenRes, errorRes, username, role;
+	        return regeneratorRuntime.wrap(function _callee$(_context) {
+	          while (1) {
+	            switch (_context.prev = _context.next) {
+	              case 0:
+	                console.info("credentials", credentials);
+	                this.setState({
+	                  error: null,
+	                  sendingRequest: true
+	                });
+
+	                _context.next = 4;
+	                return _falcorModel2.default.call(['login'], [credentials]).then(function (result) {
+	                  return loginResult;
+	                });
+
+	              case 4:
+	                loginResult = _context.sent;
+	                _context.next = 7;
+	                return _falcorModel2.default.getValue('login.token');
+
+	              case 7:
+	                tokenRes = _context.sent;
+
+
+	                console.info("tokenRes", tokenRes);
+	                console.info("tokenRes", tokenRes);
+	                console.info("tokenRes", tokenRes);
+
+	                if (!(tokenRes === "INVALID")) {
+	                  _context.next = 17;
+	                  break;
+	                }
+
+	                _context.next = 14;
+	                return _falcorModel2.default.getValue('login.error');
+
+	              case 14:
+	                errorRes = _context.sent;
+
+	                this.setState({ error: errorRes, sendingRequest: false });
+	                return _context.abrupt('return');
+
+	              case 17:
+	                if (!tokenRes) {
+	                  _context.next = 32;
+	                  break;
+	                }
+
+	                _context.next = 20;
+	                return _falcorModel2.default.getValue('login.username');
+
+	              case 20:
+	                username = _context.sent;
+	                _context.next = 23;
+	                return _falcorModel2.default.getValue('login.role');
+
+	              case 23:
+	                role = _context.sent;
+
+
+	                this.setState({ error: "Logged in as " + role });
+	                localStorage.setItem("token", tokenRes);
+	                localStorage.setItem("username", username);
+	                localStorage.setItem("role", role);
+	                sessionStorage.setItem('magicToken', 'magic-login-token');
+	                return _context.abrupt('return');
+
+	              case 32:
+	                alert("Fatal login error, please contact an admin");
+
+	              case 33:
+	                return _context.abrupt('return');
+
+	              case 34:
+	              case 'end':
+	                return _context.stop();
+	            }
+	          }
+	        }, _callee, this);
+	      }));
+
+	      function login(_x) {
+	        return ref.apply(this, arguments);
+	      }
+
+	      return login;
+	    }()
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -60543,9 +60644,7 @@
 	          'div',
 	          { style: { maxWidth: 450, margin: '0 auto' } },
 	          _react2.default.createElement(_LoginForm.LoginForm, {
-	            onSubmit: function onSubmit(model) {
-	              return alert(JSON.stringify(model));
-	            },
+	            onSubmit: this.login,
 	            sendingRequest: function sendingRequest() {
 	              return alert("works");
 	            } })
