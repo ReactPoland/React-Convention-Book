@@ -7781,7 +7781,7 @@
 
 	var _Root2 = _interopRequireDefault(_Root);
 
-	var _configureStore = __webpack_require__(965);
+	var _configureStore = __webpack_require__(966);
 
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 
@@ -33775,25 +33775,30 @@
 
 	var _LoginView2 = _interopRequireDefault(_LoginView);
 
-	var _DashboardView = __webpack_require__(964);
+	var _RegisterView = __webpack_require__(964);
+
+	var _RegisterView2 = _interopRequireDefault(_RegisterView);
+
+	var _DashboardView = __webpack_require__(965);
 
 	var _DashboardView2 = _interopRequireDefault(_DashboardView);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/* auth views */
-
-
-	/* wrappers */
+	/* home view */
 	exports.default = _react2.default.createElement(
 	  _reactRouter.Route,
 	  { component: _CoreLayout2.default, path: '/' },
 	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _PublishingApp2.default, name: 'home' }),
 	  _react2.default.createElement(_reactRouter.Route, { component: _LoginView2.default, path: 'login', name: 'login' }),
+	  _react2.default.createElement(_reactRouter.Route, { component: _RegisterView2.default, path: 'register', name: 'register' }),
 	  _react2.default.createElement(_reactRouter.Route, { component: _DashboardView2.default, path: 'dashboard', name: 'dashboard' })
 	);
 
-	/* home view */
+	/* auth views */
+
+
+	/* wrappers */
 
 /***/ },
 /* 524 */
@@ -33840,6 +33845,12 @@
 	          'span',
 	          null,
 	          'Links: ',
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/register' },
+	            'Register'
+	          ),
+	          ' | ',
 	          _react2.default.createElement(
 	            _reactRouter.Link,
 	            { to: '/login' },
@@ -99353,6 +99364,84 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _falcorModel = __webpack_require__(680);
+
+	var _falcorModel2 = _interopRequireDefault(_falcorModel);
+
+	var _reactRedux = __webpack_require__(469);
+
+	var _redux = __webpack_require__(475);
+
+	var _materialUi = __webpack_require__(696);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return _extends({}, state);
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
+	};
+
+	var RegisterView = function (_React$Component) {
+	  _inherits(RegisterView, _React$Component);
+
+	  function RegisterView(props) {
+	    _classCallCheck(this, RegisterView);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RegisterView).call(this, props));
+
+	    _this.state = {
+	      error: null
+	    };
+	    return _this;
+	  }
+
+	  _createClass(RegisterView, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'Register'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return RegisterView;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RegisterView);
+
+/***/ },
+/* 965 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(292);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _falcor = __webpack_require__(526);
 
 	var _falcor2 = _interopRequireDefault(_falcor);
@@ -99413,7 +99502,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(DashboardView);
 
 /***/ },
-/* 965 */
+/* 966 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99423,11 +99512,11 @@
 	});
 	exports.default = configureStore;
 
-	var _reducers = __webpack_require__(966);
+	var _reducers = __webpack_require__(967);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _reduxThunk = __webpack_require__(968);
+	var _reduxThunk = __webpack_require__(969);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
@@ -99449,7 +99538,7 @@
 	}
 
 /***/ },
-/* 966 */
+/* 967 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99462,7 +99551,7 @@
 
 	var _reduxSimpleRouter = __webpack_require__(467);
 
-	var _article = __webpack_require__(967);
+	var _article = __webpack_require__(968);
 
 	var _article2 = _interopRequireDefault(_article);
 
@@ -99474,7 +99563,7 @@
 	});
 
 /***/ },
-/* 967 */
+/* 968 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99500,7 +99589,7 @@
 	exports.default = article;
 
 /***/ },
-/* 968 */
+/* 969 */
 /***/ function(module, exports) {
 
 	'use strict';

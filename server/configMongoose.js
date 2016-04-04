@@ -15,9 +15,6 @@ var articleSchema = {
 
 var Article = mongoose.model('Article', articleSchema, 'articles');
 
-{type: String, index: {unique: true, dropDups: true}}
-})
-
 var userSchema = {
   "username" : { type: String, index: {unique: true, dropDups: true }},
   "password" : String,
