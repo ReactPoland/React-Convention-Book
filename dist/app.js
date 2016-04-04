@@ -60541,28 +60541,24 @@
 	    key: 'login',
 	    value: function () {
 	      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(credentials) {
-	        var loginResult, tokenRes, errorRes, username, role;
+	        var loginResult, tokenRes;
 	        return regeneratorRuntime.wrap(function _callee$(_context) {
 	          while (1) {
 	            switch (_context.prev = _context.next) {
 	              case 0:
 	                console.info("credentials", credentials);
-	                this.setState({
-	                  error: null,
-	                  sendingRequest: true
-	                });
 
-	                _context.next = 4;
+	                _context.next = 3;
 	                return _falcorModel2.default.call(['login'], [credentials]).then(function (result) {
 	                  return loginResult;
 	                });
 
-	              case 4:
+	              case 3:
 	                loginResult = _context.sent;
-	                _context.next = 7;
+	                _context.next = 6;
 	                return _falcorModel2.default.getValue('login.token');
 
-	              case 7:
+	              case 6:
 	                tokenRes = _context.sent;
 
 
@@ -60570,52 +60566,9 @@
 	                console.info("tokenRes", tokenRes);
 	                console.info("tokenRes", tokenRes);
 
-	                if (!(tokenRes === "INVALID")) {
-	                  _context.next = 17;
-	                  break;
-	                }
-
-	                _context.next = 14;
-	                return _falcorModel2.default.getValue('login.error');
-
-	              case 14:
-	                errorRes = _context.sent;
-
-	                this.setState({ error: errorRes, sendingRequest: false });
 	                return _context.abrupt('return');
 
-	              case 17:
-	                if (!tokenRes) {
-	                  _context.next = 32;
-	                  break;
-	                }
-
-	                _context.next = 20;
-	                return _falcorModel2.default.getValue('login.username');
-
-	              case 20:
-	                username = _context.sent;
-	                _context.next = 23;
-	                return _falcorModel2.default.getValue('login.role');
-
-	              case 23:
-	                role = _context.sent;
-
-
-	                this.setState({ error: "Logged in as " + role });
-	                localStorage.setItem("token", tokenRes);
-	                localStorage.setItem("username", username);
-	                localStorage.setItem("role", role);
-	                sessionStorage.setItem('magicToken', 'magic-login-token');
-	                return _context.abrupt('return');
-
-	              case 32:
-	                alert("Fatal login error, please contact an admin");
-
-	              case 33:
-	                return _context.abrupt('return');
-
-	              case 34:
+	              case 11:
 	              case 'end':
 	                return _context.stop();
 	            }
@@ -60631,6 +60584,30 @@
 	    }()
 	  }, {
 	    key: 'render',
+
+
+	    // if(tokenRes === "INVALID") {
+	    //   // login failed, get error msg
+	    //   let errorRes = await falcorModel.getValue('login.error');
+	    //   this.setState({error: errorRes, sendingRequest: false});
+	    //   return;
+	    // }
+
+	    // if(tokenRes) {
+	    //   let username = await falcorModel.getValue('login.username');
+	    //   let role = await falcorModel.getValue('login.role');
+
+	    //   this.setState({error: "Logged in as "+role});
+	    //   localStorage.setItem("token", tokenRes);
+	    //   localStorage.setItem("username", username);
+	    //   localStorage.setItem("role", role);
+	    //   sessionStorage.setItem('magicToken', 'magic-login-token');
+	    //   return;
+	    // } else {
+	    //   alert("Fatal login error, please contact an admin");
+	    // }
+
+	    // return;
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',

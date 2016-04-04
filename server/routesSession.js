@@ -1,12 +1,20 @@
 import { User } from './configMongoose';
 import jwt from 'jsonwebtoken';
 import jwtSecret from './configSecret';
-
+console.info(1);
+console.info(1);
+console.info(1);
+console.info(1);
+console.info(1);
+console.info(1);
 export default [
   { 
     route: ['login'],
     call: (callPath, args) => 
       {
+        console.info("args");
+        console.info(args);
+        console.info("args");
         let { username, password } = args[0];
         let saltedPassword = password+"pubApp"; // pubApp is our salt string
         let saltedPassHash = crypto.createHash('sha256').update(saltedPassword).digest('hex');

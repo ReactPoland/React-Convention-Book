@@ -171,7 +171,33 @@ Make sure you are in the server dir:
 $ cd server
 ```
 
-then create a new file:
+First open the server.js file on order to add one line of code that will allow to post usernames and passwords to the backend, so add this:
+```
+app.use(bodyParser.urlencoded({extended: false}));
+```
+... this has to be added under ***app.use(bodyParser.json({extended: false}));*** so you will end up with server.js code that begins as following:
+```
+import http from 'http';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import falcor from 'falcor';
+import falcorExpress from 'falcor-express';
+import Router from 'falcor-router';
+import routes from './routes.js';
+
+var app = express();
+app.server = http.createServer(app);
+
+// CORS - 3rd party middleware
+app.use(cors());
+
+// This is required by falcor-express middleware to work correctly with falcor-browser
+app.use(bodyParser.json({extended: false}));
+app.use(bodyParser.urlencoded({extended: false}));
+```
+... the last line is a new line that has to be added in order to make it works. Then create a new file in the same directory with:
 ```
 $ touch routesSession.js
 ```
