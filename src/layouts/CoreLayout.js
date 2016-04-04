@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 class CoreLayout extends React.Component {
   static propTypes = {
@@ -13,7 +14,7 @@ class CoreLayout extends React.Component {
   render () {
     return (
       <div>
-        <span>[In future there will be a header]</span>
+        <span>Links: <Link to='/login'>Login</Link> | <Link to='/'>Home Page</Link></span>
           <br/>
           {this.props.children}
       </div>
