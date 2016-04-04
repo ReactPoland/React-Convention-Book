@@ -21,8 +21,33 @@ class RegisterView extends React.Component {
     };
   }
 
-  register (model) {
-  	alert(JSON.stringify(model));
+  async register (newUserModel) {
+    console.info("newUserModel", newUserModel);
+
+    let registerResult = await falcorModel
+      .call(
+            ['login'],
+            [newUserModel]
+          ).
+      then((result) => {
+        return result;
+      });
+
+    let newUserId = await falcorModel.getValue('register.newUserId');
+    if(newUserId === "INVALID") {
+      let errorRes = await falcorModel.getValue('register.error');
+      this.setState({error: errorRes});
+      alert(JSON.stringify(errorRes));
+      return;
+    }
+
+
+    if(newUserId) {
+      this.props.history.pushState(null, '/login');
+      return;
+    } else {
+      alert("Fatal registration error, please contact an admin");
+    }
 
   }
 
