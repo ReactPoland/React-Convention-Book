@@ -495,24 +495,25 @@ import React                        from 'react';
 import { Route, IndexRoute }        from 'react-router';
 
 /* wrappers */
-import PublishingApp                   from 'layouts/PublishingApp';
+import CoreLayout                   from '../layouts/CoreLayout';
 
-/* authorization views */
-import LoginView                    from 'views/account/LoginView';
+/* home view */
+import PublishingApp                    from '../layouts/PublishingApp';
+
+/* auth views */
+import LoginView                    from '../views/LoginView';
 
 export default (
   <Route component={CoreLayout} path='/'>
-    <IndexRoute component={HomeView} name='home' />
-
-    /* authorization related routes */
-    <Route component={LoginView}  path='/login' name='login' />
+    <IndexRoute component={PublishingApp} name='home' />
+    <Route component={LoginView} path='login' name='login' />
   </Route>
 );
 ```
 
-At this points we are missing one component for our app called CoreLayout.
+At this points we are missing two components for our app called CoreLayout & LoginView (we will implement them in a minute).
 
-#### CoreLayout
+#### CoreLayout's component
 The CoreLayout is the a for our whole application.
 
 Create it by doing as following:
@@ -524,6 +525,7 @@ touch CoreLayout.js
 ... and then populate it with the following content:
 ```
 import React from 'react';
+import { Link } from 'react-router';
 
 class CoreLayout extends React.Component {
   static propTypes = {
@@ -538,7 +540,7 @@ class CoreLayout extends React.Component {
   render () {
     return (
       <div>
-        <span>[In future there will be a header]</span>
+        <span>Links: <Link to='/login'>Login</Link> | <Link to='/'>Home Page</Link></span>
           <br/>
           {this.props.children}
       </div>
@@ -548,22 +550,59 @@ class CoreLayout extends React.Component {
 
 export default CoreLayout;
 ```
-As you probably know, the all content of a current route will go into the ***{this.props.children}***'s target (that is basic's React.JS concept you must to know beforehand).
+As you probably know, the all content of a current route will go into the ***{this.props.children}***'s target (that is basic's React.JS concept you must to know beforehand). We also created two links to our routes as a header.
 
-#### A container for our app
 
+#### LoginView's component
+For the time being, we will create a mocked LoginView as you can find below with the "FORM GOES HERE"'s placeholder:
+```
+"use strict";
+
+import React from 'react';
+import Falcor from 'falcor';
+import falcorModel from '../falcorModel.js';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+const mapStateToProps = (state) => ({
+  ...state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
+
+class LoginView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render () {
+    return (
+      <div>
+          <h1>Login view</h1>
+          FORM GOES HERE
+      </div>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginView);
+```
+
+We are done with all missing pieces for the ***routes/index.js***, but there some other outstanding stuff to do before our app with the routing will be working.
+
+#### A ROOT's container for our app
 Because our is getting more complicated, we need to create a container that it will live in, in order to do that let's do as following the in ***src*** location:
 ```
+$ pwd 
+$ [[[you shall be at the src folder]]]
 $ mkdir containers
 $ cd container
 $ touch Root.js
 ```
 
 The Root.js is going to be our main root file - the content of this file is as following:
-
-
-TODO install history -> import createHashHistory        from 'history/lib/createHashHistory';
-
 ```
 import React                    from 'react';
 import { Provider }             from 'react-redux';
@@ -595,6 +634,14 @@ export default class Root extends React.Component {
   }
 }
 ```
+For now it's only simple container, but later we will implement into it more futures for debugging, hot reloading reasons etc. The ***noQueryKeyHistory*** is saying to the Router, that we don't want to have any random strings in our url so our routes will be looking nicer (not a big deal, you can change the false flag to true, to see what I am talking about).
+
+
+#### Remaining configuration for: configureStore & rootReducer
+
+
+
+
 
 
 
