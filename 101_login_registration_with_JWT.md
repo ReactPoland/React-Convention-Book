@@ -983,9 +983,78 @@ Great! Now we are done! Below you can find what you shall see after running ***n
 
 ![screenshot after filling and submiting login form](http://test.przeorski.pl/book/105_screenshot_after_submit_login_form.png)
 
-As you can see in the browser's console - we can see the submited credential's object (***credentials Object {username: "admin", password: "123456"}***) and also a token that has been fetched from the backend (***tokenRes eyJhbGciOiJIUzI1NiJ9.YWRtaW5hZG1pbg.NKmrphxbqNcL_jFLBdTWGM6Y_Q78xks5E2TxBZRyjDA***) - all that tells us that we are on good track in order to implement login in our publishing application.
+As you can see in the browser's console - we can see the submited credential's object (***credentials Object {username: "admin", password: "123456"}***) and also a token that has been fetched from the backend (***tokenRes eyJhbGciOiJIUzI1NiJ9.YWRtaW5hZG1pbg.NKmrphxbqNcL_jFLBdTWGM6Y_Q78xks5E2TxBZRyjDA***) - all that tells us that we are on a good track in order to implement the login's mechanism in our publishing application.
 
 
+
+### Making DashboardView's component
+
+At this point we have a login feature that is not finished, but before continuing the work on it, let's create a simple ***src/views/DashboardView.js*** component that will be shown after a successful login:
+
+```
+$ pwd 
+$ [[[you shall be at the views folder]]]
+$ touch DashboardView.js
+```
+
+with a simple content as following:
+```
+"use strict";
+
+import React from 'react';
+import Falcor from 'falcor';
+import falcorModel from '../falcorModel.js';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { LoginForm } from '../components/LoginForm.js';
+
+const mapStateToProps = (state) => ({
+  ...state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
+
+class DashboardView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render () {
+    return (
+      <div>
+          <h1>Dashboard - loggedin!</h1>
+      </div>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardView);
+```
+
+This is simple component, that is static at this point - later we will build more features into it.
+
+The last thing regarding the dashboard's that we need to create is a new route in the ***src/routes/index.js***'s file:
+```
+import DashboardView from '../views/DashboardView';
+
+export default (
+  <Route component={CoreLayout} path='/'>
+    <IndexRoute component={PublishingApp} name='home' />
+    <Route component={LoginView} path='login' name='login' />
+    <Route component={DashboardView} path='dashboard' name='dashboard' />
+  </Route>
+);
+```
+
+We have added two things:
+1) ***import DashboardView from '../views/DashboardView';***
+2) ***<Route component={DashboardView} path='dashboard' name='dashboard' />***
+
+Nothing fancy - we have created a dashboard route in the react-router's config.
+
+#### Finishing the login's mechanism
 
 
 
