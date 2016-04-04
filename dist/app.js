@@ -33976,8 +33976,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.info("props", this.props);
-
 	      var articlesJSX = [];
 	      for (var articleKey in this.props.article) {
 	        var articleDetails = this.props.article[articleKey];

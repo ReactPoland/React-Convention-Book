@@ -740,6 +740,14 @@ Why outdated? Because we have introduced rootReducer and combineReducers so if y
 
 Do you see the difference? The old ***for(let articleKey in this.props)*** has changed into ***for(let articleKey in this.props.article)*** and ***this.props[articleKey]*** has changed to ***this.props.article[articleKey]***. Why? I will recall again: now every new reducer will be available in our app via it's name created in ***routes/index.js***. We have named our reducer article, so we now had to add this into ***this.props.article*** to make this stuff works together.
 
+#### Screenshots of our running app:
+
+Currently when you do ***npm start*** then you will see as following two routes:
+
+1) Home Page:
+![screenshot home view](http://test.przeorski.pl/book/103_homeview.png)
+2) Login's View:
+![screenshot login view](http://test.przeorski.pl/book/104_loginview.png)
 
 
 
