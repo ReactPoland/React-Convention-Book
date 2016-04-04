@@ -477,8 +477,10 @@ Please run the app and then if everything is working for you, and after it works
 
 Let's create a new route for login in our redux application. In order to do that, we need to introduce the ***react-router***:
 ```
-$ npm i --save react-router@2.0.1 redux-simple-router@2.0.4
+$ npm i --save react-router@1.0.0 redux-simple-router@0.0.10 redux-thunk@1.0.0
 ```
+
+PLEASE NOTE: it's important to use correct NPM's versions - otherwise things may broke! [[[NOTE to our editor: in June we shall revise the versions and improve the codebase to make it more actual as things evolve very quickly in the ecosystem!]]]
 
 After we have installed them, we need to add routes in the src:
 ```
