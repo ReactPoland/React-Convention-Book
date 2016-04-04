@@ -668,7 +668,42 @@ export default combineReducers({
 The new thing is that we are introducing a combineReducers' function from Redux. This is exactly, what I've written before: we will have more than one reducers - in our case we have also introducing the routeReducer from a redux-simple-router's library.
 
 
+Next step is to create the configureStore that will be managing our stores also in order to implement a server rendering later in this book.
 
+```
+$ pwd 
+$ [[[you shall be at the src folder]]]
+$ mkdir store
+$ cd store
+$ touch configureStore.js
+```
+
+... and the content for the configureStore.js:
+```
+import rootReducer          from '../reducers';
+import thunk                from 'redux-thunk';
+import {
+  applyMiddleware,
+  compose,
+  createStore
+} from 'redux';
+
+export default function configureStore (initialState, debug = false) {
+  let createStoreWithMiddleware;
+
+  const middleware = applyMiddleware(thunk);
+
+  createStoreWithMiddleware = compose(middleware);
+
+  const store = createStoreWithMiddleware(createStore)(
+    rootReducer, initialState
+  );
+  return store;
+}
+```
+In the above's code we are importing the rootReducer that we've created recently. We also import the redux-thunk's lib which is very useful for server side rendering (described later in the book). 
+
+At the end, we export a store which is composed of many different's reducers (currently routing and article's reducer that you can find in ***reducer/index.js***) and is able to handle the server rendering initial's state.
 
 
 
