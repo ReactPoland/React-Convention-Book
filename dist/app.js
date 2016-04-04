@@ -7781,7 +7781,7 @@
 
 	var _Root2 = _interopRequireDefault(_Root);
 
-	var _configureStore = __webpack_require__(966);
+	var _configureStore = __webpack_require__(967);
 
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 
@@ -33779,7 +33779,7 @@
 
 	var _RegisterView2 = _interopRequireDefault(_RegisterView);
 
-	var _DashboardView = __webpack_require__(965);
+	var _DashboardView = __webpack_require__(966);
 
 	var _DashboardView2 = _interopRequireDefault(_DashboardView);
 
@@ -99374,6 +99374,8 @@
 
 	var _materialUi = __webpack_require__(696);
 
+	var _RegisterForm = __webpack_require__(965);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -99405,6 +99407,11 @@
 	  }
 
 	  _createClass(RegisterView, [{
+	    key: 'register',
+	    value: function register(model) {
+	      alert(JSON.stringify(model));
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -99414,6 +99421,12 @@
 	          'h1',
 	          null,
 	          'Register'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { style: { maxWidth: 450, margin: '0 auto' } },
+	          _react2.default.createElement(_RegisterForm.RegisterForm, {
+	            onSubmit: this.register })
 	        )
 	      );
 	    }
@@ -99426,6 +99439,86 @@
 
 /***/ },
 /* 965 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.RegisterForm = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(292);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _formsyReact = __webpack_require__(689);
+
+	var _formsyReact2 = _interopRequireDefault(_formsyReact);
+
+	var _materialUi = __webpack_require__(696);
+
+	var _DefaultInput = __webpack_require__(963);
+
+	var _DefaultInput2 = _interopRequireDefault(_DefaultInput);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var RegisterForm = exports.RegisterForm = function (_React$Component) {
+	  _inherits(RegisterForm, _React$Component);
+
+	  function RegisterForm() {
+	    _classCallCheck(this, RegisterForm);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(RegisterForm).call(this));
+	  }
+
+	  _createClass(RegisterForm, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        _formsyReact2.default.Form,
+	        { onSubmit: this.props.onSubmit },
+	        _react2.default.createElement(
+	          _materialUi.Paper,
+	          { zDepth: 1, style: { padding: 32 } },
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'Registration form'
+	          ),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'username', title: 'Username', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'firstName', title: 'Firstname', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'lastName', title: 'Lastname', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'email', title: 'Email', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, type: 'password', name: 'password', title: 'Password', required: true }),
+	          _react2.default.createElement(
+	            'div',
+	            { style: { marginTop: 24 } },
+	            _react2.default.createElement(_materialUi.RaisedButton, {
+	              secondary: true,
+	              type: 'submit',
+	              style: { margin: '0 auto', display: 'block', width: 150 },
+	              label: 'Register' })
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return RegisterForm;
+	}(_react2.default.Component);
+
+/***/ },
+/* 966 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -99502,7 +99595,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(DashboardView);
 
 /***/ },
-/* 966 */
+/* 967 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99512,11 +99605,11 @@
 	});
 	exports.default = configureStore;
 
-	var _reducers = __webpack_require__(967);
+	var _reducers = __webpack_require__(968);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _reduxThunk = __webpack_require__(969);
+	var _reduxThunk = __webpack_require__(970);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
@@ -99538,7 +99631,7 @@
 	}
 
 /***/ },
-/* 967 */
+/* 968 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99551,7 +99644,7 @@
 
 	var _reduxSimpleRouter = __webpack_require__(467);
 
-	var _article = __webpack_require__(968);
+	var _article = __webpack_require__(969);
 
 	var _article2 = _interopRequireDefault(_article);
 
@@ -99563,7 +99656,7 @@
 	});
 
 /***/ },
-/* 968 */
+/* 969 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99589,7 +99682,7 @@
 	exports.default = article;
 
 /***/ },
-/* 969 */
+/* 970 */
 /***/ function(module, exports) {
 
 	'use strict';
