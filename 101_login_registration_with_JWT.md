@@ -1056,6 +1056,62 @@ Nothing fancy - we have created a dashboard route in the react-router's config.
 
 #### Finishing the login's mechanism
 
+The last improvements for login at this point of our publishing app is remaining at the ***src/views/LoginView.js***'s location:
+
+1) First of all, let's add handling an invalid logins:
+```
+    console.info("tokenRes", tokenRes);
+
+    if(tokenRes === "INVALID") {
+      // login failed, get error msg
+      let errorRes = await falcorModel.getValue('login.error');
+      this.setState({error: errorRes});
+      return;
+    }
+
+    return;
+```
+
+we have added this ***if(tokenRes === "INVALID")*** in order to update the  error state with ***this.setState({error: errorRes})***.
+
+2) next step is to add into the render function a Snackbar that will show to the user a type of the error - in top of the LoginView's component add this import:
+
+```
+import { Snackbar } from 'material-ui';
+```
+
+then you need to update render function as following:
+```
+<Snackbar
+  autoHideDuration={4000}
+  open={!!this.state.error}
+  message={this.state.error || ""} />
+```
+
+so after adding it, the render function will look like:
+```
+render () {
+  return (
+    <div>
+        <h1>Login view</h1>
+        <div style={{maxWidth: 450, margin: '0 auto'}}>
+          <LoginForm
+            onSubmit={this.login} />
+        </div>
+        <Snackbar
+          autoHideDuration={4000}
+          open={!!this.state.error}
+          message={this.state.error || ""} />
+    </div>
+  );
+}
+```
+
+OK, so we are handling login's error - now let's work on successful logins.
+
+#### Handling successful logins in the LoginView's component
+
+
 
 
 

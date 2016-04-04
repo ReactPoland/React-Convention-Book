@@ -6,6 +6,7 @@ import falcorModel from '../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { LoginForm } from '../components/LoginForm.js';
+import { Snackbar } from 'material-ui';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -40,18 +41,15 @@ class LoginView extends React.Component {
     let tokenRes = await falcorModel.getValue('login.token');
 
     console.info("tokenRes", tokenRes);
-    console.info("tokenRes", tokenRes);
-    console.info("tokenRes", tokenRes);
 
+    if(tokenRes === "INVALID") {
+      // login failed, get error msg
+      let errorRes = await falcorModel.getValue('login.error');
+      this.setState({error: errorRes});
+      return;
+    }
 
     return;
-
-    // if(tokenRes === "INVALID") {
-    //   // login failed, get error msg
-    //   let errorRes = await falcorModel.getValue('login.error');
-    //   this.setState({error: errorRes, sendingRequest: false});
-    //   return;
-    // }
 
     // if(tokenRes) {
     //   let username = await falcorModel.getValue('login.username');
@@ -78,6 +76,10 @@ class LoginView extends React.Component {
             <LoginForm
               onSubmit={this.login} />
           </div>
+          <Snackbar
+            autoHideDuration={4000}
+            open={!!this.state.error}
+            message={this.state.error || ""} />
       </div>
     );
   }

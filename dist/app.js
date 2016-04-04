@@ -7781,7 +7781,7 @@
 
 	var _Root2 = _interopRequireDefault(_Root);
 
-	var _configureStore = __webpack_require__(964);
+	var _configureStore = __webpack_require__(965);
 
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 
@@ -33775,20 +33775,25 @@
 
 	var _LoginView2 = _interopRequireDefault(_LoginView);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _DashboardView = __webpack_require__(964);
 
-	/* home view */
-	exports.default = _react2.default.createElement(
-	  _reactRouter.Route,
-	  { component: _CoreLayout2.default, path: '/' },
-	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _PublishingApp2.default, name: 'home' }),
-	  _react2.default.createElement(_reactRouter.Route, { component: _LoginView2.default, path: 'login', name: 'login' })
-	);
+	var _DashboardView2 = _interopRequireDefault(_DashboardView);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/* auth views */
 
 
 	/* wrappers */
+	exports.default = _react2.default.createElement(
+	  _reactRouter.Route,
+	  { component: _CoreLayout2.default, path: '/' },
+	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _PublishingApp2.default, name: 'home' }),
+	  _react2.default.createElement(_reactRouter.Route, { component: _LoginView2.default, path: 'login', name: 'login' }),
+	  _react2.default.createElement(_reactRouter.Route, { component: _DashboardView2.default, path: 'dashboard', name: 'dashboard' })
+	);
+
+	/* home view */
 
 /***/ },
 /* 524 */
@@ -60501,6 +60506,12 @@
 
 	var _LoginForm = __webpack_require__(688);
 
+	var _materialUi = __webpack_require__(696);
+
+	var _colors = __webpack_require__(727);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
@@ -60538,7 +60549,7 @@
 	    key: 'login',
 	    value: function () {
 	      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(credentials) {
-	        var loginResult, tokenRes;
+	        var loginResult, tokenRes, errorRes;
 	        return regeneratorRuntime.wrap(function _callee$(_context) {
 	          while (1) {
 	            switch (_context.prev = _context.next) {
@@ -60560,12 +60571,25 @@
 
 
 	                console.info("tokenRes", tokenRes);
-	                console.info("tokenRes", tokenRes);
-	                console.info("tokenRes", tokenRes);
 
-	                return _context.abrupt('return');
+	                if (!(tokenRes === "INVALID")) {
+	                  _context.next = 14;
+	                  break;
+	                }
+
+	                _context.next = 11;
+	                return _falcorModel2.default.getValue('login.error');
 
 	              case 11:
+	                errorRes = _context.sent;
+
+	                this.setState({ error: errorRes });
+	                return _context.abrupt('return');
+
+	              case 14:
+	                return _context.abrupt('return');
+
+	              case 15:
 	              case 'end':
 	                return _context.stop();
 	            }
@@ -60582,13 +60606,6 @@
 	  }, {
 	    key: 'render',
 
-
-	    // if(tokenRes === "INVALID") {
-	    //   // login failed, get error msg
-	    //   let errorRes = await falcorModel.getValue('login.error');
-	    //   this.setState({error: errorRes, sendingRequest: false});
-	    //   return;
-	    // }
 
 	    // if(tokenRes) {
 	    //   let username = await falcorModel.getValue('login.username');
@@ -60619,7 +60636,12 @@
 	          { style: { maxWidth: 450, margin: '0 auto' } },
 	          _react2.default.createElement(_LoginForm.LoginForm, {
 	            onSubmit: this.login })
-	        )
+	        ),
+	        _react2.default.createElement(_materialUi.Snackbar, {
+	          styles: { background: 'red', fontFace: 'arial' },
+	          autoHideDuration: 4000,
+	          open: !!this.state.error,
+	          message: this.state.error || "" })
 	      );
 	    }
 	  }]);
@@ -99311,6 +99333,83 @@
 /* 964 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(292);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _falcor = __webpack_require__(526);
+
+	var _falcor2 = _interopRequireDefault(_falcor);
+
+	var _falcorModel = __webpack_require__(680);
+
+	var _falcorModel2 = _interopRequireDefault(_falcorModel);
+
+	var _reactRedux = __webpack_require__(469);
+
+	var _redux = __webpack_require__(475);
+
+	var _LoginForm = __webpack_require__(688);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return _extends({}, state);
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
+	};
+
+	var DashboardView = function (_React$Component) {
+	  _inherits(DashboardView, _React$Component);
+
+	  function DashboardView(props) {
+	    _classCallCheck(this, DashboardView);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(DashboardView).call(this, props));
+	  }
+
+	  _createClass(DashboardView, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'Dashboard - loggedin!'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return DashboardView;
+	}(_react2.default.Component);
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(DashboardView);
+
+/***/ },
+/* 965 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -99318,11 +99417,11 @@
 	});
 	exports.default = configureStore;
 
-	var _reducers = __webpack_require__(965);
+	var _reducers = __webpack_require__(966);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _reduxThunk = __webpack_require__(967);
+	var _reduxThunk = __webpack_require__(968);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
@@ -99344,7 +99443,7 @@
 	}
 
 /***/ },
-/* 965 */
+/* 966 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99357,7 +99456,7 @@
 
 	var _reduxSimpleRouter = __webpack_require__(467);
 
-	var _article = __webpack_require__(966);
+	var _article = __webpack_require__(967);
 
 	var _article2 = _interopRequireDefault(_article);
 
@@ -99369,7 +99468,7 @@
 	});
 
 /***/ },
-/* 966 */
+/* 967 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99395,7 +99494,7 @@
 	exports.default = article;
 
 /***/ },
-/* 967 */
+/* 968 */
 /***/ function(module, exports) {
 
 	'use strict';
