@@ -60508,10 +60508,6 @@
 
 	var _materialUi = __webpack_require__(696);
 
-	var _colors = __webpack_require__(727);
-
-	var _colors2 = _interopRequireDefault(_colors);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
@@ -60549,7 +60545,7 @@
 	    key: 'login',
 	    value: function () {
 	      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(credentials) {
-	        var loginResult, tokenRes, errorRes;
+	        var loginResult, tokenRes, errorRes, username, role;
 	        return regeneratorRuntime.wrap(function _callee$(_context) {
 	          while (1) {
 	            switch (_context.prev = _context.next) {
@@ -60587,9 +60583,38 @@
 	                return _context.abrupt('return');
 
 	              case 14:
+	                if (!tokenRes) {
+	                  _context.next = 30;
+	                  break;
+	                }
+
+	                _context.next = 17;
+	                return _falcorModel2.default.getValue('login.username');
+
+	              case 17:
+	                username = _context.sent;
+	                _context.next = 20;
+	                return _falcorModel2.default.getValue('login.role');
+
+	              case 20:
+	                role = _context.sent;
+
+
+	                localStorage.setItem("token", tokenRes);
+	                localStorage.setItem("username", username);
+	                localStorage.setItem("role", role);
+	                console.info("this.props", this.props);
+	                console.info("this.props.history", this.props.history);
+	                this.props.history.pushState(null, '/dashboard');
 	                return _context.abrupt('return');
 
-	              case 15:
+	              case 30:
+	                alert("Fatal login error, please contact an admin");
+
+	              case 31:
+	                return _context.abrupt('return');
+
+	              case 32:
 	              case 'end':
 	                return _context.stop();
 	            }
@@ -60605,23 +60630,6 @@
 	    }()
 	  }, {
 	    key: 'render',
-
-
-	    // if(tokenRes) {
-	    //   let username = await falcorModel.getValue('login.username');
-	    //   let role = await falcorModel.getValue('login.role');
-
-	    //   this.setState({error: "Logged in as "+role});
-	    //   localStorage.setItem("token", tokenRes);
-	    //   localStorage.setItem("username", username);
-	    //   localStorage.setItem("role", role);
-	    //   sessionStorage.setItem('magicToken', 'magic-login-token');
-	    //   return;
-	    // } else {
-	    //   alert("Fatal login error, please contact an admin");
-	    // }
-
-	    // return;
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
@@ -60638,7 +60646,6 @@
 	            onSubmit: this.login })
 	        ),
 	        _react2.default.createElement(_materialUi.Snackbar, {
-	          styles: { background: 'red', fontFace: 'arial' },
 	          autoHideDuration: 4000,
 	          open: !!this.state.error,
 	          message: this.state.error || "" })

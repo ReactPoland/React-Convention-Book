@@ -1112,6 +1112,48 @@ OK, so we are handling login's error - now let's work on successful logins.
 #### Handling successful logins in the LoginView's component
 
 
+For handling successful token's backend responses add to the login function under the:
+```
+    if(tokenRes === "INVALID") {
+      // login failed, get error msg
+      let errorRes = await falcorModel.getValue('login.error');
+      this.setState({error: errorRes});
+      return;
+    }
+
+```
+
+a new code for handling correct responses as following:
+```
+if(tokenRes) {
+  let username = await falcorModel.getValue('login.username');
+  let role = await falcorModel.getValue('login.role');
+
+  localStorage.setItem("token", tokenRes);
+  localStorage.setItem("username", username);
+  localStorage.setItem("role", role);
+
+  this.props.history.pushState(null, '/dashboard');
+  return;
+} else {
+  alert("Fatal login error, please contact an admin");
+}
+
+return; 
+```
+
+#### Explanation
+After we know that the tokenRes is not "INVALID" and it's not an undefined (otherwise let's show a fatal error to the user) then we do certain steps:
+1) We are fetching username from the Falcor's model (***await falcorModel.getValue('login.username')***)
+2) We are fetching user's role (***await falcorModel.getValue('login.role')***)
+3) then we save all the known variables from backend into our localStorage with:
+```
+  localStorage.setItem("token", tokenRes);
+  localStorage.setItem("username", username);
+  localStorage.setItem("role", role);
+```
+
+At the same end we are sending our user's to the /dashboard route with use of ***this.props.history.pushState(null, '/dashboard')***.
 
 
 

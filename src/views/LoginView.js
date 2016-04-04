@@ -49,23 +49,21 @@ class LoginView extends React.Component {
       return;
     }
 
-    return;
+    if(tokenRes) {
+      let username = await falcorModel.getValue('login.username');
+      let role = await falcorModel.getValue('login.role');
 
-    // if(tokenRes) {
-    //   let username = await falcorModel.getValue('login.username');
-    //   let role = await falcorModel.getValue('login.role');
+      localStorage.setItem("token", tokenRes);
+      localStorage.setItem("username", username);
+      localStorage.setItem("role", role);
 
-    //   this.setState({error: "Logged in as "+role});
-    //   localStorage.setItem("token", tokenRes);
-    //   localStorage.setItem("username", username);
-    //   localStorage.setItem("role", role);
-    //   sessionStorage.setItem('magicToken', 'magic-login-token');
-    //   return;
-    // } else {
-    //   alert("Fatal login error, please contact an admin");
-    // }
+      this.props.history.pushState(null, '/dashboard');
+      return;
+    } else {
+      alert("Fatal login error, please contact an admin");
+    }
 
-    // return; 
+    return; 
   }
 
   render () {
