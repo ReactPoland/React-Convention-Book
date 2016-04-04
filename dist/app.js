@@ -7794,13 +7794,7 @@
 
 	console.info("store", store);
 
-	(0, _reduxSimpleRouter.syncReduxAndRouter)(history, store); // TO IMPROVE! ....
-	// alert("https://github.com/reactjs/react-router-redux/issues/181");
-	// "history": "1.13.1", // 1
-	// "react-router": "^1.0.0", // 1
-	// "redux-simple-router": "0.0.10", // 1   
-	// "redux-thunk": "^1.0.0", // 1
-
+	(0, _reduxSimpleRouter.syncReduxAndRouter)(history, store); // TO IMPROVE! for newer versions
 	var node = _react2.default.createElement(_Root2.default, {
 	  history: history,
 	  store: store
@@ -33785,7 +33779,8 @@
 	exports.default = _react2.default.createElement(
 	  _reactRouter.Route,
 	  { component: _CoreLayout2.default, path: '/' },
-	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _PublishingApp2.default, name: 'home' })
+	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _PublishingApp2.default, name: 'home' }),
+	  _react2.default.createElement(_reactRouter.Route, { component: _PublishingApp2.default, path: 'test', name: 'test' })
 	);
 
 	/* home view */
@@ -33961,9 +33956,11 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      console.info("props", this.props);
+
 	      var articlesJSX = [];
-	      for (var articleKey in this.props) {
-	        var articleDetails = this.props[articleKey];
+	      for (var articleKey in this.props.article) {
+	        var articleDetails = this.props.article[articleKey];
 	        var currentArticleJSX = _react2.default.createElement(
 	          'div',
 	          { key: articleKey },

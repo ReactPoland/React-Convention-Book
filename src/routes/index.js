@@ -10,5 +10,6 @@ import PublishingApp                    from '../layouts/PublishingApp';
 export default (
   <Route component={CoreLayout} path='/'>
     <IndexRoute component={PublishingApp} name='home' />
+    <Route component={PublishingApp} path="test" name="test" />
   </Route>
 );
