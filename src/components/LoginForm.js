@@ -15,14 +15,12 @@ export class LoginForm extends React.Component {
   }
 
   render() {
-  	console.info("1111");
-
     return (
       <Formsy.Form onSubmit={this._submit}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Log in</h3>
-          <DefaultInput name='email' title='Email (admin)' required />
-          <DefaultInput type='password' name='password' title='Password (test)' required />
+          <DefaultInput onChange={(newText) => console.info("email"+newText)} name='email' title='Email (admin)' required />
+          <DefaultInput onChange={(newText) => console.info("pass"+newText)} type='password' name='password' title='Password (test)' required />
 
 
           <div style={{marginTop: 24}}>
@@ -30,7 +28,7 @@ export class LoginForm extends React.Component {
               secondary={true}
               type="submit"
               style={{margin: '0 auto', display: 'block', width: 150}}
-              label={this.props.sendingRequest ? 'Logging in...' : 'Log in'} />
+              label={'Log in'} />
           </div>
         </Paper>
       </Formsy.Form>
