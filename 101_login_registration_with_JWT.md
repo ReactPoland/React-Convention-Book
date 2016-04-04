@@ -706,6 +706,39 @@ In the above's code we are importing the rootReducer that we've created recently
 At the end, we export a store which is composed of many different's reducers (currently routing and article's reducer that you can find in ***reducer/index.js***) and is able to handle the server rendering initial's state.
 
 
+#### Last tweaks in layouts/PublishingApp.js before running the app
+
+The last thing that changed in our app is that we have out-of-date code in PublishingApp.
+
+Why outdated? Because we have introduced rootReducer and combineReducers so if you will check your code in render of PublishingApp here:
+```
+    let articlesJSX = [];
+    for(let articleKey in this.props) {
+      let articleDetails = this.props[articleKey];
+      let currentArticleJSX = (
+        <div key={articleKey}>
+          <h2>{articleDetails.articleTitle}</h2>
+          <h3>{articleDetails.articleContent}</h3>
+        </div>);
+      articlesJSX.push(currentArticleJSX);
+    }
+```
+
+... then it won't work, because you are you need to change it to this:
+```
+    let articlesJSX = [];
+    for(let articleKey in this.props.article) {
+      let articleDetails = this.props.article[articleKey];
+      let currentArticleJSX = (
+        <div key={articleKey}>
+          <h2>{articleDetails.articleTitle}</h2>
+          <h3>{articleDetails.articleContent}</h3>
+        </div>);
+      articlesJSX.push(currentArticleJSX);
+    }
+```
+
+Do you see the difference? The old ***for(let articleKey in this.props)*** has changed into ***for(let articleKey in this.props.article)*** and ***this.props[articleKey]*** has changed to ***this.props.article[articleKey]***. Why? I will recall again: now every new reducer will be available in our app via it's name created in ***routes/index.js***. We have named our reducer article, so we now had to add this into ***this.props.article*** to make this stuff works together.
 
 
 
