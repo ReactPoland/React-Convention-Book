@@ -463,7 +463,7 @@ with this code that is returning successful login's details:
 ```
 let role = result[0].role;
 let userDetailsToHash = username+role;
-let token = jwt.sign(userDetailsToHash, jwtSecret, { expiresIn: '1h' });
+let token = jwt.sign(userDetailsToHash, jwtSecret);
 return [
   {
     path: ['login', 'token'],
@@ -485,7 +485,7 @@ return [
 ```
 
 #### Explanation:
-As you can see, the only thing that we fetch from DB right now is the role value === ***result[0].role***. We need add this to hash, because we don't want our app to be vulnerable so a normal user can get an admin role with some hacking. The value of the ***token*** is calculated based on ***userDetailsToHash = username+role*** - that's enough for now. We also added as a third argument in the jwt.sign an information about how long the token shall be valid (***{ expiresIn: '1h' }***).
+As you can see, the only thing that we fetch from DB right now is the role value === ***result[0].role***. We need add this to hash, because we don't want our app to be vulnerable so a normal user can get an admin role with some hacking. The value of the ***token*** is calculated based on ***userDetailsToHash = username+role*** - that's enough for now.
 
 After we are fine here the only thing that needs to be done on the backend is returning the paths with values:
 1) The login token with: ['login', 'token']

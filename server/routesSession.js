@@ -36,7 +36,7 @@ export default [
         /* 
           findOne MAY NOT WORK! double-check!
          */
-        return User.findOne(userStatementQuery, function(err, user) {
+        return User.find({}, function(err, user) {
           console.info(5);
           if (err) throw err;
           console.info(6);
@@ -48,7 +48,7 @@ export default [
             console.info("1) ", result);
             let role = result[0].role;
             let userDetailsToHash = username+role;
-            let token = jwt.sign(userDetailsToHash, jwtSecret, { expiresIn: '1h' });
+            let token = jwt.sign(userDetailsToHash, jwtSecret);
             return [
               {
                 path: ['login', 'token'],
