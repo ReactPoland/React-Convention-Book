@@ -857,13 +857,46 @@ Also the only state of this component is ***this.state.currentText*** in order t
 #### LoginForm and making it works with LoginView
 
 Next step is to create LoginForm, that will use this DefaultInput's component with following commands:
+
 ```
 $ pwd 
 $ [[[you shall be at the components folder]]]
 $ touch LoginForm.js
 ```
 
+and then the content of our ***src/components/LoginForm.js*** file is as following:
+```
+import React from 'react';
+import Formsy from 'formsy-react';
+import { RaisedButton, Paper } from 'material-ui';
+import DefaultInput from './DefaultInput';
 
+export class LoginForm extends React.Component {
+  constructor() {
+    super();
+  }
+
+  render() {
+    return (
+      <Formsy.Form onSubmit={this.props.onSubmit}>
+        <Paper zDepth={1} style={{padding: 32}}>
+          <h3>Log in</h3>
+          <DefaultInput onChange={(newText) => console.info("email"+newText)} name='username' title='Username (admin)' required />
+          <DefaultInput onChange={(newText) => console.info("pass"+newText)} type='password' name='password' title='Password (123456)' required />
+          <div style={{marginTop: 24}}>
+            <RaisedButton
+              secondary={true}
+              type="submit"
+              style={{margin: '0 auto', display: 'block', width: 150}}
+              label={'Log in'} />
+          </div>
+        </Paper>
+      </Formsy.Form>
+    );
+  }
+}
+```
+Above we have our LoginForm's component that is using the DefaultInput's component. It's simple React.js' form that after submit is calling the ***this.props.onSubmit*** - this onSubmit function will be definied in ***src/views/LoginView.js***'s smart component in a moment. I won't talk too much about attached styles on that component because it's up to you how you will style it - you will see a screenshot of aplied styles of our app in a moment.
 
 
 

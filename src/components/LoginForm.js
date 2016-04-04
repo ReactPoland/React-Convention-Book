@@ -6,7 +6,6 @@ import DefaultInput from './DefaultInput';
 export class LoginForm extends React.Component {
   constructor() {
     super();
-
   }
 
   render() {
