@@ -37,9 +37,14 @@ export default [
           findOne MAY NOT WORK! double-check!
          */
         return User.findOne(userStatementQuery, function(err, user) {
+          console.info(5);
           if (err) throw err;
+          console.info(6);
         }).then((result) => {
-          if(result.length) {
+          console.info(JSON.stringify(result, null, 4));
+          console.info(7);
+          if(result && result.length) {
+            console.info(8);
             console.info("1) ", result);
             let role = result[0].role;
             let userDetailsToHash = username+role;
@@ -63,6 +68,7 @@ export default [
               }
             ];
           } else {
+            console.info("INVALID");
             // INVALID LOGIN
             return [
               {
@@ -75,6 +81,8 @@ export default [
               }
             ];
           }
+          console.info("TO RETURN", result);
+
           return result;
         });
       }
