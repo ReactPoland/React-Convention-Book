@@ -754,4 +754,23 @@ Currently when you do ***npm start*** then you will see as following two routes:
 ![screenshot login view](http://test.przeorski.pl/book/104_loginview.png)
 
 
+### Working on the login form that will call the backend in order to authenticate
+
+OK, so we have done a lot of preparation in terms of having an extensible project structure (routes, rootReducer, configStores etc).
+
+In order to make our app nicer from a user perspective we will start using Material Design CSS. For making our work easier with forms, we will start using a ***formsy-react***'s library. Let's install them:
+```
+$ npm i --save material-ui@0.15.0-alpha.2 formsy-react@0.17.0
+```
+
+At the time writing this, the version ***0.15.0-alpha.2*** if Material UI is the newest one - I put this version above because the ecosystem is changing so quickly that it's better to mark the used version in here so you won't have any suprises when following the instructions in that book.
+
+The ***formsy-react***'s library will help you to write more efficient forms code, so it will be a please as you can learn in a while.
+
+
+
+
+
+
+
 
