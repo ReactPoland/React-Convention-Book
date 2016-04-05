@@ -99394,6 +99394,8 @@
 	  return {};
 	};
 
+	alert("DEBUG kamilek123:kamilek123 (with Robomongo)");
+
 	var RegisterView = function (_React$Component) {
 	  _inherits(RegisterView, _React$Component);
 
@@ -99420,20 +99422,20 @@
 	                console.info("newUserModel", newUserModel);
 
 	                _context.next = 3;
-	                return _falcorModel2.default.call(['login'], [newUserModel]).then(function (result) {
+	                return _falcorModel2.default.call(['register'], [newUserModel]).then(function (result) {
 	                  return result;
 	                });
 
 	              case 3:
 	                registerResult = _context.sent;
 	                _context.next = 6;
-	                return _falcorModel2.default.getValue('register.newUserId');
+	                return _falcorModel2.default.getValue(['register', 'newUserId']);
 
 	              case 6:
 	                newUserId = _context.sent;
 
 	                if (!(newUserId === "INVALID")) {
-	                  _context.next = 14;
+	                  _context.next = 13;
 	                  break;
 	                }
 
@@ -99444,22 +99446,21 @@
 	                errorRes = _context.sent;
 
 	                this.setState({ error: errorRes });
-	                alert(JSON.stringify(errorRes));
 	                return _context.abrupt('return');
 
-	              case 14:
+	              case 13:
 	                if (!newUserId) {
-	                  _context.next = 19;
+	                  _context.next = 18;
 	                  break;
 	                }
 
 	                this.props.history.pushState(null, '/login');
 	                return _context.abrupt('return');
 
-	              case 19:
+	              case 18:
 	                alert("Fatal registration error, please contact an admin");
 
-	              case 20:
+	              case 19:
 	              case 'end':
 	                return _context.stop();
 	            }

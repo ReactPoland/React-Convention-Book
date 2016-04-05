@@ -13,6 +13,7 @@ export default [
         let { username, password } = args[0];
         let saltedPassword = password+"pubApp"; // pubApp is our salt string
         let saltedPassHash = crypto.createHash('sha256').update(saltedPassword).digest('hex');
+
         let userStatementQuery = {
           $and: [
               { 'username': username },
@@ -89,7 +90,6 @@ export default [
                 }
               ];
             } else {
-              console.info(5);
               // registration failed
               return [
                 {
@@ -102,7 +102,6 @@ export default [
                 }
               ];
             }
-            console.info(5);
             return;
           }).catch((reason) => console.error(reason));
       }

@@ -21,7 +21,7 @@ var userSchema = {
   "firstName" : String,
   "lastName" : String,
   "email" : { type: String, index: {unique: true, dropDups: true }},
-  "role" : String,
+  "role" : { type: String, default: 'editor' },
   "verified" : Boolean,
   "imageUrl" : String
 }
