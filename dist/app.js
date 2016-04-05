@@ -99394,8 +99394,6 @@
 	  return {};
 	};
 
-	alert("DEBUG kamilek123:kamilek123 (with Robomongo)");
-
 	var RegisterView = function (_React$Component) {
 	  _inherits(RegisterView, _React$Component);
 
@@ -99407,6 +99405,7 @@
 	    _this.state = {
 	      error: null
 	    };
+	    _this.register = _this.register.bind(_this);
 	    return _this;
 	  }
 

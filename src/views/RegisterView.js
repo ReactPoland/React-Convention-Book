@@ -13,14 +13,13 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 });
 
-alert("DEBUG kamilek123:kamilek123 (with Robomongo)");
-
 class RegisterView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       error: null
     };
+    this.register = this.register.bind(this);
   }
 
   async register (newUserModel) {
