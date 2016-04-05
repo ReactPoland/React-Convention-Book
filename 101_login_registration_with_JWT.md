@@ -1167,10 +1167,138 @@ The only remaining step for us is to make a RegistrationView component, this rou
 
 #### Starting working on the new editor's registration
 
+In order to wrap up the registration, let's first make some changes in our User's scheme from Mongoose's config file at location ***server/configMongoose.js***:
+```
+var userSchema = {
+  "username" : String,
+  "password" : String,
+  "firstName" : String,
+  "lastName" : String,
+  "email" : String,
+  "role" : String,
+  "verified" : Boolean,
+  "imageUrl" : String
+}
+```
 
+to new scheme as following:
+```
+var userSchema = {
+  "username" : { type: String, index: {unique: true, dropDups: true }},
+  "password" : String,
+  "firstName" : String,
+  "lastName" : String,
+  "email" : { type: String, index: {unique: true, dropDups: true }},
+  "role" : { type: String, default: 'editor' },
+  "verified" : Boolean,
+  "imageUrl" : String
+}
+```
 
+As you can see above, we have added unique's indexes to the "username" and the "email"'s fields. We also have added a default vlaue for a role, as the any next user in our collection will be an editor (not an admin).
 
+#### Adding register's falcor-route
 
+In the file located at ***server/routesSession.js*** you need to add a new route (next to the login's route):
+```
+  { 
+    route: ['register'],
+    call: (callPath, args) => 
+      {
+        let newUserObj = args[0];
+        newUserObj.password = newUserObj.password+"pubApp";
+        newUserObj.password = crypto.createHash('sha256').update(newUserObj.password).digest('hex');
+        let newUser = new User(newUserObj);
+        return newUser.save((err, data) => { if (err) return err; })
+          .then ((newRes) => {
+            /*
+              got new obj data, now let's get count:
+             */
+            let newUserDetail = newRes.toObject();
+            if(newUserDetail._id) {
+              return null; // Mocked for now
+            } else {
+              // registration failed
+              return [
+                {
+                  path: ['register', 'newUserId'], 
+                  value: 'INVALID'
+                },
+                {
+                  path: ['register', 'error'], 
+                  value: 'Registration failed - no id has been created'
+                }
+              ];
+            }
+            return;
+          }).catch((reason) => console.error(reason));
+      }
+  }
+```
+
+What the above's code is actually do is simply receiving the new user's object from the front-end via ***let newUserObj = args[0]***...
+
+... then we are salting the password that we will store in our database:
+```
+        newUserObj.password = newUserObj.password+"pubApp";
+        newUserObj.password = crypto.createHash('sha256').update(newUserObj.password).digest('hex');
+```
+
+and then we are creating a new User Model from Mongoose via ***let newUser = new User(newUserObj)***. Because the ***newUser*** variable is a new model (not saved yet) of User then we need to save it with this code:
+```
+return newUser.save((err, data) => { if (err) return err; })
+```
+
+... and after it's saved into the db and the promise has been resolved we are managing an invalid entry to db first making the Mongoose result's object into a simple JSON structure with ***let newUserDetail = newRes.toObject();***.
+
+And after we are done with it, then we are returning an INVALID information to the Falcor's model:
+```
+  // registration failed
+    return [
+      {
+        path: ['register', 'newUserId'], 
+        value: 'INVALID'
+      },
+      {
+        path: ['register', 'error'], 
+        value: 'Registration failed - no id has been created'
+      }
+```
+
+OK, so we are done with handling an invalid user registration from Falcor. 
+Next step is to replace this:
+```
+// you shall already have this in your codebase, just a recall
+if(newUserDetail._id) {
+  return null; // Mocked for now
+}
+```
+
+and the above needs to be replaced with:
+```
+if(newUserDetail._id) {
+  let newUserId = newUserDetail._id.toString();
+  return [
+    {
+      path: ['register', 'newUserId'], 
+      value: newUserId
+    },
+    {
+      path: ['register', 'error'], 
+      value: false 
+    }
+  ];
+}
+```
+
+#### Explanation:
+We need to cast our new user's id into the String ***newUserId = newUserDetail._id.toString()*** (otherwise it will break the code).
+
+As you can see, we have a standard return statement that complements the model in falcor.
+
+To quickly recalling, after it will return correctly on backend (as above), then we will be able to request this value on front-end as following: ***let newUserId = await falcorModel.getValue(['register', 'newUserId']);*** (this is just example here how to fetch this newUserId on the client-side - don't write it into your code, we will do it in a minute below).
+
+You will get used to after few more examples.
 
 
 
