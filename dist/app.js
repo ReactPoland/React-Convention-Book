@@ -60726,8 +60726,8 @@
 	            null,
 	            'Log in'
 	          ),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'username', title: 'Username (admin)', required: true }),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, type: 'password', name: 'password', title: 'Password (123456)', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(event) {}, name: 'username', title: 'Username (admin)', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(event) {}, type: 'password', name: 'password', title: 'Password (123456)', required: true }),
 	          _react2.default.createElement(
 	            'div',
 	            { style: { marginTop: 24 } },
@@ -99557,11 +99557,11 @@
 	            null,
 	            'Registration form'
 	          ),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'username', title: 'Username', required: true }),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'firstName', title: 'Firstname', required: true }),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'lastName', title: 'Lastname', required: true }),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, name: 'email', title: 'Email', required: true }),
-	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(newText) {}, type: 'password', name: 'password', title: 'Password', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(event) {}, name: 'username', title: 'Username', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(event) {}, name: 'firstName', title: 'Firstname', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(event) {}, name: 'lastName', title: 'Lastname', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(event) {}, name: 'email', title: 'Email', required: true }),
+	          _react2.default.createElement(_DefaultInput2.default, { onChange: function onChange(event) {}, type: 'password', name: 'password', title: 'Password', required: true }),
 	          _react2.default.createElement(
 	            'div',
 	            { style: { marginTop: 24 } },

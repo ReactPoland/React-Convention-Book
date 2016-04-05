@@ -1347,6 +1347,121 @@ export class RegisterForm extends React.Component {
 
 The above's registration component is creating a form exactly the same way as on the LoginForm. After a user clicks the "Register"'s button then it sends a callback to the our ***src/views/RegisterView.js*** component (that we will create in a moment).
 
+Just please remember that in the components' directory we keep only DUMB components so all the communication with rest of the app must to be done via callbacks like in this example.
+
+#### RegisterView
+
+Let's create a RegisterView's file:
+```
+$ pwd 
+$ [[[you shall be at the views folder]]]
+$ touch RegisterView.js
+```
+
+and it's content is:
+```
+"use strict";
+import React from 'react';
+import falcorModel from '../falcorModel.js';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Snackbar } from 'material-ui';
+import { RegisterForm } from '../components/RegisterForm.js';
+
+const mapStateToProps = (state) => ({ 
+  ...state 
+});
+
+const mapDispatchToProps = (dispatch) => ({
+});
+```
+
+That are standard things that we use in our SMART components (we need falcorModel in order to comunicate with backend and the mapStateToProps and the mapDispatchToProps in order to communicate with our Redux's store/reducer).
+
+OK, it's not all of the register view, next let's add a component:
+```
+const mapDispatchToProps = (dispatch) => ({
+});
+
+class RegisterView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      error: null
+    };
+    this.register = this.register.bind(this);
+  }
+
+  render () {
+    return (
+      <div>
+          <h1>Register</h1>
+          <div style={{maxWidth: 450, margin: '0 auto'}}>
+            <RegisterForm 
+              onSubmit={this.register} />
+          </div>
+      </div>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterView);
+```
+
+As you can find on the above code snippet, we are missing the ***register*** function, so between the ***constructor*** and the ***render*** function add also the function which is as following:
+```
+  async register (newUserModel) {
+    console.info("newUserModel", newUserModel);
+
+    let registerResult = await falcorModel
+      .call(
+            ['register'],
+            [newUserModel]
+          ).
+      then((result) => {
+        return result;
+      });
+
+    let newUserId = await falcorModel.getValue(['register', 'newUserId']);
+    if(newUserId === "INVALID") {
+      let errorRes = await falcorModel.getValue('register.error');
+      this.setState({error: errorRes});
+      return;
+    }
+
+    if(newUserId) {
+      this.props.history.pushState(null, '/login');
+      return;
+    } else {
+      alert("Fatal registration error, please contact an admin");
+    }
+  }
+```
+As you can find above, the ***async register (newUserModel)*** function is asynchronous and friendly to the awaits. Next we are just logging to the console what a user has submited with ***console.info("newUserModel", newUserModel);***. After that we are querying with a call the falcor-router:
+```
+    let registerResult = await falcorModel
+      .call(
+            ['register'],
+            [newUserModel]
+          ).
+      then((result) => {
+        return result;
+      });
+```
+After we have called the router then we fetch the response with:
+```
+let newUserId = await falcorModel.getValue(['register', 'newUserId']);
+```
+
+... and depending on the response from the backend, then we do different things:
+1) For INVALID we are fetching and setting error message into the component's state (***this.setState({error: errorRes})***).
+
+2) If the user has registered correctly, then we have their new id and we are asking user to login with history's push state (***this.props.history.pushState(null, '/login');***).
+
+
+At this point we shall be able to register with this form:
+
+![registration form](http://test.przeorski.pl/book/107_registration_form_v1.png)
 
 
 
