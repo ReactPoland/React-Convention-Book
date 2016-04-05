@@ -1461,7 +1461,7 @@ let newUserId = await falcorModel.getValue(['register', 'newUserId']);
 
 At this point we shall be able to register with this form:
 
-![registration form](http://test.przeorski.pl/book/107_registration_form_v1.png)
+![registration form](http://test.przeorski.pl/book/107_registration_form.png)
 
 
 
