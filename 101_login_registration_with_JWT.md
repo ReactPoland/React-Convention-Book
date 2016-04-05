@@ -883,8 +883,8 @@ export class LoginForm extends React.Component {
       <Formsy.Form onSubmit={this.props.onSubmit}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Log in</h3>
-          <DefaultInput onChange={(newText) => {}} name='username' title='Username (admin)' required />
-          <DefaultInput onChange={(newText) => {}} type='password' name='password' title='Password (123456)' required />
+          <DefaultInput onChange={(event) => {}} name='username' title='Username (admin)' required />
+          <DefaultInput onChange={(event) => {}} type='password' name='password' title='Password (123456)' required />
           <div style={{marginTop: 24}}>
             <RaisedButton
               secondary={true}
@@ -1299,6 +1299,53 @@ As you can see, we have a standard return statement that complements the model i
 To quickly recalling, after it will return correctly on backend (as above), then we will be able to request this value on front-end as following: ***let newUserId = await falcorModel.getValue(['register', 'newUserId']);*** (this is just example here how to fetch this newUserId on the client-side - don't write it into your code, we will do it in a minute below).
 
 You will get used to after few more examples.
+
+#### Front-end implementation (RegisterView and RegisterForm)
+
+Let's create first a component that will manage on the front-end the register's form with following actions:
+```
+$ pwd 
+$ [[[you shall be at the components folder]]]
+$ touch RegisterForm.js
+```
+
+and the content of that file:
+```
+import React from 'react';
+import Formsy from 'formsy-react';
+import { RaisedButton, Paper } from 'material-ui';
+import DefaultInput from './DefaultInput';
+
+export class RegisterForm extends React.Component {
+  constructor() {
+    super();
+  }
+
+  render() {
+    return (
+      <Formsy.Form onSubmit={this.props.onSubmit}>
+        <Paper zDepth={1} style={{padding: 32}}>
+          <h3>Registration form</h3>
+          <DefaultInput onChange={(event) => {}} name='username' title='Username' required />
+          <DefaultInput onChange={(event) => {}} name='firstName' title='Firstname' required />
+          <DefaultInput onChange={(event) => {}} name='lastName' title='Lastname' required />
+          <DefaultInput onChange={(event) => {}} name='email' title='Email' required />
+          <DefaultInput onChange={(event) => {}} type='password' name='password' title='Password' required />
+          <div style={{marginTop: 24}}>
+            <RaisedButton
+              secondary={true}
+              type="submit"
+              style={{margin: '0 auto', display: 'block', width: 150}}
+              label={'Register'} />
+          </div>
+        </Paper>
+      </Formsy.Form>
+    );
+  }
+}
+```
+
+The above's registration component is creating a form exactly the same way as on the LoginForm. After a user clicks the "Register"'s button then it sends a callback to the our ***src/views/RegisterView.js*** component (that we will create in a moment).
 
 
 

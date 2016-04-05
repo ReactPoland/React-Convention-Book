@@ -13,11 +13,11 @@ export class RegisterForm extends React.Component {
       <Formsy.Form onSubmit={this.props.onSubmit}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Registration form</h3>
-          <DefaultInput onChange={(newText) => {}} name='username' title='Username' required />
-          <DefaultInput onChange={(newText) => {}} name='firstName' title='Firstname' required />
-          <DefaultInput onChange={(newText) => {}} name='lastName' title='Lastname' required />
-          <DefaultInput onChange={(newText) => {}} name='email' title='Email' required />
-          <DefaultInput onChange={(newText) => {}} type='password' name='password' title='Password' required />
+          <DefaultInput onChange={(event) => {}} name='username' title='Username' required />
+          <DefaultInput onChange={(event) => {}} name='firstName' title='Firstname' required />
+          <DefaultInput onChange={(event) => {}} name='lastName' title='Lastname' required />
+          <DefaultInput onChange={(event) => {}} name='email' title='Email' required />
+          <DefaultInput onChange={(event) => {}} type='password' name='password' title='Password' required />
           <div style={{marginTop: 24}}>
             <RaisedButton
               secondary={true}
