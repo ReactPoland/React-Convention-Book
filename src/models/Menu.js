@@ -7,7 +7,7 @@ export default class Menu extends Model {
   constructor(menu) {
     super(menu);
     this.type = 'Menu';
-    this.showAllergensInMenu = typeof(menu.showAllergensInMenu) !== 'undefined' ? menu.showAllergensInMenu : true;
+    this.showAllergensInMenu = typeof(menu.showAllergensInMenu) !== 'undefined' ? menu.showAllergensInMenu : "KLOPS";
     this.sections = super.prepareArray(menu.sections);
   }
 

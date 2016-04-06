@@ -14,7 +14,7 @@ import { DefaultDatePicker } from 'components/forms/DefaultDatePicker';
 import CloseClearModalIcon from 'react-material-icons/icons/content/clear';
 
 import RichEditor from 'components/wyswig-draftjs/RichEditor';
-
+import { allergensDetails } from 'components/menu/Allergens';
 
 
 
@@ -40,11 +40,19 @@ export default class AddMenuItemModal extends React.Component {
     this.onSectionsChange = this.onSectionsChange.bind(this);
     this.onAllergensChange = this.onAllergensChange.bind(this);
     this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
-
     this.state = {
       canSubmit: false,
-      contentJSON: {}
+      contentJSON: {},
+      allergens: {}
     };
+
+    if(!props.editItemId) {
+      // set default allergens obj based on Allergens component config:
+      allergensDetails.map((allergenItem) => {
+        this.state.allergens[allergenItem.value] = false;
+      });
+      
+    }
   }
 
   componentWillMount() {
@@ -66,6 +74,9 @@ export default class AddMenuItemModal extends React.Component {
   }
 
   _onDone(formData) {
+    console.info("\n\n\n this.state.allergens\n\n\n ");
+    console.info(this.state.allergens);
+    console.info("\n\n\n this.state.allergens\n\n\n ");
     if(this.state.editedItem) {
       // only in edit mode
       for(var key in this.state.editedItem) {
@@ -120,7 +131,6 @@ export default class AddMenuItemModal extends React.Component {
   }
 
   _onchangeDraftJSON(contentJSON, descriptionName) {
-    // ....
     let newContentJSON = this.state.contentJSON;
     newContentJSON[descriptionName] = contentJSON;
     this.setState({ contentJSON: newContentJSON});

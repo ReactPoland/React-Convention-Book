@@ -22,17 +22,17 @@ export default class EditMenuSectionsModal extends React.Component {
     this._onDone = this._onDone.bind(this);
     this._enableButton = this._enableButton.bind(this);
     this._disableButton = this._disableButton.bind(this);
-    this._unlockInput         = this._unlockInput.bind(this);
     this._lockInputAndSave         = this._lockInputAndSave.bind(this);
     this.onSectionEdit         = this.onSectionEdit.bind(this);
 
     this.state = {
       sections: this._getSections(this.props),
-      sectionInEdit: null
+      sectionInEdit: null,
+      sectionInEditINDEX: null
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
     this.setState({
       sections: this._getSections(nextProps)
     });
@@ -45,12 +45,6 @@ export default class EditMenuSectionsModal extends React.Component {
       return this.props.fullSections.get(section);
     });
     return sections;
-  }
-
-  _unlockInput(section) {
-    this.setState({
-      sectionInEdit: section.id
-    });
   }
 
   _onDone() {
@@ -77,12 +71,15 @@ export default class EditMenuSectionsModal extends React.Component {
     this.setState({sections});
   }
 
-  onSectionEdit(section) {
-    this._unlockInput(section)
-
+  onSectionEdit(sectionIndexEditing, section) {
+    this.setState({
+      sectionInEditINDEX: sectionIndexEditing,
+      sectionInEdit: section.id
+    });
   }
 
   _lockInputAndSave() {
+    console.info(1);
     const title = this.refs[this.state.sectionInEdit].getValue();
     if(title === undefined) { 
       this.setState({
@@ -90,13 +87,20 @@ export default class EditMenuSectionsModal extends React.Component {
       });
       return;
     }
-
+    console.info(2);
     const originSection = this.props.section.get(this.state.sectionInEdit);
     const newSection = new Section(originSection.formatForWire());
     newSection.title = title;
 
     this.props.onUpdate(newSection);
+    console.info(7);
+    let updatedSections = this.state.sections; 
+    updatedSections[this.state.sectionInEditINDEX] = newSection;
+    console.info("updatedSections");
+    console.info(updatedSections);
+    console.info("updatedSections");
     this.setState({
+      sections: updatedSections,
       sectionInEdit: null
     });
   }
@@ -134,6 +138,10 @@ export default class EditMenuSectionsModal extends React.Component {
               autoFocus
               required
               onEnterKeyDown={this._lockInputAndSave} />
+                <FlatButton 
+                  primary={true} 
+                  label="Save changes" 
+                  onTouchTap={this._lockInputAndSave} />
           </div>
         </Form>
       );
@@ -143,7 +151,7 @@ export default class EditMenuSectionsModal extends React.Component {
 
     const actionBtns = [
       <FlatButton label="Cancel" onClick={this.props.onHide} />,
-      <FlatButton label="Save" primary={true} onClick={this._onDone} />
+      <FlatButton label="Done with editing sections" primary={true} onClick={this._onDone} />
     ];
 
     fullSections.forEach((section) => {
@@ -155,14 +163,6 @@ export default class EditMenuSectionsModal extends React.Component {
       title: section.title,
       value: section.id
     }));
-
-
-    console.info("\n\n\n\n\n\n 5555 this.onSectionEdit \n\n\n "
-      ,this.onSectionEdit
-      ,"\n\n\n\n\n\n 5555 this.onSectionEdit \n\n\n ");
-
-
-
 
     return (
       <Dialog

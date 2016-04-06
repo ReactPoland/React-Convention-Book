@@ -149,9 +149,6 @@ export default class MenuListItem extends React.Component {
         readOnly={true} 
         allergensObj={item.allergens}/>);
 
-    console.info("\n\n\n\n DESCRIPTIONS \n\n\n 1:", item.description, "\n\n\n 2:", item.description2, "\n\n\n 3:", item.description3 )
-
-
     return (
       <Card className="MenuItem">
         <div>

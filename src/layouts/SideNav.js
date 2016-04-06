@@ -126,6 +126,8 @@ class SideNav extends React.Component {
         ['restaurants', 0, 'menus', {from: 0, to: 100}, ['title', 'id', 'description', 'showAllergensInMenu']]
       );
 
+      console.info("\n\n\n 1111debug \n\n\n", response, "\n\n\n debug \n\n\n");
+
       console.info("RESULT #2", response);
       const menus = falcorUtils.makeArray({object: response.restaurants[0], name: 'menus'});
       

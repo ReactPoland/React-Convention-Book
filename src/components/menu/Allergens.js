@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checkbox } from 'material-ui';
 
-const allergensDetails = [{
+export const allergensDetails = [{
   value: 'vegetarian',
   title: 'Vegetarian',
   icon: 'Ⓥ',

@@ -8,9 +8,9 @@ let Schema = mongoose.Schema;
 // };
 
 const conf = {
-  hostname: process.env.MONGO_HOSTNAME || 'ds011890.mlab.com',
-  port: process.env.MONGO_PORT || 11890,
-  env: process.env.MONGO_ENV || 'rrtest',
+  hostname: process.env.MONGO_HOSTNAME || 'localhost',
+  port: process.env.MONGO_PORT || 27017,
+  env: process.env.MONGO_ENV || 'test',
 };
 
 // test / test123
@@ -31,7 +31,7 @@ var menuItemSchema = {
   description2: String,
   description3: String,
   type: String,
-  allergens: Array
+  allergens: Object
 };
 var MenuItemCollection = mongoose.model('MenuItemCollection', menuItemSchema, 'menuItems');
 
@@ -48,12 +48,10 @@ var SectionCollection = mongoose.model('SectionCollection', sectionSchema, 'sect
 var menuSchema = {
   title: String,
   description: String,
+  showAllergensInMenu: Boolean,
   orderNumber: Number,
   sectionsById: Array
 };
-
-
-
 
 var MenuCollection = mongoose.model('MenuCollection', menuSchema, 'menus');
 
@@ -65,7 +63,7 @@ var userSchema = new Schema({
   email: String,
   password: String,
   role: String,
-  verified: false,
+  verified: Boolean,
   imageUrl: String,
   gender: String,
   created_at: Date,

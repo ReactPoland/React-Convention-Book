@@ -73,7 +73,7 @@ class MenuEntity extends React.Component {
     const response = await API.get(
       // I don't know yet exact number of items needed
       // perhaps we'll need to fetch items partialy (pagination style)
-      ['restaurants', 0, 'menus', {from: 0, to: 20}, ['id', 'title', 'description', 'sections'], {from: 0, to: 100}, 'id']
+      ['restaurants', 0, 'menus', {from: 0, to: 20}, ['id', 'title', 'description', 'sections', 'showAllergensInMenu'], {from: 0, to: 100}, 'id']
     );
 
     console.info("\n\n\n DEBUG response \n\n ", response, "\n\n\n\n ");
@@ -129,7 +129,6 @@ class MenuEntity extends React.Component {
             [newMenu]          
           ).
       then((result) => {
-        console.info(2);
         return result;
       });
     const menusLen = await falcorModel.getValue(
@@ -314,7 +313,6 @@ class MenuEntity extends React.Component {
       newOrder.map(async (secItem, index) => {
         if(typeof secItem.id !== "undefined") {
           newSectionsOrder.push(secItem.id);
-          console.info("Already in db")
           return;
         }
 
@@ -365,30 +363,32 @@ class MenuEntity extends React.Component {
 
   }
 
-  onItemsReorder(sections) {
-    Promise.all(
-      sections.map((section) => {
-        console.log('\n#################\nCALL API: UPDATE SECTION\n#################\n');
-        let fullSection = this.props.section.get(section.id);
-        fullSection.items = section.items.map((item) => item.id);
-        section = fullSection.formatForWire();
-        return API
-          .set({
-            url: ['sectionsById', section.id],
-            body: section
-          })
-          .then(() => {
-            this.props.actions.section.update(section);
-            return section;
-          });
-      })
-    )
-    .then((menu) => {
-      this.setState({
-        requestSuccess: 'Saved',
-        modal: null
-      });
+  async onItemsReorder(sections) {
+    console.log('\n#################\nCALL API: UPDATE SECTION\n#################\n');
+    let sectionsObjArray = sections.map((sectionItem, index) => {
+      // add sections with IDs to menu items, only
+      sectionItem.items = sectionItem.items.map((menuItem, index2) => menuItem.id);
+      return sectionItem;
     });
+
+    // return;
+    let sectionsUpdateResult = await falcorModel
+      .call(
+            ['restaurants', 0, 'sections','update'],
+            [sectionsObjArray]  // requires array of menus        
+          ).
+      then((result) => {
+        return result;
+      });
+    sectionsObjArray.map((section) => {
+      this.props.actions.section.update(section);
+    });
+
+    this.setState({
+      requestSuccess: 'Saved',
+      modal: null
+    });
+    return;
   }
 
   onAddMenuItem() {
@@ -513,7 +513,7 @@ class MenuEntity extends React.Component {
 
     let items = mapHelpers.getFromRange(this.props.items, 0, 3);
     let openContent = null;
-
+    console.info("\n\n\n\n this.state.modal\n\n\n\n ", this.state.modal , "\n\n\n\n this.state.modal \n\n\n\n ")
     if(this.props.open) {
       items = this.props.items;
       openContent = [
@@ -538,7 +538,8 @@ class MenuEntity extends React.Component {
           onHide={this.closeModal}
           onDone={this.onReorderMenus} />,
 
-        <EditMenuSectionsModal
+        (this.state.modal === 'edit-menu-sections' ?
+          <EditMenuSectionsModal
           onUpdate={this.onUpdateSection}
           section={this.props.section}
           key="edit-menu-sections-modal"
@@ -546,7 +547,9 @@ class MenuEntity extends React.Component {
           menu={this.state.menuInEdit}
           fullSections={this.props.section}
           onDone={this.onMenuSectionsReorder}
-          onHide={this.closeModal} />,
+          onHide={this.closeModal} />
+          :
+          <span />),
 
         <ReorderMenuItemsModal
           key="reorder-menu-items-modal"

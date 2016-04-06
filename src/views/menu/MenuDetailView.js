@@ -13,7 +13,7 @@ import Loader from '../../decorators/Loader';
 import AddPlaceholder from 'components/menu/AddPlaceholder';
 import MenuLibraryView from 'views/menu/MenuLibraryView';
 import Allergens from 'components/menu/Allergens';
-
+import LinearProgress from 'material-ui/lib/linear-progress';
 
 const mapStateToProps = (state) => ({
   session: state.session,
@@ -113,10 +113,17 @@ class MenuDetailView extends React.Component {
       loaded: this.state.loaded,
       __getLoaderMarkup: this.props.__getLoaderMarkup
     }
-
     let currentMenuDetails = this.props.menu.get(currentMenuId);
-    let dontShowAllergens = currentMenuDetails && (currentMenuDetails.showAllergensInMenu === true);
-    console.info("\n\n showAllergens \n\n\n", dontShowAllergens, "\n\n showAllergens \n\n\n");
+
+    if(typeof currentMenuDetails === 'undefined') {
+      return (
+          <div> 
+            <LinearProgress style={{margin: '0 auto', marginTop: 100 ,width: 300}} mode="indeterminate"/> 
+          </div>
+        )
+    }
+    
+    let dontShowAllergens = (currentMenuDetails.showAllergensInMenu === false);
 
     return (<div>
       <div style={{margin: '0px 0px 0px 45px'}}>

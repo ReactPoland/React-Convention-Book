@@ -110,21 +110,10 @@ class Inside extends React.Component {
   }
 
   render() {
-
-    console.info("\n\n\n\n\n\n 9999 this.props.onEdit \n\n\n "
-      ,this.props.onEdit
-      ,"\n\n\n\n\n\n 9999 this.props.onEdit \n\n\n ");
-
-
-
     const { connectDropTarget } = this.props;
     const items = (this.state.items || []).map((item, index) => {
       /* use title as a key if item is newly created and doesn't have id yet */
       if(!item) return null; // this cases covers when someone has removed an item
-      
-      console.info("\n\n\n\n\n\n 6666 this.props.onEdit \n\n\n "
-        ,this.props.onEdit
-        ,"\n\n\n\n\n\n 6666 this.props.onEdit \n\n\n ");
 
       return (
         <ReorderDraggableBox
@@ -134,7 +123,7 @@ class Inside extends React.Component {
           key={item.id || item.title}
           moveItem={this.moveItem}
           onDelete={this.props.onDelete}
-          onEdit={this.props.onEdit} />
+          onEdit={this.props.onEdit.bind(this, index)} />
       );
     });
     const styles = getStyles(items.length, this.state.dye);
@@ -158,14 +147,6 @@ export default class ReorderItemsWrapper extends React.Component {
   }
 
   render() {
-    console.info("props");
-    console.info(this.props);
-    console.info("\n\n\n\n\n\n 8888 this.props.onEdit \n\n\n "
-      ,this.props.onEdit
-      ,"\n\n\n\n\n\n 8888 this.props.onEdit \n\n\n ");
-
-
-
     return (
       <Inside
         {...this.props} />

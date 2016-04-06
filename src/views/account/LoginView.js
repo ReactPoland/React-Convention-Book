@@ -64,12 +64,9 @@ class LoginView extends React.Component {
         return loginResult;
       });
 
-    let tokenRes = await falcorModel.getValue('login.token');
+    let tokenRes = await falcorModel.getValue(['login', 'token']);
 
     console.info("tokenRes", tokenRes);
-    console.info("tokenRes", tokenRes);
-    console.info("tokenRes", tokenRes);
-
 
     if(tokenRes === "INVALID") {
       // login failed, get error msg

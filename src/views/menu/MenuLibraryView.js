@@ -22,6 +22,7 @@ import MenuItemModel from 'models/MenuItem';
 
 import AddMenuItemModal from 'components/menu/modals/AddMenuItemModal';
 
+
 const falcorLib = require('falcor/dist/falcor.browser');
 
 const mapStateToProps = (state) => ({
@@ -188,14 +189,13 @@ class MenuLibraryView extends React.Component {
   }
 
   async onEditItemDone(menuItem, refMap) {
+    console.info("onEditItemDone");
+    console.info(menuItem);
+    console.info("onEditItemDone");
     /*
         refMap is an information in what menus and sections, the item has been added
      */
     menuItem.picUrl = "http://lorempixel.com/700/500/food/";
-    // menuItem.description = menuItem.description;
-    console.info(" \n\n\n\n\n menuItem \n\n\n\n\n ");
-    console.info(menuItem);
-    console.info(" \n\n\n\n\n menuItem \n\n\n\n\n ");
     let menuItemArray = [menuItem] ; //.formatForWire();
     let resultUpdateMenuItems = await falcorModel
       .call(
@@ -263,6 +263,11 @@ class MenuLibraryView extends React.Component {
 
 
   async onAddItemDone(newMenuItem, refMap) {
+
+    console.info("newMenuItem");
+    console.info(newMenuItem);
+    console.info("newMenuItem");
+
     let result = await falcorModel
       .call(
             ['restaurants', 0, 'menuItems','add'],
@@ -300,16 +305,10 @@ class MenuLibraryView extends React.Component {
             [updatedSections[0]]          
           ).
       then((result) => {
-        console.info("sectionUpdateResult", result);
         return result;
       });
 
-    console.info("sectionUpdateResult");
-    console.info(sectionUpdateResult);
-    console.info("sectionUpdateResult");
-
     updatedSections[0].map((updatedSection) => {
-      console.info("updatedSection", updatedSection);
       this.props.actions.section.update(updatedSection);
     });
 
@@ -350,9 +349,6 @@ class MenuLibraryView extends React.Component {
         toUpdateSections.push(sectionItem);
       }
     });
-    console.info("\n\n\n\n\n toUpdateSections", toUpdateSections);
-
-
 
     let sectionUpdateResult = await falcorModel
       .call(
@@ -360,13 +356,8 @@ class MenuLibraryView extends React.Component {
             [toUpdateSections]          
           ).
       then((result) => {
-        console.info("sectionUpdateResult", result);
         return result;
       });
-
-    console.info("\n\n sectionUpdateResult \n\n\n ");
-    console.info(sectionUpdateResult);
-    console.info("\n\n\n\n sectionUpdateResult \n\n\n ");
 
     let result = await falcorModel
       .call(
@@ -501,8 +492,6 @@ class MenuLibraryView extends React.Component {
       if(!this.props.menuDetailProps.loaded) {
         return this.props.menuDetailProps.__getLoaderMarkup();
       }
-
-      // ....
 
       if(!menu.sections || !menu.sections.length) {
         return (

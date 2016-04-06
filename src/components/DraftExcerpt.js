@@ -1,8 +1,10 @@
 import React from 'react';
 import { FlatButton } from 'material-ui';
 import backdraft  from 'backdraft-js';
-import { NavigationChevronRight } from 'material-ui/lib/svg-icons';
 import ViewerOfRichEditor from 'components/wyswig-draftjs/ViewerOfRichEditor';
+import ExpandLess from 'material-ui/lib/svg-icons/navigation/expand-less';
+import ExpandMore from 'material-ui/lib/svg-icons/navigation/expand-more';
+
 
 export default class DraftExcerpt extends React.Component {
   constructor(props) {
@@ -41,7 +43,7 @@ export default class DraftExcerpt extends React.Component {
         buttonJSX = <span />;
       } else {
         buttonJSX = (  
-          <NavigationChevronRight
+          <ExpandMore
             style={{height: 80, width: 80, cursor: 'pointer'}}
             className="Excerpt-Button"
             onClick={this._toggle}
@@ -64,7 +66,7 @@ export default class DraftExcerpt extends React.Component {
 
     } else {
       buttonJSX = (
-        <NavigationChevronRight
+        <ExpandLess
           style={{height: 80, width: 80, cursor: 'pointer'}}
           className="Excerpt-Button"
           onClick={this._toggle}

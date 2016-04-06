@@ -24,6 +24,9 @@ class MenuSection extends React.Component {
       return menuItem.get(id);
     });
 
+    if(items.length ===0 && localStorage.role !== 'admin') 
+      return <span />;
+
     return (
       <div className="MenuSection">
         <h3 className="MenuSection-Title">{currentSection.title}</h3>
@@ -31,6 +34,7 @@ class MenuSection extends React.Component {
           items.length
           ? items.map((item) => {
               if(!item) return null;
+
               return (<div>
                 <MenuListItem 
                   onDeleteClick={this.props.onDeleteClick} 

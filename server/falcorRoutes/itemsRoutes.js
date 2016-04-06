@@ -1,6 +1,7 @@
 import models from '../modelsMongoose';
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
+var $atom = jsonGraph.atom;
 
 module.exports = [
  {
@@ -22,26 +23,16 @@ module.exports = [
             /*
                 TO-DO: this is temporary solution
              */
-            resObj.allergens = "STRING";
-            console.info("***** THIS IS TEMPORARY THAT resObj.allergens ===", resObj.allergens, "TODO-please fix it");
-
-
-
             resObj.id = String(resObj["_id"]);
-            
-
-            const allergenPathAndValue = {
-              path: ["menuItemsById", resObj.id, "allergens"],
-              value: resObj.allergens
-            };
 
             delete resObj["_id"];
-
+            resObj.allergens = $atom(resObj.allergens);
             results.push({
               path: ["menuItemsById", resObj.id],
               value: resObj
             });
           });
+
           return results;
         });
     }

@@ -92,6 +92,11 @@ export default class ReorderMenuItemsModal extends React.Component {
     this.setState({sections});
   }
 
+  onSectionEdit(section) {
+    // this._unlockInput(section)
+    alert("works");
+  }
+
   render() {
     const { sections } = this.state;
     const actionBtns = [
@@ -112,7 +117,8 @@ export default class ReorderMenuItemsModal extends React.Component {
               <ReorderItemsWrapper
                 onChange={this.onUpdateOrder.bind(this, section)}
                 items={section.items}
-                onDelete={this.onDeleteItem.bind(this, section)} />
+                onDelete={this.onDeleteItem.bind(this, section)} 
+                onEdit={this.onSectionEdit.bind(this)} />
             </Paper>
           );
         })}

@@ -44,10 +44,6 @@ export const DefaultInput = React.createClass({
         {this.props.children}
       </div>
     );
-  },
-  componentWillUnmount() {
-    console.info("componentWillUnmount");
-    console.info("componentWillUnmount");
   }
 });
 
