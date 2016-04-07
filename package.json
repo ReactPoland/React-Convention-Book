@@ -20,6 +20,10 @@
     "type": "git",
     "url": "git+https://github.com/davezuko/react-redux-starter-kit.git"
   },
+  "engines": { 
+    "node": "4.2.2",
+    "npm": "3.5.1"
+  },
   "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
   "license": "MIT",
   "dependencies": {
