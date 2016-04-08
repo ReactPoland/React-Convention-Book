@@ -12,7 +12,8 @@ var menusRoutes = require('./menusRoutes.js');
 var menusCallRoutes = require('./menusCallRoutes.js');
 var itemsRoutes = require('./itemsRoutes.js');
 var loginRoutes = require('./loginRoutes.js');
-
+var staffRoutes = require('./staffRoutes.js');
+var emailRoutes = require('./emailRoutes.js');
 
 
 let routes = [
@@ -22,7 +23,9 @@ let routes = [
   ...sectionsCallRoutes,
   ...menusRoutes,
   ...menusCallRoutes,
-  ...loginRoutes
+  ...loginRoutes,
+  ...staffRoutes,
+  ...emailRoutes
 ];
 
 

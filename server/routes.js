@@ -9,6 +9,8 @@ var menusRoutes = require('./menusRoutes.js');
 var menusCallRoutes = require('./menusCallRoutes.js');
 var itemsRoutes = require('./itemsRoutes.js');
 var loginRoutes = require('./loginRoutes.js');
+var staffRoutes = require('./staffRoutes.js');
+
 
 
 let routes = [
@@ -19,7 +21,9 @@ let routes = [
   ...menusRoutes,
   ...menusCallRoutes,
   ...loginRoutes,
+  ...staffRoutes
   {
+
     /*
         USED on frontend in layouts/CoreLayout.js 
      */

@@ -74,15 +74,33 @@ class MenuLibraryView extends React.Component {
 
   async _fetchData() {
     console.info("IMPLEMENTED #3");
+    //let menuItemsLength = 100; // TO-DO unmock this later
+
+    const menuItemsLength = await falcorModel.getValue(
+      ['restaurants', 0, 'menuItems', 'length']
+    );
+
     const response = await API.get(
-      ['restaurants', 0, 'menuItems', {from: 0, to: 100}, ['id', 'title', 'description', 'description2', 'description3', 'picUrl', 'allergens']]
+      ['restaurants', 0, 'menuItems', {from: 0, to: menuItemsLength}, ['id', 'title', 'description', 'description2', 'description3', 'picUrl', 'allergens']]
     );
 
     console.info("RESULT #4", response);
 
     console.info("IMPLEMENTED #4");
+
+    //let sectionsLength = 100; // TO-DO unmock this later
+
+    const sectionsLength = await falcorModel.getValue(
+      ['restaurants', 0, 'sections', 'length']
+    );
+
+    const menuItemsLen = await falcorModel.getValue(
+      ['restaurants', 0, 'menuItems', 'length']
+    );
+
+
     const response2 = await API.get(
-      ['restaurants', 0, 'sections', {from: 0, to: 100}, ['id', 'title', 'items'], {from: 0, to: 100}, 'id']
+      ['restaurants', 0, 'sections', {from: 0, to: sectionsLength}, ['id', 'title', 'items'], {from: 0, to: menuItemsLen}, 'id']
     );
 
     console.info("RESULT #4", response2);

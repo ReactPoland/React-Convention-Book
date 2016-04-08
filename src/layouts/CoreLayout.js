@@ -25,7 +25,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const whiteList = [
   'home', 'login', 'register', 'reset-password1',
-  'reset-password2', 'token-not-found'
+  'reset-password2', 'token-not-found', 'staff-register'
 ];
 const fullWidth = whiteList.concat([
   'dashboard', 'account-settings', 'resend-confirmation-email',
@@ -105,11 +105,11 @@ class CoreLayout extends React.Component {
       return this.props.sessionActions.login(response.v1.user.me);
     }
     /////////// endof mock
-
     this.props.history.pushState(null, '/login');
   }
 
   _navigate(route) {
+    alert(1);
     this.props.history.pushState(null, route);
   }
 
