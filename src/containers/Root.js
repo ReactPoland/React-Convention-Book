@@ -20,8 +20,7 @@ export default class Root extends React.Component {
         <div>
           <Router history={noQueryKeyHistory}>
             {routes}
-          </Router>
-          
+          </Router>          
         </div>
       </Provider>
     );

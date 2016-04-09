@@ -8,6 +8,10 @@ import falcorExpress from 'falcor-express';
 import Router from 'falcor-router';
 import routes from './routes.js';
 
+import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+
 var app = express();
 app.server = http.createServer(app);
 
