@@ -44,7 +44,7 @@ class Header extends React.Component {
     delete localStorage.token;
     delete localStorage.username;
     delete localStorage.role;
-    delete localStorage.userid;
+    delete localStorage.restaurantID;
     // alert("logout to fix");
     ////// endof mock
 

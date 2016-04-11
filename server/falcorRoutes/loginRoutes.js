@@ -31,13 +31,19 @@ module.exports = [
             username: username,
             role: userAuthRes[0].role
           };
-          let userDetailsToken = userDetails.username+userDetails.role;
+
+          let restaurantID = "570b6e26ae357d391c6ebc1f";
+          let userDetailsToken = userDetails.username+userDetails.role+restaurantID;
           let token = jwt.sign(userDetailsToken, jwtSecret);
 
           return [
             {
               path: ['login', 'token'],
               value: token
+            },
+            {
+              path: ['login', 'restaurantID'],
+              value: restaurantID
             },
             {
               path: ['login', 'username'],

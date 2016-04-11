@@ -52,11 +52,24 @@ class MenuDetailView extends React.Component {
   async _fetchData(id) {
     const {actions} = this.props;
     console.info("KEEPING IT below");
+
+    //---------------MOCKED
+    //let sectionsLength = 100;
+    //let menuItemsLen = 100;
+
+    //---------------UNMOCKED
+    // const sectionsLength = await falcorModel.getValue(
+    //   ['restaurants', 0, 'sections', 'length']
+    // );
+
+    // const menuItemsLen = await falcorModel.getValue(
+    //   ['restaurants', 0, 'menuItems', 'length']
+    // );
     
     // const response = await API.get(
     //   ['menusById', id,
-    //     'sections', {from: 0, to: 100}, ['id', 'title',
-    //       'items'], {from: 0, to: 100}, ['id', 'title', 'description', 'picUrl']]
+    //     'sections', {from: 0, to: sectionsLength}, ['id', 'title',
+    //       'items'], {from: 0, to: menuItemsLen}, ['id', 'title', 'description', 'picUrl']]
     // );
 
     // const sections = falcorUtils.makeArray({

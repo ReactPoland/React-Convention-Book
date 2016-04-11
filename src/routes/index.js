@@ -26,7 +26,7 @@ import Staff                        from 'views/manage/staff/Main';
 import StaffView                    from 'views/manage/staff/StaffView';
 // import StaffMemberView              from 'views/manage/staff/StaffMemberView';
 // import StaffInvitationView          from 'views/manage/staff/StaffInvitationView';
-// import StaffRegistrationView        from 'views/manage/staff/StaffRegistrationView';
+import StaffRegistrationView        from 'views/manage/staff/StaffRegistrationView';
 
 /* menus related views */
 import Menus                        from 'views/menu/Main';
@@ -67,10 +67,10 @@ export default (
         <Route component={StaffView} path="/manage/staff" name="staff" />
       </Route>
     </Route>
+    <Route      component={StaffRegistrationView}  path='/staff-register/:token' name='staff-register' />
     {/*<Route      component={StaffView}  path='/staff' name='staff' />
     <Route      component={StaffMemberView}  path='/staff/:id' name='staff' />
-    <Route      component={StaffInvitationView}  path='/staff-invite' name='staff-invite' />
-    <Route      component={StaffRegistrationView}  path='/staff-register/:token' name='staff-register' />*/}
+    <Route      component={StaffInvitationView}  path='/staff-invite' name='staff-invite' />*/}
 
   </Route>
 );

@@ -44,7 +44,6 @@ var sectionSchema = {
 };
 var SectionCollection = mongoose.model('SectionCollection', sectionSchema, 'sections');
 
-
 var menuSchema = {
   title: String,
   description: String,
@@ -64,7 +63,7 @@ var userSchema = new Schema({
   password: String,
   role: String,
   verified: Boolean,
-  imageUrl: String,
+  imageUrl: { type: String, required: true, default: 'http://lorempixel.com/100/100/people/' },
   gender: String,
   created_at: Date,
   updated_at: Date

@@ -12,6 +12,8 @@ import { AccountSettingsForm } from 'components/forms/AccountSettingsForm';
 import { ChangePasswordForm } from 'components/forms/ChangePasswordForm';
 import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
 
+import falcorModel from '../../falcorModel.js';
+
 const mapStateToProps = (state) => ({
   session: state.session
 });
@@ -43,8 +45,22 @@ class AccountSettingsView extends React.Component {
 
     console.log('\n#################\nCALL API: UPDATE USER DETAILS\n#################\n');
 
-    this.props.actions.updateUserSettings(formData);
+    //this.props.actions.updateUserSettings(formData);    
 
+    let accountResults = await falcorModel
+      .call(
+            ['profileData', 'update'],
+            [formData, this.props.session.user.email]
+          ).
+      then((result) => {
+        return accountResults;
+      });
+
+    this.props.session.user.email = await falcorModel.getValue('profileData.newEmail');
+    // this.props.session.user.firstName = await falcorModel.getValue('profileData.newFirstName');
+    // this.props.session.user.lastName = await falcorModel.getValue('profileData.newLastName');
+    // this.props.session.user.imageUrl = await falcorModel.getValue('profileData.newImageUrl');
+    
     this.setState({
       requestSuccess: "Successfully updated account details",
       sendingAccountRequest: false
@@ -60,10 +76,31 @@ class AccountSettingsView extends React.Component {
 
     console.log('\n#################\nCALL API: CHANGE PASSWORD\n#################\n');
 
-    this.setState({
-      requestSuccess: "Successfully changed password",
-      sendingPasswordRequest: false
-    });
+    let passwordResult = await falcorModel
+      .call(
+            ['profilePassword', 'change'],
+            [formData, this.props.session.user.email]
+          ).
+      then((result) => {
+        return passwordResult;
+      });
+
+    let valid = await falcorModel.getValue('profilePassword.validation');
+
+    if (valid){
+      this.setState({
+        requestSuccess: "Successfully changed password",
+        sendingPasswordRequest: false
+      });
+    }
+    else{
+      this.setState({
+        requestError: "Wrong old password",
+        sendingPasswordRequest: false
+      });
+    }
+
+    
   }
 
   nullifyRequestState() {

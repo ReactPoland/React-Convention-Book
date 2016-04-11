@@ -15,6 +15,8 @@ import Loader from 'decorators/Loader';
 import SidenavList from 'components/sidenav/SidenavList';
 import MenuEntity from 'layouts/SidenavEntities/MenuEntity';
 
+import falcorModel from '../falcorModel.js';
+
 const mapStateToProps = (state) => ({
   ...state
 });
@@ -120,10 +122,14 @@ class SideNav extends React.Component {
   async _fetchData() {
     const { menu, menuItem, section, actions } = this.props;
 
+    const menusLength = await falcorModel.getValue(
+      ['restaurants', 0, 'menus', 'length']
+    );
+
     if(!menu.length) {
       console.info("IMPLEMENTED #2");
       const response = await API.get(
-        ['restaurants', 0, 'menus', {from: 0, to: 100}, ['title', 'id', 'description', 'showAllergensInMenu']]
+        ['restaurants', 0, 'menus', {from: 0, to: menusLength}, ['title', 'id', 'description', 'showAllergensInMenu']]
       );
 
       console.info("\n\n\n 1111debug \n\n\n", response, "\n\n\n debug \n\n\n");

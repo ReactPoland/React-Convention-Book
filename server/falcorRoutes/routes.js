@@ -12,7 +12,9 @@ var menusRoutes = require('./menusRoutes.js');
 var menusCallRoutes = require('./menusCallRoutes.js');
 var itemsRoutes = require('./itemsRoutes.js');
 var loginRoutes = require('./loginRoutes.js');
-
+var staffRoutes = require('./staffRoutes.js');
+var emailRoutes = require('./emailRoutes.js');
+var profileRoutes = require('./profileRoutes.js');
 
 
 let routes = [
@@ -22,7 +24,10 @@ let routes = [
   ...sectionsCallRoutes,
   ...menusRoutes,
   ...menusCallRoutes,
-  ...loginRoutes
+  ...loginRoutes,
+  ...staffRoutes,
+  ...emailRoutes,
+  ...profileRoutes,
 ];
 
 
@@ -33,8 +38,8 @@ export const getCurrentUser = ( db, req ) => db.map( db => [{
 
 export default ( req, res ) => {
   // const users = db.map( db => db.collection( 'users' ) );
-  let { authorization, role, username } = req.headers;
-  let userDetailsToken = username+role;
+  let { authorization, role, username, restaurantid } = req.headers;
+  let userDetailsToken = username+role+restaurantid;
   console.info("***************");
   console.info("***************");
   console.info("authorization", authorization);

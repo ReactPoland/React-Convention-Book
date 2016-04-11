@@ -283,7 +283,8 @@ if(localStorage.token) {
       headers: {
         'Authorization': localStorage.token,
         'role': localStorage.role,
-        'username': localStorage.username
+        'username': localStorage.username,
+        'restaurantID': localStorage.restaurantID
       }
     };
 }

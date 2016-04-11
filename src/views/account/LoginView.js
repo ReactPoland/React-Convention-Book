@@ -11,6 +11,7 @@ import Styles from 'styles/inlineStyles';
 
 import { LoginForm } from 'components/forms/LoginForm';
 
+import RefreshIndicator from 'material-ui/lib/refresh-indicator';
 import falcorModel from '../../falcorModel.js';
 
 const mapStateToProps = (state) => ({
@@ -28,14 +29,19 @@ class LoginView extends React.Component {
     super(props);
     this.state = {
       error: null,
-      sendingRequest: false
+      sendingRequest: false,
+      showLoginForm: false
     };
     this.login = this.login.bind(this);
   }
 
   componentDidMount() {
+    console.info(localStorage.token);
+
     if(localStorage.token) {
-      this.props.history.pushState(null, '/dashboard');
+      setTimeout(() => this.props.history.pushState(null, '/dashboard') , 300 );
+    } else {
+      setTimeout(() => this.setState({showLoginForm: true}), 1000);
     }
     // ///////////////////////// mock
     // if(localStorage.token) {
@@ -79,25 +85,15 @@ class LoginView extends React.Component {
     if(tokenRes) {
       let username = await falcorModel.getValue('login.username');
       let role = await falcorModel.getValue('login.role');
+      let restaurantID = await falcorModel.getValue('login.restaurantID');
 
       this.setState({error: "Logged in as "+role});
       localStorage.setItem("token", tokenRes);
       localStorage.setItem("username", username);
       localStorage.setItem("role", role);
-      sessionStorage.setItem('magicToken', 'magic-login-token');
-      // window.location.href = "/#/dashboard";
+      localStorage.setItem("restaurantID", restaurantID);
       location.reload();
-      setTimeout(() => this.setState({error: null, sendingRequest: false}), 3000);
       return;
-      // ///////////////////////// mock
-      // this.props.history.pushState(null, '/dashboard');
-      // const response = await API.get(
-      //   ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email']]
-      // );
-      // sessionStorage.setItem('magicToken', 'magic-login-token');
-      // this.props.actions.login(response.v1.user.me);
-      // ///////////////////////// endof mock
-
     } else {
       alert("Fatal login error, please contact an admin");
     }
@@ -106,6 +102,20 @@ class LoginView extends React.Component {
   }
 
   render() {
+    let refreshStyles = {
+      margin: '0 auto',
+      marginTop: 200
+    }
+    if(this.state.showLoginForm === false) {
+      return (
+          <div style={{width: 400, margin: "0 auto"}}>
+            <Paper zDepth={3} style={{padding: 32, margin: 32}}>
+              Loading...
+            </Paper>
+          </div>
+        );
+    }
+
     return (
       <div id='loginView'>
         <div className='form'>

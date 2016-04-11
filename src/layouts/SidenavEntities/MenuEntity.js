@@ -70,10 +70,19 @@ class MenuEntity extends React.Component {
   }
 
   async _fetchData() {
+
+    const menusLength = await falcorModel.getValue(
+      ['restaurants', 0, 'menus', 'length']
+    );
+
+    const sectionsLength = await falcorModel.getValue(
+      ['restaurants', 0, 'sections', 'length']
+    );
+
     const response = await API.get(
       // I don't know yet exact number of items needed
       // perhaps we'll need to fetch items partialy (pagination style)
-      ['restaurants', 0, 'menus', {from: 0, to: 20}, ['id', 'title', 'description', 'sections', 'showAllergensInMenu'], {from: 0, to: 100}, 'id']
+      ['restaurants', 0, 'menus', {from: 0, to: menusLength}, ['id', 'title', 'description', 'sections'], {from: 0, to: sectionsLength}, 'id']
     );
 
     console.info("\n\n\n DEBUG response \n\n ", response, "\n\n\n\n ");

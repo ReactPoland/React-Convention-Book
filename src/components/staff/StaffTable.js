@@ -9,17 +9,19 @@ export default class StaffTable extends React.Component {
   }
 
   render() {
+
     return (
       <Paper zDepth={1}>
         <List subheader="Staff members">
           {
-            this.props.staff.map((member) => {
+            this.props.staff.map((member, index) => {
               return [
                 <ListItem
                   key={member.id}
                   leftAvatar={<Avatar src={member.imageUrl} />}
                   primaryText={member.firstName + ' ' + member.lastName}
-                  secondaryText={member.position} />
+                  secondaryText={member.role} 
+                  onClick={this.props.onStaffMemberClick.bind(this, member)}/>
               ];
             })
           }

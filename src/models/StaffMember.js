@@ -6,7 +6,7 @@ export default class StaffMemeber extends Model {
 
     this.type = 'Staff Member';
     this.email = member.email;
-    this.position = member.position;
+    this.role = member.role;
     this.verified = member.verified;
     this.location = member.location;
     this.firstName = member.firstName;
