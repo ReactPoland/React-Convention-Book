@@ -9,6 +9,14 @@ var $ref = jsonGraph.ref;
 // API KEY GENERATED; name = 'rr';
 var sendgrid  = require('sendgrid')('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'); 
 
+var websiteURL;
+
+if(process.env.MONGO_HOSTNAME) {
+  websiteURL = "http://restaurantreason.herokuapp.com";
+} else {
+  websiteURL = "localhost:3000";
+}
+
 module.exports = [
   { 
     route: ['emailWelcomeMessage'] ,
@@ -20,7 +28,7 @@ module.exports = [
           to:       member.email,
           from:     'TheRestaurantReason',
           subject:  'Welcome to The Restaurant Reason',
-          text:     'Click here to configure your new account: http://localhost:3000/#/staff-register/'+member.id
+          text:     'Click here to configure your new account: '+websiteURL+'/#/staff-register/'+member.id
         };
         await sendgrid.send(sendInfo, function(err, json) {
           if (err) { return console.error(err); }

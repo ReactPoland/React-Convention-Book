@@ -16,7 +16,6 @@ var staffRoutes = require('./staffRoutes.js');
 var emailRoutes = require('./emailRoutes.js');
 var profileRoutes = require('./profileRoutes.js');
 
-
 let routes = [
   ...itemsCallRoutes, 
   ...itemsRoutes,
@@ -27,7 +26,7 @@ let routes = [
   ...loginRoutes,
   ...staffRoutes,
   ...emailRoutes,
-  ...profileRoutes,
+  ...profileRoutes
 ];
 
 
