@@ -56,7 +56,7 @@ module.exports = [
         ownedByRestaurantID: restaurantID
       }
 
-      return models.MenuCollection.find(andStatementQuery, '_id', function(err, menusDocs) {
+      return models.MenuCollection.find({}, '_id', function(err, menusDocs) {
           return menusDocs;
         })
           .sort({orderNumber: 1})
