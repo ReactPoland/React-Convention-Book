@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
-import { Snackbar } from 'material-ui';
+import { Snackbar, FlatButton } from 'material-ui';
 
 import API from 'utils/API';
 import Styles from 'styles/inlineStyles';
@@ -26,6 +26,8 @@ class AccountSettingsView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      requestSuccessPaper: null,
+      requestErrorPaper: null,
       requestSuccess: null,
       requestError: null,
       sendingAccountRequest: false,
@@ -38,13 +40,15 @@ class AccountSettingsView extends React.Component {
 
   async _updateAccount(formData) {
     this.setState({
+      requestSuccessPaper: null,
+      requestErrorPaper: null,
       requestSuccess: null,
       requestError: null,
       sendingAccountRequest: true
     });
 
     console.log('\n#################\nCALL API: UPDATE USER DETAILS\n#################\n');
-
+    
     //this.props.actions.updateUserSettings(formData);    
 
     let accountResults = await falcorModel
@@ -57,11 +61,14 @@ class AccountSettingsView extends React.Component {
       });
 
     this.props.session.user.email = await falcorModel.getValue('profileData.newEmail');
-    // this.props.session.user.firstName = await falcorModel.getValue('profileData.newFirstName');
-    // this.props.session.user.lastName = await falcorModel.getValue('profileData.newLastName');
-    // this.props.session.user.imageUrl = await falcorModel.getValue('profileData.newImageUrl');
+    this.props.session.user.firstName = await falcorModel.getValue('profileData.newFirstName');
+    this.props.session.user.lastName = await falcorModel.getValue('profileData.newLastName');
+    this.props.session.user.imageUrl = await falcorModel.getValue('profileData.newImageUrl');
     
+    this.props.actions.updateUserSettings(this.props.session.user); 
+
     this.setState({
+      requestSuccessPaper: "Successfully updated account details",
       requestSuccess: "Successfully updated account details",
       sendingAccountRequest: false
     });
@@ -69,6 +76,8 @@ class AccountSettingsView extends React.Component {
 
   async _changePassword(formData) {
     this.setState({
+      requestSuccessPaper: null,
+      requestErrorPaper: null,
       requestSuccess: null,
       requestError: null,
       sendingPasswordRequest: true
@@ -89,12 +98,14 @@ class AccountSettingsView extends React.Component {
 
     if (valid){
       this.setState({
+        requestSuccessPaper: "Successfully changed password",
         requestSuccess: "Successfully changed password",
         sendingPasswordRequest: false
       });
     }
     else{
       this.setState({
+        requestErrorPaper: "Wrong old password",
         requestError: "Wrong old password",
         sendingPasswordRequest: false
       });
@@ -105,6 +116,8 @@ class AccountSettingsView extends React.Component {
 
   nullifyRequestState() {
     this.setState({
+      requestSuccessPaper: null,
+      requestErrorPaper: null,
       requestSuccess: null,
       requestError: null
     });
@@ -112,6 +125,22 @@ class AccountSettingsView extends React.Component {
 
   render() {
     const { requestSuccess, requestError } = this.state;
+    const { requestSuccessPaper, requestErrorPaper } = this.state;
+    
+    let modalJSX;
+    if(typeof this.state.requestSuccess === 'string') {
+      alert(typeof this.state.requestSuccess);
+      modalJSX = <h1>
+        Successfully updated account details 
+        <FlatButton
+          label="OK"
+          primary={true}
+          keyboardFocused={true}
+          onTouchTap={() => this.setState.requestSuccess=null}
+        />
+      </h1>;
+      return modalJSX;
+    }
 
     return (
       <div id='accountSettingsView'>
@@ -123,7 +152,6 @@ class AccountSettingsView extends React.Component {
             <ChangePasswordForm session={this.props.session} onSubmit={this._changePassword} sendingRequest={this.state.sendingPasswordRequest} />
           </div>
         </div>
-
         <ErrorSuccessMsg
           errorMessage={requestError}
           successMessage={requestSuccess}

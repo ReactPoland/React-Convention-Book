@@ -8,6 +8,37 @@ var $atom = jsonGraph.atom;
 
 module.exports = [
   {
+    route: 'staffRoute.verify',
+    call: async function(callPath, args) {
+
+      let id = args[0];
+      
+      let user = await models.UserCollection.find({_id: id}, function(err, user) {
+        if (err) throw err;
+      }).then((result) => {
+        return result;
+      });
+
+      //debugging
+      console.log("1. user before");
+      console.log(user);
+      //debugging
+
+      if (user[0].verified == true){
+        return {
+          path: ['staffRoute', 'verified'],
+          value: true
+        }
+      } 
+      else{
+        return {
+          path: ['staffRoute', 'verified'],
+          value: false
+        }
+      }
+    }
+  },
+  {
     route: 'staffRoute.accept',
     call: async function(callPath, args) {
 
@@ -25,10 +56,19 @@ module.exports = [
       console.log(user);
       //debugging
 
+      if (user[0].verified == true){
+        //do nothing because he's verified
+        console.log("true");
+      } 
+      else{
+        //change password
+        console.log("false");
+      }
+
       models.UserCollection.update(
           { _id: id }, 
-          { $set: { "password": newPassword}},
-          { $set: { "verified": true }},
+          { $set: { "password": newPassword}, "verified": true },
+          //{ $set: { "verified": false }},
           function(err) {
             if(err) { throw err; }
             console.info("UPDATED user SIR!");

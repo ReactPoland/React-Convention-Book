@@ -306,34 +306,44 @@ class MenuLibraryView extends React.Component {
     /*
         UPDATING SECTIONS refMap below:
      */
+    if (typeof refMap === "undefined"){
+      this.setState({
+        requestSuccess: 'Added new item - successful!',
+        modal: null
+      });     
+    }
+    else{
 
-    let updatedSections = Object.keys(refMap).map((menuID) => {
-      return refMap[menuID];
-    }).map((sectionsIDarray) => {
-      return sectionsIDarray.map((sectionID) => {
-        let currentSection = this.props.section.get(sectionID);
-        currentSection.items.push(newMenuItemId);
-        return currentSection;
-      })
-    });
-
-    let sectionUpdateResult = await falcorModel
-      .call(
-            ['restaurants', 0, 'sections','update'],
-            [updatedSections[0]]          
-          ).
-      then((result) => {
-        return result;
+      let updatedSections = Object.keys(refMap).map((menuID) => {
+        return refMap[menuID];
+      }).map((sectionsIDarray) => {
+        return sectionsIDarray.map((sectionID) => {
+          let currentSection = this.props.section.get(sectionID);
+          currentSection.items.push(newMenuItemId);
+          return currentSection;
+        })
       });
 
-    updatedSections[0].map((updatedSection) => {
-      this.props.actions.section.update(updatedSection);
-    });
+      let sectionUpdateResult = await falcorModel
+        .call(
+              ['restaurants', 0, 'sections','update'],
+              [updatedSections[0]]          
+            ).
+        then((result) => {
+          return result;
+        });
 
-    this.setState({
-      requestSuccess: 'Added new item - successful!',
-      modal: null
-    });
+      updatedSections[0].map((updatedSection) => {
+        this.props.actions.section.update(updatedSection);
+      });
+
+      this.setState({
+        requestSuccess: 'Added new item - successful!',
+        modal: null
+      });
+    }
+
+    
 
   }
 

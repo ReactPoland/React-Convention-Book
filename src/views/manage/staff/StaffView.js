@@ -111,17 +111,7 @@ class StaffView extends React.Component {
   }
 
   async _onStaffMemberClick(member) {
-    let emailWelcomeMessage = await falcorModel
-      .call(
-            ['emailWelcomeMessage'],
-            [member]
-          ).
-      then((result) => {
-        return falcorModel.getValue(['emailWelcomeMessage']);
-      });
-    console.info("emailWelcomeMessage");
-    console.info(emailWelcomeMessage);
-    console.info("emailWelcomeMessage");
+    alert("_onStaffMemberClick")
   }
 
   _showForm() {

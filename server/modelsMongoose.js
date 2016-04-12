@@ -31,7 +31,8 @@ var menuItemSchema = {
   description2: String,
   description3: String,
   type: String,
-  allergens: Object
+  allergens: Object,
+  ownedByRestaurantID: String
 };
 var MenuItemCollection = mongoose.model('MenuItemCollection', menuItemSchema, 'menuItems');
 
@@ -40,7 +41,8 @@ var MenuItemCollection = mongoose.model('MenuItemCollection', menuItemSchema, 'm
 var sectionSchema = {
   title: String,
   category: String,
-  items: Array
+  items: Array,
+  ownedByRestaurantID: String
 };
 var SectionCollection = mongoose.model('SectionCollection', sectionSchema, 'sections');
 
@@ -49,7 +51,8 @@ var menuSchema = {
   description: String,
   showAllergensInMenu: Boolean,
   orderNumber: Number,
-  sectionsById: Array
+  sectionsById: Array,
+  ownedByRestaurantID: String
 };
 
 var MenuCollection = mongoose.model('MenuCollection', menuSchema, 'menus');

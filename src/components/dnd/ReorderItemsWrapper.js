@@ -123,7 +123,7 @@ class Inside extends React.Component {
           key={item.id || item.title}
           moveItem={this.moveItem}
           onDelete={this.props.onDelete}
-          onEdit={this.props.onEdit.bind(this, index)} />
+          onEdit={this.props.onEdit} />
       );
     });
     const styles = getStyles(items.length, this.state.dye);

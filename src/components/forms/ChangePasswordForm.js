@@ -32,6 +32,7 @@ export class ChangePasswordForm extends React.Component {
           <h3>Change password</h3>
           <DefaultInput name='OldPassword' title='Old Password' type="password" required />
           <DefaultInput name='NewPassword' title='New Password' type="password" required />
+          <DefaultInput type='password' title='Repeat password' name='RepeatedPassword' validations='equalsField:NewPassword' validationError='Passwords must match' required />
           <div style={{textAlign: 'center'}}>
             <RaisedButton
               primary={true}

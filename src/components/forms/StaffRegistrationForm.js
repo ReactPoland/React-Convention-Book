@@ -15,6 +15,7 @@ export class AthleteRegistrationForm extends React.Component {
   _submit (data) {
     this._disableButton()
     this.props.onSubmit(data)
+    console.info(this.props.onSubmit)
   }
 
   _enableButton () {
@@ -31,12 +32,12 @@ export class AthleteRegistrationForm extends React.Component {
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Set your new password</h3>
           <DefaultInput defaultValue="" type='password' name='password' title='Password' required />
-          <DefaultInput defaultValue="" type='password' name='repeated_password' title='Repeat Password' required  validations="equalsField:password" />
+          <DefaultInput defaultValue="" type='password' name='repeated_password' title='Repeat Password' required  validations="equalsField:password" validationError="Passwords are different"/>
           <div style={{marginTop: 24}}>
             <RaisedButton
               secondary={true}
               type="submit"
-              disabled={ false /* !this.state.canSubmit */}
+              disabled={ !this.state.canSubmit }
               style={{margin: '0 auto', display: 'block', width: 150}}
               label={'Set password'} />
           </div>

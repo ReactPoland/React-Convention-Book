@@ -16,19 +16,6 @@ var staffRoutes = require('./staffRoutes.js');
 var emailRoutes = require('./emailRoutes.js');
 var profileRoutes = require('./profileRoutes.js');
 
-let routes = [
-  ...itemsCallRoutes, 
-  ...itemsRoutes,
-  ...sectionsRoutes,
-  ...sectionsCallRoutes,
-  ...menusRoutes,
-  ...menusCallRoutes,
-  ...loginRoutes,
-  ...staffRoutes,
-  ...emailRoutes,
-  ...profileRoutes
-];
-
 
 export const getCurrentUser = ( db, req ) => db.map( db => [{
   path: [ 'currentUser' ],
@@ -51,6 +38,22 @@ export default ( req, res ) => {
   console.info("IS TRUE?", authSign === authorization);
   console.info("***************");
   console.info("***************");
+
+  let isAuthorized = authSign === authorization;
+  let sessionObject = { isAuthorized, role, username, restaurantid };
+
+  let routes = [
+      ...loginRoutes,
+      ...staffRoutes,
+      ...emailRoutes,
+      ...profileRoutes,
+    ]
+      .concat(itemsRoutes( sessionObject ))
+      .concat(itemsCallRoutes( sessionObject ))
+      .concat(sectionsRoutes( sessionObject ))
+      .concat(sectionsCallRoutes( sessionObject ))
+      .concat(menusRoutes( sessionObject ))
+      .concat(menusCallRoutes( sessionObject ));
 
   return [
     ...routes,

@@ -14,14 +14,31 @@ class StaffRegistrationView extends React.Component {
     this.state = {
       invitationAccepted: false,
       staffData: {},
-      sendingRequest: false
+      sendingRequest: false,
+      linkIsDeactivated: false
     }
     this._getStaffData = this._getStaffData.bind(this)
     this._acceptIvitation = this._acceptIvitation.bind(this)
   }
 
-  componentWillMount () {
-    this._getStaffData(this.props.routeParams.token)
+  async componentWillMount () {
+    this._getStaffData(this.props.routeParams.token);
+
+    let verifyResult = await falcorModel
+      .call(
+            ['staffRoute', 'verify'],
+            [this.props.routeParams.token]
+          ).
+      then((result) => {
+        return verifyResult;
+      });
+    
+    let verified = await falcorModel.getValue('staffRoute.verified');
+    if (verified){
+      this.setState({
+        linkIsDeactivated: true
+      });
+    }
   }
 
   async _getStaffData (token) {
@@ -78,13 +95,26 @@ class StaffRegistrationView extends React.Component {
         form = !this.state.invitationAccepted ?
           <div style={{width: 500, margin: "0 auto", marginTop: 100}}>
             <StaffRegistrationForm staffData={ this.state.staffData } onSubmit={ this._acceptIvitation } sendingRequest={ this.state.sendingRequest } />
-          </div> : null
+          </div> : null,
+
+        linkIsDeactivated = this.state.linkIsDeactivated ?
+          <div style={{width: 400, margin: "0 auto"}}>
+            <Paper zDepth={3} style={{padding: 32, margin: 32}}>
+              Link has expired
+            </Paper>
+          </div>
+           : null;
+
+    if (this.state.linkIsDeactivated){
+      form = null;
+    }
 
     return (
       <div>
         { form }
         { successMessage }
         { errorMessage }
+        { linkIsDeactivated }
       </div>
     )
   }

@@ -116,6 +116,8 @@ export default class AddMenuItemModal extends React.Component {
   }
 
   onSectionsChange(sectionsMap) {
+    console.info(sectionsMap);
+    console.info("sectionsMap^^^^^^^^^^^^^^^");
     this.setState({
       sectionsMap
     });

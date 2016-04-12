@@ -2,92 +2,95 @@ import models from '../modelsMongoose';
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
 
-module.exports = [
-  { 
-    route: 'menusById[{keys}]',
-    get: function(pathSet) {
-      let menusIDs = pathSet[1];
+export default ( sessionObject ) => {
+  // sessionObject = { isAuthorized, role, username, restaurantid };
 
-      return models.MenuCollection.find({
-            '_id': { $in: menusIDs}
-        }, function(err, menusDocs) {
-          return menusDocs;
-        })
-          .then ((menusArrayFromDB) => {
-          let results = [];
-          let sectionsById;
-          menusArrayFromDB.map((menuObject) => {
-            let resObj = menuObject.toObject();
-            delete resObj.id;
-            resObj.id = String(resObj["_id"]);
-            delete resObj["_id"];
+  return [
+    { 
+      route: 'menusById[{keys}]',
+      get: function(pathSet) {
+        let menusIDs = pathSet[1];
 
-            sectionsById = resObj.sectionsById;
-            delete resObj.sectionsById;
+        return models.MenuCollection.find({
+              '_id': { $in: menusIDs}
+          }, function(err, menusDocs) {
+            return menusDocs;
+          })
+            .then ((menusArrayFromDB) => {
+            let results = [];
+            let sectionsById;
+            menusArrayFromDB.map((menuObject) => {
+              let resObj = menuObject.toObject();
+              delete resObj.id;
+              resObj.id = String(resObj["_id"]);
+              delete resObj["_id"];
 
-            results.push({
-              path: ["menusById", resObj.id],
-              value: resObj
-            });
+              sectionsById = resObj.sectionsById;
+              delete resObj.sectionsById;
 
-            sectionsById.map((sectionID, index) => {
               results.push({
-                  path: ["menusById", resObj.id, "sections", index],
-                  value: $ref(['sectionsById', sectionID])
-                });
+                path: ["menusById", resObj.id],
+                value: resObj
+              });
+
+              sectionsById.map((sectionID, index) => {
+                results.push({
+                    path: ["menusById", resObj.id, "sections", index],
+                    value: $ref(['sectionsById', sectionID])
+                  });
+              });
+
             });
 
+            return results;
           });
-
-          return results;
-        });
-    }
-  },
-{
-    /*
-        USED on frontend in layouts/SideNav.js 
-     */
-    route: 'restaurants[0].menus[{integers}]',
-    get: (pathSet) => {
-      let restaurantID = "570b6e26ae357d391c6ebc1f";
-      let menusIndexes = pathSet[3];
-
-      let andStatementQuery = {
-        ownedByRestaurantID: restaurantID
       }
+    },
+  {
+      /*
+          USED on frontend in layouts/SideNav.js 
+       */
+      route: 'restaurants[0].menus[{integers}]',
+      get: (pathSet) => {
+        let menusIndexes = pathSet[3];
 
-      return models.MenuCollection.find({}, '_id', function(err, menusDocs) {
-          return menusDocs;
-        })
-          .sort({orderNumber: 1})
-          .then ((menusArrayFromDB) => {
-          console.info("111 SORTED", menusArrayFromDB);
-          let results = [];
-          menusIndexes.map((index) => {
-            let res;
-            if (menusArrayFromDB.length - 1 < index) { 
+        let andStatementQuery = {
+          ownedByRestaurantID: sessionObject.restaurantid
+        }
+
+        return models.MenuCollection.find(andStatementQuery, '_id', function(err, menusDocs) {
+            return menusDocs;
+          })
+            .sort({orderNumber: 1})
+            .then ((menusArrayFromDB) => {
+            console.info("111 SORTED", menusArrayFromDB);
+            let results = [];
+            menusIndexes.map((index) => {
+              let res;
+              if (menusArrayFromDB.length - 1 < index) { 
+                res = {
+                  path: ['restaurants', 0, 'menus', index],
+                  invalidate: true
+                };
+                results.push(res);
+                return;
+              }
+
+              let menuObject = menusArrayFromDB[index].toObject();
+              let currentMongoID = String(menuObject["_id"]);
+              let menuItemRef = $ref(['menusById', currentMongoID]);
+
               res = {
                 path: ['restaurants', 0, 'menus', index],
-                invalidate: true
+                value: menuItemRef,
               };
               results.push(res);
-              return;
-            }
+            });
 
-            let menuObject = menusArrayFromDB[index].toObject();
-            let currentMongoID = String(menuObject["_id"]);
-            let menuItemRef = $ref(['menusById', currentMongoID]);
-
-            res = {
-              path: ['restaurants', 0, 'menus', index],
-              value: menuItemRef,
-            };
-            results.push(res);
-          });
-
-          return results;
-        })
-    }
-  },
-];
+            return results;
+          })
+      }
+    },
+  ];
+}
 

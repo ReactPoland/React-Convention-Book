@@ -509,10 +509,7 @@ class MenuEntity extends React.Component {
               primaryText="Reorder Items"
               value="reorder-menu-items"
               rightIcon={<ActionSwapVert />} />
-            <MenuItem
-              value="add-menu-item"
-              primaryText="Add Item"
-              rightIcon={<ContentAdd />} />
+            
           </IconMenu>
         );
 
