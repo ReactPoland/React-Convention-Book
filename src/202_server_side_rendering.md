@@ -33,6 +33,17 @@ The ***app.use(handleServerSideRender)*** is fired each time the server side rec
 1) handleServerSideRender - it will use renderToString in order to create a valid server-side's html's markup
 2) renderFullHtml - that helper's function will embed our new React's HTML markup into a whole html's document as you can later in a moment down below.
 
+### The handleServerSideRender's function
+
+At first we are going to create a new Redux store instance that will be created on every call to the backend. The main goal of this is to give the initial state information's to our application so it can create a valid markup based on the current request.
+
+We will use the ***Provider***'s component that we already have used in our client-side's app, that will be wrapping the ***Root***'s component. That will make the store available to all our components.
+
+
+The most important part here is ***ReactDOMServer.renderToString()*** which goal's to render the initial's HTML markup of our application, before we send the markup to the client-side.
+
+Next step is to get the initial state from the Redux store by using function ***store.getState()***. That initial state will be passed along in our renderFullHtml's function as you can learn in a moment.
+
 
 
 
