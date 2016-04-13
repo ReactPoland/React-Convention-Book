@@ -12,7 +12,8 @@ import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { renderToString } from 'react-dom/server'
-
+import createHashHistory from 'history/lib/createHashHistory';
+import { ReactRouter }               from 'react-router';
 
 let initMOCKstore = {
 	"routing":
@@ -34,23 +35,41 @@ let initMOCKstore = {
   }
 };
 
+
+import rootReducer from '../src/reducers';
+import reactRoutes from '../src/routes';
+
 function handleRender(req, res) {
   // Create a new Redux store instance
-  const store = createStore(initMOCKstore)
-
+  const store = createStore(rootReducer)
+  console.info(111111);
+  console.info(store);
+  console.info(111111);
   // Render the component to a string
   const html = renderToString(
     <Provider store={store}>
-      <App />
+      <div>
+        <ReactRouter>
+          {reactRoutes}
+        </ReactRouter>          
+      </div>
     </Provider>
   );
 
+  console.info(22222);
+  console.info(html);
+  console.info(2222);
+
   // Grab the initial state from our Redux store
   const initialState = store.getState()
-
+  console.info(33333);
+  console.info(initialState);
+  console.info(33333);
   // Send the rendered page back to the client
-  res.send(renderFullPage(html, initialState))
+  // res.send(renderFullPage(html, initialState))
 }
+
+handleRender(1, 1);
 
 var app = express();
 app.server = http.createServer(app);
