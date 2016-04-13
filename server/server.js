@@ -14,7 +14,25 @@ import { Provider } from 'react-redux'
 import { renderToString } from 'react-dom/server'
 
 
-let initMOCKstore = {"routing":{"changeId":1,"path":"/#/"},"article":{"0":{"articleTitle":"Lorem ipsum - article one","articleContent":"Here goes the content of the article"},"1":{"articleTitle":"Lorem ipsum - article two","articleContent":"Sky is the limit, the content goes here."}}};
+let initMOCKstore = {
+	"routing":
+		{
+      "changeId":1,
+      "path":"/#/"
+    },
+	"article":
+	{
+		"0": {
+      "articleTitle": "Lorem ipsum - article one",
+      "articleContent":"Here goes the content of the article"
+    },
+		
+		"1": {
+      "articleTitle":"Lorem ipsum - article two",
+      "articleContent":"Sky is the limit, the content goes here."
+    }
+  }
+};
 
 function handleRender(req, res) {
   // Create a new Redux store instance
@@ -25,7 +43,7 @@ function handleRender(req, res) {
     <Provider store={store}>
       <App />
     </Provider>
-  )
+  );
 
   // Grab the initial state from our Redux store
   const initialState = store.getState()
