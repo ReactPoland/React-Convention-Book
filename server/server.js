@@ -11,6 +11,28 @@ import routes from './routes.js';
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+import { renderToString } from 'react-dom/server'
+
+
+let initMOCKstore = {"routing":{"changeId":1,"path":"/#/"},"article":{"0":{"articleTitle":"Lorem ipsum - article one","articleContent":"Here goes the content of the article"},"1":{"articleTitle":"Lorem ipsum - article two","articleContent":"Sky is the limit, the content goes here."}}};
+
+function handleRender(req, res) {
+  // Create a new Redux store instance
+  const store = createStore(initMOCKstore)
+
+  // Render the component to a string
+  const html = renderToString(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+
+  // Grab the initial state from our Redux store
+  const initialState = store.getState()
+
+  // Send the rendered page back to the client
+  res.send(renderFullPage(html, initialState))
+}
 
 var app = express();
 app.server = http.createServer(app);
