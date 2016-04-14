@@ -37,6 +37,11 @@ var menuItemSchema = {
 var MenuItemCollection = mongoose.model('MenuItemCollection', menuItemSchema, 'menuItems');
 
 
+var restaurantSchema = {
+  name: String,
+  subdomain: String
+};
+var RestaurantCollection = mongoose.model('RestaurantCollection', restaurantSchema, 'restaurants');
 
 var sectionSchema = {
   title: String,
@@ -125,5 +130,6 @@ module.exports = {
   MenuCollection,
   MenuItemCollection,
   SectionCollection,
-  UserCollection
+  UserCollection,
+  RestaurantCollection
 };

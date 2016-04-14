@@ -519,7 +519,6 @@ class MenuEntity extends React.Component {
 
     let items = mapHelpers.getFromRange(this.props.items, 0, 3);
     let openContent = null;
-    console.info("\n\n\n\n this.state.modal\n\n\n\n ", this.state.modal , "\n\n\n\n this.state.modal \n\n\n\n ")
     if(this.props.open) {
       items = this.props.items;
       openContent = [

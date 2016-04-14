@@ -71,56 +71,53 @@ export default ( req, res ) => {
             return result;
           });
 
-          console.info("userDetailsRes");
-          console.info(userDetailsRes);
-          console.info("userDetailsRes");
           let userObj = userDetailsRes[0].toObject();
 
           userObj.id = userObj._id;
           delete userObj._id;
 
-
-          console.info("userObj");
-          console.info(userObj);
-          console.info("userObj");
-
-
           return {
             path: ['v1', 'user', 'me'],
             value: userObj
-
-            // {
-            //   firstName: 'test',
-            //   lastName: 'admin',
-            //   email: 'test@admin.com',
-            //   role: 'admin',
-            //   verified: false,
-            //   imageUrl: 'http://lorempixel.com/100/100/animals/',
-            //   token: 'magic-login-token',
-            //   gender: 'male'
-            // }
           };
         }
-      }
-    ];
+      },
+      {
+        /*
+            USED on frontend in layouts/CoreLayout.js 
+         */
+        route: 'restaurants.lookup[{keys}]',
+        get: async (pathSet) => {
+          console.info("restaurants.lookup pathSet");
+          console.info(pathSet);
+          let restaurantSubdomain = pathSet[2][0];
 
-  return [
-    {
-      route: 'currentUser',
-      get: pathSet => getCurrentUser( users, req ),
-    },
-    // {
-    //   route: 'usersById[{keys:ids}]["email"]',
-    //   get: pathSet => getUsers( users, pathSet.ids, pathSet[ 2 ] ),
-    // },
-    {
-      route: 'usersById[{keys:ids}].worlds[{integers:indices}]',
-      get: pathSet => getUserWorlds( users, pathSet.ids, pathSet.indices ),
-    },
-    {
-      route: 'usersById[{keys:ids}].ux.lastVisited',
-      get: pathSet => getLastVisited( users, pathSet.ids ),
-      set: pathSet => setLastVisited( users, pathSet.usersById ),
-    },
+          let andStatementQuery = {
+            "subdomain": restaurantSubdomain
+          }
+          console.info("andStatementQuery", andStatementQuery);
+
+          let restaurantRes = await models.RestaurantCollection.find(andStatementQuery, function(err, res) {
+            if (err) throw err;
+          }).then((result) => {
+            return result;
+          });
+
+          console.info("restaurantRes", restaurantRes);
+          if(restaurantRes.length > 0) {
+            let restaurantID = restaurantRes[0].toObject()._id.toString();
+            return {
+              path: ['restaurants', 'lookup', restaurantSubdomain],
+              value: restaurantID
+            }
+          } else {
+            return {
+              path: ['restaurants', 'lookup', restaurantSubdomain],
+              value: 'INVALID'
+            }
+          }
+          
+      }
+    }
   ];
 };

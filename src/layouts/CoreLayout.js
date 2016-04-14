@@ -15,6 +15,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import SideNav from './SideNav';
 
+import falcorModel from '../falcorModel.js';
+
 const mapStateToProps = (state) => ({
   ...state
 });
@@ -87,6 +89,30 @@ class CoreLayout extends React.Component {
       _this.forceUpdate();
       pushState(...arguments);
     }.bind(this.props.history);
+
+    this.state = {
+      restaurantID: null
+    }
+  }
+
+  componentWillMount() {
+    function getSubdomain() {
+            var regexParse = new RegExp('[a-z\-0-9]{2,63}\.[a-z\.]{2,5}$');
+            var urlParts = regexParse.exec(window.location.hostname);
+            return window.location.hostname.replace(urlParts[0],'').slice(0, -1);
+    }
+    
+    let currentSubdomain = getSubdomain();
+    if(currentSubdomain.length < 2) {
+      currentSubdomain = "starbucks";
+    }
+
+    falcorModel.getValue(
+      ['restaurants', 'lookup', currentSubdomain]
+    ).then((value) => {
+      this.setState({restaurantID: value});
+      localStorage.setItem("restaurantID", value);
+    });
   }
 
   async _checkIfLoggedIn() {
@@ -123,6 +149,15 @@ class CoreLayout extends React.Component {
   }
 
   render () {
+    console.info("--> this.state.restaurantID -->", this.state.restaurantID);
+    if(this.state.restaurantID === null) {
+      return <h1>Look up in progress</h1>;
+    } else if(this.state.restaurantID === 'INVALID') {
+      return <h1>Restaurant not found</h1>;
+    } else if(typeof this.state.restaurantID === 'undefined') {
+      return <h1>backend error, please contact admin</h1>;
+    }
+
     const classes = ["ContentWrapper"];
     if(isFullWidth()) {
       classes.push('fullsize');
