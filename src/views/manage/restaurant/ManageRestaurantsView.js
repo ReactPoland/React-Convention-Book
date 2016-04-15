@@ -84,10 +84,16 @@ class ManageRestaurantsView extends React.Component {
     });
   }
 
-  async _onFormSubmit(objInfo, model) {
+  async _onEditFormSubmit(objInfo, model) {
 
     console.info('_onFormSubmit', objInfo, model);
     
+  }
+
+  async _onAddFormSubmit(model) {
+
+    alert('_onAddFormSubmit', JSON.stringify(model));
+
     // Object.keys(model).map((changedItem) => {
     //   objInfo.templateText = model[changedItem];
     //   let itemToEdit = null;
@@ -124,7 +130,7 @@ class ManageRestaurantsView extends React.Component {
       let itemEDITname = this.state.itemToEdit;
       if(typeof regInfo === 'object') {
         registrationTextField = (
-          <Formsy.Form onSubmit={this._onFormSubmit.bind(this, regInfo)}>
+          <Formsy.Form onSubmit={this._onEditFormSubmit.bind(this, regInfo)}>
             <h4>{itemEDITname} template in edit</h4>
             <DefaultInput
               name={itemEDITname}
@@ -168,6 +174,29 @@ class ManageRestaurantsView extends React.Component {
 
             {itemListJSX}
           </div>
+
+          <hr />
+          <h1>Add new restaurant</h1>
+          <Formsy.Form onSubmit={this._onAddFormSubmit}>
+            <h4> Restaurant name: </h4>
+            <DefaultInput
+              name='name'
+              hintText='Restaurant Name' />
+
+            <h4> Restaurant subdomain: </h4>
+            <DefaultInput
+              name='subdomain'
+              hintText='Restaurant Subdomain (lower-case like starbucks or pizzahut)' />
+
+            <div style={{marginTop: 24}}>
+            <RaisedButton
+              secondary={true}
+              type="submit"
+              disabled={ false /* !this.state.canSubmit */}
+              style={{margin: '0 auto', display: 'block', width: 150}}
+              label={'submit'} />
+            </div>
+          </Formsy.Form>
       </div>
     );
   }
