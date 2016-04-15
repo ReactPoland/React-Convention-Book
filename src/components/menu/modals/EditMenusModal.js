@@ -123,7 +123,7 @@ export default class EditMenusModal extends React.Component {
         let editShowAllergens = (<Checkbox
             defaultChecked={this.state.showAllergensInEditMenu}
             name="checkboxEditShowAllergensInMenu"
-            label={<span>Don't show allergen guide</span>}
+            label={<span>Show allergen guide</span>}
             onCheck={() => { this.setState({ showAllergensInEditMenu: !this.state.showAllergensInEditMenu}) }} />);
 
         nameNodeEdit = (

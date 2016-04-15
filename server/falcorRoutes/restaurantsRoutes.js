@@ -1,13 +1,13 @@
 import models from '../modelsMongoose';
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
-
+var $atom = jsonGraph.atom;
 export default ( sessionObject ) => {
   // sessionObject = { isAuthorized, role, username, restaurantid };
 
   return [
     {
-    route: 'restaurants[{keys}].delete',
+    route: 'restaurantsManage[{integers}].delete',
     call: (callPath, args) => 
       {
         let toDeleteRestaurantId = args[0];
@@ -22,7 +22,7 @@ export default ( sessionObject ) => {
       }
     },
     {
-    route: 'restaurants[{keys}].add',
+    route: 'restaurantsManage.add',
     call: (callPath, args) => 
       {
         let newRestaurantObj = args[0];
@@ -50,11 +50,11 @@ export default ( sessionObject ) => {
             
             let results = [
               {
-                path: ['restaurants', res.count-1],
+                path: ['restaurantsManage', res.count-1],
                 value: NewRestaurantRef
               },
               {
-                path: ['restaurants', 'length'],
+                path: ['restaurantsManage', 'length'],
                 value: res.count
               }
             ];
@@ -64,20 +64,20 @@ export default ( sessionObject ) => {
       }
     },
     {
-      route: 'restaurants.length',
+      route: 'restaurantsManage.length',
       get: (callPath, args) => {
         return models.RestaurantCollection.count({}, function(err, count) {
           return count;
         }).then ((count) => {
           return {
-            path: ['restaurants', 'length'],
+            path: ['restaurantsManage', 'length'],
             value: count
           }
         });
       }
     },
     {
-    route: 'restaurants[{keys}].update',
+    route: 'restaurantsManage.update',
     call: async (callPath, args) => 
       {
         let updatedRestaurants = args[0];
@@ -113,70 +113,31 @@ export default ( sessionObject ) => {
         return results;
       }
     },
-    { 
-      route: 'restaurantsById[{keys}]',
-      get: function(pathSet) {
-        let restaurantsIDs = pathSet[1];
-
-        return models.RestaurantCollection.find({
-              '_id': { $in: restaurantsIDs}
-          }, function(err, restaurantsDocs) {
-            return restaurantsDocs;
-          })
-            .then ((restaurantsArrayFromDB) => {
-            let results = [];
-            restaurantsArrayFromDB.map((restaurantObject) => {
-              let resObj = restaurantObject.toObject();
-              delete resObj.id;
-              resObj.id = String(resObj["_id"]);
-              delete resObj["_id"];
-              results.push({
-                path: ["restaurantsById", resObj.id],
-                value: resObj
-              });
-            });
-
-            return results;
-          });
-      }
-    },
   {
       /*
           USED on frontend in layouts/SideNav.js 
        */
-      route: 'restaurants[{keys}]',
+      route: 'restaurantsManage[{integers}]',
       get: (pathSet) => {
-        let restaurantsIndexes = pathSet[3];
-
-        return models.RestaurantCollection.find({}, '_id', function(err, restaurantsDocs) {
+        return models.RestaurantCollection.find({}, function(err, restaurantsDocs) {
             return restaurantsDocs;
           })
             .sort({orderNumber: 1})
             .then ((restaurantsArrayFromDB) => {
-            console.info("111 SORTED", restaurantsArrayFromDB);
+            console.info("\n\n\n 111 SORTED", restaurantsArrayFromDB, "\n\n\n 111 SORTED",);
             let results = [];
-            restaurantsIndexes.map((index) => {
+            restaurantsArrayFromDB.map((item, index) => {
               let res;
-              if (restaurantsArrayFromDB.length - 1 < index) { 
-                res = {
-                  path: ['restaurants', index],
-                  invalidate: true
-                };
-                results.push(res);
-                return;
-              }
-
               let restaurantObject = restaurantsArrayFromDB[index].toObject();
-              let currentMongoID = String(restaurantObject["_id"]);
-              let restaurantItemRef = $ref(['restaurantsById', currentMongoID]);
-
               res = {
-                path: ['restaurants', index],
-                value: restaurantItemRef,
+                path: ['restaurantsManage', index],
+                value: $atom(restaurantObject)
               };
               results.push(res);
             });
 
+            console.info('---->', JSON.stringify(results));
+            
             return results;
           })
       }

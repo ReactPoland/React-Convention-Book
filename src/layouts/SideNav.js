@@ -40,7 +40,8 @@ function getCurrentRoute() {
 
 const managing = [
   { id: 'staff',      title: 'Staff',         link: '/manage/staff' },
-  { id: 'reports',    title: 'Email Templates',       link: '/manage/emailTemplates' },
+  { id: 'emailTemplates',    title: 'Email Templates',       link: '/manage/emailTemplates' },
+  { id: 'manageRestaurants',    title: 'Manage Restaurants',       link: '/manage/manageRestaurants' },
   { id: 'reports',    title: 'Reports',       link: '/manage/reports' },
   { id: 'messaging',  title: 'Messaging',     link: '/manage/message' },
   { id: 'video',      title: 'Video Library', link: '/manage/video' },

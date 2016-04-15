@@ -67,7 +67,7 @@ export default class AddMenuModal extends React.Component {
             <Checkbox
               defaultChecked={this.state.showAllergensInMenu}
               name="checkboxShowAllergensInMenu"
-              label={<span>Don't show allergen guide</span>}
+              label={<span>Show allergen guide</span>}
               onCheck={() => {this.setState({ showAllergensInMenu: !this.state.showAllergensInMenu})}} />
         </Form>
       </Dialog>

@@ -28,6 +28,7 @@ import EmailTemplatesView                    from 'views/manage/emailTemplates/E
 // import StaffMemberView              from 'views/manage/staff/StaffMemberView';
 // import StaffInvitationView          from 'views/manage/staff/StaffInvitationView';
 import StaffRegistrationView        from 'views/manage/staff/StaffRegistrationView';
+import ManageRestaurantsView        from 'views/manage/restaurant/ManageRestaurantsView';
 
 /* menus related views */
 import Menus                        from 'views/menu/Main';
@@ -68,6 +69,7 @@ export default (
         <Route component={StaffView} path="/manage/staff" name="staff" />
       </Route>
       <Route component={EmailTemplatesView} path="/manage/emailTemplates" name="emailTemplates" />
+      <Route component={ManageRestaurantsView} path="/manage/manageRestaurants" name="manageRestaurants" />
 
     </Route>
     <Route      component={StaffRegistrationView}  path='/staff-register/:token' name='staff-register' />
