@@ -77,11 +77,11 @@ class MenuLibraryView extends React.Component {
     //let menuItemsLength = 100; // TO-DO unmock this later
 
     const menuItemsLength = await falcorModel.getValue(
-      ['restaurants', 0, 'menuItems', 'length']
+      ['restaurants', localStorage.restaurantID, 'menuItems', 'length']
     );
 
     const response = await API.get(
-      ['restaurants', 0, 'menuItems', {from: 0, to: menuItemsLength}, ['id', 'title', 'description', 'description2', 'description3', 'picUrl', 'allergens']]
+      ['restaurants', localStorage.restaurantID, 'menuItems', {from: 0, to: menuItemsLength}, ['id', 'title', 'description', 'description2', 'description3', 'picUrl', 'allergens']]
     );
 
     console.info("RESULT #4", response);
@@ -91,23 +91,23 @@ class MenuLibraryView extends React.Component {
     //let sectionsLength = 100; // TO-DO unmock this later
 
     const sectionsLength = await falcorModel.getValue(
-      ['restaurants', 0, 'sections', 'length']
+      ['restaurants', localStorage.restaurantID, 'sections', 'length']
     );
 
     const menuItemsLen = await falcorModel.getValue(
-      ['restaurants', 0, 'menuItems', 'length']
+      ['restaurants', localStorage.restaurantID, 'menuItems', 'length']
     );
 
 
     const response2 = await API.get(
-      ['restaurants', 0, 'sections', {from: 0, to: sectionsLength}, ['id', 'title', 'items'], {from: 0, to: menuItemsLen}, 'id']
+      ['restaurants', localStorage.restaurantID, 'sections', {from: 0, to: sectionsLength}, ['id', 'title', 'items'], {from: 0, to: menuItemsLen}, 'id']
     );
 
     console.info("RESULT #4", response2);
 
 
-    const items = response ? falcorUtils.makeArray({object: response.restaurants[0], name: 'menuItems'}) : [];
-    let sections = response2 ? falcorUtils.makeArray({object: response2.restaurants[0], name: 'sections'}) : [];
+    const items = response ? falcorUtils.makeArray({object: response.restaurants[localStorage.restaurantID], name: 'menuItems'}) : [];
+    let sections = response2 ? falcorUtils.makeArray({object: response2.restaurants[localStorage.restaurantID], name: 'sections'}) : [];
 
     this.props.actions.menuItem.menuItemList(items);
     this.props.actions.section.sectionList(sections);
@@ -140,7 +140,7 @@ class MenuLibraryView extends React.Component {
         this.props.actions.menuItem.add(newMenuItem);
 
         return API
-          .getValue(['restaurants', 0, 'menuItems', 'length'])
+          .getValue(['restaurants', localStorage.restaurantID, 'menuItems', 'length'])
           .then((size) => ({
             size,
             menuItem: newMenuItem
@@ -217,7 +217,7 @@ class MenuLibraryView extends React.Component {
     let menuItemArray = [menuItem] ; //.formatForWire();
     let resultUpdateMenuItems = await falcorModel
       .call(
-            ['restaurants', 0, 'menuItems','update'],
+            ['restaurants', localStorage.restaurantID, 'menuItems','update'],
             [menuItemArray] // update requries an array
           ).
       then((result) => {
@@ -259,7 +259,7 @@ class MenuLibraryView extends React.Component {
 
       let sectionUpdateResult = await falcorModel
         .call(
-              ['restaurants', 0, 'sections','update'],
+              ['restaurants', localStorage.restaurantID, 'sections','update'],
               [purgedSections]          
             ).
         then((result) => {
@@ -288,7 +288,7 @@ class MenuLibraryView extends React.Component {
 
     let result = await falcorModel
       .call(
-            ['restaurants', 0, 'menuItems','add'],
+            ['restaurants', localStorage.restaurantID, 'menuItems','add'],
             [newMenuItem]          
           ).
       then((result) => {
@@ -296,10 +296,10 @@ class MenuLibraryView extends React.Component {
       });
 
     const menuItemsLen = await falcorModel.getValue(
-      ['restaurants', 0, 'menuItems', 'length']
+      ['restaurants', localStorage.restaurantID, 'menuItems', 'length']
     );
 
-    let newMenuItemId = result.json.restaurants[0].menuItems[menuItemsLen-1][1];
+    let newMenuItemId = result.json.restaurants[localStorage.restaurantID].menuItems[menuItemsLen-1][1];
     newMenuItemId = newMenuItemId ? newMenuItemId : alert("error with newMenuItemId");
     newMenuItem.id = newMenuItemId;
     this.props.actions.menuItem.add(newMenuItem);
@@ -326,7 +326,7 @@ class MenuLibraryView extends React.Component {
 
       let sectionUpdateResult = await falcorModel
         .call(
-              ['restaurants', 0, 'sections','update'],
+              ['restaurants', localStorage.restaurantID, 'sections','update'],
               [updatedSections[0]]          
             ).
         then((result) => {
@@ -380,7 +380,7 @@ class MenuLibraryView extends React.Component {
 
     let sectionUpdateResult = await falcorModel
       .call(
-            ['restaurants', 0, 'sections','update'],
+            ['restaurants', localStorage.restaurantID, 'sections','update'],
             [toUpdateSections]          
           ).
       then((result) => {
@@ -389,7 +389,7 @@ class MenuLibraryView extends React.Component {
 
     let result = await falcorModel
       .call(
-            ['restaurants', 0, 'menuItems', 'delete'],
+            ['restaurants', localStorage.restaurantID, 'menuItems', 'delete'],
             [menuItemIdToDelete]          
           ).
       then((result) => {

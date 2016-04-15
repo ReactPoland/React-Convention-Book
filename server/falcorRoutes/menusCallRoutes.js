@@ -8,7 +8,7 @@ export default ( sessionObject ) => {
 
   return [
     {
-    route: 'restaurants[{integers}].menus.delete',
+    route: 'restaurants[{keys}].menus.delete',
     call: (callPath, args) => 
       {
         let toDeleteMenuId = args[0];
@@ -23,7 +23,7 @@ export default ( sessionObject ) => {
       }
     },
     {
-    route: 'restaurants[{integers}].menus.add',
+    route: 'restaurants[{keys}].menus.add',
     call: (callPath, args) => 
       {
         let newMenuObj = args[0];
@@ -52,11 +52,11 @@ export default ( sessionObject ) => {
             
             let results = [
               {
-                path: ['restaurants', 0, 'menus', res.count-1],
+                path: ['restaurants', sessionObject.restaurantid, 'menus', res.count-1],
                 value: NewMenuRef
               },
               {
-                path: ['restaurants', 0, 'menus', 'length'],
+                path: ['restaurants', sessionObject.restaurantid, 'menus', 'length'],
                 value: res.count
               }
             ];
@@ -66,20 +66,20 @@ export default ( sessionObject ) => {
       }
     },
     {
-      route: 'restaurants[{integers}].menus.length',
+      route: 'restaurants[{keys}].menus.length',
       get: (callPath, args) => {
         return models.MenuCollection.count({}, function(err, count) {
           return count;
         }).then ((count) => {
           return {
-            path: ['restaurants', 0, 'menus', 'length'],
+            path: ['restaurants', sessionObject.restaurantid, 'menus', 'length'],
             value: count
           }
         });
       }
     },
     {
-    route: 'restaurants[{integers}].menus.update',
+    route: 'restaurants[{keys}].menus.update',
     call: async (callPath, args) => 
       {
         let updatedMenus = args[0];

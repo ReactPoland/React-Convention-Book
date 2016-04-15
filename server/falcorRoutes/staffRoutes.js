@@ -166,6 +166,95 @@ module.exports = [
       });
     }
   },
+
+  { 
+    route: 'staffRoute.edit' , 
+    call: async (callPath, args) => 
+    {
+        let member = args[0];
+        console.log("MEMBER IN staffRoute.edit: ");
+        console.log(member);
+        console.log("MEMBER^^^");
+
+        let newFirstName = member.firstName;
+        let newLastName = member.lastName;
+        let newEmail = member.email;
+        let newReEmail = member.reEmail;
+        let newAddress = member.address;
+        let newLocation = member.location;
+        let newRole = member.position;
+        //let newStartDate = member.startDate;
+
+        let memberToEdit = args[1];
+
+//find an user in db
+        let user = await models.UserCollection.find({_id: memberToEdit.id}, function(err, user) {
+          if (err) throw err;
+        }).then((result) => {
+          return result;
+        });
+
+        console.log("Member before edit: ");
+        console.log(user);
+        console.log("member before edit^^^");
+
+      //firstName
+      if (typeof newFirstName === "undefined"){  
+        newFirstName = user[0].firstName;
+      }
+      //lastName
+      if (typeof newLastName === "undefined"){  
+        newLastName = user[0].lastName;
+      }
+      //email
+      if (typeof newEmail === "undefined"){  
+        newEmail = user[0].email;
+      }
+      //address
+      if (typeof newAddress === "undefined"){
+        newAddress = user[0].address;
+      }
+      //role
+      if (newRole == ""){  
+        newRole = user[0].role;
+      }
+      //location
+      if (newLocation == ""){  
+        newLocation = user[0].location;
+      }
+
+
+//update
+        models.UserCollection.update(
+          { _id: memberToEdit.id }, 
+          { $set: { "firstName": newFirstName,
+                   "lastName": newLastName,
+                   "email": newEmail,
+                   "role": newRole,
+                   "address": newAddress,
+                   "location": newLocation,
+                  }
+          },
+          function(err) {
+            if(err) { throw err; }
+            console.info("UPDATED user SIR!");
+        });
+
+        user = await models.UserCollection.find({_id: memberToEdit.id}, function(err, user) {
+          if (err) throw err;
+        }).then((result) => {
+          return result;
+        });
+
+        console.log("Member after edit: ");
+        console.log(user);
+        console.log("member after edit^^^");
+
+        return 0;
+    }
+  },
+
+
   {
     route: ['staffRoute', 'length'],
     get: (callPath, args) => {

@@ -102,17 +102,22 @@ class CoreLayout extends React.Component {
             return window.location.hostname.replace(urlParts[0],'').slice(0, -1);
     }
     
-    let currentSubdomain = getSubdomain();
-    if(currentSubdomain.length < 2) {
-      currentSubdomain = "starbucks";
-    }
+    if(localStorage.restaurantID === 'undefined' || !localStorage.restaurantID) {
+      let currentSubdomain = getSubdomain();
+      if(currentSubdomain.length < 2) {
+        currentSubdomain = "starbucks";
+      }
 
-    falcorModel.getValue(
-      ['restaurants', 'lookup', currentSubdomain]
-    ).then((value) => {
-      this.setState({restaurantID: value});
-      localStorage.setItem("restaurantID", value);
-    });
+      falcorModel.getValue(
+        ['restaurants', 'lookup', currentSubdomain]
+      ).then((value) => {
+        this.setState({restaurantID: value});
+        if(value !== "INVALID") 
+          localStorage.setItem("restaurantID", value);
+      });
+    } else {
+      this.setState({restaurantID: localStorage.restaurantID});
+    }
   }
 
   async _checkIfLoggedIn() {

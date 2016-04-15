@@ -44,12 +44,20 @@ export default ( sessionObject ) => {
       /*
           USED on frontend in views/MenuLibraryView.js 
        */
-      route: 'restaurants[0].menuItems[{integers}]',
+      route: 'restaurants[{keys}].menuItems[{integers}]',
       get: (pathSet) => {
         let menuItemsIndexes = pathSet[3];
+        let restIDnow = pathSet[1][0];
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info(restIDnow);
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info("restIDnow");
 
         let andStatementQuery = {
-          ownedByRestaurantID: sessionObject.restaurantid
+          ownedByRestaurantID: restIDnow
         }
         
         return models.MenuItemCollection.find(andStatementQuery, '_id', function(err, menuItemsDocs) {
@@ -60,7 +68,7 @@ export default ( sessionObject ) => {
               let res;
               if (menuItemsArrayFromDB.length - 1 < index) { 
                 res = {
-                  path: ['restaurants', 0, 'menuItems', index],
+                  path: ['restaurants', sessionObject.restaurantid, 'menuItems', index],
                   invalidate: true
                 };
                 results.push(res);
@@ -71,7 +79,7 @@ export default ( sessionObject ) => {
               let newmenuItemRef = $ref(['menuItemsById', currentMongoID]);
 
               res = {
-                path: ['restaurants', 0, 'menuItems', index],
+                path: ['restaurants', sessionObject.restaurantid, 'menuItems', index],
                 value: newmenuItemRef,
               };
               results.push(res);

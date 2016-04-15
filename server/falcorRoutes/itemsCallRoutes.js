@@ -7,7 +7,7 @@ export default ( sessionObject ) => {
         
   return [
     {
-    route: 'restaurants[{integers}].menuItems.delete',
+    route: 'restaurants[{keys}].menuItems.delete',
     call: (callPath, args) => 
       {
         let toDeleteMenuItemId = args[0];
@@ -22,7 +22,7 @@ export default ( sessionObject ) => {
       }
     },
     {
-      route: 'restaurants[{integers}].menuItems.add',
+      route: 'restaurants[{keys}].menuItems.add',
       call: (callPath, args) => 
         {
           let newMenuItemObj = args[0];
@@ -54,11 +54,11 @@ export default ( sessionObject ) => {
               
               let results = [
                 {
-                  path: ['restaurants', 0, 'menuItems', res.count-1],
+                  path: ['restaurants', sessionObject.restaurantid, 'menuItems', res.count-1],
                   value: NewMenuItemRef
                 },
                 {
-                  path: ['restaurants', 0, 'menuItems', 'length'],
+                  path: ['restaurants', sessionObject.restaurantid, 'menuItems', 'length'],
                   value: res.count
                 }
               ];
@@ -68,20 +68,20 @@ export default ( sessionObject ) => {
         }
     },
     {
-      route: 'restaurants[{integers}].menuItems.length',
+      route: 'restaurants[{keys}].menuItems.length',
       get: (callPath, args) => {
         return models.MenuItemCollection.count({}, function(err, count) {
           return count;
         }).then ((count) => {
           return {
-            path: ['restaurants', 0, 'menuItems', 'length'],
+            path: ['restaurants', sessionObject.restaurantid, 'menuItems', 'length'],
             value: count
           }
         });
       }
     },
     {
-      route: 'restaurants[{integers}].menuItems.update',
+      route: 'restaurants[{keys}].menuItems.update',
       call: async (callPath, args) => 
         {
           let updatedMenuItems = args[0];

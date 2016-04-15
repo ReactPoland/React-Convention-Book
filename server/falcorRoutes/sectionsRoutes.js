@@ -51,12 +51,19 @@ export default ( sessionObject ) => {
        */
 
 
-      route: 'restaurants[0].sections[{integers}]',
+      route: 'restaurants[{keys}].sections[{integers}]',
       get: (pathSet) => {
         let sectionsIndexes = pathSet[3];
-        
+        let restIDnow = pathSet[1][0];
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info(restIDnow);
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info("restIDnow");
         let andStatementQuery = {
-          ownedByRestaurantID: sessionObject.restaurantid
+          ownedByRestaurantID: restIDnow
         }
         
         return models.SectionCollection.find(andStatementQuery, '_id', function(err, sectionsDocs) {
@@ -67,7 +74,7 @@ export default ( sessionObject ) => {
               let res;
               if (sectionsArrayFromDB.length - 1 < index) { 
                 res = {
-                  path: ['restaurants', 0, 'sections', index],
+                  path: ['restaurants', sessionObject.restaurantid, 'sections', index],
                   invalidate: true
                 };
                 results.push(res);
@@ -78,7 +85,7 @@ export default ( sessionObject ) => {
               let sectionItemRef = $ref(['sectionsById', currentMongoID]);
 
               res = {
-                path: ['restaurants', 0, 'sections', index],
+                path: ['restaurants', sessionObject.restaurantid, 'sections', index],
                 value: sectionItemRef,
               };
               results.push(res);

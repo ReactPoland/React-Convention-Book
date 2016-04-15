@@ -50,12 +50,19 @@ export default ( sessionObject ) => {
       /*
           USED on frontend in layouts/SideNav.js 
        */
-      route: 'restaurants[0].menus[{integers}]',
+      route: 'restaurants[{keys}].menus[{integers}]',
       get: (pathSet) => {
         let menusIndexes = pathSet[3];
-
+        let restIDnow = pathSet[1][0];
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info(restIDnow);
+        console.info("restIDnow");
+        console.info("restIDnow");
+        console.info("restIDnow");
         let andStatementQuery = {
-          ownedByRestaurantID: sessionObject.restaurantid
+          ownedByRestaurantID: restIDnow
         }
 
         return models.MenuCollection.find(andStatementQuery, '_id', function(err, menusDocs) {
@@ -69,7 +76,7 @@ export default ( sessionObject ) => {
               let res;
               if (menusArrayFromDB.length - 1 < index) { 
                 res = {
-                  path: ['restaurants', 0, 'menus', index],
+                  path: ['restaurants', sessionObject.restaurantid, 'menus', index],
                   invalidate: true
                 };
                 results.push(res);
@@ -81,11 +88,19 @@ export default ( sessionObject ) => {
               let menuItemRef = $ref(['menusById', currentMongoID]);
 
               res = {
-                path: ['restaurants', 0, 'menus', index],
+                path: ['restaurants', sessionObject.restaurantid, 'menus', index],
                 value: menuItemRef,
               };
               results.push(res);
             });
+            console.info("321results");
+            console.info("321results");
+            console.info("321results");
+            console.info("321results");
+            console.info(JSON.stringify(results));
+            console.info("results");
+
+
 
             return results;
           })

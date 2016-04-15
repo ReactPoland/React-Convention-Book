@@ -37,6 +37,15 @@ var menuItemSchema = {
 var MenuItemCollection = mongoose.model('MenuItemCollection', menuItemSchema, 'menuItems');
 
 
+
+
+var emailTemplateSchema = {
+  templateText: String,
+  templateName: String,
+  ownedByRestaurantID: String
+};
+var EmailTemplateCollection = mongoose.model('EmailTemplateCollection', emailTemplateSchema, 'emailTemplates');
+
 var restaurantSchema = {
   name: String,
   subdomain: String
@@ -131,5 +140,6 @@ module.exports = {
   MenuItemCollection,
   SectionCollection,
   UserCollection,
-  RestaurantCollection
+  RestaurantCollection,
+  EmailTemplateCollection
 };

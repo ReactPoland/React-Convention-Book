@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import { Link } from 'react-router';
 import { Snackbar, FlatButton } from 'material-ui';
+import {Paper} from 'material-ui';
 
 import API from 'utils/API';
 import Styles from 'styles/inlineStyles';
@@ -26,8 +27,6 @@ class AccountSettingsView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      requestSuccessPaper: null,
-      requestErrorPaper: null,
       requestSuccess: null,
       requestError: null,
       sendingAccountRequest: false,
@@ -40,8 +39,6 @@ class AccountSettingsView extends React.Component {
 
   async _updateAccount(formData) {
     this.setState({
-      requestSuccessPaper: null,
-      requestErrorPaper: null,
       requestSuccess: null,
       requestError: null,
       sendingAccountRequest: true
@@ -68,7 +65,6 @@ class AccountSettingsView extends React.Component {
     this.props.actions.updateUserSettings(this.props.session.user); 
 
     this.setState({
-      requestSuccessPaper: "Successfully updated account details",
       requestSuccess: "Successfully updated account details",
       sendingAccountRequest: false
     });
@@ -76,8 +72,6 @@ class AccountSettingsView extends React.Component {
 
   async _changePassword(formData) {
     this.setState({
-      requestSuccessPaper: null,
-      requestErrorPaper: null,
       requestSuccess: null,
       requestError: null,
       sendingPasswordRequest: true
@@ -98,14 +92,12 @@ class AccountSettingsView extends React.Component {
 
     if (valid){
       this.setState({
-        requestSuccessPaper: "Successfully changed password",
         requestSuccess: "Successfully changed password",
         sendingPasswordRequest: false
       });
     }
     else{
       this.setState({
-        requestErrorPaper: "Wrong old password",
         requestError: "Wrong old password",
         sendingPasswordRequest: false
       });
@@ -116,8 +108,6 @@ class AccountSettingsView extends React.Component {
 
   nullifyRequestState() {
     this.setState({
-      requestSuccessPaper: null,
-      requestErrorPaper: null,
       requestSuccess: null,
       requestError: null
     });
@@ -125,20 +115,36 @@ class AccountSettingsView extends React.Component {
 
   render() {
     const { requestSuccess, requestError } = this.state;
-    const { requestSuccessPaper, requestErrorPaper } = this.state;
     
     let modalJSX;
     if(typeof this.state.requestSuccess === 'string') {
-      alert(typeof this.state.requestSuccess);
-      modalJSX = <h1>
-        Successfully updated account details 
-        <FlatButton
-          label="OK"
-          primary={true}
-          keyboardFocused={true}
-          onTouchTap={() => this.setState.requestSuccess=null}
-        />
-      </h1>;
+      modalJSX = <div style={{width: 400, margin: "0 auto"}}>
+            <Paper zDepth={3} style={{padding: 32, margin: 32}}>
+              Successfully updated account details
+                 <FlatButton
+                    label="OK"
+                    primary={true}
+                    keyboardFocused={true}
+                    style={{float: 'right'}}
+                    onTouchTap={() => this.setState({requestSuccess: false})}
+                  />
+            </Paper>
+          </div>;
+      return modalJSX;
+    }
+    if(typeof this.state.requestError === 'string') {
+      modalJSX = <div style={{width: 400, margin: "0 auto"}}>
+            <Paper zDepth={3} style={{padding: 32, margin: 32}}>
+              Wrong Password
+                 <FlatButton
+                    label="OK"
+                    primary={true}
+                    keyboardFocused={true}
+                    style={{float: 'right', margin: 32}}
+                    onTouchTap={() => this.setState({requestError: false})}
+                  />
+            </Paper>
+          </div>;
       return modalJSX;
     }
 

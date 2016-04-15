@@ -39,7 +39,7 @@ class LoginView extends React.Component {
     console.info(localStorage.token);
 
     if(localStorage.token) {
-      setTimeout(() => this.props.history.pushState(null, '/dashboard') , 300 );
+      setTimeout(() => this.props.history.pushState(null, '/dashboard') , 1000 );
     } else {
       setTimeout(() => this.setState({showLoginForm: true}), 1000);
     }
@@ -85,13 +85,12 @@ class LoginView extends React.Component {
     if(tokenRes) {
       let username = await falcorModel.getValue('login.username');
       let role = await falcorModel.getValue('login.role');
-      let restaurantID = await falcorModel.getValue('login.restaurantID');
 
       this.setState({error: "Logged in as "+role});
       localStorage.setItem("token", tokenRes);
       localStorage.setItem("username", username);
       localStorage.setItem("role", role);
-      localStorage.setItem("restaurantID", restaurantID);
+
       location.reload();
       return;
     } else {

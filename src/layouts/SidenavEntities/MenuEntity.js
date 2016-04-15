@@ -72,23 +72,23 @@ class MenuEntity extends React.Component {
   async _fetchData() {
 
     const menusLength = await falcorModel.getValue(
-      ['restaurants', 0, 'menus', 'length']
+      ['restaurants', localStorage.restaurantID, 'menus', 'length']
     );
 
     const sectionsLength = await falcorModel.getValue(
-      ['restaurants', 0, 'sections', 'length']
+      ['restaurants', localStorage.restaurantID, 'sections', 'length']
     );
 
     const response = await API.get(
       // I don't know yet exact number of items needed
       // perhaps we'll need to fetch items partialy (pagination style)
-      ['restaurants', 0, 'menus', {from: 0, to: menusLength}, ['id', 'title', 'description', 'sections'], {from: 0, to: sectionsLength}, 'id']
+      ['restaurants', localStorage.restaurantID, 'menus', {from: 0, to: menusLength}, ['id', 'title', 'description', 'sections'], {from: 0, to: sectionsLength}, 'id']
     );
 
     console.info("\n\n\n DEBUG response \n\n ", response, "\n\n\n\n ");
 
     let menus = falcorUtils.makeArray({
-      object: response.restaurants[0],
+      object: response.restaurants[localStorage.restaurantID],
       name: 'menus'
     });
 
@@ -134,17 +134,17 @@ class MenuEntity extends React.Component {
     let newMenu = menu;
     let resultNewMenu = await falcorModel
       .call(
-            ['restaurants', 0, 'menus','add'],
+            ['restaurants', localStorage.restaurantID, 'menus','add'],
             [newMenu]          
           ).
       then((result) => {
         return result;
       });
     const menusLen = await falcorModel.getValue(
-      ['restaurants', 0, 'menus', 'length']
+      ['restaurants', localStorage.restaurantID, 'menus', 'length']
     );
 
-    let newMenuId = resultNewMenu.json.restaurants[0].menus[menusLen-1][1];
+    let newMenuId = resultNewMenu.json.restaurants[localStorage.restaurantID].menus[menusLen-1][1];
     newMenuId = newMenuId ? newMenuId : alert("error with newMenuId");
     newMenu.id = newMenuId;
 
@@ -159,7 +159,7 @@ class MenuEntity extends React.Component {
     let menuArray = [menu] ; //.formatForWire();
     let resultUpdateMenus = await falcorModel
       .call(
-            ['restaurants', 0, 'menus','update'],
+            ['restaurants', localStorage.restaurantID, 'menus','update'],
             [menuArray] // update requries an array
           ).
       then((result) => {
@@ -176,7 +176,7 @@ class MenuEntity extends React.Component {
     let sectionArray = [section] ; //.formatForWire();
     let resultUpdateSections = await falcorModel
       .call(
-            ['restaurants', 0, 'sections','update'],
+            ['restaurants', localStorage.restaurantID, 'sections','update'],
             [sectionArray] // update requries an array
           ).
       then((result) => {
@@ -192,7 +192,7 @@ class MenuEntity extends React.Component {
 
     let result = await falcorModel
       .call(
-            ['restaurants', 0, 'menus', 'delete'],
+            ['restaurants', localStorage.restaurantID, 'menus', 'delete'],
             [id]          
           ).
       then((result) => {
@@ -221,7 +221,7 @@ class MenuEntity extends React.Component {
 
     let resultUpdateMenus = await falcorModel
       .call(
-            ['restaurants', 0, 'menus','update'],
+            ['restaurants', localStorage.restaurantID, 'menus','update'],
             [orderedObjArray]          
           ).
       then((result) => {
@@ -294,7 +294,7 @@ class MenuEntity extends React.Component {
     
       let menuDeleteUpdateResult = await falcorModel
         .call(
-              ['restaurants', 0, 'menus','update'],
+              ['restaurants', localStorage.restaurantID, 'menus','update'],
               [menusToUpdate]          
             ).
         then((result) => {
@@ -305,7 +305,7 @@ class MenuEntity extends React.Component {
       await Promise.all(deletedSections.map(async sectionID => {
         let result = await falcorModel
           .call(
-                ['restaurants', 0, 'sections', 'delete'],
+                ['restaurants', localStorage.restaurantID, 'sections', 'delete'],
                 [sectionID]          
               ).
           then((result) => {
@@ -328,12 +328,12 @@ class MenuEntity extends React.Component {
         let newSection = secItem;
         let response = await falcorModel
           .call(
-                ['restaurants', 0, 'sections','add'],
+                ['restaurants', localStorage.restaurantID, 'sections','add'],
                 [newSection]          
               ).
           then((result) => {
             return falcorModel.getValue(
-              ['restaurants', 0, 'sections', 'length']
+              ['restaurants', localStorage.restaurantID, 'sections', 'length']
             ).then((sectionsLen) => {
               return { sectionsLen, result };
             });;
@@ -341,7 +341,7 @@ class MenuEntity extends React.Component {
         let sectionsLen = response.sectionsLen;
         let result = response.result;
 
-        let newSectionId = result.json.restaurants[0].sections[sectionsLen-1][1];
+        let newSectionId = result.json.restaurants[localStorage.restaurantID].sections[sectionsLen-1][1];
         newSectionsOrder.push(newSectionId);
         newSection.id = newSectionId;
         this.props.actions.section.add(newSection);
@@ -363,7 +363,7 @@ class MenuEntity extends React.Component {
     let arrayOfMenusToUpdate = [currentMenu];
     let menuUpdateResult = await falcorModel
       .call(
-            ['restaurants', 0, 'menus','update'],
+            ['restaurants', localStorage.restaurantID, 'menus','update'],
             [arrayOfMenusToUpdate]  // requires array of menus        
           ).
       then((result) => {
@@ -383,7 +383,7 @@ class MenuEntity extends React.Component {
     // return;
     let sectionsUpdateResult = await falcorModel
       .call(
-            ['restaurants', 0, 'sections','update'],
+            ['restaurants', localStorage.restaurantID, 'sections','update'],
             [sectionsObjArray]  // requires array of menus        
           ).
       then((result) => {
@@ -443,7 +443,7 @@ class MenuEntity extends React.Component {
 
     API
       .set({
-        url: ['restaurants', 0, 'menus'],
+        url: ['restaurants', localStorage.restaurantID, 'menus'],
         body: order
       })
       .then(() => {

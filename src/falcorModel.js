@@ -279,14 +279,20 @@ const cache = {
 
 let headers;
 if(localStorage.token) {
-    headers = {
-      headers: {
-        'Authorization': localStorage.token,
-        'role': localStorage.role,
-        'username': localStorage.username,
-        'restaurantID': localStorage.restaurantID
-      }
-    };
+  console.info("LOCAL --->",localStorage.restaurantID);
+  console.info("LOCAL --->",localStorage.restaurantID);
+  console.info("LOCAL --->",localStorage.restaurantID);
+  console.info("LOCAL --->",localStorage.restaurantID);
+  console.info("LOCAL --->",localStorage.restaurantID);
+  console.info("LOCAL --->",localStorage.restaurantID);
+  headers = {
+    headers: {
+      'Authorization': localStorage.token,
+      'role': localStorage.role,
+      'username': localStorage.username,
+      'restaurantid': localStorage.restaurantID
+    }
+  };
 }
 
 

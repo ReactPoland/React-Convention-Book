@@ -40,6 +40,7 @@ function getCurrentRoute() {
 
 const managing = [
   { id: 'staff',      title: 'Staff',         link: '/manage/staff' },
+  { id: 'reports',    title: 'Email Templates',       link: '/manage/emailTemplates' },
   { id: 'reports',    title: 'Reports',       link: '/manage/reports' },
   { id: 'messaging',  title: 'Messaging',     link: '/manage/message' },
   { id: 'video',      title: 'Video Library', link: '/manage/video' },
@@ -107,8 +108,13 @@ class SideNav extends React.Component {
 
     this._getProps = this._getProps.bind(this);
 
-    this.state = {};
-    this._fetchData();
+    this.state = {
+      menusLengthPath: null
+    };
+
+    if(localStorage.restaurantID && localStorage.token) {
+      this._fetchData();
+    }
   }
 
   componentDidMount() {
@@ -121,21 +127,41 @@ class SideNav extends React.Component {
 
   async _fetchData() {
     const { menu, menuItem, section, actions } = this.props;
+    let menusLengthPath = ['restaurants', localStorage.restaurantID, 'menus', 'length'];
 
+    console.info("lengthPath");
+    console.info("lengthPath");
+    console.info(menusLengthPath);
+    console.info("lengthPath");
+    console.info("lengthPath");
     const menusLength = await falcorModel.getValue(
-      ['restaurants', 0, 'menus', 'length']
+      menusLengthPath
     );
+    if(typeof menusLength === 'undefined') {
+      console.info('NOT FETCHING');
+      console.info('NOT FETCHING');
+      console.info('NOT FETCHING');
+      return;
+    }
+    console.debug("menusLength");
+    console.debug("menusLength");
+    console.debug("menusLength");
+    console.debug(menusLength);
+    console.debug("menusLength");
+    console.debug("menusLength");
+    console.debug("menusLength");
+
 
     if(!menu.length) {
       console.info("IMPLEMENTED #2");
       const response = await API.get(
-        ['restaurants', 0, 'menus', {from: 0, to: menusLength}, ['title', 'id', 'description', 'showAllergensInMenu']]
+        ['restaurants', localStorage.restaurantID, 'menus', {from: 0, to: menusLength}, ['title', 'id', 'description', 'showAllergensInMenu']]
       );
 
       console.info("\n\n\n 1111debug \n\n\n", response, "\n\n\n debug \n\n\n");
 
       console.info("RESULT #2", response);
-      const menus = falcorUtils.makeArray({object: response.restaurants[0], name: 'menus'});
+      const menus = falcorUtils.makeArray({object: response.restaurants[localStorage.restaurantID], name: 'menus'});
       
       actions.menu.menuList(menus);
     }

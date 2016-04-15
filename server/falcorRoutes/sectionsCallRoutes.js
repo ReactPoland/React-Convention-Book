@@ -7,10 +7,10 @@ export default ( sessionObject ) => {
       
   return [
     {
-    route: 'restaurants[{integers}].sections.delete',
+    route: 'restaurants[{keys}].sections.delete',
     call: (callPath, args) => 
       {
-        console.info("1) DELETE SEC: restaurants[{integers}].sections.delete");
+        console.info("1) DELETE SEC: restaurants[{keys}].sections.delete");
         let toDeleteSectionId = args[0];
         return models.SectionCollection.find({ _id: toDeleteSectionId }).remove((err) => {
           console.info("section REMOVED");
@@ -24,7 +24,7 @@ export default ( sessionObject ) => {
       }
     },
     {
-    route: 'restaurants[{integers}].sections.update',
+    route: 'restaurants[{keys}].sections.update',
     call: async (callPath, args) => 
       {
         let updatedSections = args[0];
@@ -65,7 +65,7 @@ export default ( sessionObject ) => {
       }
     },
     {
-    route: 'restaurants[{integers}].sections.add',
+    route: 'restaurants[{keys}].sections.add',
     call: (callPath, args) => 
       {
 
@@ -100,11 +100,11 @@ export default ( sessionObject ) => {
             
             let results = [
               {
-                path: ['restaurants', 0, 'sections', res.count-1],
+                path: ['restaurants', sessionObject.restaurantid, 'sections', res.count-1],
                 value: NewSectionRef
               },
               {
-                path: ['restaurants', 0, 'sections', 'length'],
+                path: ['restaurants', sessionObject.restaurantid, 'sections', 'length'],
                 value: res.count
               }
             ];
@@ -114,13 +114,13 @@ export default ( sessionObject ) => {
       }
     },
     {
-      route: 'restaurants[{integers}].sections.length',
+      route: 'restaurants[{keys}].sections.length',
       get: (callPath, args) => {
         return models.SectionCollection.count({}, function(err, count) {
           return count;
         }).then ((count) => {
           return {
-            path: ['restaurants', 0, 'sections', 'length'],
+            path: ['restaurants', sessionObject.restaurantid, 'sections', 'length'],
             value: count
           }
         });

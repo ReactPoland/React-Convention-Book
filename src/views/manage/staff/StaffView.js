@@ -13,6 +13,7 @@ import Filter from 'components/Filter';
 import StaffTable from 'components/staff/StaffTable';
 import AddStaffMemberForm from 'components/forms/AddStaffMemberForm';
 import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
+import EditStaffMemberDialog from 'components/common/EditStaffMemberDialog';
 
 import falcorModel from '../../../falcorModel.js';
 
@@ -31,12 +32,16 @@ class StaffView extends React.Component {
     super(props);
     this.state = {
       filteredStaff: null,
-      showAddForm: false
+      showAddForm: false,
+      showEditForm: false,
+      memberToEdit: null
     };
     this._onFilter = this._onFilter.bind(this);
     this.onAddMember = this.onAddMember.bind(this);
+    this.onEditMember = this.onEditMember.bind(this);
     this._showForm = this._showForm.bind(this);
     this.nullifyRequestState = this.nullifyRequestState.bind(this);
+    this._onStaffMemberClick = this._onStaffMemberClick.bind(this);
 
   }
 
@@ -94,11 +99,12 @@ class StaffView extends React.Component {
       });
     member.id = newUserID;
     this.props.actions.addStaff(new StaffMember(member));
-
+    if(!localStorage.restaurantID && localStorage.restaurantID.length < 11) alert('error when sending email because of empty restaurantID');
+    
     let emailWelcomeMessage = await falcorModel
       .call(
             ['emailWelcomeMessage'],
-            [member]
+            [member, localStorage.restaurantID]
           ).
       then((result) => {
         return falcorModel.getValue(['emailWelcomeMessage']);
@@ -110,8 +116,22 @@ class StaffView extends React.Component {
     });
   }
 
+  async onEditMember(member){
+
+   let memberResult = await falcorModel
+      .call(
+            ['staffRoute', 'edit'],
+            [member, this.state.memberToEdit]
+          ).
+      then((result) => {
+        return memberResult;
+      });
+
+    this.setState({showEditForm: false});
+  }
+
   async _onStaffMemberClick(member) {
-    alert("_onStaffMemberClick")
+    this.setState({showEditForm: true, memberToEdit: member});
   }
 
   _showForm() {
@@ -124,19 +144,32 @@ class StaffView extends React.Component {
   nullifyRequestState() {
     this.setState({
       requestError: null,
-      requestSuccess: null
+      requestSuccess: null,
+      showEditForm: false
     });
   }
 
   render() {
     const { requestSuccess, requestError } = this.state;
     const staff = this.state.filteredStaff || this.props.staff;
+
     let addForm = null;
     if(this.state.showAddForm) {
       addForm = (
         <AddStaffMemberForm
           restaurant={this.props.restaurant}
           onAddMember={this.onAddMember} />
+      );
+    }
+
+    let editForm = null;
+    if(this.state.showEditForm) {
+      editForm = (
+        <EditStaffMemberDialog 
+          restaurant={this.props.restaurant} 
+          onEditMember={this.onEditMember} 
+          memberToEdit={this.state.memberToEdit}
+          nullifyRequestState={this.nullifyRequestState}  />
       );
     }
 
@@ -167,6 +200,8 @@ class StaffView extends React.Component {
             <StaffTable staff={mapHelpers.toArray(staff)} onStaffMemberClick={this._onStaffMemberClick} />
           </div>
         </div>
+
+        {editForm}
 
         <ErrorSuccessMsg
           successMessage={requestSuccess}

@@ -50,6 +50,7 @@ export const DefaultSelect = React.createClass({
           floatingLabelText={this.props.title}
           floatingLabelStyle={{fontWeight: 300}}
           onChange={this.changeValue}
+          defaultValue={this.props.defaultValue || ''}
           fullWidth
           required={this.props.required}
           errorText={errorMessage}

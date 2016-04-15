@@ -15,6 +15,7 @@ var loginRoutes = require('./loginRoutes.js');
 var staffRoutes = require('./staffRoutes.js');
 var emailRoutes = require('./emailRoutes.js');
 var profileRoutes = require('./profileRoutes.js');
+var emailTemplatesRoutes = require('./emailTemplatesRoutes.js');
 
 
 export const getCurrentUser = ( db, req ) => db.map( db => [{
@@ -31,6 +32,7 @@ export default ( req, res ) => {
   console.info("authorization", authorization);
   console.info("role", role);
   console.info("username", username);
+  console.info("----->>>> restaurantid", restaurantid);
   let authSign = jwt.sign(userDetailsToken, jwtSecret);
   console.info("SIGNED", authSign);
   console.info("***************");
@@ -43,11 +45,12 @@ export default ( req, res ) => {
   let sessionObject = { isAuthorized, role, username, restaurantid };
 
   let routes = [
-      ...loginRoutes,
       ...staffRoutes,
       ...emailRoutes,
       ...profileRoutes,
     ]
+      .concat(emailTemplatesRoutes( sessionObject ))
+      .concat(loginRoutes( sessionObject ))
       .concat(itemsRoutes( sessionObject ))
       .concat(itemsCallRoutes( sessionObject ))
       .concat(sectionsRoutes( sessionObject ))
