@@ -55,13 +55,6 @@ export default ( sessionObject ) => {
       get: (pathSet) => {
         let sectionsIndexes = pathSet[3];
         let restIDnow = pathSet[1][0];
-        console.info("restIDnow");
-        console.info("restIDnow");
-        console.info("restIDnow");
-        console.info(restIDnow);
-        console.info("restIDnow");
-        console.info("restIDnow");
-        console.info("restIDnow");
         let andStatementQuery = {
           ownedByRestaurantID: restIDnow
         }

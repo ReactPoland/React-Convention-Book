@@ -91,14 +91,11 @@ export default ( req, res ) => {
          */
         route: 'restaurants.lookup[{keys}]',
         get: async (pathSet) => {
-          console.info("restaurants.lookup pathSet");
-          console.info(pathSet);
           let restaurantSubdomain = pathSet[2][0];
 
           let andStatementQuery = {
             "subdomain": restaurantSubdomain
           }
-          console.info("andStatementQuery", andStatementQuery);
 
           let restaurantRes = await models.RestaurantCollection.find(andStatementQuery, function(err, res) {
             if (err) throw err;
@@ -106,7 +103,6 @@ export default ( req, res ) => {
             return result;
           });
 
-          console.info("restaurantRes", restaurantRes);
           if(restaurantRes.length > 0) {
             let restaurantID = restaurantRes[0].toObject()._id.toString();
             return {

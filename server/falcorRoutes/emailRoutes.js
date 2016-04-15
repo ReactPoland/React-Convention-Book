@@ -19,8 +19,6 @@ module.exports = [
     route: ['emailWelcomeMessage'] ,
     call: async (callPath, args) => 
       {
-        console.info(args);
-
         let member = args[0];
         let restaurantID = args[1];
         console.info("emailWelcomeMessage restaurantID", restaurantID);
@@ -50,7 +48,6 @@ module.exports = [
         registrationTemplate = registrationTemplate.replaceAll('[[lastName]]', member.lastName);
         registrationTemplate = registrationTemplate.replaceAll('[[email]]', member.email);
         registrationTemplate = registrationTemplate.replaceAll('[[confirmLink]]', confirmLink);
-        console.info('registrationTemplate', registrationTemplate);
 
         let textToSend = registrationTemplate || 'Click here to configure your new account: '+confirmLink+' \n\n DEFAULT REGISTRATION MESSAGE, no template provided';
 

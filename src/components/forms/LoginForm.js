@@ -30,8 +30,8 @@ export class LoginForm extends React.Component {
       <Formsy.Form onSubmit={this._submit} onValid={this._enableButton} onInvalid={this._disableButton}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Log in</h3>
-          <DefaultInput defaultValue="" name='username' title='Username (rradmin)' required />
-          <DefaultInput defaultValue="" type='password' name='password' title='Password (test)' required />
+          <DefaultInput defaultValue="" name='username' title='Username' required />
+          <DefaultInput defaultValue="" type='password' name='password' title='Password' required />
           <div style={{marginTop: 24}}>
             <RaisedButton
               secondary={true}

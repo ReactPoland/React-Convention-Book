@@ -103,38 +103,6 @@ userSchema.methods.dudify = function() {
 var UserCollection = mongoose.model('User', userSchema, 'users');
 
 
-// let andStatementQuery = {
-//   $and: [
-//       { 'username.type': 'rradmin' },
-//       { 'password.type': '1' }
-//   ]
-// }
-
-// // get the user rradmin
-// UserCollection.find(andStatementQuery, function(err, user) {
-//   if (err) throw err;
-
-//   // object of the user
-//   console.info("user");
-//   console.info(user);
-//   console.info("user");
-// });
-
-// get any admin that was created in the past month
-
-// get the date 1 month ago
-// var monthAgo = new Date();
-// monthAgo.setMonth(monthAgo.getMonth() - 1);
-
-
-// UserCollection.find({ admin: true }).where('created_at').gt(monthAgo).exec(function(err, users) {
-//   if (err) throw err;
-
-//   // show the admins in the past month
-//   console.log(users);
-// });
-
-
 module.exports = { 
   MenuCollection,
   MenuItemCollection,

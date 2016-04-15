@@ -82,8 +82,6 @@ export default ( sessionObject ) => {
       {
         let updatedRestaurants = args[0];
 
-        console.info("-------> ", updatedRestaurants);
-        console.info("<-------");
         let results = [];
 
         for(var key in updatedRestaurants) {
@@ -96,10 +94,6 @@ export default ( sessionObject ) => {
           /*
             to-do: not ideal because it doesn't handle when it fails adding to DB
            */
-          console.info("111------------&****");
-          console.info(JSON.stringify(restaurantData, null, 4));
-          console.info("111------------&****");
-
           models.RestaurantCollection.update(
             { _id: restaurantID }, 
             restaurantData, 

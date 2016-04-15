@@ -10,10 +10,8 @@ export default ( sessionObject ) => {
     route: 'restaurants[{keys}].sections.delete',
     call: (callPath, args) => 
       {
-        console.info("1) DELETE SEC: restaurants[{keys}].sections.delete");
         let toDeleteSectionId = args[0];
         return models.SectionCollection.find({ _id: toDeleteSectionId }).remove((err) => {
-          console.info("section REMOVED");
           return [
             {
               path: ["sectionsById", toDeleteSectionId],
@@ -30,13 +28,8 @@ export default ( sessionObject ) => {
         let updatedSections = args[0];
         let results = [];
 
-        console.info("updatedSections ^^^^^");
-        console.info(updatedSections);
-        console.info("updatedSections ^^^^^");
-
         for(var key in updatedSections) {
           let updatedSection = updatedSections[key];
-          console.info("updatedSection", updatedSection);
           let sectionID = updatedSection.id;
           updatedSection.ownedByRestaurantID = sessionObject.restaurantid;
           let section = new models.SectionCollection(updatedSection);
@@ -68,12 +61,7 @@ export default ( sessionObject ) => {
     route: 'restaurants[{keys}].sections.add',
     call: (callPath, args) => 
       {
-
-        console.info("BACKEND")
         let newSectionObj = args[0];
-        console.info("newSectionObj");
-        console.info(newSectionObj);
-        console.info("newSectionObj ^^^^^");
         newSectionObj.ownedByRestaurantID = sessionObject.restaurantid;
 
         var section = new models.SectionCollection(newSectionObj);

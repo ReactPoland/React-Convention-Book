@@ -54,13 +54,7 @@ export default ( sessionObject ) => {
       get: (pathSet) => {
         let menusIndexes = pathSet[3];
         let restIDnow = pathSet[1][0];
-        console.info("restIDnow");
-        console.info("restIDnow");
-        console.info("restIDnow");
-        console.info(restIDnow);
-        console.info("restIDnow");
-        console.info("restIDnow");
-        console.info("restIDnow");
+
         let andStatementQuery = {
           ownedByRestaurantID: restIDnow
         }
@@ -70,7 +64,6 @@ export default ( sessionObject ) => {
           })
             .sort({orderNumber: 1})
             .then ((menusArrayFromDB) => {
-            console.info("111 SORTED", menusArrayFromDB);
             let results = [];
             menusIndexes.map((index) => {
               let res;
@@ -93,14 +86,6 @@ export default ( sessionObject ) => {
               };
               results.push(res);
             });
-            console.info("321results");
-            console.info("321results");
-            console.info("321results");
-            console.info("321results");
-            console.info(JSON.stringify(results));
-            console.info("results");
-
-
 
             return results;
           })
