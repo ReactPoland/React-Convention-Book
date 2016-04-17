@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/ReactConvention/React-Convention-Book#readme",
   "dependencies": {
-    "babel": "^4.7.16",
-    "babel-register": "^6.5.2",
+    "babel": "^6.3.26",
+    "babel-register": "^6.7.2",
     "body-parser": "^1.15.0",
     "cors": "^2.7.1",
     "express": "^4.13.4",
@@ -42,14 +42,21 @@
     "redux-simple-router": "0.0.10",
     "redux-thunk": "^1.0.0",
     "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "webpack-preset": "^0.2.0",
+    "webpack-preset-babel": "^0.2.0",
+    "webpack-preset-babel-stage-2": "^0.2.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.7.5",
     "babel-core": "^6.6.5",
     "babel-loader": "^6.2.4",
     "babel-polyfill": "^6.6.1",
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-react": "^6.5.0",
-    "babel-preset-stage-0": "^6.5.0"
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-preset-stage-2": "^6.5.0",
+    "babel-preset-stage-3": "^6.5.0",
+    "webpack-preset-babel-stage-2": "^0.2.0"
   }
 }
