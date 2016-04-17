@@ -12,7 +12,6 @@ import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { renderToString } from 'react-dom/server'
-import createHashHistory from 'history/lib/createHashHistory';
 import ReactRouter from 'react-router';
 
 let initMOCKstore = {
@@ -46,12 +45,31 @@ function handleRender(req, res) {
   console.info(store);
   console.log('routes',reactRoutes)
   console.info(111111);
+
+
+  match({ reactRoutes, location: req.url }, (error, redirectLocation, renderProps) => {
+    if (error) {
+      console.info('1 ---> error');
+      res.status(500).send(error.message)
+    } else if (redirectLocation) {
+      console.info('2 ---> redirect');
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search)
+    } else if (renderProps) {
+      console.info('3 ---> renderProps');
+      res.status(200).send(renderToString(<RoutingContext {...renderProps} />))
+    } else {
+      console.info('4 ---> notFound');
+      res.status(404).send('Not found')
+    }
+  })
+
+
+  process.exit();
+
   // Render the component to a string
   const html = renderToString(
     <Provider store={store}>
-        <ReactRouter>
-          {reactRoutes}
-        </ReactRouter>
+
     </Provider>
   );
 
@@ -68,7 +86,8 @@ function handleRender(req, res) {
   // res.send(renderFullPage(html, initialState))
 }
 
-handleRender(1, 1);
+// handleRender(1, 1);
+
 
 var app = express();
 app.server = http.createServer(app);
@@ -81,12 +100,20 @@ app.use(bodyParser.json({extended: false}));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
- return new FalcorRouter(routes);
+  console.info('req.url', req.url);
+  console.info('req.url', req.url);
+  console.info('req.url', req.url);
+
+  return new FalcorRouter(routes);
 }));
 
 app.use(express.static('dist'));
 
 app.get('/', (req, res) => { 
+    console.info('req.url', req.url);
+    console.info('req.url', req.url);
+    console.info('req.url', req.url);
+
     Article.find(function (err, articlesDocs) {
 
         let ourArticles = articlesDocs.map(function(articleItem){
