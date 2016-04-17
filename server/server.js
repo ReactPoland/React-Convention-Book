@@ -14,115 +14,52 @@ import { Provider } from 'react-redux'
 import { renderToString } from 'react-dom/server'
 import ReactRouter from 'react-router';
 
-let initMOCKstore = {
-	"routing":
-		{
-      "changeId":1,
-      "path":"/#/"
-    },
-	"article":
-	{
-		"0": {
-      "articleTitle": "Lorem ipsum - article one",
-      "articleContent":"Here goes the content of the article"
-    },
-		
-		"1": {
-      "articleTitle":"Lorem ipsum - article two",
-      "articleContent":"Sky is the limit, the content goes here."
-    }
-  }
-};
-
-
 import rootReducer from '../src/reducers';
 import reactRoutes from '../src/routes';
-
-function handleRender(req, res) {
-  // Create a new Redux store instance
-  const store = createStore(rootReducer)
-  console.info(111111);
-  console.info(store);
-  console.log('routes',reactRoutes)
-  console.info(111111);
-
-
-  match({ reactRoutes, location: req.url }, (error, redirectLocation, renderProps) => {
-    if (error) {
-      console.info('1 ---> error');
-      res.status(500).send(error.message)
-    } else if (redirectLocation) {
-      console.info('2 ---> redirect');
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search)
-    } else if (renderProps) {
-      console.info('3 ---> renderProps');
-      res.status(200).send(renderToString(<RoutingContext {...renderProps} />))
-    } else {
-      console.info('4 ---> notFound');
-      res.status(404).send('Not found')
-    }
-  })
-
-
-  process.exit();
-
-  // Render the component to a string
-  const html = renderToString(
-    <Provider store={store}>
-
-    </Provider>
-  );
-
-  console.info(22222);
-  console.info(html);
-  console.info(2222);
-
-  // Grab the initial state from our Redux store
-  const initialState = store.getState()
-  console.info(33333);
-  console.info(initialState);
-  console.info(33333);
-  // Send the rendered page back to the client
-  // res.send(renderFullPage(html, initialState))
-}
-
-// handleRender(1, 1);
-
 
 var app = express();
 app.server = http.createServer(app);
 
-// CORS - 3rd party middleware
-app.use(cors());
 
-// This is required by falcor-express middleware to work correctly with falcor-browser
-app.use(bodyParser.json({extended: false}));
-app.use(bodyParser.urlencoded({extended: false}));
 
-app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
-  console.info('req.url', req.url);
-  console.info('req.url', req.url);
-  console.info('req.url', req.url);
+//...other express configuration
+const {RoutingContext, match} = require('react-router');
+const hist = require('history');
 
-  return new FalcorRouter(routes);
-}));
-
-app.use(express.static('dist'));
-
-app.get('/', (req, res) => { 
-    console.info('req.url', req.url);
-    console.info('req.url', req.url);
-    console.info('req.url', req.url);
-
-    Article.find(function (err, articlesDocs) {
-
-        let ourArticles = articlesDocs.map(function(articleItem){
-            return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
-        }).join("<br/>");
-
-        res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
-    });
+app.use((req, res, next) => {
+  console.info('req.path');
+  console.info('req.path');
+  console.info(req.path);
+  console.info('req.path');
+  console.info('req.path');
+  console.info('req.path');
+  const store = createStore(rootReducer);
+  
+  const location = hist.createLocation(req.path);
+  match({
+    routes: reactRoutes,
+    location: location,
+  }, (err, redirectLocation, renderProps) => {
+    if (redirectLocation) {
+      res.redirect(301, redirectLocation.pathname + redirectLocation.search);
+    } else if (err) {
+      console.log(err);
+      next(err);
+      // res.send(500, error.message);
+    } else if (renderProps === null) {
+      res.status(404)
+        .send('Not found');
+    } else {
+      res.send('<!DOCTYPE html>' + renderToString(
+        <Provider store={store}>
+          <RoutingContext {...renderProps}/>
+        </Provider>
+      ));
+    }
+  });
 });
+
+    //...other express configuration
 
 
 
