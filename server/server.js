@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import falcor from 'falcor';
 import falcorExpress from 'falcor-express';
-import Router from 'falcor-router';
+import FalcorRouter from 'falcor-router';
 import routes from './routes.js';
 
 import React from 'react'
@@ -13,7 +13,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { renderToString } from 'react-dom/server'
 import createHashHistory from 'history/lib/createHashHistory';
-import { ReactRouter }               from 'react-router';
+import ReactRouter from 'react-router';
 
 let initMOCKstore = {
 	"routing":
@@ -44,15 +44,14 @@ function handleRender(req, res) {
   const store = createStore(rootReducer)
   console.info(111111);
   console.info(store);
+  console.log('routes',reactRoutes)
   console.info(111111);
   // Render the component to a string
   const html = renderToString(
     <Provider store={store}>
-      <div>
         <ReactRouter>
           {reactRoutes}
-        </ReactRouter>          
-      </div>
+        </ReactRouter>
     </Provider>
   );
 
@@ -82,7 +81,7 @@ app.use(bodyParser.json({extended: false}));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
- return new Router(routes);
+ return new FalcorRouter(routes);
 }));
 
 app.use(express.static('dist'));
