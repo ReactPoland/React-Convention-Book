@@ -1,5 +1,7 @@
-import { Article } from './configMongoose';
+import configMongoose from './configMongoose';
 import sessionRoutes from './routesSession';
+
+let Article = configMongoose.Article;
 
 let PublishingAppRoutes = [
     ...sessionRoutes,
