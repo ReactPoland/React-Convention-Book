@@ -1,6 +1,17 @@
 ### Server Side Rendering
 
-The first thing in order to make the server side rendering work is to make a handleServerSideRender function that will be trigerred each time a request hits the server.
+Server side rendering is very useful feature in articles' related startups because it helps to be better indexed by different search engines. It's an essential feature for any news & content heavy websites, because it helps grow them organic traffic. In that book we will also run our app with server side rendering.
+
+#### Mocking the database response
+
+First of all, we will mock our database reponse on the backend in order to get prepared to go into server side rendering directly, we will change it later in that chapter.
+
+
+
+
+
+
+Next thing in order to make the server side rendering work is to make a handleServerSideRender function that will be trigerred each time a request hits the server.
 
 In order to make the handleServerSideRender trigger every time the front-end calls our backend we need to use Express middleware using ***app.use***. So far we were using some external libraries like:
 - ***app.use(cors());***
