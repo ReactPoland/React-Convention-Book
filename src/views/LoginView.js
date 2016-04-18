@@ -1,4 +1,9 @@
 "use strict";
+/*
+  server side rendering Material UI
+ */
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import React from 'react';
 import Falcor from 'falcor';
@@ -15,6 +20,12 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 
 });
+
+
+// let MaterialLoginView = themeDecorator(getMuiTheme(null, { userAgent: 'all' }))(LoginView);
+
+
+const muiTheme = getMuiTheme({ userAgent: 'all' })
 
 class LoginView extends React.Component {
   constructor(props) {
@@ -68,6 +79,7 @@ class LoginView extends React.Component {
 
   render () {
     return (
+      <MuiThemeProvider muiTheme={muiTheme}>
       <div>
           <h1>Login view</h1>
           <div style={{maxWidth: 450, margin: '0 auto'}}>
@@ -79,6 +91,7 @@ class LoginView extends React.Component {
             open={!!this.state.error}
             message={this.state.error || ""} />
       </div>
+      </MuiThemeProvider>
     );
   }
 }
