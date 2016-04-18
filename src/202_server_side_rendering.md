@@ -6,6 +6,34 @@ Server side rendering is very useful feature in articles' related startups becau
 
 First of all, we will mock our database reponse on the backend in order to get prepared to go into server side rendering directly, we will change it later in that chapter.
 
+```
+$ [[you are in the server directory of your project]]
+$ touch fetchServerSide.js
+```
+
+The fetchServerSide.js file will consist of all functions that will fetch data from our database in order to make the server side works.
+
+As was mentioned earlier we will mock it for the meanwhile with following code in ***fetchServerSide.js***:
+```
+export default () => {
+	return {
+    "article":
+    {
+      "0": {
+        "articleTitle": "SERVER-SIDE Lorem ipsum - article one",
+        "articleContent":"SERVER-SIDE Here goes the content of the article"
+      },
+      
+      "1": {
+        "articleTitle":"SERVER-SIDE Lorem ipsum - article two",
+        "articleContent":"SERVER-SIDE Sky is the limit, the content goes here."
+      }
+    }
+  }
+}
+```
+
+The goal of making again this mocked object once again, is that we will be able to see if our server-side rendering works correctly after implementation because as you probably have already spotted that we have added this ***SERVER-SIDE*** in the beginng of each title & content - so it will help us to learn that our app is getting the data from server side rendering. Later this function will be replaced with a query to MongoDB.
 
 
 
