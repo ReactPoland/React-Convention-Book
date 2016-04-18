@@ -88,10 +88,6 @@ app.use((req, res, next) => {
   });
 });
 
-    //...other express configuration
-
-
-
 app.server.listen(process.env.PORT || 3000);
 console.log(`Started on port ${app.server.address().port}`);
 
