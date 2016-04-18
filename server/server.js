@@ -11,7 +11,7 @@ import routes from './routes.js';
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import { renderToString } from 'react-dom/server'
+import { renderToStaticMarkup } from 'react-dom/server'
 import ReactRouter from 'react-router';
 
 import rootReducer from '../src/reducers';
@@ -26,10 +26,45 @@ app.server = http.createServer(app);
 
 app.use('/static', express.static('dist'));
 
+
+
+
+app.use(bodyParser.json({extended: false}));
+app.use(bodyParser.urlencoded({extended: false}));
+
+app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
+  console.info('req.url', req.url);
+  console.info('req.url', req.url);
+  console.info('req.url', req.url);
+
+  return new FalcorRouter(routes);
+}));
+
+
+
 //...other express configuration
 const {RoutingContext, match} = require('react-router');
 const hist = require('history');
 
+let initMOCKstore = {
+  "routing":
+    {
+      "changeId":1,
+      "path":"/#/"
+    },
+  "article":
+  {
+    "0": {
+      "articleTitle": "SERVER-SIDE Lorem ipsum - article one",
+      "articleContent":"SERVER-SIDE Here goes the content of the article"
+    },
+    
+    "1": {
+      "articleTitle":"SERVER-SIDE Lorem ipsum - article two",
+      "articleContent":"SERVER-SIDE Sky is the limit, the content goes here."
+    }
+  }
+};
 
 function renderFullPage(html, initialState) {
   return `
@@ -51,13 +86,16 @@ function renderFullPage(html, initialState) {
 
 
 app.use((req, res, next) => {
-  console.info('req.path');
-  console.info('req.path');
+  console.info('111req.path');
+  console.info('111req.path');
   console.info(req.path);
   console.info('req.path');
   console.info('req.path');
   console.info('req.path');
-  const store = createStore(rootReducer);
+  // Create a new Redux store instance
+  const store = createStore(rootReducer, initMOCKstore)
+
+  // const store = createStore(rootReducer);
   
   const location = hist.createLocation(req.path);
   match({
@@ -75,7 +113,7 @@ app.use((req, res, next) => {
         .send('Not found');
     } else {
 
-      let html = renderToString(
+      let html = renderToStaticMarkup(
         <Provider store={store}>
           <RoutingContext {...renderProps}/>
         </Provider>
@@ -87,6 +125,9 @@ app.use((req, res, next) => {
     }
   });
 });
+
+
+
 
 app.server.listen(process.env.PORT || 3000);
 console.log(`Started on port ${app.server.address().port}`);

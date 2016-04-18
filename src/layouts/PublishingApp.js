@@ -20,37 +20,29 @@ class PublishingApp extends React.Component {
     super(props);
   }
   componentWillMount() {
-    console.info('---> componentWillMount');
-    console.info('---> componentWillMount');
-    console.info('---> componentWillMount');
     this._fetch();
   }
   async _fetch() {
-    return;
-    console.info(1);
-    console.info('typeof -> ', typeof window);
-    console.info('typeof -> ', typeof window);
-    console.info('typeof -> ', typeof window);
+    if(typeof window === 'undefined') {
+      return; // we are server side rendering, no fetching
+    }
     let articlesLength = await falcorModel.
       getValue("articles.length").
       then(function(length) {  
         return length;
       });
-    console.info(2);
+
     let articles = await falcorModel.
       get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
       then(function(articlesResponse) {  
         console.info(articlesResponse);
         return articlesResponse.json.articles;
       });
-    console.info(3);
     this.props.articleActions.articlesList(articles);
-    console.info(4);
   }
 
   render () {
 
-    return <h1>test</h1>;
   	let articlesJSX = [];
   	for(let articleKey in this.props.article) {
   		let articleDetails = this.props.article[articleKey];

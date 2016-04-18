@@ -8,6 +8,14 @@ import configureStore         from './store/configureStore';
 const target  = document.getElementById('publishingAppRoot');
 const history = createBrowserHistory();
 
+console.info('window.__INITIAL_STATE__');
+console.info('window.__INITIAL_STATE__');
+console.info(window.__INITIAL_STATE__);
+console.info('window.__INITIAL_STATE__');
+console.info('window.__INITIAL_STATE__');
+
+
+
 export const store = configureStore(window.__INITIAL_STATE__);
 
 syncReduxAndRouter(history, store); // TO IMPROVE! for newer versions
