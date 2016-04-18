@@ -35,11 +35,7 @@ export default () => {
 
 The goal of making again this mocked object once again, is that we will be able to see if our server-side rendering works correctly after implementation because as you probably have already spotted that we have added this ***SERVER-SIDE*** in the beginng of each title & content - so it will help us to learn that our app is getting the data from server side rendering. Later this function will be replaced with a query to MongoDB.
 
-
-
-
-
-Next thing in order to make the server side rendering work is to make a handleServerSideRender function that will be trigerred each time a request hits the server.
+Next thing that will help us implement the server side rendering is to make a handleServerSideRender function that will be trigerred each time a request hits the server.
 
 In order to make the handleServerSideRender trigger every time the front-end calls our backend we need to use Express middleware using ***app.use***. So far we were using some external libraries like:
 - ***app.use(cors());***
@@ -54,9 +50,16 @@ Before doing so, let's import our dependencies that are required in React's serv
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import { renderToString } from 'react-dom/server'
-import { ReactRouter }               from 'react-router';
+import { renderToStaticMarkup } from 'react-dom/server'
+import ReactRouter from 'react-router';
+import { RoutingContext, match } from 'react-router';
+import * as hist  from 'history';
+import rootReducer from '../src/reducers';
+import reactRoutes from '../src/routes';
 ```
+
+Most of those stuff are similar from client-side development in previous chapters. Important is to import history in the given way as in the example ***import * as hist  from 'history'***. The ***RoutingContext, match*** are ways of using React-Router on the server side. The ***renderToStaticMarkup*** function is going to generate for us a HTML markup on server-side. 
+
 
 After we have added those new imports then under them do the following:
 
