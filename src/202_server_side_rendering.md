@@ -56,6 +56,7 @@ import { RoutingContext, match } from 'react-router';
 import * as hist  from 'history';
 import rootReducer from '../src/reducers';
 import reactRoutes from '../src/routes';
+import fetchServerSide from './fetchServerSide';
 ```
 
 Most of those stuff are similar from client-side development in previous chapters. Important is to import history in the given way as in the example ***import * as hist  from 'history'***. The ***RoutingContext, match*** are ways of using React-Router on the server side. The ***renderToStaticMarkup*** function is going to generate for us a HTML markup on server-side. 
