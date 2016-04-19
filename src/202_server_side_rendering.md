@@ -338,9 +338,14 @@ After all that, then you will be able to see in your client-browser as following
 
 
 As you can see, the only missing piece in that server side rendering is to fetch real data from our MongoDB. In next chapter we will:
-1) unmock this fetching in the ***server/fetchServerSide.js***
-2) improve look of our current app
-3) start improving whole application both on front-end and backend
+
+- 1) unmock this fetching in the ***server/fetchServerSide.js***
+
+- 2) improve look of our current app
+
+- 3) start improving whole application both on front-end and backend
+
+
 
 
 
