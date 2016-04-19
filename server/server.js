@@ -42,8 +42,8 @@ let handleServerSideRender = (req, res, next) => {
 
   // Create a new Redux store instance
   const store = createStore(rootReducer, initMOCKstore)
-
   const location = hist.createLocation(req.path);
+  
   match({
     routes: reactRoutes,
     location: location,
