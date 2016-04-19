@@ -193,21 +193,52 @@ let handleServerSideRender = (req, res, next) => {
   });
 }
 ```
-The ***let initMOCKstore = fetchServerSide();*** is fetching data from MongoDB (mocked for now, later we will improve it). Next we create a server-side's Redux story with ***store = createStore(rootReducer, initMOCKstore)***. We also need to prepare a correct location of our app's user consumable by the React-Router with ***location = hist.createLocation(req.path)*** (in req.path there is simple path which is in the browser like ***/register*** or ***/login*** or simply main page ***/***)
+The ***let initMOCKstore = fetchServerSide();*** is fetching data from MongoDB (mocked for now, later we will improve it). Next we create a server-side's Redux story with ***store = createStore(rootReducer, initMOCKstore)***. We also need to prepare a correct location of our app's user consumable by the React-Router with ***location = hist.createLocation(req.path)*** (in req.path there is simple path which is in the browser like ***/register*** or ***/login*** or simply main page ***/***). The function ***match*** is provided by the React-Router in order to match the correct route on the server-side.
+
+... and when we have matched the route on the server side then we see:
+```
+// this is already added to your codebase:
+let html = renderToStaticMarkup(
+  <Provider store={store}>
+    <RoutingContext {...renderProps}/>
+  </Provider>
+);
+
+const initialState = store.getState();
+
+let fullHTML = renderFullPage(html, initialState);
+res.send(fullHTML);
+```
+
+As you can see above we are creating the server-side HTML markup with the renderToStaticMarkup. Inside this function there is a Provider with the store that has been fetched with the ***let initMOCKstore = fetchServerSide()*** previously. Inside the Redux's Provider we have the ***<RoutingContext {...renderProps}/>*** which simply passed all required props down into our app so we can have correctly created markup server side.
+
+After all that we only prepare the initialState of our's Redux Store with ***const initialState = store.getState();*** and later ***let fullHTML = renderFullPage(html, initialState);*** so we get everything we need to send it to the client with ***res.send(fullHTML)***.
+
+
+We are done with server-side preparations. 
+
+### Front-end tweaks in order to make the server-side rendering works
+
+
 
 ~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~
-3) OPISAĆ W KSIĄŻCE OD:
-a) https://github.com/ReactConvention/React-Convention-Book/commit/016513ea70e092bf24a0489b2955cd617be31d26
 
-b) https://github.com/ReactConvention/React-Convention-Book/commit/69e7fd4244852a10867e3ba61c88528d82446699
+BOOOK DESCRIPTION MISSNING:
 
-c) EWENTUALNIE JAK BY CO: https://github.com/ReactConvention/React-Convention-Book/commit/4247875d47fbb7cd4db3af1193c88767098120e4
-
-
-d) pozniej step #1. (wyzej)
-
-e) step #2. wyzej
++// KROKI:
+ +1) CO: front-end Material: 
+ +import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+ +import getMuiTheme from 'material-ui/styles/getMuiTheme';
+        
+ +const muiTheme = getMuiTheme({ userAgent: 'all' });
+        
+ +<MuiThemeProvider muiTheme={muiTheme}>
+        
+ +</MuiThemeProvider>
+        
+ +2) URL /#/ delete with:
+ +<Router history={this.props.history}>
 
 
 
