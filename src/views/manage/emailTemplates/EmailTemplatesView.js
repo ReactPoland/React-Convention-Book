@@ -34,10 +34,10 @@ class EmailTemplateView extends React.Component {
     );
 
     let emailTemplatesObjects = emailTemplatesRes.json.restaurants[localStorage.restaurantID].emailTemplates;
-    if(emailTemplatesObjects[0] === 'EMPTY') {
-      alert('empty');
-      return;
-    }
+    // if(emailTemplatesObjects[0] === 'EMPTY') {
+    //   alert('empty');
+    //   return;
+    // }
     let emailTemplates = {};
     Object.keys(emailTemplatesObjects).map((index) => {
       let tmplItem = emailTemplatesObjects[index];
@@ -66,19 +66,32 @@ class EmailTemplateView extends React.Component {
       let itemToEdit = null;
       let emailTemplates = this.state.emailTemplates;
       emailTemplates[objInfo.templateName] = objInfo;
-      console.info('emailTemplates');
-      console.info(emailTemplates);
-      console.info('emailTemplates');
+      // console.info('emailTemplates');
+      // console.info(emailTemplates);
+      // console.info('emailTemplates');
 
-      let emailUpdateResult = falcorModel
-      .call(
-        ['restaurants', localStorage.restaurantID, 'emailTemplates', 'update'],
-        [emailTemplates]
-      ).
-      then((result) => {
-        return result;
-      });
+      if(typeof objInfo.id === 'undefined') {
+        // tutaj dodajesz do falcora bo jeszcze nie istnieje
+        //alert("UNDEFINED");
+        let emailAddResult = falcorModel
+        .call(
+          ['restaurants', localStorage.restaurantID, 'emailTemplates', 'add'],
+          [objInfo]
+        ).
+        then((result) => {
+          return result;
+        });
 
+      } else {
+        let emailUpdateResult = falcorModel
+        .call(
+          ['restaurants', localStorage.restaurantID, 'emailTemplates', 'update'],
+          [emailTemplates]
+        ).
+        then((result) => {
+          return result;
+        });
+      }
 
       this.setState({ emailTemplates, itemToEdit });
       // falcorModel.getValue(
@@ -120,19 +133,31 @@ class EmailTemplateView extends React.Component {
       }
     }
 
+    if(typeof templ['registration'] === 'undefined') {
+      // handlujesz dodawanie obiektu zamiast update
+
+      templ['registration'] = {
+          "templateText" : "default empty, please change it",
+          "templateName" : "registration",
+          "ownedByRestaurantID" : localStorage.restaurantID
+      };
+    }
+    
     let itemListJSX = (<List subheader="Items List">
-        {
+        {          
           Object.keys(templ).map((itemKey) => {
-            return [
-              <ListItem
-                key={itemKey}
-                primaryText={itemKey}
-                secondaryText={'Click here to edit'} 
-                onClick={() => this.setState({itemToEdit: itemKey})}/>
-            ];
+            if (itemKey !== "undefined")              
+              return [
+                <ListItem
+                  key={itemKey}
+                  primaryText={itemKey}
+                  secondaryText={'Click here to edit'} 
+                  onClick={() => this.setState({itemToEdit: itemKey})}/>
+              ];
           })
         }
       </List>);
+
 
     return (
       <div id='emailTemplateView' className="mt100 Content">

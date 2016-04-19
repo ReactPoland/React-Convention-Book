@@ -10,19 +10,42 @@ export default class StaffTable extends React.Component {
 
   render() {
 
+    // return (
+    //   <Paper zDepth={1}>
+    //     <List subheader="Staff members">
+    //       {
+    //         this.props.staff.map((member, index) => {
+    //           return [
+    //             <ListItem
+    //               key={member.id}
+    //               leftAvatar={<Avatar src={member.imageUrl} />}
+    //               primaryText={member.firstName + ' ' + member.lastName}
+    //               secondaryText={member.role} 
+    //               onClick={this.props.onStaffMemberClick.bind(this, member)}/>
+    //           ];
+    //         })
+    //       }
+    //     </List>
+    //   </Paper>
+    // );
+
     return (
       <Paper zDepth={1}>
         <List subheader="Staff members">
           {
             this.props.staff.map((member, index) => {
-              return [
-                <ListItem
-                  key={member.id}
-                  leftAvatar={<Avatar src={member.imageUrl} />}
-                  primaryText={member.firstName + ' ' + member.lastName}
-                  secondaryText={member.role} 
-                  onClick={this.props.onStaffMemberClick.bind(this, member)}/>
-              ];
+              // if (member.ownedByRestaurantID == localStorage.restaurantID)//{
+              //   console.log(member.firstName + member.lastName)
+              // //}
+              if (member.ownedByRestaurantID == localStorage.restaurantID)
+                return [
+                  <ListItem
+                    key={member.id}
+                    leftAvatar={<Avatar src={member.imageUrl} />}
+                    primaryText={member.firstName + ' ' + member.lastName}
+                    secondaryText={member.role} 
+                    onClick={this.props.onStaffMemberClick.bind(this, member)}/>
+                ];
             })
           }
         </List>

@@ -26,6 +26,7 @@ export const DefaultDatePicker = React.createClass({
     return (
       <DatePicker
         {...this.props}
+        tabIndex={this.props.tabindex}
         onChange={this.changeValue}
         value={this.getValue()}
         errorText={errorMessage} />

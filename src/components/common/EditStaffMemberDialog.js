@@ -2,6 +2,7 @@ import React from 'react';
 import Dialog from 'material-ui/lib/dialog';
 import FlatButton from 'material-ui/lib/flat-button';
 import RaisedButton from 'material-ui/lib/raised-button';
+import Checkbox from 'material-ui/lib/checkbox';
 
 import { Form } from 'formsy-react';
 import { DefaultInput } from 'components/forms/DefaultInput';
@@ -33,10 +34,6 @@ export default class DialogExampleSimple extends React.Component {
     console.log(this.props.nullifyRequestState);
     this.props.nullifyRequestState();
   }
-
-  // handleClose = () => {
-    
-  // };
 
   _onEditStaffMember(member) {
     this.props.onEditMember(member);
@@ -153,7 +150,11 @@ export default class DialogExampleSimple extends React.Component {
                 <p className="validation-error">{//this.state.errorMessage
                   false}</p>
 
-                
+                <Checkbox
+                  label="Active"
+                  defaultChecked={true}
+                  //onCheck={(e, checked) => active.onChange(checked)}
+                />
 
                 <RaisedButton
                   disabled={!this.state.canSubmit}

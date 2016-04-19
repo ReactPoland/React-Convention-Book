@@ -21,9 +21,10 @@ class ManageRestaurantsView extends React.Component {
       showAddForm: false,
       showEditForm: false,
       itemToEdit: null,
-      Restaurants: null
+      restaurantsObj: null
     };
     this.nullifyRequestState = this.nullifyRequestState.bind(this);
+    this._onAddFormSubmit = this._onAddFormSubmit.bind(this);
 
   }
 
@@ -56,19 +57,19 @@ class ManageRestaurantsView extends React.Component {
       return;
     }
 
-    let Restaurants = {};
+    let restaurantsObj = {};
     Object.keys(RestaurantsObjects).map((index) => {
       let tmplItem = RestaurantsObjects[index];
-      Restaurants[tmplItem.name] = tmplItem;
+      restaurantsObj[tmplItem.name] = tmplItem;
 
     });
 
 
-    console.info('Restaurants');
-    console.info(Restaurants);
-    console.info('Restaurants');
+    console.info('restaurantsObj');
+    console.info(restaurantsObj);
+    console.info('restaurantsObj');
 
-    this.setState({ Restaurants });
+    this.setState({ restaurantsObj });
 
     return;
   }
@@ -92,36 +93,28 @@ class ManageRestaurantsView extends React.Component {
 
   async _onAddFormSubmit(model) {
 
-    alert('_onAddFormSubmit', JSON.stringify(model));
+    let newRestaurant = await falcorModel
+      .call(
+            'restaurantsManage.add',
+            [model]
+          ).
+      then((result) => {
+        return result;
+      });
+            
+    let newRestaurantName = await falcorModel.getValue('restaurantsManage.newRestaurantName');
+    let newRestaurantObj = await falcorModel.getValue('restaurantsManage.newRestaurantObj');
+    
+    // tutaj dopier pushujesz do this.state.Restaurants z id, z bazy
 
-    // Object.keys(model).map((changedItem) => {
-    //   objInfo.templateText = model[changedItem];
-    //   let itemToEdit = null;
-    //   let Restaurants = this.state.Restaurants;
-    //   Restaurants[objInfo.templateName] = objInfo;
-    //   console.info('Restaurants');
-    //   console.info(Restaurants);
-    //   console.info('Restaurants');
+    let restaurants = this.state.restaurantsObj;
+    restaurants[newRestaurantName] = newRestaurantObj;
 
-    //   let emailUpdateResult = falcorModel
-    //   .call(
-    //     ['restaurants', localStorage.restaurantID, 'Restaurants', 'update'],
-    //     [Restaurants]
-    //   ).
-    //   then((result) => {
-    //     return result;
-    //   });
-
-
-    //   this.setState({ Restaurants, itemToEdit });
-    //   // falcorModel.getValue(
-    //   //   pathValue
-    //   // );
-    // })
+    this.setState({restaurantsObj: restaurants});   
   }
 
   render() {
-    let templ = this.state.Restaurants;
+    let templ = this.state.restaurantsObj;
     if(templ === null) return <span />;
     let registrationTextField = <span />;
 
@@ -178,15 +171,58 @@ class ManageRestaurantsView extends React.Component {
           <hr />
           <h1>Add new restaurant</h1>
           <Formsy.Form onSubmit={this._onAddFormSubmit}>
-            <h4> Restaurant name: </h4>
+          <div className="col-md-6">
+            <h4> Restaurant Name: </h4>
             <DefaultInput
               name='name'
               hintText='Restaurant Name' />
 
-            <h4> Restaurant subdomain: </h4>
+            <h4> Restaurant Subdomain: </h4>
             <DefaultInput
               name='subdomain'
               hintText='Restaurant Subdomain (lower-case like starbucks or pizzahut)' />
+
+            <h4> Site Name: </h4>
+            <DefaultInput
+              name='siteName'
+              hintText='Site Name' />
+
+            <h4> Site Description: </h4>
+            <DefaultInput
+              name='siteDescription'
+              hintText='Site Description' />
+
+            <h4> RR Account Manager: </h4>
+            <DefaultInput
+              name='RRAccountManager'
+              hintText='RR Account Manager' />
+
+            <h4> Positions: </h4>
+            <DefaultInput
+              name='positions'
+              hintText='Positions' />
+
+          </div>
+          <div className="col-md-6">
+            <h4> Client Name: </h4>
+            <DefaultInput
+              name='clientName'
+              hintText='Client Name' />
+
+            <h4> Client Address: </h4>
+            <DefaultInput
+              name='clientAddress'
+              hintText='Client Address' />
+
+            <h4> Client Phone Number: </h4>
+            <DefaultInput
+              name='clientPhoneNumber'
+              hintText='Client Phone Number' />
+
+            <h4> Available Features: </h4>
+            <DefaultInput
+              name='availableFeatures'
+              hintText='Available Features' />
 
             <div style={{marginTop: 24}}>
             <RaisedButton
@@ -196,6 +232,7 @@ class ManageRestaurantsView extends React.Component {
               style={{margin: '0 auto', display: 'block', width: 150}}
               label={'submit'} />
             </div>
+          </div>
           </Formsy.Form>
       </div>
     );

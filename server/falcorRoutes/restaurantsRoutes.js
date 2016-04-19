@@ -26,6 +26,7 @@ export default ( sessionObject ) => {
     call: (callPath, args) => 
       {
         let newRestaurantObj = args[0];
+        console.log(newRestaurantObj);
         var restaurant = new models.RestaurantCollection(newRestaurantObj);
         return restaurant.save(function (err, data) {
             if (err) {
@@ -33,6 +34,8 @@ export default ( sessionObject ) => {
               return err;
             }
             else {
+              console.log("data");
+              console.log(data);
               return data;
             }
           }).then ((data) => {
@@ -48,6 +51,13 @@ export default ( sessionObject ) => {
             let newRestaurantDetail = res.data.toObject();
             let NewRestaurantRef = $ref(['restaurantsById', newRestaurantDetail["_id"]]);
             
+            
+            newRestaurantDetail.id = newRestaurantDetail._id.toString();
+            delete newRestaurantDetail._id;
+
+            console.log("newRestaurantDetail.id");
+            console.log(newRestaurantDetail.id);
+
             let results = [
               {
                 path: ['restaurantsManage', res.count-1],
@@ -56,6 +66,18 @@ export default ( sessionObject ) => {
               {
                 path: ['restaurantsManage', 'length'],
                 value: res.count
+              },
+              {
+                path: ['restaurantsManage', 'newRestaurantID'],
+                value: newRestaurantDetail.id
+              },
+              {
+                path: ['restaurantsManage', 'newRestaurantName'],
+                value: newRestaurantDetail.name
+              },
+              {
+                path: ['restaurantsManage', 'newRestaurantObj'],
+                value: $atom(newRestaurantDetail)
               }
             ];
 

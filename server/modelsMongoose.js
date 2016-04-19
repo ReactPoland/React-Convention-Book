@@ -48,7 +48,15 @@ var EmailTemplateCollection = mongoose.model('EmailTemplateCollection', emailTem
 
 var restaurantSchema = {
   name: String,
-  subdomain: String
+  subdomain: String,
+  siteName: String,
+  siteDescription: String,
+  RRAccountManager: String,
+  positions: String,
+  clientName: String,
+  clientAddress: String,
+  clientPhoneNumber: String,
+  availableFeatures: String
 };
 var RestaurantCollection = mongoose.model('RestaurantCollection', restaurantSchema, 'restaurants');
 
@@ -79,6 +87,8 @@ var userSchema = new Schema({
   email: String,
   password: String,
   role: String,
+  ownedByRestaurantID: String,
+  active: Boolean,
   verified: Boolean,
   imageUrl: { type: String, required: true, default: 'http://lorempixel.com/100/100/people/' },
   gender: String,

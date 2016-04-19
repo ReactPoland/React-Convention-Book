@@ -39,14 +39,9 @@ function getCurrentRoute() {
 }
 
 const managing = [
-  { id: 'staff',      title: 'Staff',         link: '/manage/staff' },
-  { id: 'emailTemplates',    title: 'Email Templates',       link: '/manage/emailTemplates' },
-  { id: 'manageRestaurants',    title: 'Manage Restaurants',       link: '/manage/manageRestaurants' },
-  { id: 'reports',    title: 'Reports',       link: '/manage/reports' },
-  { id: 'messaging',  title: 'Messaging',     link: '/manage/message' },
-  { id: 'video',      title: 'Video Library', link: '/manage/video' },
-  { id: 'suppliers',  title: 'Suppliers',     link: '/manage/suppliers' },
-  { id: 'inventory',  title: 'Inventory',     link: '/manage/inventory'}
+  { id: 'staff',      title: 'Staff List',         link: '/manage/staff' },
+  { id: 'managerLog',      title: 'Manager Log',    link: '/manage/managerLog'},
+  { id: 'emailTemplates',    title: 'Email Templates',       link: '/manage/emailTemplates' }
 ];
 
 const train = [{
@@ -59,6 +54,77 @@ const train = [{
   id: 'service',
   title: 'Services'
 }];
+
+const training = [
+  {
+    id: 'working',
+    title: 'Working Here'
+  },
+  {
+    id: 'library',
+    title: 'Menus'
+  },
+  {
+    id: 'leadership',
+    title: "Who's Who/Leadership"
+  },
+  {
+    id: 'beverage',
+    title: 'Beverage Basics'
+  },
+  {
+    id: 'trainer',
+    title: 'Trainer Log'
+  }
+];
+
+const cnct = [
+  {
+    id: 'post1',
+    title: 'Title of Post/Message',
+    author: 'authorname',
+    date: 'Month 7, 2016',
+    excerpt: 'Preview of the content/text goes here...'
+  },
+  {
+    id: 'post2',
+    title: 'Title of Post/Message',
+    author: 'authorname',
+    date: 'Month 4, 2016',
+    excerpt: 'Preview of the content/text goes here...'
+  },
+  {
+    id: 'post3',
+    title: 'Title of Post/Message',
+    author: 'authorname',
+    date: 'Month 3, 2016',
+    excerpt: 'Preview of the content/text goes here...'
+  }
+];
+
+const schedule = [
+  {
+    id: 'sched1',
+    title: 'Schedule: 00/00/00 - 00/00/00',
+    author: 'authorname',
+    date: 'Month 7, 2016',
+    excerpt: 'Preview of the content/text goes here...'
+  },
+  {
+    id: 'sched2',
+    title: 'Schedule: 00/00/00 - 00/00/00',
+    author: 'authorname',
+    date: 'Month 4, 2016',
+    excerpt: 'Preview of the content/text goes here...'
+  },
+  {
+    id: 'sched3',
+    title: 'Schedule: 00/00/00 - 00/00/00',
+    author: 'authorname',
+    date: 'Month 3, 2016',
+    excerpt: 'Preview of the content/text goes here...'
+  }
+]
 
 function sortPostsByDate(a, b) {
   if(a.publicationDate < b.publicationDate) return 1;
@@ -163,7 +229,7 @@ class SideNav extends React.Component {
 
       console.info("RESULT #2", response);
       const menus = falcorUtils.makeArray({object: response.restaurants[localStorage.restaurantID], name: 'menus'});
-      
+
       actions.menu.menuList(menus);
     }
   }
@@ -177,10 +243,12 @@ class SideNav extends React.Component {
     let props = {
       posts: this.props.post,//getPosts(this.props.post),
       menus: this.props.menu,
-      schedule: this.props.schedule,//getSchedule(this.props.schedule),
+      schedule: schedule,//getSchedule(this.props.schedule),
       recipes: this.props.recipe,//getRecipes(this.props.recipe),
       train: train,
-      managing: managing
+      managing: managing,
+      training: training,
+      cnct: cnct
     }
 
     if(route === 'dashboard') {
@@ -222,39 +290,45 @@ class SideNav extends React.Component {
     if(!this.state.loaded) {
       return this.props.__getLoaderMarkup();
     }
-
+console.log('PROPS: ', props.menus)
     return (
       <div className={classes.join(" ")}>
         <SidenavList
-          prefix="post"
-          items={props.posts || []}
-          label="News Feed"
-          headerComponent={<ListItem primaryText='News Feed' disabled style={headerStyle} />}
-          {...openOrVisible(props, 'post')} />
+          prefix="cnct"
+          items={props.cnct || []}
+          label="Connect"
+          headerComponent={<ListItem primaryText='Connect' disabled style={headerStyle} />}
+          {...openOrVisible(props, 'cnct')} />
         <MenuEntity
           {...this.props}
           prefix="menu"
           items={props.menus || []}
+          label="Training"
+            {...openOrVisible(props, 'menu')} />
+        {/*<MenuEntity
+          {...this.props}
+          prefix="menu"
+          items={props.menus || []}
           label="Menus"
-          {...openOrVisible(props, 'menu')} />
+          {...openOrVisible(props, 'menu')} />*/}
         <SidenavList
           prefix="task"
           items={props.schedule || []}
           label="Schedule"
           headerComponent={<ListItem primaryText='Schedule' disabled style={headerStyle} />}
           {...openOrVisible(props, 'schedule')} />
-        <SidenavList
+        {/*<SidenavList
           prefix="train"
           items={props.train || []}
           label="Learn/Train"
           headerComponent={<ListItem primaryText='Learn/Train' disabled style={headerStyle} />}
-          {...openOrVisible(props, 'train')} />
-        <SidenavList
+          {...openOrVisible(props, 'train')} />*/}
+        {/*<SidenavList
           prefix="recipe"
           items={props.recipes || []}
           label="Recipes"
           headerComponent={<ListItem primaryText='Recipes' disabled style={headerStyle} />}
-          {...openOrVisible(props, 'recipe')} />
+          {...openOrVisible(props, 'recipe')} />*/}
         {manageBox}
       </div>
     );

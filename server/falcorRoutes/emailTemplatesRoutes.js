@@ -83,6 +83,56 @@ export default ( sessionObject ) => {
 
         return [];
       }
+    },
+    {
+      route: 'restaurants[{keys}].emailTemplates.add',
+      call: async (callPath, args) => 
+      {
+        let newEmailTempl = args[0];
+        console.log("NEW EMAIL TEMPL:");
+        console.log(newEmailTempl);
+
+        var email = new models.EmailTemplateCollection(newEmailTempl);
+        return email.save(function (err, data) {
+            if (err) {
+              console.info("ERROR", err);
+              return err;
+            }
+            else {
+              console.log("data");
+              console.log(data);
+              return data;
+            }
+          }).then ((data) => {
+            /*
+              got new obj data, now let's get count:
+             */
+            return models.EmailTemplateCollection.count({}, function(err, count) {
+            }).then((count) => {
+              return { count, data };
+            });
+
+          }).then ((res) => {
+            let newEmailDetail = res.data.toObject();
+            //let NewRestaurantRef = $ref(['restaurantsById', newEmailDetail["_id"]]);
+            
+            
+            //newRestaurantDetail.id = newRestaurantDetail._id.toString();
+            //delete newRestaurantDetail._id;
+
+            //console.log("newRestaurantDetail.id");
+            //console.log(newRestaurantDetail.id);
+
+            let results = [
+              {
+                path: ['emailsManage', 'newEmail'],
+                value: $atom(newEmailDetail)
+              }
+            ];
+
+            return results;
+          });
+      }
     }
 
   ];

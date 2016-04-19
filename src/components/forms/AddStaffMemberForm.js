@@ -16,6 +16,7 @@ class AddStaffMemberForm extends React.Component {
     this._onAddStaffMember = this._onAddStaffMember.bind(this);
     this._disableButton = this._disableButton.bind(this);
     this._enableButton = this._enableButton.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   _onAddStaffMember(member) {
@@ -34,6 +35,10 @@ class AddStaffMemberForm extends React.Component {
     });
   }
 
+  handleClose(){
+    this.props.hideAddForm();
+  }
+
   render() {
     const availableLocations = this.props.restaurant.locations.reduce((a, location) => {
       return a.concat(location.title);
@@ -43,11 +48,12 @@ class AddStaffMemberForm extends React.Component {
       <div className="row" style={{marginTop: 20}}>
         <Form onSubmit={this._onAddStaffMember} onValid={this._enableButton} onInvalid={this._disableButton}>
           <div className="col-md-6">
+
             <DefaultInput
               name="firstName"
               title="First Name"
               required
-              tabindex="1"
+              tabIndexProp="1"
               validations="isAlpha"
               validationError="Invalid first name" />
             <DefaultInput
@@ -57,14 +63,14 @@ class AddStaffMemberForm extends React.Component {
               type="email"
               validations="isEmail"
               validationError="Invalid email address"
-              tabindex="3" />
+              tabIndexProp="3" />
             <DefaultInput
               name="phone"
               title="Telephone Number"
               validations="isNumeric"
               validationError="Invalid telephone number"
               required
-              tabindex="5" />
+              tabIndexProp="5" />
             <div style={{paddingTop: 24}}>
               <DefaultDatePicker
                 name="startDate"
@@ -75,7 +81,7 @@ class AddStaffMemberForm extends React.Component {
                 required
                 validations="isExisty"
                 validationError="Invalid start date"
-                tabIndex="7" />
+                tabindex="7" />
             </div>
           </div>
           <div className="col-md-6">
@@ -85,7 +91,7 @@ class AddStaffMemberForm extends React.Component {
               required
               validations="isAlpha"
               validationError="Invalid last name"
-              tabindex="2" />
+              tabIndexProp="2" />
             <DefaultInput
               name="reEmail"
               title="Confirm Email Address"
@@ -93,14 +99,14 @@ class AddStaffMemberForm extends React.Component {
               validations="equalsField:email"
               validationError="Emails are different"
               type="email"
-              tabindex="4" />
+              tabIndexProp="4" />
             <DefaultInput
               name="address"
               title="Mailing Address"
               required
               validations="isExisty"
               validationError="Invalid mailing address"
-              tabindex="6" />
+              tabIndexProp="6" />
             <DefaultSelect
               name="position"
               title="Position"
@@ -128,7 +134,15 @@ class AddStaffMemberForm extends React.Component {
               style={{float: 'right'}}
               label="Add"
               type="submit"
-              tabIndex={10} />
+              tabindex={10} 
+              />
+            <RaisedButton
+              disabled={false}
+              secondary={true}
+              style={{float: 'right'}}
+              label="Cancel"
+              onTouchTap={this.handleClose}
+              tabindex={11} />
           </div>
         </Form>
       </div>

@@ -40,7 +40,8 @@ class StaffView extends React.Component {
     this.onAddMember = this.onAddMember.bind(this);
     this.onEditMember = this.onEditMember.bind(this);
     this._showForm = this._showForm.bind(this);
-    this.nullifyRequestState = this.nullifyRequestState.bind(this);
+    this.nullifyRequestState = this.nullifyRequestState.bind(this);    
+    this.hideAddForm = this.hideAddForm.bind(this);
     this._onStaffMemberClick = this._onStaffMemberClick.bind(this);
 
   }
@@ -97,6 +98,7 @@ class StaffView extends React.Component {
         return falcorModel.getValue(['staffRoute', 'newUserID']);
 
       });
+    
     member.id = newUserID;
     this.props.actions.addStaff(new StaffMember(member));
     if(!localStorage.restaurantID && localStorage.restaurantID.length < 11) alert('error when sending email because of empty restaurantID');
@@ -149,6 +151,12 @@ class StaffView extends React.Component {
     });
   }
 
+  hideAddForm() {
+    this.setState({
+      showAddForm: false
+    });
+  }
+
   render() {
     const { requestSuccess, requestError } = this.state;
     const staff = this.state.filteredStaff || this.props.staff;
@@ -158,7 +166,8 @@ class StaffView extends React.Component {
       addForm = (
         <AddStaffMemberForm
           restaurant={this.props.restaurant}
-          onAddMember={this.onAddMember} />
+          onAddMember={this.onAddMember} 
+          hideAddForm={this.hideAddForm}  />
       );
     }
 

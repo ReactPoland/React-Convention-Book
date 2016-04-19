@@ -16,6 +16,11 @@
     "test:dev": "npm run test -- --watch",
     "deploy": "npm run lint && npm run test && npm run compile"
   },
+  "engines" : 
+  { 
+    "npm" : "3.5.1",
+    "node" : "4.2.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/davezuko/react-redux-starter-kit.git"

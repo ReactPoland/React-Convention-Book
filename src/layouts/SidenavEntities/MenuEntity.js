@@ -57,7 +57,7 @@ class MenuEntity extends React.Component {
     this.onUpdateMenu           = this.onUpdateMenu.bind(this);
     this.onUpdateSection           = this.onUpdateSection.bind(this);
 
-    
+
     this.onDeleteMenu           = this.onDeleteMenu.bind(this);
     this.onReorderMenus         = this.onReorderMenus.bind(this);
     this.onMenuSectionsReorder  = this.onMenuSectionsReorder.bind(this);
@@ -135,7 +135,7 @@ class MenuEntity extends React.Component {
     let resultNewMenu = await falcorModel
       .call(
             ['restaurants', localStorage.restaurantID, 'menus','add'],
-            [newMenu]          
+            [newMenu]
           ).
       then((result) => {
         return result;
@@ -193,14 +193,14 @@ class MenuEntity extends React.Component {
     let result = await falcorModel
       .call(
             ['restaurants', localStorage.restaurantID, 'menus', 'delete'],
-            [id]          
+            [id]
           ).
       then((result) => {
         return result;
       });
 
     this.props.actions.menu.delete(id);
-    
+
     if(id === this.props.params.id) {
       this.props.history.pushState(null, '/menu/library');
     }
@@ -214,7 +214,7 @@ class MenuEntity extends React.Component {
 
   async onReorderMenus(order) {
     console.log('\n#################\nCALL API: CHANGE MENU ORDER\n#################\n');
-    let orderedObjArray = order.map((item, index) => { 
+    let orderedObjArray = order.map((item, index) => {
       item.orderNumber = index;
       return item;
     });
@@ -222,7 +222,7 @@ class MenuEntity extends React.Component {
     let resultUpdateMenus = await falcorModel
       .call(
             ['restaurants', localStorage.restaurantID, 'menus','update'],
-            [orderedObjArray]          
+            [orderedObjArray]
           ).
       then((result) => {
         return result;
@@ -283,36 +283,36 @@ class MenuEntity extends React.Component {
             remainingSections.push(sectionID);
           }
         });
-        
-      
+
+
         if(menuItem.sections.length !== remainingSections.length) {
           menuItem.sections = remainingSections;
           menusToUpdate.push(menuItem);
         }
 
       });
-    
+
       let menuDeleteUpdateResult = await falcorModel
         .call(
               ['restaurants', localStorage.restaurantID, 'menus','update'],
-              [menusToUpdate]          
+              [menusToUpdate]
             ).
         then((result) => {
           return result;
         });
-    
+
 
       await Promise.all(deletedSections.map(async sectionID => {
         let result = await falcorModel
           .call(
                 ['restaurants', localStorage.restaurantID, 'sections', 'delete'],
-                [sectionID]          
+                [sectionID]
               ).
           then((result) => {
             return result;
           });
         this.props.actions.section.delete(sectionID);
-      }));    
+      }));
     }
     /*
       BELOW here below add to falcor to sections
@@ -329,7 +329,7 @@ class MenuEntity extends React.Component {
         let response = await falcorModel
           .call(
                 ['restaurants', localStorage.restaurantID, 'sections','add'],
-                [newSection]          
+                [newSection]
               ).
           then((result) => {
             return falcorModel.getValue(
@@ -364,7 +364,7 @@ class MenuEntity extends React.Component {
     let menuUpdateResult = await falcorModel
       .call(
             ['restaurants', localStorage.restaurantID, 'menus','update'],
-            [arrayOfMenusToUpdate]  // requires array of menus        
+            [arrayOfMenusToUpdate]  // requires array of menus
           ).
       then((result) => {
         return result;
@@ -384,7 +384,7 @@ class MenuEntity extends React.Component {
     let sectionsUpdateResult = await falcorModel
       .call(
             ['restaurants', localStorage.restaurantID, 'sections','update'],
-            [sectionsObjArray]  // requires array of menus        
+            [sectionsObjArray]  // requires array of menus
           ).
       then((result) => {
         return result;
@@ -457,7 +457,7 @@ class MenuEntity extends React.Component {
     const disable = !this.props.menu.size;
     const header = (
       <ListItem
-        primaryText={this.props.label}
+        primaryText={this.props.open ? 'Menus' : this.props.label}
         disabled
         rightIcon={
           this.props.open && localStorage.role === 'admin'
@@ -490,10 +490,10 @@ class MenuEntity extends React.Component {
         style={{backgroundColor: Colors.cyan800,  marginTop: -8, color: '#fff'}} />
     );
 
-    const itemMenuComponent = 
-      localStorage.role !== 'admin' 
-      ? 
-        <span /> 
+    const itemMenuComponent =
+      localStorage.role !== 'admin'
+      ?
+        <span />
       :
         (
           <IconMenu
@@ -509,12 +509,20 @@ class MenuEntity extends React.Component {
               primaryText="Reorder Items"
               value="reorder-menu-items"
               rightIcon={<ActionSwapVert />} />
-            
+
           </IconMenu>
         );
 
-    const prepend = [
-      SidenavListItem({}, {id: 'library', title: 'Library'}, 'menu', true),
+    const prependOpen = [
+      SidenavListItem({}, {id: 'library', title: "Library"}, 'menu', true),
+    ];
+
+    const prependClosed = [
+      SidenavListItem({}, {id: 'working', title: "Working Here"}, 'training', true),
+      SidenavListItem({}, {id: 'library', title: "Menus"}, 'menu', true),
+      SidenavListItem({}, {id: 'leadership', title: "Who's Who/Leadership"}, 'training', true),
+      SidenavListItem({}, {id: 'beverage', title: "Beverage Basics"}, 'training', true),
+      SidenavListItem({}, {id: 'trainerLog', title: "Trainer Log"}, 'training', true),
     ];
 
     let items = mapHelpers.getFromRange(this.props.items, 0, 3);
@@ -584,9 +592,9 @@ class MenuEntity extends React.Component {
       <SidenavList
         {...this.props}
         headerComponent={header}
-        staticItems={prepend}
+        staticItems={this.props.open ? prependOpen : prependClosed}
         menuComponent={itemMenuComponent}
-        items={items}>
+        items={this.props.open ? items : null}>
 
         {openContent}
       </SidenavList>

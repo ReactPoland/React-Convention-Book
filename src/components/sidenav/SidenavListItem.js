@@ -10,7 +10,9 @@ function isActiveLink(item) {
 export default function SidenavListItem(props, item, prefix, open) {
   const classes = ["DashboardBox-Item"];
   const isActive = isActiveLink(item);
-  let description = null;
+  let excerpt = null;
+  let author = null;
+  let date = null;
   let icon = null;
 
   if(isActive) {
@@ -18,7 +20,9 @@ export default function SidenavListItem(props, item, prefix, open) {
   }
 
   if(!open) {
-    description = item.description;
+    excerpt = item.excerpt;
+    author = item.author + ' ';
+    date = ' ' + item.date;
   }
 
   if(open && isActive) {
@@ -30,7 +34,7 @@ export default function SidenavListItem(props, item, prefix, open) {
           disabled
           key={item.id}
           primaryText={item.title}
-          secondaryText={description}
+          secondaryText={<p><span>{excerpt}</span></p>}
           rightIcon={icon} />
       </span>
     );
@@ -40,7 +44,14 @@ export default function SidenavListItem(props, item, prefix, open) {
         <ListItem
           key={item.id}
           primaryText={item.title}
-          secondaryText={description}
+          secondaryText={<div style={{display: excerpt ? 'block':'none'}}>
+          <span style={{fontSize: '12px'}}>{author}|{date}</span><img
+          src="http://lorempixel.com/60/60"
+          style={{float: 'right', overflow: 'visible'}}
+          /><br />
+          {excerpt}
+          </div>}
+          secondaryTextLines={2}
           rightIcon={icon} />
       </Link>
     );

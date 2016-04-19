@@ -14,5 +14,7 @@ export default class StaffMemeber extends Model {
     this.imageUrl = member.imageUrl;
     this.address = member.address;
     this.startDate = new Date(member.startDate);
+    this.ownedByRestaurantID = member.ownedByRestaurantID;
+    this.active = member.active;
   }
 }
