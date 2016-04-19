@@ -21,6 +21,7 @@ import fetchServerSide from './fetchServerSide';
 
 
 
+
 var app = express();
 app.server = http.createServer(app);
 
@@ -32,29 +33,26 @@ app.use(bodyParser.json({extended: false}));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
-  console.info('req.url', req.url);
-  console.info('req.url', req.url);
-  console.info('req.url', req.url);
-
   return new FalcorRouter(routes);
 }));
 
 app.use(express.static('dist'));
 
-app.get('/', (req, res) => { 
-    console.info('req.url', req.url);
-    console.info('req.url', req.url);
-    console.info('req.url', req.url);
 
-    Article.find(function (err, articlesDocs) {
 
-        let ourArticles = articlesDocs.map(function(articleItem){
-            return `<h2>${articleItem.articleTitle}</h2> ${articleItem.articleContent}`;
-        }).join("<br/>");
+let handleServerSideRender = (req, res) => // OK
+{
+  return;
+};
 
-        res.send(`<h1>Publishing App Initial Application!</h1> ${ourArticles}`);
-    });
-});
+let renderFullHtml = (html, initialState) => // OK
+{
+  return;
+};
+
+app.use(handleServerSideRender);
+
+
 
 
 

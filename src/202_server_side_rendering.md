@@ -59,18 +59,33 @@ import reactRoutes from '../src/routes';
 import fetchServerSide from './fetchServerSide';
 ```
 
-Most of those stuff are similar from client-side development in previous chapters. Important is to import history in the given way as in the example ***import * as hist  from 'history'***. The ***RoutingContext, match*** are ways of using React-Router on the server side. The ***renderToStaticMarkup*** function is going to generate for us a HTML markup on server-side. 
+Most of those stuff above are similar from client-side development in previous chapters. Important is to import history in the given way as in the example ***import * as hist  from 'history'***. The ***RoutingContext, match*** is the way of using React-Router on the server side. The ***renderToStaticMarkup*** function is going to generate for us a HTML markup on server-side. 
 
 
-After we have added those new imports then under them do the following:
+After we have added those new imports then under falcor's middleware setup:
+```
+// this already exsits in your codebase
+app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
+  return new FalcorRouter(routes); // this alrady exsits in your codebase
+}));
+```
+
+... under that ***model.json***'s code, please add the following:
 
 ```
+let handleServerSideRender = (req, res) =>
+{
+  return;
+};
+
+let renderFullHtml = (html, initialState) =>
+{
+  return;
+};
+
 app.use(handleServerSideRender);
-
-// We are going to fill these out in the sections to follow
-function handleServerSideRender(req, res) { }
-function renderFullHtml(html, initialState) { }
 ```
+
 The ***app.use(handleServerSideRender)*** is fired each time the server side recives a request from a client's application. Then we have prepared empty functions that we will use:
 
 1) handleServerSideRender - it will use renderToString in order to create a valid server-side's html's markup
