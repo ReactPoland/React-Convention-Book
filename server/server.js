@@ -74,7 +74,21 @@ let handleServerSideRender = (req, res, next) => {
 
 let renderFullPage = (html, initialState) =>
 {
-  return;
+  return `
+    <!doctype html>
+    <html>
+      <head>
+        <title>Publishing App Server Side Rendering</title>
+      </head>
+      <body>
+        <div id="publishingAppRoot">${html}</div>
+        <script>
+          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+        </script>
+        <script src="/static/app.js"></script>
+      </body>
+    </html>
+    `
 };
 
 app.use(handleServerSideRender);
