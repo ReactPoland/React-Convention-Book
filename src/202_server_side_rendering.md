@@ -336,6 +336,9 @@ After all that, then you will be able to see in your client-browser as following
 
 ![server side html markup](http://test.przeorski.pl/book/202_client_side_markup.png)
 
+... and of course you can see the server-rendered markup when you will go to the page's HTML source:
+![server side html markup](http://test.przeorski.pl/book/203_markup_html_source.png)
+
 
 As you can see, the only missing piece in that server side rendering is to fetch real data from our MongoDB. In next chapter we will:
 
