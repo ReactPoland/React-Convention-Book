@@ -114,12 +114,34 @@ app.use('/static', express.static('dist'));
 ```
 ... that only changes that everything what is in our dist project, then it will be available as a static file under localhost address (***http://localhost:3000/static/app.js****). This will help us make Single-Page-App after first server side initial rendering.
 
+//////
+// KROKI:
+1) CO: front-end Material: 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+const muiTheme = getMuiTheme({ userAgent: 'all' });
+
+<MuiThemeProvider muiTheme={muiTheme}>
+
+</MuiThemeProvider>
+
+2) URL /#/ delete with:
+<Router history={this.props.history}>
+
+~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
+3) OPISAĆ W KSIĄŻCE OD:
+a) https://github.com/ReactConvention/React-Convention-Book/commit/016513ea70e092bf24a0489b2955cd617be31d26
+
+b) https://github.com/ReactConvention/React-Convention-Book/commit/69e7fd4244852a10867e3ba61c88528d82446699
+
+c) EWENTUALNIE JAK BY CO: https://github.com/ReactConvention/React-Convention-Book/commit/4247875d47fbb7cd4db3af1193c88767098120e4
 
 
+d) pozniej step #1. (wyzej)
 
-
-
-
+e) step #2. wyzej
 
 
 

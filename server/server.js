@@ -34,7 +34,6 @@ app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
   return new FalcorRouter(routes);
 }));
 
-app.use(express.static('dist'));
 app.use('/static', express.static('dist'));
 
 
