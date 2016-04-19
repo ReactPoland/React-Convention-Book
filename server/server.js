@@ -35,6 +35,7 @@ app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
 }));
 
 app.use(express.static('dist'));
+app.use('/static', express.static('dist'));
 
 
 let handleServerSideRender = (req, res, next) => {
@@ -67,7 +68,8 @@ let handleServerSideRender = (req, res, next) => {
 
       const initialState = store.getState()
 
-      res.send(renderFullPage(html, initialState));
+      let fullHTML = renderFullPage(html, initialState);
+      res.send(fullHTML);
     }
   });
 }
@@ -81,6 +83,7 @@ let renderFullPage = (html, initialState) =>
         <title>Publishing App Server Side Rendering</title>
       </head>
       <body>
+      	<h1>server side</h1>
         <div id="publishingAppRoot">${html}</div>
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
@@ -92,6 +95,7 @@ let renderFullPage = (html, initialState) =>
 };
 
 app.use(handleServerSideRender);
+
 
 app.server.listen(process.env.PORT || 3000);
 console.log(`Started on port ${app.server.address().port}`);

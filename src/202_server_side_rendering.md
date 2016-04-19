@@ -1,6 +1,6 @@
 ### Server Side Rendering
 
-Server side rendering is very useful feature in articles' related startups because it helps to be better indexed by different search engines. It's an essential feature for any news & content heavy websites, because it helps grow them organic traffic. In that book we will also run our app with server side rendering.
+Server side rendering is very useful feature in text's content (like news portals) related startups/companies because it helps to be better indexed by different search engines. It's an essential feature for any news & content heavy websites, because it helps grow them organic traffic. In that book we will also run our app with server side rendering.  Second segment of companies where server side rendering may be very useful are entertaining one where use has less patience and he can close the www's browser if a webpage is loading slowly. In general, all B2C (consumer facing) apps shall use server side rendering to improve it's experience with the masses of people who are visitng their websites.
 
 #### Mocking the database response
 
@@ -101,6 +101,24 @@ We will use the ***Provider***'s component that we already have used in our clie
 The most important part here is ***ReactDOMServer.renderToString()*** which goal's to render the initial's HTML markup of our application, before we send the markup to the client-side.
 
 Next step is to get the initial state from the Redux store by using function ***store.getState()***. That initial state will be passed along in our renderFullHtml's function as you can learn in a moment.
+
+
+Before we will work on those two new functions (handleServerSideRender & renderFullHtml) , please replace also this in server.js:
+```
+app.use(express.static('dist'));
+```
+
+with a new:
+```
+app.use('/static', express.static('dist'));
+```
+... that only changes that everything what is in our dist project, then it will be available as a static file under localhost address (***http://localhost:3000/static/app.js****). This will help us make Single-Page-App after first server side initial rendering.
+
+
+
+
+
+
 
 
 
