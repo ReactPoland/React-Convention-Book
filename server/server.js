@@ -20,8 +20,6 @@ import reactRoutes from '../src/routes';
 import fetchServerSide from './fetchServerSide';
 
 
-
-
 var app = express();
 app.server = http.createServer(app);
 
@@ -39,24 +37,51 @@ app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
 app.use(express.static('dist'));
 
 
+let handleServerSideRender = (req, res, next) => {
+  let initMOCKstore = fetchServerSide(); // mocked for now
 
-let handleServerSideRender = (req, res) => // OK
-{
-  return;
-};
+  // Create a new Redux store instance
+  const store = createStore(rootReducer, initMOCKstore)
 
-let renderFullHtml = (html, initialState) => // OK
+  const location = hist.createLocation(req.path);
+  match({
+    routes: reactRoutes,
+    location: location,
+  }, (err, redirectLocation, renderProps) => {
+    if (redirectLocation) {
+      res.redirect(301, redirectLocation.pathname + redirectLocation.search);
+    } else if (err) {
+      console.log(err);
+      next(err);
+      // res.send(500, error.message);
+    } else if (renderProps === null) {
+      res.status(404)
+        .send('Not found');
+    } else {
+
+      let html = renderToStaticMarkup(
+        <Provider store={store}>
+          <RoutingContext {...renderProps}/>
+        </Provider>
+      );
+
+      const initialState = store.getState()
+
+      res.send(renderFullPage(html, initialState));
+    }
+  });
+}
+
+let renderFullPage = (html, initialState) =>
 {
   return;
 };
 
 app.use(handleServerSideRender);
 
-
-
-
-
 app.server.listen(process.env.PORT || 3000);
 console.log(`Started on port ${app.server.address().port}`);
 
 export default app;
+
+
