@@ -81,7 +81,8 @@ class AddStaffMemberForm extends React.Component {
                 required
                 validations="isExisty"
                 validationError="Invalid start date"
-                tabindex="7" />
+                tabIndex="7" 
+                />
             </div>
           </div>
           <div className="col-md-6">
@@ -134,7 +135,7 @@ class AddStaffMemberForm extends React.Component {
               style={{float: 'right'}}
               label="Add"
               type="submit"
-              tabindex={10} 
+              tabIndex={10} 
               />
             <RaisedButton
               disabled={false}
@@ -142,7 +143,8 @@ class AddStaffMemberForm extends React.Component {
               style={{float: 'right'}}
               label="Cancel"
               onTouchTap={this.handleClose}
-              tabindex={11} />
+              tabIndex={11} 
+              />
           </div>
         </Form>
       </div>

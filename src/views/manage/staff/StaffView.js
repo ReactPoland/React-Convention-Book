@@ -87,18 +87,29 @@ class StaffView extends React.Component {
     
     console.info("member", member);
     member.position = "staff";
-
-    let newUserID = await falcorModel
+    member.ownedByRestaurantID = localStorage.restaurantID;
+    member.active = true;
+    let errorValue = await falcorModel
       .call(
             ['staffRoute', 'add'],
             [member]
           ).
       then((result) => {
-
-        return falcorModel.getValue(['staffRoute', 'newUserID']);
+        console.log("result");
+        console.log(result);
+        console.log("result");
+        return falcorModel.getValue(['staffRoute', 'errorValue']);
 
       });
-    
+
+    if(errorValue) {
+      alert("error!");
+    }
+    else{
+      alert("no error!");
+    }
+
+    let newUserID = falcorModel.getValue(['staffRoute', 'newUserID']);
     member.id = newUserID;
     this.props.actions.addStaff(new StaffMember(member));
     if(!localStorage.restaurantID && localStorage.restaurantID.length < 11) alert('error when sending email because of empty restaurantID');
@@ -119,6 +130,13 @@ class StaffView extends React.Component {
   }
 
   async onEditMember(member){
+
+    console.log("--------------------");
+    console.log("member to edit");
+    console.log(member);
+    console.log("member to edit");
+    console.log("--------------------");
+    
 
    let memberResult = await falcorModel
       .call(

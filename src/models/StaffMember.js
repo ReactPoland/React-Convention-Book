@@ -12,9 +12,11 @@ export default class StaffMemeber extends Model {
     this.firstName = member.firstName;
     this.lastName = member.lastName;
     this.imageUrl = member.imageUrl;
-    this.address = member.address;
+    this.address = typeof(member.address) !== 'undefined' ? member.address : 'frontend default address';
     this.startDate = new Date(member.startDate);
     this.ownedByRestaurantID = member.ownedByRestaurantID;
     this.active = member.active;
+    this.position = typeof(member.position) !== 'undefined' ? member.positions : 'frontend def position';
+    this.phoneNumber = member.phoneNumber;
   }
 }

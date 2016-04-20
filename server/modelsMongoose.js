@@ -14,7 +14,7 @@ const conf = {
 };
 
 // test / test123
-// 
+//
 let dbUser
 if(process.env.MONGO_USER && process.env.MONGO_PASS) {
   dbUser = {user: process.env.MONGO_USER, pass: process.env.MONGO_PASS}
@@ -93,16 +93,20 @@ var userSchema = new Schema({
   imageUrl: { type: String, required: true, default: 'http://lorempixel.com/100/100/people/' },
   gender: String,
   created_at: Date,
-  updated_at: Date
+  updated_at: Date,
+  address: { type: String, required: true, default: 'default address' },
+  position: { type: String, required: true, default: 'mongoosedefault'},
+  location: { type: String, required: true, default: 'mongoosedefault'},
+  phoneNumber: String
 });
 
 
 // custom method to add string to end of name
 // you can create more important methods like name validations or formatting
-// you can also do queries and find similar users 
+// you can also do queries and find similar users
 userSchema.methods.dudify = function() {
   // add some stuff to the users name
-  this.name = this.name + '-dude'; 
+  this.name = this.name + '-dude';
 
   return this.name;
 };
@@ -113,7 +117,7 @@ userSchema.methods.dudify = function() {
 var UserCollection = mongoose.model('User', userSchema, 'users');
 
 
-module.exports = { 
+module.exports = {
   MenuCollection,
   MenuItemCollection,
   SectionCollection,

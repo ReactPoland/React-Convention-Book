@@ -12,6 +12,7 @@ import Styles from 'styles/inlineStyles';
 import { AccountSettingsForm } from 'components/forms/AccountSettingsForm';
 import { ChangePasswordForm } from 'components/forms/ChangePasswordForm';
 import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
+import UserDetails from 'components/UserDetails.js';
 
 import falcorModel from '../../falcorModel.js';
 
@@ -45,8 +46,8 @@ class AccountSettingsView extends React.Component {
     });
 
     console.log('\n#################\nCALL API: UPDATE USER DETAILS\n#################\n');
-    
-    //this.props.actions.updateUserSettings(formData);    
+
+    //this.props.actions.updateUserSettings(formData);
 
     let accountResults = await falcorModel
       .call(
@@ -61,8 +62,8 @@ class AccountSettingsView extends React.Component {
     this.props.session.user.firstName = await falcorModel.getValue('profileData.newFirstName');
     this.props.session.user.lastName = await falcorModel.getValue('profileData.newLastName');
     this.props.session.user.imageUrl = await falcorModel.getValue('profileData.newImageUrl');
-    
-    this.props.actions.updateUserSettings(this.props.session.user); 
+
+    this.props.actions.updateUserSettings(this.props.session.user);
 
     this.setState({
       requestSuccess: "Successfully updated account details",
@@ -103,7 +104,7 @@ class AccountSettingsView extends React.Component {
       });
     }
 
-    
+
   }
 
   nullifyRequestState() {
@@ -115,7 +116,6 @@ class AccountSettingsView extends React.Component {
 
   render() {
     const { requestSuccess, requestError } = this.state;
-    
     let modalJSX;
     if(typeof this.state.requestSuccess === 'string') {
       modalJSX = <div style={{width: 400, margin: "0 auto"}}>
@@ -150,14 +150,8 @@ class AccountSettingsView extends React.Component {
 
     return (
       <div id='accountSettingsView'>
-        <div className='row-fluid'>
-          <div className='col-md-6'>
-            <AccountSettingsForm session={this.props.session} onSubmit={this._updateAccount} sendingRequest={this.state.sendingAccountRequest} />
-          </div>
-          <div className='col-md-6'>
-            <ChangePasswordForm session={this.props.session} onSubmit={this._changePassword} sendingRequest={this.state.sendingPasswordRequest} />
-          </div>
-        </div>
+        <UserDetails
+          userData={this.props.session.user} />
         <ErrorSuccessMsg
           errorMessage={requestError}
           successMessage={requestSuccess}

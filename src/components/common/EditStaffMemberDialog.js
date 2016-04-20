@@ -8,6 +8,7 @@ import { Form } from 'formsy-react';
 import { DefaultInput } from 'components/forms/DefaultInput';
 import { DefaultDatePicker } from 'components/forms/DefaultDatePicker';
 import { DefaultSelect } from 'components/forms/DefaultSelect';
+import { DefaultCheckbox } from 'components/forms/DefaultCheckbox';
 
 export default class DialogExampleSimple extends React.Component {
   constructor(props) {
@@ -36,6 +37,11 @@ export default class DialogExampleSimple extends React.Component {
   }
 
   _onEditStaffMember(member) {
+    console.log("--------------------");
+    console.log("member to edit DIALOGDIALOGDIALOG");
+    console.log(member);
+    console.log("member to edit");
+    console.log("--------------------");
     this.props.onEditMember(member);
   }
 
@@ -150,10 +156,12 @@ export default class DialogExampleSimple extends React.Component {
                 <p className="validation-error">{//this.state.errorMessage
                   false}</p>
 
-                <Checkbox
+                <DefaultCheckbox
+                  name="active"
                   label="Active"
-                  defaultChecked={true}
+                  defaultChecked={memberToEdit.active}
                   //onCheck={(e, checked) => active.onChange(checked)}
+                  //onCheck={(e, checked) => alert(checked)}
                 />
 
                 <RaisedButton

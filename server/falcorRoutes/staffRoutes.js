@@ -110,8 +110,12 @@ module.exports = [
   { 
     route: 'staffRoute.add' ,
     call: async (callPath, args) => 
-    {
-        let {firstName, email, phone, startDate, lastName, reEmail, address, position, location} = args[0];
+    { 
+        console.log("args[0]");
+        console.log(args[0]);
+        let {firstName, email, phone, startDate, lastName, reEmail, address, position, location, ownedByRestaurantID, active} = args[0];
+        console.log("ownedByRestaurantID");
+        console.log(ownedByRestaurantID, active);
         let newUserObj = {
                'username': email,
                'password': 'passwordTOchange',
@@ -122,12 +126,15 @@ module.exports = [
                'verified': false ,
                'imageURL': 'http://lorempixel.com/100/100/animals' ,
                'gender' : 'male',
-               'address' : address
+               'address' : address,
+               'ownedByRestaurantID' : ownedByRestaurantID,
+               'active' : active
         };
         var user = new models.UserCollection(newUserObj);
         return user.save(function (err, data) {
           if (err) {
             console.info("ERROR", err);
+            //duplicate email!
             return err;
           }
           else {
@@ -146,7 +153,6 @@ module.exports = [
           let newUserDetail = res.data.toObject();
           newUserDetail.id = newUserDetail._id.toString();
           delete newUserDetail._id;
-          
           let results = [
             {
               path: ['staffRoute', res.count-1],
@@ -159,10 +165,20 @@ module.exports = [
             {
               path: ['staffRoute', 'length'],
               value: res.count
+            },
+            {
+              path: ['staffRoute', 'errorValue'],
+              value: null
             }
           ];
-
           return results;
+      }).catch((err) => {
+        console.info('error321');
+
+        return {
+          path: ['staffRoute', 'errorValue'],
+          value: 'user exists'
+        };
       });
     }
   },

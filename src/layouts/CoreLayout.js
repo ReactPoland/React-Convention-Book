@@ -101,7 +101,7 @@ class CoreLayout extends React.Component {
             var urlParts = regexParse.exec(window.location.hostname);
             return window.location.hostname.replace(urlParts[0],'').slice(0, -1);
     }
-    
+
     if(localStorage.restaurantID === 'undefined' || !localStorage.restaurantID) {
       let currentSubdomain = getSubdomain();
       if(currentSubdomain.length < 2) {
@@ -112,7 +112,7 @@ class CoreLayout extends React.Component {
         ['restaurants', 'lookup', currentSubdomain]
       ).then((value) => {
         this.setState({restaurantID: value});
-        if(value !== "INVALID") 
+        if(value !== "INVALID")
           localStorage.setItem("restaurantID", value);
       });
     } else {
@@ -125,7 +125,7 @@ class CoreLayout extends React.Component {
     if(localStorage.token) {
       console.info("IMPLEMENTED #1");
       let response = await API.get(
-        ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email']]
+        ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email', 'address', 'startDate', 'position', 'location', 'phoneNumber']]
       );
 
       // check if token is valid

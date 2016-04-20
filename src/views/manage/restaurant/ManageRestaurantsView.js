@@ -119,31 +119,33 @@ class ManageRestaurantsView extends React.Component {
     let registrationTextField = <span />;
 
     if(this.state.itemToEdit) {
+      //TODO      
       let regInfo = templ[this.state.itemToEdit];
       let itemEDITname = this.state.itemToEdit;
-      if(typeof regInfo === 'object') {
-        registrationTextField = (
-          <Formsy.Form onSubmit={this._onEditFormSubmit.bind(this, regInfo)}>
-            <h4>{itemEDITname} template in edit</h4>
-            <DefaultInput
-              name={itemEDITname}
-              hintText={itemEDITname+" template in edit"}
-              multiLine={true}
-              rows={7}
-              style={{width: 600}}
-              defaultValue={regInfo.templateText}
-              rowsMax={7} />
-            <div style={{marginTop: 24}}>
-            <RaisedButton
-              secondary={true}
-              type="submit"
-              disabled={ false /* !this.state.canSubmit */}
-              style={{margin: '0 auto', display: 'block', width: 150}}
-              label={'submit'} />
-            </div>
-          </Formsy.Form>
-        );
-      }
+      alert("EDIT RESTAURANT: " + itemEDITname);
+      // if(typeof regInfo === 'object') {
+      //   registrationTextField = (
+      //     <Formsy.Form onSubmit={this._onEditFormSubmit.bind(this, regInfo)}>
+      //       <h4>{itemEDITname} template in edit</h4>
+      //       <DefaultInput
+      //         name={itemEDITname}
+      //         hintText={itemEDITname+" template in edit"}
+      //         multiLine={true}
+      //         rows={7}
+      //         style={{width: 600}}
+      //         defaultValue={regInfo.templateText}
+      //         rowsMax={7} />
+      //       <div style={{marginTop: 24}}>
+      //       <RaisedButton
+      //         secondary={true}
+      //         type="submit"
+      //         disabled={ false /* !this.state.canSubmit */}
+      //         style={{margin: '0 auto', display: 'block', width: 150}}
+      //         label={'submit'} />
+      //       </div>
+      //     </Formsy.Form>
+      //   );
+      // }
     }
 
     let itemListJSX = (<List subheader="Items List">
