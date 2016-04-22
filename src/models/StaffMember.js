@@ -16,7 +16,7 @@ export default class StaffMemeber extends Model {
     this.startDate = new Date(member.startDate);
     this.ownedByRestaurantID = member.ownedByRestaurantID;
     this.active = member.active;
-    this.position = typeof(member.position) !== 'undefined' ? member.positions : 'frontend def position';
+    this.position = typeof(member.position) !== undefined ? member.position : 'frontend def position';
     this.phoneNumber = member.phoneNumber;
   }
 }

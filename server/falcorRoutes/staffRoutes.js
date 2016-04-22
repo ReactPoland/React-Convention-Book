@@ -12,7 +12,7 @@ module.exports = [
     call: async function(callPath, args) {
 
       let id = args[0];
-      
+
       let user = await models.UserCollection.find({_id: id}, function(err, user) {
         if (err) throw err;
       }).then((result) => {
@@ -29,7 +29,7 @@ module.exports = [
           path: ['staffRoute', 'verified'],
           value: true
         }
-      } 
+      }
       else{
         return {
           path: ['staffRoute', 'verified'],
@@ -59,14 +59,14 @@ module.exports = [
       if (user[0].verified == true){
         //do nothing because he's verified
         console.log("true");
-      } 
+      }
       else{
         //change password
         console.log("false");
       }
 
       models.UserCollection.update(
-          { _id: id }, 
+          { _id: id },
           { $set: { "password": newPassword}, "verified": true },
           //{ $set: { "verified": false }},
           function(err) {
@@ -107,13 +107,13 @@ module.exports = [
       return usersArray;
     }
   },
-  { 
+  {
     route: 'staffRoute.add' ,
-    call: async (callPath, args) => 
-    { 
+    call: async (callPath, args) =>
+    {
         console.log("args[0]");
         console.log(args[0]);
-        let {firstName, email, phone, startDate, lastName, reEmail, address, position, location, ownedByRestaurantID, active} = args[0];
+        let {firstName, email, phone, startDate, lastName, reEmail, address, position, location, ownedByRestaurantID, active, role} = args[0];
         console.log("ownedByRestaurantID");
         console.log(ownedByRestaurantID, active);
         let newUserObj = {
@@ -122,13 +122,14 @@ module.exports = [
                'firstName': firstName,
                'lastName': lastName,
                'email': email,
-               'role': position,
+               'role': role ? 'admin' : 'staff',
                'verified': false ,
                'imageURL': 'http://lorempixel.com/100/100/animals' ,
                'gender' : 'male',
                'address' : address,
                'ownedByRestaurantID' : ownedByRestaurantID,
-               'active' : active
+               'active': active,
+               'position': position
         };
         var user = new models.UserCollection(newUserObj);
         return user.save(function (err, data) {
@@ -171,10 +172,13 @@ module.exports = [
               value: null
             }
           ];
+
           return results;
       }).catch((err) => {
         console.info('error321');
-
+        /*
+            TODO - it doesn't work properly, breaks whole app instead of returning json envelope
+         */
         return {
           path: ['staffRoute', 'errorValue'],
           value: 'user exists'
@@ -183,9 +187,9 @@ module.exports = [
     }
   },
 
-  { 
-    route: 'staffRoute.edit' , 
-    call: async (callPath, args) => 
+  {
+    route: 'staffRoute.edit' ,
+    call: async (callPath, args) =>
     {
         let member = args[0];
         console.log("MEMBER IN staffRoute.edit: ");
@@ -199,6 +203,7 @@ module.exports = [
         let newAddress = member.address;
         let newLocation = member.location;
         let newRole = member.position;
+        let active = member.active;
         //let newStartDate = member.startDate;
 
         let memberToEdit = args[1];
@@ -215,15 +220,15 @@ module.exports = [
         console.log("member before edit^^^");
 
       //firstName
-      if (typeof newFirstName === "undefined"){  
+      if (typeof newFirstName === "undefined"){
         newFirstName = user[0].firstName;
       }
       //lastName
-      if (typeof newLastName === "undefined"){  
+      if (typeof newLastName === "undefined"){
         newLastName = user[0].lastName;
       }
       //email
-      if (typeof newEmail === "undefined"){  
+      if (typeof newEmail === "undefined"){
         newEmail = user[0].email;
       }
       //address
@@ -231,24 +236,27 @@ module.exports = [
         newAddress = user[0].address;
       }
       //role
-      if (newRole == ""){  
+      if (newRole == ""){
         newRole = user[0].role;
       }
       //location
-      if (newLocation == ""){  
+      if (newLocation == ""){
         newLocation = user[0].location;
       }
+      //Active
+      console.log('USER IS ACTIVE BEFORE UPDATE', active)
 
 
 //update
         models.UserCollection.update(
-          { _id: memberToEdit.id }, 
+          { _id: memberToEdit.id },
           { $set: { "firstName": newFirstName,
                    "lastName": newLastName,
                    "email": newEmail,
                    "role": newRole,
                    "address": newAddress,
                    "location": newLocation,
+                   "active": active
                   }
           },
           function(err) {

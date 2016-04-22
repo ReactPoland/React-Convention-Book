@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
+var $atom = jsonGraph.atom;
 var $error = jsonGraph.error;
 var itemsCallRoutes = require('./itemsCallRoutes.js');
 var sectionsCallRoutes = require('./sectionsCallRoutes.js');
@@ -106,11 +107,32 @@ export default ( req, res ) => {
           });
 
           if(restaurantRes.length > 0) {
-            let restaurantID = restaurantRes[0].toObject()._id.toString();
-            return {
-              path: ['restaurants', 'lookup', restaurantSubdomain],
-              value: restaurantID
-            }
+            let restaurantObj = restaurantRes[0].toObject();
+            let restaurantID = restaurantObj._id.toString();
+
+            console.info('restaurantID', restaurantID);
+            console.info('restaurantSubdomain', restaurantSubdomain)
+            console.info(              {
+                path: ['restaurants', 'details', restaurantID],
+                value: $atom(restaurantObj)
+              });
+            console.info('IS WORKING ???');
+            console.info(restaurantObj);
+            console.info('IS WORKING ???');
+            let resultsJSON = [
+              {
+                path: ['restaurants', 'lookup', restaurantSubdomain],
+                value: restaurantID
+              },
+              {
+                path: ['restaurants', 'details', restaurantID],
+                value: $atom(restaurantObj)
+              }
+            ]
+            console.info('resultsJSON');
+            console.info(resultsJSON);
+
+            return resultsJSON;
           } else {
             return {
               path: ['restaurants', 'lookup', restaurantSubdomain],

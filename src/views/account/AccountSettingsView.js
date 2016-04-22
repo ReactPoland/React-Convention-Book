@@ -32,17 +32,19 @@ class AccountSettingsView extends React.Component {
       requestError: null,
       sendingAccountRequest: false,
       sendingPasswordRequest: false,
+      editingProfile: false
     }
     this._updateAccount = this._updateAccount.bind(this);
     this._changePassword = this._changePassword.bind(this);
     this.nullifyRequestState = this.nullifyRequestState.bind(this);
+    this.editProfile = this.editProfile.bind(this);
   }
 
   async _updateAccount(formData) {
     this.setState({
       requestSuccess: null,
       requestError: null,
-      sendingAccountRequest: true
+      sendingAccountRequest: true,
     });
 
     console.log('\n#################\nCALL API: UPDATE USER DETAILS\n#################\n');
@@ -114,6 +116,10 @@ class AccountSettingsView extends React.Component {
     });
   }
 
+  editProfile() {
+    this.setState({ editingProfile: true });
+  }
+
   render() {
     const { requestSuccess, requestError } = this.state;
     let modalJSX;
@@ -126,7 +132,7 @@ class AccountSettingsView extends React.Component {
                     primary={true}
                     keyboardFocused={true}
                     style={{float: 'right'}}
-                    onTouchTap={() => this.setState({requestSuccess: false})}
+                    onTouchTap={() => this.setState({requestSuccess: false, editingProfile: false})}
                   />
             </Paper>
           </div>;
@@ -147,17 +153,32 @@ class AccountSettingsView extends React.Component {
           </div>;
       return modalJSX;
     }
-
+    if (this.state.editingProfile === false) {
+    return (
+        <div className='container'>
+          <UserDetails
+            userData={this.props.session.user}
+            onEdit={this.editProfile} />
+        </div>
+    );
+  } else {
     return (
       <div id='accountSettingsView'>
-        <UserDetails
-          userData={this.props.session.user} />
-        <ErrorSuccessMsg
-          errorMessage={requestError}
-          successMessage={requestSuccess}
-          onRequestClose={this.nullifyRequestState} />
+      <div className='row'>
+           <div className='col-md-6'>
+             <AccountSettingsForm session={this.props.session} onSubmit={this._updateAccount} sendingRequest={this.state.sendingAccountRequest} />
+           </div>
+           <div className='col-md-6'>
+             <ChangePasswordForm session={this.props.session} onSubmit={this._changePassword} sendingRequest={this.state.sendingPasswordRequest} />
+           </div>
+         </div>
+         <ErrorSuccessMsg
+           errorMessage={requestError}
+           successMessage={requestSuccess}
+           onRequestClose={this.nullifyRequestState} />
       </div>
-    );
+    )
+  }
   }
 }
 

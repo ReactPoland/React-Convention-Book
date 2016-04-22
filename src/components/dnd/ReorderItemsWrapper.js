@@ -64,12 +64,13 @@ class Inside extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-    if(nextProps.items !== this.props.items) {
-      this.setState({
-        items: nextProps.items
-      });
+      if(typeof nextProps !== 'undefined' && nextProps.items !== this.props.items) {
+        this.setState({
+          items: nextProps.items
+        });
+      }
     }
-  }
+  
 
   moveItem(dragItem, hoverIndex) {
     const { items } = this.state;
@@ -114,6 +115,9 @@ class Inside extends React.Component {
     const items = (this.state.items || []).map((item, index) => {
       /* use title as a key if item is newly created and doesn't have id yet */
       if(!item) return null; // this cases covers when someone has removed an item
+      if(typeof item === 'object') {
+        item.orderIndex = index;
+      }
 
       return (
         <ReorderDraggableBox

@@ -45,7 +45,7 @@ export default class EditMenusModal extends React.Component {
 
     this.state = {
       menuInEdit: null,
-      showAllergensInEditMenu: null
+      showAllergensInEditMenu: false
     };
   }
 
@@ -58,7 +58,7 @@ export default class EditMenusModal extends React.Component {
 
   _lockInputAndSave(menuTitleDefault) {
     let title = this.refs[this.state.menuInEdit].getValue();
-    if(title === undefined) { 
+    if(title === undefined) {
       // we need to do it, because maybe a checkbox has been changed
       title = menuTitleDefault;
     }
@@ -119,12 +119,10 @@ export default class EditMenusModal extends React.Component {
 
       if(menuInEdit === menu.id) {
         topPadding = 0;
-
         let editShowAllergens = (<Checkbox
-            defaultChecked={this.state.showAllergensInEditMenu}
             name="checkboxEditShowAllergensInMenu"
             label={<span>Show allergen guide</span>}
-            onCheck={() => { this.setState({ showAllergensInEditMenu: !this.state.showAllergensInEditMenu}) }} />);
+            onCheck={() => { this.setState({ showAllergensInEditMenu: true}) }} />);
 
         nameNodeEdit = (
           <Form>
@@ -137,9 +135,9 @@ export default class EditMenusModal extends React.Component {
                 onChange={this._onChangeEditTitleInput}
                 onEnterKeyDown={this._lockInputAndSave.bind(this, menu.title)} />
                 {editShowAllergens}
-                <FlatButton 
-                  primary={true} 
-                  label="Save changes" 
+                <FlatButton
+                  primary={true}
+                  label="Save changes"
                   onTouchTap={this._lockInputAndSave.bind(this, menu.title)} />
 
           </Form>

@@ -71,15 +71,14 @@ export default class EditMenuSectionsModal extends React.Component {
     this.setState({sections});
   }
 
-  onSectionEdit(sectionIndexEditing, section) {
+  onSectionEdit(itemDetails) {
     this.setState({
-      sectionInEditINDEX: sectionIndexEditing,
-      sectionInEdit: section.id
+      sectionInEditINDEX: itemDetails.orderIndex,
+      sectionInEdit: itemDetails.id
     });
   }
 
   _lockInputAndSave() {
-    console.info(1);
     const title = this.refs[this.state.sectionInEdit].getValue();
     if(title === undefined) { 
       this.setState({
@@ -87,18 +86,13 @@ export default class EditMenuSectionsModal extends React.Component {
       });
       return;
     }
-    console.info(2);
     const originSection = this.props.section.get(this.state.sectionInEdit);
     const newSection = new Section(originSection.formatForWire());
     newSection.title = title;
 
     this.props.onUpdate(newSection);
-    console.info(7);
     let updatedSections = this.state.sections; 
     updatedSections[this.state.sectionInEditINDEX] = newSection;
-    console.info("updatedSections");
-    console.info(updatedSections);
-    console.info("updatedSections");
     this.setState({
       sections: updatedSections,
       sectionInEdit: null
@@ -174,7 +168,7 @@ export default class EditMenuSectionsModal extends React.Component {
           onChange={this.updateOrder.bind(this)}
           items={this.state.sections}
           onDelete={this.onSectionDelete.bind(this)} 
-          onEdit={this.onSectionEdit.bind(this)} />
+          onEdit={(this.onSectionEdit.bind(this))} />
 
         <div style={{
             position: 'absolute',

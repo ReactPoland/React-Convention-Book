@@ -279,12 +279,6 @@ const cache = {
 
 let headers;
 if(localStorage.token) {
-  console.info("LOCAL --->",localStorage.restaurantID);
-  console.info("LOCAL --->",localStorage.restaurantID);
-  console.info("LOCAL --->",localStorage.restaurantID);
-  console.info("LOCAL --->",localStorage.restaurantID);
-  console.info("LOCAL --->",localStorage.restaurantID);
-  console.info("LOCAL --->",localStorage.restaurantID);
   headers = {
     headers: {
       'Authorization': localStorage.token,

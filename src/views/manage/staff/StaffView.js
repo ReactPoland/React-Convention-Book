@@ -18,6 +18,7 @@ import EditStaffMemberDialog from 'components/common/EditStaffMemberDialog';
 import falcorModel from '../../../falcorModel.js';
 
 const mapStateToProps = (state) => ({
+  // here are going reducers results
   session: state.session,
   staff: state.staff,
   restaurant: state.restaurant
@@ -40,7 +41,7 @@ class StaffView extends React.Component {
     this.onAddMember = this.onAddMember.bind(this);
     this.onEditMember = this.onEditMember.bind(this);
     this._showForm = this._showForm.bind(this);
-    this.nullifyRequestState = this.nullifyRequestState.bind(this);    
+    this.nullifyRequestState = this.nullifyRequestState.bind(this);
     this.hideAddForm = this.hideAddForm.bind(this);
     this._onStaffMemberClick = this._onStaffMemberClick.bind(this);
 
@@ -67,7 +68,6 @@ class StaffView extends React.Component {
       return userItem;
     });
     /////////////////////
-
     this.props.actions.staffList(displayAll)
   }
 
@@ -77,43 +77,40 @@ class StaffView extends React.Component {
 
   _onFilter(data) {
     this.setState({filteredStaff: data});
-    
+
   }
 
   async onAddMember(member) {
     console.log('\n#################\nCALL API: INVITE STAFF MEMBER\n#################\n');
+
+    let __contains__ = false;
+
+    this.props.staff.forEach((item) => {
+      if(member.email === item.email) __contains__ = true;
+    });
+
+    if(__contains__) {
+      alert('user already exsits (email must be unique)');
+      return;
+    }
     // TODO unmock in future
-    member.imageUrl = "http://lorempixel.com/200/300/people"; 
-    
-    console.info("member", member);
-    member.position = "staff";
+    member.imageUrl = "http://lorempixel.com/200/300/people";
+    member.role = member.role ;
     member.ownedByRestaurantID = localStorage.restaurantID;
     member.active = true;
-    let errorValue = await falcorModel
+    let newUserID = await falcorModel
       .call(
             ['staffRoute', 'add'],
             [member]
           ).
       then((result) => {
-        console.log("result");
-        console.log(result);
-        console.log("result");
-        return falcorModel.getValue(['staffRoute', 'errorValue']);
-
+        return result.json.staffRoute.newUserID;
       });
 
-    if(errorValue) {
-      alert("error!");
-    }
-    else{
-      alert("no error!");
-    }
-
-    let newUserID = falcorModel.getValue(['staffRoute', 'newUserID']);
     member.id = newUserID;
     this.props.actions.addStaff(new StaffMember(member));
     if(!localStorage.restaurantID && localStorage.restaurantID.length < 11) alert('error when sending email because of empty restaurantID');
-    
+
     let emailWelcomeMessage = await falcorModel
       .call(
             ['emailWelcomeMessage'],
@@ -136,7 +133,7 @@ class StaffView extends React.Component {
     console.log(member);
     console.log("member to edit");
     console.log("--------------------");
-    
+
 
    let memberResult = await falcorModel
       .call(
@@ -146,7 +143,6 @@ class StaffView extends React.Component {
       then((result) => {
         return memberResult;
       });
-
     this.setState({showEditForm: false});
   }
 
@@ -184,7 +180,7 @@ class StaffView extends React.Component {
       addForm = (
         <AddStaffMemberForm
           restaurant={this.props.restaurant}
-          onAddMember={this.onAddMember} 
+          onAddMember={this.onAddMember}
           hideAddForm={this.hideAddForm}  />
       );
     }
@@ -192,9 +188,9 @@ class StaffView extends React.Component {
     let editForm = null;
     if(this.state.showEditForm) {
       editForm = (
-        <EditStaffMemberDialog 
-          restaurant={this.props.restaurant} 
-          onEditMember={this.onEditMember} 
+        <EditStaffMemberDialog
+          restaurant={this.props.restaurant}
+          onEditMember={this.onEditMember}
           memberToEdit={this.state.memberToEdit}
           nullifyRequestState={this.nullifyRequestState}  />
       );

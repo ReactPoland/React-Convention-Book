@@ -66,13 +66,8 @@ class EmailTemplateView extends React.Component {
       let itemToEdit = null;
       let emailTemplates = this.state.emailTemplates;
       emailTemplates[objInfo.templateName] = objInfo;
-      // console.info('emailTemplates');
-      // console.info(emailTemplates);
-      // console.info('emailTemplates');
 
       if(typeof objInfo.id === 'undefined') {
-        // tutaj dodajesz do falcora bo jeszcze nie istnieje
-        //alert("UNDEFINED");
         let emailAddResult = falcorModel
         .call(
           ['restaurants', localStorage.restaurantID, 'emailTemplates', 'add'],

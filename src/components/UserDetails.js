@@ -5,15 +5,24 @@ import Phone from 'material-ui/lib/svg-icons/communication/phone';
 import Settings from 'material-ui/lib/svg-icons/action/settings';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
+import IconButton from 'material-ui/lib/icon-button';
 
 class UserDetails extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      edit: false
+    };
+    this.toggleEdit = this.toggleEdit.bind(this);
+  }
+  toggleEdit(){
+    this.setState({ edit: true });
+    this.props.onEdit();
   }
   render(){
     let user = this.props.userData;
     return (
-    <div className="container">
+      <div>
       <div className='row'>
         <div className='col-md-4'>
           {/*<AccountSettingsForm session={this.props.session} onSubmit={this._updateAccount} sendingRequest={this.state.sendingAccountRequest} />*/}
@@ -41,7 +50,9 @@ class UserDetails extends React.Component {
           right: '0'}}>
           {user.phoneNumber}
         </div><br />
-        <Settings />
+        <IconButton onClick={this.toggleEdit} style={{width: '25px', padding: '0'}}>
+          <Settings />
+        </IconButton>
         </div>
       </div>
       <div className='row' style={{padding: '50px 0 0 0'}}>
@@ -60,7 +71,8 @@ class UserDetails extends React.Component {
         </div>
         </div>
       </div>
-    </div>);
+      </div>
+      );
     }
 }
 export default UserDetails

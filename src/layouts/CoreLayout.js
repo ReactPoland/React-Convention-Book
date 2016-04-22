@@ -3,6 +3,7 @@ import 'styles/core.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
+import * as restaurantActions from 'actions/restaurant';
 import API from 'utils/API';
 import Header from './Header';
 import { Link } from 'react-router';
@@ -22,7 +23,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  sessionActions: bindActionCreators(sessionActions, dispatch)
+  sessionActions: bindActionCreators(sessionActions, dispatch),
+  restaurantActions: bindActionCreators(restaurantActions, dispatch),
 });
 
 const whiteList = [
@@ -79,6 +81,7 @@ class CoreLayout extends React.Component {
     this._checkIfLoggedIn = this._checkIfLoggedIn.bind(this);
     this._checkChildName = this._checkChildName.bind(this);
     this._navigate = this._navigate.bind(this);
+    this._fetchRestaurantData = this._fetchRestaurantData.bind(this);
 
 
     // this makes sure that classes was updated
@@ -102,7 +105,8 @@ class CoreLayout extends React.Component {
             return window.location.hostname.replace(urlParts[0],'').slice(0, -1);
     }
 
-    if(localStorage.restaurantID === 'undefined' || !localStorage.restaurantID) {
+    // TEMP solution
+    if(true) { // && localStorage.restaurantID === 'undefined' || !localStorage.restaurantID) {
       let currentSubdomain = getSubdomain();
       if(currentSubdomain.length < 2) {
         currentSubdomain = "starbucks";
@@ -112,12 +116,70 @@ class CoreLayout extends React.Component {
         ['restaurants', 'lookup', currentSubdomain]
       ).then((value) => {
         this.setState({restaurantID: value});
-        if(value !== "INVALID")
+        if(value !== "INVALID") {
           localStorage.setItem("restaurantID", value);
+          this._fetchRestaurantData();
+        }
       });
     } else {
       this.setState({restaurantID: localStorage.restaurantID});
+      this._fetchRestaurantData();
     }
+  }
+
+  async _fetchRestaurantData() {
+    let restaurantDetails = await API.get(
+      ['restaurants', 'details', localStorage.restaurantID]
+    ).then((results) => {
+      return results.restaurants.details[localStorage.restaurantID];
+
+    });
+
+    let MOCKED = {
+      name: 'Restaurant Name',
+      positions: ['FROM CoreLayout Chef', 'Vice Chef', 'Cook', 'Waiter/Waitress', 'Bartender'],
+      locations: [{
+        id: 321654987,
+        name: 'NY',
+        title: '548 Wide St., 25487-4565 New York'
+      }, {
+        id: 3216547898,
+        name: 'DC',
+        title: '45 Tree Av., 13254 Washington D.C.'
+      }, {
+        id: 46544055,
+        name: 'NM',
+        title: '874 Long St., 99999 New Mexico'
+      }]
+    };
+
+    this.props.restaurantActions.restaurantsList(MOCKED);
+    // TO NA DOLE ROBISZ DOPIERO JAK DOBRZE FETCHUJE Z FALCORA:
+    // JAK OBIERZESZ FALCOREM, to pushujesz w ten sam sposob:
+    // 1) stworz restaurant ACTION na wzor staff:
+    // staffList: (staff) => {
+    //   return {
+    //     type: STAFF_LIST,
+    //     payload: staff
+    //   };
+    // },
+    // 2) tak wyglda REDUCER STAFF i akcja STAFF_LIST:
+    // export default createReducer(initialState, {
+    //   [STAFF_LIST]: (state, payload) => {
+    //     const keys = Object.keys(payload);
+    //     const pathIndex = keys.indexOf('$__path');
+    //     if(pathIndex !== -1) {
+    //       keys.splice(pathIndex, 1);
+    //     }
+
+    //     const items = keys.map((key) => {
+    //       return new StaffMember(payload[key]);
+    //     });
+
+    //     return mapHelpers.addMultipleItems(state, items);
+    //   },
+    // 3) this.props.sessionActions.login(response.v1.user.me);
+
   }
 
   async _checkIfLoggedIn() {
@@ -140,7 +202,6 @@ class CoreLayout extends React.Component {
   }
 
   _navigate(route) {
-    alert(1);
     this.props.history.pushState(null, route);
   }
 
@@ -156,7 +217,7 @@ class CoreLayout extends React.Component {
   render () {
     console.info("--> this.state.restaurantID -->", this.state.restaurantID);
     if(this.state.restaurantID === null) {
-      return <h1>Look up in progress</h1>;
+      return <h1>Restaurant details look up in progress</h1>;
     } else if(this.state.restaurantID === 'INVALID') {
       return <h1>Restaurant not found</h1>;
     } else if(typeof this.state.restaurantID === 'undefined') {

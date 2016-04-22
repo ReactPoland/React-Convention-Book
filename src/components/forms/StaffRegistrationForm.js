@@ -15,7 +15,6 @@ export class AthleteRegistrationForm extends React.Component {
   _submit (data) {
     this._disableButton()
     this.props.onSubmit(data)
-    console.info(this.props.onSubmit)
   }
 
   _enableButton () {

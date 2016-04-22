@@ -74,9 +74,6 @@ export default class AddMenuItemModal extends React.Component {
   }
 
   _onDone(formData) {
-    console.info("\n\n\n this.state.allergens\n\n\n ");
-    console.info(this.state.allergens);
-    console.info("\n\n\n this.state.allergens\n\n\n ");
     if(this.state.editedItem) {
       // only in edit mode
       for(var key in this.state.editedItem) {
@@ -116,8 +113,6 @@ export default class AddMenuItemModal extends React.Component {
   }
 
   onSectionsChange(sectionsMap) {
-    console.info(sectionsMap);
-    console.info("sectionsMap^^^^^^^^^^^^^^^");
     this.setState({
       sectionsMap
     });

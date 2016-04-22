@@ -15,11 +15,13 @@ export const DefaultCheckbox = React.createClass({
   },
 
   changeValue(event, value) {
-    this.setValue(value);
+    console.log(value);
+    this.setValue(event.currentTarget.checked);
     this.props.onCheck(value);
   },
 
-  render() {    
+  render() {
+    let val = this.getValue();
     return (
       <div>
         <Checkbox
@@ -27,9 +29,10 @@ export const DefaultCheckbox = React.createClass({
           label={this.props.label}
           defaultChecked={this.props.defaultChecked}
           onCheck={this.changeValue}
+          style={this.props.style}
+          checked={this.getValue()}
            />
       </div>
     );
   }
 });
-

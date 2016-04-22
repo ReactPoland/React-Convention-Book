@@ -5,6 +5,7 @@ import { RaisedButton } from 'material-ui';
 import { DefaultInput } from './DefaultInput';
 import { DefaultSelect } from './DefaultSelect';
 import { DefaultDatePicker } from './DefaultDatePicker';
+import { DefaultCheckbox } from './DefaultCheckbox';
 
 class AddStaffMemberForm extends React.Component {
   constructor(props) {
@@ -81,9 +82,19 @@ class AddStaffMemberForm extends React.Component {
                 required
                 validations="isExisty"
                 validationError="Invalid start date"
-                tabIndex="7" 
+                tabIndex="7"
                 />
             </div>
+            <DefaultSelect
+              name="location"
+              title="Location"
+              placeholder="Location"
+              required
+              validations="isExisty"
+              validationError="Invalid location"
+              tabindex="9"
+              options={availableLocations} />
+            <p className="validation-error">{this.state.errorMessage}</p>
           </div>
           <div className="col-md-6">
             <DefaultInput
@@ -117,25 +128,22 @@ class AddStaffMemberForm extends React.Component {
               validationError="Invalid position"
               tabindex="8"
               options={this.props.restaurant.positions} />
+            <DefaultCheckbox
+              name="role"
+              label="Administrator"
+              defaultChecked={false}
+              style={{ position: 'absolute', bottom: '-50px', right: '-80px'}}
+               />
           </div>
           <div className="col-md-12">
-            <DefaultSelect
-              name="location"
-              title="Location"
-              placeholder="Location"
-              required
-              validations="isExisty"
-              validationError="Invalid location"
-              tabindex="9"
-              options={availableLocations} />
-            <p className="validation-error">{this.state.errorMessage}</p>
+
             <RaisedButton
               disabled={!this.state.canSubmit}
               primary={true}
               style={{float: 'right'}}
               label="Add"
               type="submit"
-              tabIndex={10} 
+              tabIndex={10}
               />
             <RaisedButton
               disabled={false}
@@ -143,7 +151,7 @@ class AddStaffMemberForm extends React.Component {
               style={{float: 'right'}}
               label="Cancel"
               onTouchTap={this.handleClose}
-              tabIndex={11} 
+              tabIndex={11}
               />
           </div>
         </Form>

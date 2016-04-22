@@ -36,20 +36,11 @@ class ManageRestaurantsView extends React.Component {
       return result;
     });
 
-
-    console.info('restaurantsLength', restaurantsLength);
-    console.info('restaurantsLength', restaurantsLength);
-    console.info('restaurantsLength', restaurantsLength);
-    console.info('restaurantsLength', restaurantsLength);
-
     let restaurantsResults = await falcorModel.get(
       ['restaurantsManage', {from: 0, to: restaurantsLength} ]
     ).then((result) => {
       return result;
     });
-    console.info('\n\n\n\n\n\n 7777 restaurantsResults', restaurantsResults);
-
-
 
     let RestaurantsObjects = restaurantsResults.json.restaurantsManage;
     if(RestaurantsObjects[0] === 'EMPTY') {
@@ -63,11 +54,6 @@ class ManageRestaurantsView extends React.Component {
       restaurantsObj[tmplItem.name] = tmplItem;
 
     });
-
-
-    console.info('restaurantsObj');
-    console.info(restaurantsObj);
-    console.info('restaurantsObj');
 
     this.setState({ restaurantsObj });
 
@@ -122,7 +108,6 @@ class ManageRestaurantsView extends React.Component {
       //TODO      
       let regInfo = templ[this.state.itemToEdit];
       let itemEDITname = this.state.itemToEdit;
-      alert("EDIT RESTAURANT: " + itemEDITname);
       // if(typeof regInfo === 'object') {
       //   registrationTextField = (
       //     <Formsy.Form onSubmit={this._onEditFormSubmit.bind(this, regInfo)}>

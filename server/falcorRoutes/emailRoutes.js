@@ -21,7 +21,6 @@ module.exports = [
       {
         let member = args[0];
         let restaurantID = args[1];
-        console.info("emailWelcomeMessage restaurantID", restaurantID);
 
         let andStatementQuery = {
           $and: [
@@ -30,7 +29,6 @@ module.exports = [
           ]
         }
 
-
         let registrationTemplate = await models.EmailTemplateCollection.find(andStatementQuery, function(err, emailTemplatesDocs) {
             return emailTemplatesDocs;
           }).then ((templatesArray) => {
@@ -38,16 +36,37 @@ module.exports = [
             if(templatesArray.length) {
               return templatesArray[0].templateText;
             } else {
-              return null;
+              return 'template has not been defined correctly';
             }
           });
 
-
         let confirmLink = 'http://localhost:3000/#/staff-register/'+member.id;
-        registrationTemplate = registrationTemplate.replaceAll('[[firstName]]', member.firstName);
-        registrationTemplate = registrationTemplate.replaceAll('[[lastName]]', member.lastName);
-        registrationTemplate = registrationTemplate.replaceAll('[[email]]', member.email);
-        registrationTemplate = registrationTemplate.replaceAll('[[confirmLink]]', confirmLink);
+        if(typeof member.email === 'undefined') member.email = member.reEmail;
+        if(typeof registrationTemplate === 'undefined') registrationTemplate = 'template has not been defined correctly';
+
+        try {
+          registrationTemplate = registrationTemplate.replaceAll('[[firstName]]', member.firstName);
+        } catch (e) {
+          console.info('error [[firstName]]');
+        }
+
+        try {
+          registrationTemplate = registrationTemplate.replaceAll('[[lastName]]', member.lastName);
+        } catch (e) {
+          console.info('error [[lastName]]');
+        }
+        
+        try {
+          registrationTemplate = registrationTemplate.replaceAll('[[email]]', member.email);
+        } catch (e) {
+          console.info('error [[email]]');
+        }
+
+        try {
+          registrationTemplate = registrationTemplate.replaceAll('[[confirmLink]]', confirmLink);
+        } catch (e) {
+          console.info('error [[confirmLink]]');
+        }
 
         let textToSend = registrationTemplate || 'Click here to configure your new account: '+confirmLink+' \n\n DEFAULT REGISTRATION MESSAGE, no template provided';
 
@@ -57,6 +76,7 @@ module.exports = [
           subject:  'Welcome to The Restaurant Reason',
           text:     textToSend
         };
+        
         await sendgrid.send(sendInfo, function(err, json) {
           if (err) { return console.error(err); }
           console.log(json);

@@ -74,43 +74,40 @@ class MenuLibraryView extends React.Component {
 
   async _fetchData() {
     console.info("IMPLEMENTED #3");
-    //let menuItemsLength = 100; // TO-DO unmock this later
-
     const menuItemsLength = await falcorModel.getValue(
       ['restaurants', localStorage.restaurantID, 'menuItems', 'length']
     );
 
-    const response = await API.get(
-      ['restaurants', localStorage.restaurantID, 'menuItems', {from: 0, to: menuItemsLength}, ['id', 'title', 'description', 'description2', 'description3', 'picUrl', 'allergens']]
-    );
-
-    console.info("RESULT #4", response);
+    if(menuItemsLength > 0) {
+      const response = await API.get(
+        ['restaurants', localStorage.restaurantID, 'menuItems', {from: 0, to: menuItemsLength}, ['id', 'title', 'description', 'description2', 'description3', 'picUrl', 'allergens']]
+      );
+      console.info("RESULT #4", response);
+      const items = response ? falcorUtils.makeArray({object: response.restaurants[localStorage.restaurantID], name: 'menuItems'}) : [];
+      this.props.actions.menuItem.menuItemList(items);
+    } else {
+      this.props.actions.menuItem.menuItemList([]);
+    }
 
     console.info("IMPLEMENTED #4");
-
-    //let sectionsLength = 100; // TO-DO unmock this later
 
     const sectionsLength = await falcorModel.getValue(
       ['restaurants', localStorage.restaurantID, 'sections', 'length']
     );
 
-    const menuItemsLen = await falcorModel.getValue(
-      ['restaurants', localStorage.restaurantID, 'menuItems', 'length']
-    );
-
-
-    const response2 = await API.get(
-      ['restaurants', localStorage.restaurantID, 'sections', {from: 0, to: sectionsLength}, ['id', 'title', 'items'], {from: 0, to: menuItemsLen}, 'id']
-    );
-
-    console.info("RESULT #4", response2);
-
-
-    const items = response ? falcorUtils.makeArray({object: response.restaurants[localStorage.restaurantID], name: 'menuItems'}) : [];
-    let sections = response2 ? falcorUtils.makeArray({object: response2.restaurants[localStorage.restaurantID], name: 'sections'}) : [];
-
-    this.props.actions.menuItem.menuItemList(items);
-    this.props.actions.section.sectionList(sections);
+    if(sectionsLength > 0) {
+      const menuItemsLen = await falcorModel.getValue(
+        ['restaurants', localStorage.restaurantID, 'menuItems', 'length']
+      );
+      const response2 = await API.get(
+        ['restaurants', localStorage.restaurantID, 'sections', {from: 0, to: sectionsLength}, ['id', 'title', 'items'], {from: 0, to: menuItemsLen}, 'id']
+      );
+      console.info("RESULT #4", response2);
+      let sections = response2 ? falcorUtils.makeArray({object: response2.restaurants[localStorage.restaurantID], name: 'sections'}) : [];
+      this.props.actions.section.sectionList(sections);
+    } else {
+      this.props.actions.section.sectionList([]);
+    }
   }
 
   _openModal(modal) {

@@ -20,7 +20,7 @@ export default class StaffTable extends React.Component {
     //               key={member.id}
     //               leftAvatar={<Avatar src={member.imageUrl} />}
     //               primaryText={member.firstName + ' ' + member.lastName}
-    //               secondaryText={member.role} 
+    //               secondaryText={member.role}
     //               onClick={this.props.onStaffMemberClick.bind(this, member)}/>
     //           ];
     //         })
@@ -43,7 +43,7 @@ export default class StaffTable extends React.Component {
                     key={member.id}
                     leftAvatar={<Avatar src={member.imageUrl} />}
                     primaryText={member.firstName + ' ' + member.lastName}
-                    secondaryText={member.role} 
+                    secondaryText={member.position}
                     onClick={this.props.onStaffMemberClick.bind(this, member)}/>
                 ];
             })

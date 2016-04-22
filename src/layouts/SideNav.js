@@ -197,41 +197,28 @@ class SideNav extends React.Component {
     const { menu, menuItem, section, actions } = this.props;
     let menusLengthPath = ['restaurants', localStorage.restaurantID, 'menus', 'length'];
 
-    console.info("lengthPath");
-    console.info("lengthPath");
-    console.info(menusLengthPath);
-    console.info("lengthPath");
-    console.info("lengthPath");
     const menusLength = await falcorModel.getValue(
       menusLengthPath
     );
     if(typeof menusLength === 'undefined') {
-      console.info('NOT FETCHING');
-      console.info('NOT FETCHING');
-      console.info('NOT FETCHING');
       return;
     }
-    console.debug("menusLength");
-    console.debug("menusLength");
-    console.debug("menusLength");
-    console.debug(menusLength);
-    console.debug("menusLength");
-    console.debug("menusLength");
-    console.debug("menusLength");
 
-
-    if(!menu.length) {
+    if(!menu.length && menusLength > 0) {
       console.info("IMPLEMENTED #2");
       const response = await API.get(
         ['restaurants', localStorage.restaurantID, 'menus', {from: 0, to: menusLength}, ['title', 'id', 'description', 'showAllergensInMenu']]
       );
 
-      console.info("\n\n\n 1111debug \n\n\n", response, "\n\n\n debug \n\n\n");
-
       console.info("RESULT #2", response);
-      const menus = falcorUtils.makeArray({object: response.restaurants[localStorage.restaurantID], name: 'menus'});
-
-      actions.menu.menuList(menus);
+      try {
+        const menus = falcorUtils.makeArray({object: response.restaurants[localStorage.restaurantID], name: 'menus'});
+        actions.menu.menuList(menus);
+      } catch(e) {
+        actions.menu.menuList([]);
+      }
+    } else {
+      actions.menu.menuList([]);
     }
   }
 

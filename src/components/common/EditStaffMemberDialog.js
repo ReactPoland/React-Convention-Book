@@ -107,8 +107,8 @@ export default class DialogExampleSimple extends React.Component {
                   validations="isEmail"
                   validationError="Invalid email address"
                   tabindex="3" />
-                
-                
+
+
               </div>
               <div className="col-md-6">
                 <DefaultInput
@@ -133,7 +133,7 @@ export default class DialogExampleSimple extends React.Component {
                   //validations="isExisty"
                   //validationError="Invalid mailing address"
                   tabindex="6" />
-                
+
                 <DefaultSelect
                   name="position"
                   title="Position"
@@ -160,6 +160,10 @@ export default class DialogExampleSimple extends React.Component {
                   name="active"
                   label="Active"
                   defaultChecked={memberToEdit.active}
+                  onCheck={() => {
+                    memberToEdit.active = !memberToEdit.active;
+                    console.log('On Check', memberToEdit.active);
+                  }}
                   //onCheck={(e, checked) => active.onChange(checked)}
                   //onCheck={(e, checked) => alert(checked)}
                 />

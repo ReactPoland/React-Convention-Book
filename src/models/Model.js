@@ -16,7 +16,6 @@ export default class Model {
     if(this.id) forWire.id = this.id;
     if(this.title) forWire.title = this.title;
     if(this.description) forWire.description = this.description;
-
     return forWire;
   }
 

@@ -26,7 +26,7 @@ if(process.env.MONGO_USER && process.env.MONGO_PASS) {
 mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`, dbUser);
 
 var menuItemSchema = {
-  title: String,
+  title: { type: String, required: true, default: 'mongoosedefault' },
   description: String,
   description2: String,
   description3: String,
@@ -61,17 +61,17 @@ var restaurantSchema = {
 var RestaurantCollection = mongoose.model('RestaurantCollection', restaurantSchema, 'restaurants');
 
 var sectionSchema = {
-  title: String,
-  category: String,
+  title: { type: String, required: true, default: 'mongoosedefault' },
+  category: { type: String, required: true, default: 'mongoosedefault' },
   items: Array,
   ownedByRestaurantID: String
 };
 var SectionCollection = mongoose.model('SectionCollection', sectionSchema, 'sections');
 
 var menuSchema = {
-  title: String,
-  description: String,
-  showAllergensInMenu: Boolean,
+  title: { type: String, required: true, default: 'mongoosedefault' },
+  description: { type: String, required: true, default: 'mongoosedefault' },
+  showAllergensInMenu: { type: Boolean, required: true, default: true },
   orderNumber: Number,
   sectionsById: Array,
   ownedByRestaurantID: String
@@ -88,7 +88,7 @@ var userSchema = new Schema({
   password: String,
   role: String,
   ownedByRestaurantID: String,
-  active: Boolean,
+  active: { type: Boolean, required: true, default: true },
   verified: Boolean,
   imageUrl: { type: String, required: true, default: 'http://lorempixel.com/100/100/people/' },
   gender: String,

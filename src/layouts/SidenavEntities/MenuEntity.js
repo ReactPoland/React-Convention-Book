@@ -79,22 +79,27 @@ class MenuEntity extends React.Component {
       ['restaurants', localStorage.restaurantID, 'sections', 'length']
     );
 
-    const response = await API.get(
-      // I don't know yet exact number of items needed
-      // perhaps we'll need to fetch items partialy (pagination style)
-      ['restaurants', localStorage.restaurantID, 'menus', {from: 0, to: menusLength}, ['id', 'title', 'description', 'sections'], {from: 0, to: sectionsLength}, 'id']
-    );
+    if(menusLength === 0 || sectionsLength === 0) {
+      // manage empty menus sections here
+      
+    } else {
+      const response = await API.get(
+        // I don't know yet exact number of items needed
+        // perhaps we'll need to fetch items partialy (pagination style)
+        ['restaurants', localStorage.restaurantID, 'menus', {from: 0, to: menusLength}, ['id', 'title', 'description', 'sections', 'showAllergensInMenu'], {from: 0, to: sectionsLength}, 'id']
+      );
 
-    console.info("\n\n\n DEBUG response \n\n ", response, "\n\n\n\n ");
+      console.info("\n\n\n DEBUG response \n\n ", response, "\n\n\n\n ");
 
-    let menus = falcorUtils.makeArray({
-      object: response.restaurants[localStorage.restaurantID],
-      name: 'menus'
-    });
+      let menus = falcorUtils.makeArray({
+        object: response.restaurants[localStorage.restaurantID],
+        name: 'menus'
+      });
 
-    console.info("\n\n\n DEBUG menus \n\n ", menus, "\n\n\n\n ");
+      console.info("\n\n\n DEBUG menus \n\n ", menus, "\n\n\n\n ");
 
-    this.props.actions.menu.menuList(menus);
+      this.props.actions.menu.menuList(menus);
+    }
   }
 
   componentDidMount() {

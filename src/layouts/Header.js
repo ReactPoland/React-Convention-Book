@@ -92,7 +92,7 @@ class Header extends React.Component {
         className="MainHeader"
         title={
           <h1 className="MainHeader-Title">
-            <Link to={link}>The Restaurant Reason</Link>
+            <Link to={link}><img src="/static/full_logo.png" width="15%" height="15%" /></Link>
           </h1>
         }
         iconClassNameLeft="display-none"
