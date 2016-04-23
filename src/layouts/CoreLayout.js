@@ -8,6 +8,12 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const muiTheme = getMuiTheme({ userAgent: 'all' });
 
+import AppBar from 'material-ui/AppBar';
+import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
+import ActionHome from 'material-ui/svg-icons/action/home';
+
+
 class CoreLayout extends React.Component {
   static propTypes = {
     children : React.PropTypes.element
@@ -19,10 +25,30 @@ class CoreLayout extends React.Component {
   }
 
   render () {
+    const buttonStyle = {
+      margin: 12
+    };
+    
+    let menuLinksJSX = (<span>
+        <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
+        <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
+      </span>);
+
+    let homePageJSX = (<Link to='/'>
+        <IconButton tooltip="Home Page">
+          <ActionHome />
+        </IconButton>
+      </Link>);
+
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <span>Links: <Link to='/register'>Register</Link> | <Link to='/login'>Login</Link> | <Link to='/'>Home Page</Link></span>
+          <AppBar
+            title="Publishing App"
+            iconClassNameRight="muidocs-icon-navigation-expand-more" 
+            iconElementLeft={homePageJSX}
+            iconElementRight={menuLinksJSX} />
             <br/>
             {this.props.children}
         </div>
