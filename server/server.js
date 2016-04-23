@@ -85,7 +85,6 @@ let renderFullPage = (html, initialState) =>
         <title>Publishing App Server Side Rendering</title>
       </head>
       <body>
-        <h1>Server side publishing app</h1>
         <div id="publishingAppRoot">${html}</div>
         <script>
           window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
