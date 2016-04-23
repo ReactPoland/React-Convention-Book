@@ -1,9 +1,11 @@
 "use strict";
 
-import { User } from './configMongoose';
+import configMongoose from './configMongoose';
 import jwt from 'jsonwebtoken';
 import jwtSecret from './configSecret';
 import crypto from 'crypto';
+
+let User = configMongoose.User;
 
 export default [
   { 

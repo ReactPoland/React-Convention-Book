@@ -37,8 +37,11 @@ app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
 app.use('/static', express.static('dist'));
 
 
-let handleServerSideRender = (req, res, next) => {
-  let initMOCKstore = fetchServerSide(); // mocked for now
+let handleServerSideRender = async (req, res, next) => {
+  let articlesArray = await fetchServerSide();
+  let initMOCKstore = {
+    article: articlesArray
+  }
 
   // Create a new Redux store instance
   const store = createStore(rootReducer, initMOCKstore)
