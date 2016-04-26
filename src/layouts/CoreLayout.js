@@ -51,8 +51,7 @@ class CoreLayout extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <AppBar
-            title="Publishing App"
-            iconClassNameRight="muidocs-icon-navigation-expand-more" 
+            title='Publishing App'
             iconElementLeft={homePageJSX}
             iconElementRight={menuLinksJSX} />
             <br/>

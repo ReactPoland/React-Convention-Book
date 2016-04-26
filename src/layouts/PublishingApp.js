@@ -6,44 +6,7 @@ import falcorModel from '../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import articleActions from '../actions/article.js';
-
-
-import { 
-  Card, 
-  CardActions, 
-  CardHeader, 
-  CardMedia, 
-  CardTitle, 
-  CardText 
-} from 'material-ui/Card';
-import { Paper, FlatButton } from 'material-ui';
-
-
-let cardDivStyle = {
-  width: '80%', 
-  height: '100%',
-  margin: '50px 150px 50px 150px',
-  clear: 'left'
-};
-const ArticleCart = (title = "title", content = "content") => (
-      <Paper style={{padding: 10, width: '100%', height: 300}}>
-        <CardHeader
-          title={title}
-          subtitle="Subtitle"
-          avatar="/static/avatar.png"
-        />
-
-        <div style={{width: '30%', float: 'left'}}>
-          <Card >
-            <CardMedia
-              overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
-              <img src="/static/placeholder.png" height="190" />
-            </CardMedia>
-          </Card>
-        </div>
-      </Paper>
-);
-
+import ArticleCard from '../components/ArticleCard';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -88,12 +51,9 @@ class PublishingApp extends React.Component {
   		let articleDetails = this.props.article[articleKey];
   		let currentArticleJSX = (
   			<div key={articleKey}>
-            {
-              ArticleCart(
-                articleDetails.articleTitle,
-                articleDetails.articleContent
-              )
-            }
+          <ArticleCard 
+            title={articleDetails.articleTitle}
+            content={articleDetails.articleContent} />
   			</div>
       );
 
