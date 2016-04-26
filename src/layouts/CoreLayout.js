@@ -14,6 +14,10 @@ import IconButton from 'material-ui/IconButton';
 import ActionHome from 'material-ui/svg-icons/action/home';
 
 
+
+
+
+
 class CoreLayout extends React.Component {
   static propTypes = {
     children : React.PropTypes.element
@@ -26,7 +30,11 @@ class CoreLayout extends React.Component {
 
   render () {
     const buttonStyle = {
-      margin: 12
+      margin: 5
+    };
+    const homeIconStyle = {
+      margin: 5,
+      paddingTop: 5
     };
     
     let menuLinksJSX = (<span>
@@ -35,9 +43,7 @@ class CoreLayout extends React.Component {
       </span>);
 
     let homePageJSX = (<Link to='/'>
-        <IconButton tooltip="Home Page">
-          <ActionHome />
-        </IconButton>
+        <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
       </Link>);
 
 

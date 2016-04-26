@@ -7,6 +7,44 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import articleActions from '../actions/article.js';
 
+
+import { 
+  Card, 
+  CardActions, 
+  CardHeader, 
+  CardMedia, 
+  CardTitle, 
+  CardText 
+} from 'material-ui/Card';
+import { Paper, FlatButton } from 'material-ui';
+
+
+let cardDivStyle = {
+  width: '80%', 
+  height: '100%',
+  margin: '50px 150px 50px 150px',
+  clear: 'left'
+};
+const ArticleCart = (title = "title", content = "content") => (
+      <Paper style={{padding: 10, width: '100%', height: 300}}>
+        <CardHeader
+          title={title}
+          subtitle="Subtitle"
+          avatar="/static/avatar.png"
+        />
+
+        <div style={{width: '30%', float: 'left'}}>
+          <Card >
+            <CardMedia
+              overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
+              <img src="/static/placeholder.png" height="190" />
+            </CardMedia>
+          </Card>
+        </div>
+      </Paper>
+);
+
+
 const mapStateToProps = (state) => ({
 	...state
 });
@@ -44,19 +82,25 @@ class PublishingApp extends React.Component {
   }
 
   render () {
+
   	let articlesJSX = [];
   	for(let articleKey in this.props.article) {
   		let articleDetails = this.props.article[articleKey];
   		let currentArticleJSX = (
   			<div key={articleKey}>
-  				<h2>{articleDetails.articleTitle}</h2>
-  				<h3>{articleDetails.articleContent}</h3>
-  			</div>);
+            {
+              ArticleCart(
+                articleDetails.articleTitle,
+                articleDetails.articleContent
+              )
+            }
+  			</div>
+      );
+
   		articlesJSX.push(currentArticleJSX);
   	}
     return (
-      <div>
-          <h1>Our publishing app</h1>
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
           {articlesJSX}
       </div>
     );
