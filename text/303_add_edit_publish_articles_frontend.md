@@ -58,8 +58,33 @@ What is new in our improved handleServerSideRender? As you can see we have added
 
 #### Our website header and articles list look improvements
 
+Let's start with header, first please delete this below from server/server.js, we don't need anymore:
+```
+<h1>Server side publishing app</h1>
+```
 
+After that go to the ***src/CoreLayout.js*** and please import a new AppBar component:
+```
+import AppBar from 'material-ui/AppBar';
+```
 
+.. and add this AppBar into the render:
+```
+  render () {
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          <AppBar
+            title="Publishing App"
+            iconClassNameRight="muidocs-icon-navigation-expand-more" />
+          <span>Links: <Link to='/register'>Register</Link> | <Link to='/login'>Login</Link> | <Link to='/'>Home Page</Link></span>
+            <br/>
+            {this.props.children}
+        </div>
+      </MuiThemeProvider>
+    );
+  }
+```
 
 
 
