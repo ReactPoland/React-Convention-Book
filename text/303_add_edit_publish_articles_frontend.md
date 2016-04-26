@@ -63,6 +63,12 @@ Let's start with header, first please delete this below from server/server.js, w
 <h1>Server side publishing app</h1>
 ```
 
+... you can also delete this header in ***src/layouts/PublishingApp.js***:
+```
+<h1>Our publishing app</h1>
+```
+
+
 After that go to the ***src/CoreLayout.js*** and please import a new AppBar component:
 ```
 import AppBar from 'material-ui/AppBar';
