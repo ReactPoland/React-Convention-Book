@@ -18,15 +18,32 @@ class ArticleCard extends React.Component {
     let title = this.props.title || 'no title provided';
     let content = this.props.content || 'no content provided';
 
+    let paperStyle = {
+      padding: 10, 
+      width: '100%', 
+      height: 300
+    };
+
+    let leftDivStyle = {
+      width: '30%', 
+      float: 'left'
+    }
+    
+    let rightDivStyle = {
+      width: '60%', 
+      float: 'left', 
+      padding: '10px 10px 10px 10px'
+    }
+
     return (
-      <Paper style={{padding: 10, width: '100%', height: 300}}>
+      <Paper style={paperStyle}>
         <CardHeader
           title={this.props.title}
           subtitle="Subtitle"
           avatar="/static/avatar.png"
         />
 
-        <div style={{width: '30%', float: 'left'}}>
+        <div style={leftDivStyle}>
           <Card >
             <CardMedia
               overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
@@ -34,7 +51,7 @@ class ArticleCard extends React.Component {
             </CardMedia>
           </Card>
         </div>
-        <div style={{width: '60%', float: 'left', padding: '10px 10px 10px 10px'}}>
+        <div style={rightDivStyle}>
           {content}
         </div>
       </Paper>);
