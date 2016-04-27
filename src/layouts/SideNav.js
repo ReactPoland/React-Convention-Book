@@ -21,11 +21,14 @@ const mapStateToProps = (state) => ({
   ...state
 });
 
+console.info('SIDENAV IMPORT ACTIONS: ', actions)
+
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     menu: bindActionCreators(actions.menu, dispatch),
     section: bindActionCreators(actions.section, dispatch),
-    menuItem: bindActionCreators(actions.menuItem, dispatch)
+    menuItem: bindActionCreators(actions.menuItem, dispatch),
+    newsFeed: bindActionCreators(actions.newsFeed, dispatch),
   }
 });
 
@@ -236,8 +239,9 @@ class SideNav extends React.Component {
       train: train,
       managing: managing,
       training: training,
-      cnct: cnct
+      newsFeed: this.props.newsFeed
     }
+    console.log('SIDENAV PROPS: ', props);
 
     if(route === 'dashboard') {
       props.open = null;
@@ -282,11 +286,11 @@ console.log('PROPS: ', props.menus)
     return (
       <div className={classes.join(" ")}>
         <SidenavList
-          prefix="cnct"
-          items={props.cnct || []}
+          prefix="newsFeed"
+          items={props.newsFeed || []}
           label="Connect"
           headerComponent={<ListItem primaryText='Connect' disabled style={headerStyle} />}
-          {...openOrVisible(props, 'cnct')} />
+          {...openOrVisible(props, 'newsFeed')} />
         <MenuEntity
           {...this.props}
           prefix="menu"

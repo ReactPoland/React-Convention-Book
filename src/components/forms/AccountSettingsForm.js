@@ -33,7 +33,6 @@ export class AccountSettingsForm extends React.Component {
           <DefaultInput name='firstName' title='First Name' validations='isAlphanumeric' validationError='This is not a text' defaultValue={this.props.session.user.firstName} />
           <DefaultInput name='lastName' title='Last Name' validations='isAlphanumeric' validationError='This is not a text' defaultValue={this.props.session.user.lastName} />
           <DefaultInput name='email' title='Email' validations='isEmail' validationError='This is not a valid email' defaultValue={this.props.session.user.email} />
-          <DefaultInput name='imageUrl' title='Image URL' defaultValue={this.props.session.user.imageUrl} />
           <DefaultSelect
             name='gender'
             title='Gender'

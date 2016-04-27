@@ -8,6 +8,7 @@ import staffActions from 'actions/staff';
 import API from 'utils/API';
 import mapHelpers from 'utils/mapHelpers';
 import { StaffMember } from 'models';
+import { Restaurant } from 'models';
 
 import Filter from 'components/Filter';
 import StaffTable from 'components/staff/StaffTable';
@@ -174,7 +175,7 @@ class StaffView extends React.Component {
   render() {
     const { requestSuccess, requestError } = this.state;
     const staff = this.state.filteredStaff || this.props.staff;
-
+    console.log('STAFF VIEW this.props.restaurant', this.props.restaurant)
     let addForm = null;
     if(this.state.showAddForm) {
       addForm = (

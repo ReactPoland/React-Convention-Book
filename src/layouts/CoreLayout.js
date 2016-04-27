@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as sessionActions from 'actions/session';
 import * as restaurantActions from 'actions/restaurant';
+import * as newsFeedActions from 'actions/newsFeed';
 import API from 'utils/API';
 import Header from './Header';
 import { Link } from 'react-router';
@@ -25,6 +26,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   sessionActions: bindActionCreators(sessionActions, dispatch),
   restaurantActions: bindActionCreators(restaurantActions, dispatch),
+  newsFeedActions: bindActionCreators(newsFeedActions, dispatch)
 });
 
 const whiteList = [
@@ -132,54 +134,11 @@ class CoreLayout extends React.Component {
       ['restaurants', 'details', localStorage.restaurantID]
     ).then((results) => {
       return results.restaurants.details[localStorage.restaurantID];
-
     });
 
-    let MOCKED = {
-      name: 'Restaurant Name',
-      positions: ['FROM CoreLayout Chef', 'Vice Chef', 'Cook', 'Waiter/Waitress', 'Bartender'],
-      locations: [{
-        id: 321654987,
-        name: 'NY',
-        title: '548 Wide St., 25487-4565 New York'
-      }, {
-        id: 3216547898,
-        name: 'DC',
-        title: '45 Tree Av., 13254 Washington D.C.'
-      }, {
-        id: 46544055,
-        name: 'NM',
-        title: '874 Long St., 99999 New Mexico'
-      }]
-    };
-
-    this.props.restaurantActions.restaurantsList(MOCKED);
-    // TO NA DOLE ROBISZ DOPIERO JAK DOBRZE FETCHUJE Z FALCORA:
-    // JAK OBIERZESZ FALCOREM, to pushujesz w ten sam sposob:
-    // 1) stworz restaurant ACTION na wzor staff:
-    // staffList: (staff) => {
-    //   return {
-    //     type: STAFF_LIST,
-    //     payload: staff
-    //   };
-    // },
-    // 2) tak wyglda REDUCER STAFF i akcja STAFF_LIST:
-    // export default createReducer(initialState, {
-    //   [STAFF_LIST]: (state, payload) => {
-    //     const keys = Object.keys(payload);
-    //     const pathIndex = keys.indexOf('$__path');
-    //     if(pathIndex !== -1) {
-    //       keys.splice(pathIndex, 1);
-    //     }
-
-    //     const items = keys.map((key) => {
-    //       return new StaffMember(payload[key]);
-    //     });
-
-    //     return mapHelpers.addMultipleItems(state, items);
-    //   },
-    // 3) this.props.sessionActions.login(response.v1.user.me);
-
+    this.props.restaurantActions.restaurantsList(restaurantDetails);
+    //TEMP
+    this.props.newsFeedActions.newsFeedList();
   }
 
   async _checkIfLoggedIn() {
@@ -202,6 +161,7 @@ class CoreLayout extends React.Component {
   }
 
   _navigate(route) {
+    alert(1);
     this.props.history.pushState(null, route);
   }
 
@@ -216,6 +176,7 @@ class CoreLayout extends React.Component {
 
   render () {
     console.info("--> this.state.restaurantID -->", this.state.restaurantID);
+    console.log('CORELAYOUT STATE', this.props)
     if(this.state.restaurantID === null) {
       return <h1>Restaurant details look up in progress</h1>;
     } else if(this.state.restaurantID === 'INVALID') {

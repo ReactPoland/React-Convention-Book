@@ -75,7 +75,7 @@ export default class DialogExampleSimple extends React.Component {
     console.log("RENDER DIALOG: ");
     console.log(this.props.memberToEdit);
     const memberToEdit = this.props.memberToEdit;
-
+    console.log('EdStMeDialog', this.props.restaurant);
     const availableLocations = this.props.restaurant.locations.reduce((a, location) => {
       return a.concat(location.title);
     }, []);

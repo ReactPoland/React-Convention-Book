@@ -30,14 +30,12 @@ var menuItemSchema = {
   description: String,
   description2: String,
   description3: String,
+  picUrl: { type: String, required: true, default: 'http://lorempixel.com/700/500/food/' },
   type: String,
   allergens: Object,
   ownedByRestaurantID: String
 };
 var MenuItemCollection = mongoose.model('MenuItemCollection', menuItemSchema, 'menuItems');
-
-
-
 
 var emailTemplateSchema = {
   templateText: String,

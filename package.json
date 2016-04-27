@@ -16,10 +16,9 @@
     "test:dev": "npm run test -- --watch",
     "deploy": "npm run lint && npm run test && npm run compile"
   },
-  "engines" : 
-  { 
-    "npm" : "3.5.1",
-    "node" : "4.2.2"
+  "engines": {
+    "npm": "3.5.1",
+    "node": "4.2.2"
   },
   "repository": {
     "type": "git",
@@ -28,6 +27,7 @@
   "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.3.5",
     "axios": "^0.7.0",
     "babel": "^5.8.23",
     "backdraft-js": "0.0.1",

@@ -11,6 +11,7 @@ import section    from './section';
 import session    from './session';
 import staff      from './staff';
 import schedule   from './schedule';
+import newsFeed   from './newsFeed';
 
 export default combineReducers({
   routing: routeReducer,
@@ -23,5 +24,6 @@ export default combineReducers({
   section,
   session,
   staff,
-  schedule
+  schedule,
+  newsFeed
 });

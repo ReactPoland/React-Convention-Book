@@ -36,6 +36,9 @@ import MenuLibraryView              from 'views/menu/MenuLibraryView';
 import MenuSectionsView             from 'views/menu/MenuSectionsView';
 import MenuDetailView               from 'views/menu/MenuDetailView';
 
+// News Feed
+import NewsFeed                     from 'views/newsFeed/Main';
+
 export default (
   <Route component={CoreLayout} path='/'>
     <IndexRoute component={HomeView} name='home' />
@@ -77,5 +80,10 @@ export default (
     <Route      component={StaffMemberView}  path='/staff/:id' name='staff' />
     <Route      component={StaffInvitationView}  path='/staff-invite' name='staff-invite' />*/}
 
+    /* News Feed router */
+    <Route component={NewsFeed} path="/newsFeed/*" name="newsFeed" />
+
   </Route>
+
+
 );
