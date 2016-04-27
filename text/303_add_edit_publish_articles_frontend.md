@@ -11,7 +11,7 @@ note to the editor: if there will be not enough books count, then we can add an 
 ------------------------------------------
 
 
-#### Before working a prettier front-end
+#### Before improving front-end, the back-end wrap-up
 In our last chapter we have done a server side rendering which will affect our users in order that they will see their articles quicker and will improve our website SEO as whole HTML markup is rendering on the server-side.
 
 The last thing to make our server-side rendering works in 100% is that has left for us is to unmock the server-side articles fetch in the ***/server/fetchServerSide.js***, the new code for fetching:
@@ -60,13 +60,15 @@ let handleServerSideRender = async (req, res, next) => {
   const location = hist.createLocation(req.path);
 ```
 
-What is new in our improved handleServerSideRender? As you can see we have added ***async await***. I will recall that it is helping to make our code less painful with asynchronous calls like queries to the database (synchronous-looking generator style code). This ES7's feature helps us to write the asynchronous calls the way as it's a synchronous one - under the hood the async await is much more complicated (after it's transpiled into ES5 so it can be ran in any modern browser) but it's not in the scope of this chapter right now.
+What is new in our improved handleServerSideRender? As you can see we have added ***async await***. I will recall that it is helping to make our code less painful with asynchronous calls like queries to the database (synchronous-looking generator style code). This ES7's feature helps us to write the asynchronous calls the way as it's a synchronous one - under the hood the async await is much more complicated (after it's transpiled into ES5 so it can be ran in any modern browser) but we won't get into details of how async await because it's not in the scope of this chapter right now.
 
 
 
 #### Our website header and articles list look improvements
 
-Let's start with header, first please delete this below from server/server.js, we don't need anymore:
+We are fine with all wrap ups of server-side rendering and fetching articles from DB then let's start with the front-end.
+
+First please delete this below from server/server.js, we don't need anymore:
 ```
 <h1>Server side publishing app</h1>
 ```
@@ -75,9 +77,10 @@ Let's start with header, first please delete this below from server/server.js, w
 ```
 <h1>Our publishing app</h1>
 ```
+All both h1 paragraphs are not needed as we want to have nice looking design instead of old one.
 
 
-After that go to the ***src/CoreLayout.js*** and please import a new AppBar component:
+After that go to the ***src/CoreLayout.js*** and please import a new AppBar component from the Material UI:
 ```
 import AppBar from 'material-ui/AppBar';
 ```
@@ -123,14 +126,14 @@ What we have done above? We have added the inline styles for ***buttonStyle*** a
 ![AppBar look v1](http://test.przeorski.pl/book/301_AppBar_app_look.png)
 
 
-Next step in order to improve look of our home page is to make articles' card based on Material Design CSS:
+Next step in order to improve look of our home page is to make articles' card based on the Material Design CSS as well. Let's create a component's file first:
 
 ```
 $ [[you are in the src/components/ directory of your project]]
 $ touch ArticleCard.js
 ```
 
-... then into that file, let's init the ArticleCard's component with the followin content:
+... then into that file ***ArticleCard.js***, let's init the ArticleCard's component with the following content:
 ```
 import React from 'react';
 import { 
@@ -154,7 +157,7 @@ class ArticleCard extends React.Component {
 export default ArticleCard;
 ```
 
-... as you can find above, we have imported required components from the material-ui/Card that will help our home page looking prettier. The next step is to improve our ArticleCard's render function with the following:
+... as you can find above, we have imported required components from the ***material-ui/Card*** that will help our home page's articles list looking nice. The next step is to improve our ArticleCard's render function with the following:
 ```
 render() {
   let title = this.props.title || 'no title provided';
@@ -200,32 +203,62 @@ render() {
 }
 ```
 
-... as you can find above, we have created an article card, there are some inline styles for ***Paper component***, ***left and right div***. Feel free to change them. 
+... as you can find above, we have created an article card, there are some inline styles for ***Paper component***, ***left and right div***. Feel free to change the styles if you want.
 
 In general, we are missing two static images in the above's render function ***src="/static/placeholder.png"*** and ***avatar="/static/avatar.png"***. Let's add them now with the following steps:
 
-1) one
+1) Please make a png file with the name of ***placeholder.png*** in the ***dist*** directory. In my case this is how my placeholder.png is looking:
 
-2) two
+![placeholder.png](http://test.przeorski.pl/book/303_placeholder_png.png)
 
-3) three
+2) Please also create an avatar.png in the ***dist*** that will be exposed in ***/static/avatar.png***. I won't put here the example, as you can find it's my personal photo ;-)
 
-### add static images avatar and placeholder into dist
 
-### add code to the layouts/PublishingApp
+EXPLANATION: the /static/ file in express.js is exposed in the ***/server/server.js*** file with the following code ***app.use('/static', express.static('dist'));*** (you shall already have it in there as we added this in a previous chapter).
 
+After all the last thing is that you need to import ArticleCard and modify render of the ***layouts/PublishingApp.js*** from the old simple view to the new one:
+
+with adding the import on top of the file:
+```
+import ArticleCard from '../components/ArticleCard';
+```
+
+... and then replacing the render to new one:
+```
+render () {
+
+  let articlesJSX = [];
+  for(let articleKey in this.props.article) {
+    let articleDetails = this.props.article[articleKey];
+    let currentArticleJSX = (
+      <div key={articleKey}>
+        <ArticleCard 
+          title={articleDetails.articleTitle}
+          content={articleDetails.articleContent} />
+      </div>
+    );
+
+    articlesJSX.push(currentArticleJSX);
+  }
+  return (
+    <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        {articlesJSX}
+    </div>
+  );
+}
+```
+
+Above the new code is only putting this new ArticleCard component:
+```
+<ArticleCard 
+  title={articleDetails.articleTitle}
+  content={articleDetails.articleContent} />
+```
+and we also have added some styles to the ***div style={{height: '100%', width: '75%', margin: 'auto'}}***.
 
 After all those above steps, following them one-to-one in terms of styles, this is what you will see:
 
 ![home page look v2](http://test.przeorski.pl/book/302_improved_home_page.png)
-
-
-
-
-STEPS:
-1) Add ArticleCard
-2) import ArticleCard
-3) change render with ArticleCard
 
 
 
