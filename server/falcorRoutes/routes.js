@@ -1,6 +1,9 @@
 import models from '../modelsMongoose';
 import jwtSecret from '../secret';
 import jwt from 'jsonwebtoken';
+import AWS from 'aws-sdk';
+import awsConfig from '../awsconfig.js';
+import { downloadImage } from '../helpers/fileSystem';
 
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
@@ -65,7 +68,7 @@ export default ( req, res ) => {
     ...routes,
       {
         /*
-            USED on frontend in layouts/CoreLayout.js 
+            USED on frontend in layouts/CoreLayout.js
          */
         route: ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email']],
         get: async (pathSet) => {
@@ -82,6 +85,15 @@ export default ( req, res ) => {
           userObj.id = userObj._id;
           delete userObj._id;
 
+          let userImage = await downloadImage({
+            bucket: 'avatar',
+            id: userObj.email
+          });
+
+          if (userImage != null) {
+            userObj.imageUrl = userImage;
+          }
+
           return {
             path: ['v1', 'user', 'me'],
             value: userObj
@@ -90,7 +102,7 @@ export default ( req, res ) => {
       },
       {
         /*
-            USED on frontend in layouts/CoreLayout.js 
+            USED on frontend in layouts/CoreLayout.js
          */
         route: 'restaurants.lookup[{keys}]',
         get: async (pathSet) => {
@@ -139,7 +151,7 @@ export default ( req, res ) => {
               value: 'INVALID'
             }
           }
-          
+
       }
     }
   ];

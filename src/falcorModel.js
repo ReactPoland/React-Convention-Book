@@ -289,10 +289,11 @@ if(localStorage.token) {
   };
 }
 
-
 const model = new falcor.Model({
   // "cache": cache
   source: new FalcorDataSource('/model.json', headers)
 });
+
+console.info(model);
 
 export default model;

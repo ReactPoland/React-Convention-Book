@@ -8,8 +8,8 @@ import {
   IconMenu,
   IconButton,
   MenuItem,
-  RaisedButton, 
-  Dialog, 
+  RaisedButton,
+  Dialog,
   FlatButton,
   Popover
 } from 'material-ui';
@@ -37,6 +37,10 @@ const menuStyle = {
   marginTop: -44,
   marginRight: -8
 };
+
+// mock below
+window.amazonURL = "https://restauranttestbucket.s3-us-west-2.amazonaws.com/";
+
 
 
 export default class MenuListItem extends React.Component {
@@ -76,7 +80,7 @@ export default class MenuListItem extends React.Component {
     } else {
       this.setState({open: true});
     }
-    // 
+    //
   }
 
   onDeleteWithModal() {
@@ -138,15 +142,15 @@ export default class MenuListItem extends React.Component {
         arrayOfSections.map((item, index) => {
           itemBelongingsJSX.push(
             <span key={item+index} >
-              <span style={{color: '#ff0000'}}> {key}</span> <span style={{color: '#56A76F'}}>: {item}</span> 
+              <span style={{color: '#ff0000'}}> {key}</span> <span style={{color: '#56A76F'}}>: {item}</span>
             </span>);
         })
       }
     } else itemBelongingsJSX = null;
-    
+
     let AllergensJSX = (
-      <Allergens 
-        readOnly={true} 
+      <Allergens
+        readOnly={true}
         allergensObj={item.allergens}/>);
 
     return (
@@ -166,7 +170,7 @@ export default class MenuListItem extends React.Component {
             <div
               className="MenuItem-Thumbnail"
               onClick={this._handleOpenImg}
-              style={{backgroundImage: 'url("' + item.picUrl + '")'}} />
+              style={{backgroundImage: 'url("' + window.amazonURL+item.picUrl + '")'}} />
             <ActionZoomIn className="MenuItem-Zoom" color="#fff" />
           </CardMedia>
           <Popover
@@ -179,14 +183,14 @@ export default class MenuListItem extends React.Component {
             anchorOrigin={{horizontal: 'middle', vertical: 'center'}}
             targetOrigin={{horizontal: 'middle', vertical: 'center'}}>
 
-            <img className="MenuItem-Preview--image" src={item.picUrl} onClick={this._handleCloseImg} alt="thumbnail" />
+            <img className="MenuItem-Preview--image" src={window.amazonURL+item.picUrl} onClick={this._handleCloseImg} alt="thumbnail" />
             <NavigationClose className="MenuItem-Preview--close" onClick={this._handleCloseImg} color="#fff" />
           </Popover>
         </div>
         <div className="MenuItem-Right">
           <h4>
             <CardTitle title={item.title} style={{padding: 0, paddingLeft: 15, lineHeight: 6}}>
-              { 
+              {
                 localStorage.role === 'admin' ?
                   <IconMenu
                     style={menuStyle}
@@ -205,7 +209,7 @@ export default class MenuListItem extends React.Component {
                       onClick={this.deleteOrRemoveActionModal}
                       primaryText={ !this.props.currentSectionId ? "Delete Item" : "Remove Item" }
                       rightIcon={<ActionDelete />} />
-                  </IconMenu> 
+                  </IconMenu>
                 : null }
             </CardTitle>
 

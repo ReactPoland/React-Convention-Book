@@ -128,12 +128,23 @@ class CoreLayout extends React.Component {
   }
 
   async _fetchRestaurantData() {
+    console.info('ODPALAM _fetchRestaurantData');
     let restaurantDetails = await API.get(
       ['restaurants', 'details', localStorage.restaurantID]
     ).then((results) => {
+      console.info('1111 restaurant fetch details');
+      console.info(results);
+      console.info('1111 restaurant fetch details');
+
       return results.restaurants.details[localStorage.restaurantID];
 
     });
+
+    console.info('restaurantDetails');
+    console.info('restaurantDetails');
+    console.info(restaurantDetails);
+    console.info('restaurantDetails');
+    console.info('restaurantDetails');
 
     let MOCKED = {
       name: 'Restaurant Name',
@@ -153,7 +164,7 @@ class CoreLayout extends React.Component {
       }]
     };
 
-    this.props.restaurantActions.restaurantsList(MOCKED);
+    this.props.restaurantActions.restaurantsList(restaurantDetails);
     // TO NA DOLE ROBISZ DOPIERO JAK DOBRZE FETCHUJE Z FALCORA:
     // JAK OBIERZESZ FALCOREM, to pushujesz w ten sam sposob:
     // 1) stworz restaurant ACTION na wzor staff:
@@ -202,6 +213,7 @@ class CoreLayout extends React.Component {
   }
 
   _navigate(route) {
+    alert(1);
     this.props.history.pushState(null, route);
   }
 

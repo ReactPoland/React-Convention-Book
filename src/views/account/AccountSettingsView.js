@@ -12,7 +12,7 @@ import Styles from 'styles/inlineStyles';
 import { AccountSettingsForm } from 'components/forms/AccountSettingsForm';
 import { ChangePasswordForm } from 'components/forms/ChangePasswordForm';
 import ErrorSuccessMsg from 'components/common/ErrorSuccessMsg';
-import UserDetails from 'components/UserDetails.js';
+import UserDetails from 'components/account-settings/UserDetails.js';
 
 import falcorModel from '../../falcorModel.js';
 
@@ -38,6 +38,7 @@ class AccountSettingsView extends React.Component {
     this._changePassword = this._changePassword.bind(this);
     this.nullifyRequestState = this.nullifyRequestState.bind(this);
     this.editProfile = this.editProfile.bind(this);
+    this.editImage = this.editImage.bind(this);
   }
 
   async _updateAccount(formData) {
@@ -120,6 +121,10 @@ class AccountSettingsView extends React.Component {
     this.setState({ editingProfile: true });
   }
 
+  editImage(newUserData) {
+    this.props.actions.updateUserSettings(newUserData);
+  }
+
   render() {
     const { requestSuccess, requestError } = this.state;
     let modalJSX;
@@ -153,32 +158,33 @@ class AccountSettingsView extends React.Component {
           </div>;
       return modalJSX;
     }
-    if (this.state.editingProfile === false) {
     return (
         <div className='container'>
-          <UserDetails
-            userData={this.props.session.user}
-            onEdit={this.editProfile} />
+          <div className='row'>
+            <div className='col-md-12'>
+              <UserDetails
+                userData={this.props.session.user}
+                onEdit={this.editProfile}
+                onImageChange={this.editImage} />
+              </div>
+            </div>
+
+          <div id='accountSettingsView'>
+            <div className='row'>
+                 <div className='col-md-6'>
+                   <AccountSettingsForm session={this.props.session} onSubmit={this._updateAccount} sendingRequest={this.state.sendingAccountRequest} />
+                 </div>
+                 <div className='col-md-6'>
+                   <ChangePasswordForm session={this.props.session} onSubmit={this._changePassword} sendingRequest={this.state.sendingPasswordRequest} />
+                 </div>
+               </div>
+               <ErrorSuccessMsg
+                 errorMessage={requestError}
+                 successMessage={requestSuccess}
+                 onRequestClose={this.nullifyRequestState} />
+            </div>
         </div>
     );
-  } else {
-    return (
-      <div id='accountSettingsView'>
-      <div className='row'>
-           <div className='col-md-6'>
-             <AccountSettingsForm session={this.props.session} onSubmit={this._updateAccount} sendingRequest={this.state.sendingAccountRequest} />
-           </div>
-           <div className='col-md-6'>
-             <ChangePasswordForm session={this.props.session} onSubmit={this._changePassword} sendingRequest={this.state.sendingPasswordRequest} />
-           </div>
-         </div>
-         <ErrorSuccessMsg
-           errorMessage={requestError}
-           successMessage={requestSuccess}
-           onRequestClose={this.nullifyRequestState} />
-      </div>
-    )
-  }
   }
 }
 

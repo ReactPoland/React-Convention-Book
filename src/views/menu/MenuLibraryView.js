@@ -225,7 +225,7 @@ class MenuLibraryView extends React.Component {
 
 
     if(refMap !== undefined) {
-      /* 
+      /*
        there was an update in refMap! let's update sections
        */
 
@@ -257,7 +257,7 @@ class MenuLibraryView extends React.Component {
       let sectionUpdateResult = await falcorModel
         .call(
               ['restaurants', localStorage.restaurantID, 'sections','update'],
-              [purgedSections]          
+              [purgedSections]
             ).
         then((result) => {
           return result;
@@ -278,7 +278,7 @@ class MenuLibraryView extends React.Component {
 
 
   async onAddItemDone(newMenuItem, refMap) {
-
+    alert(JSON.stringify(newMenuItem))
     console.info("newMenuItem");
     console.info(newMenuItem);
     console.info("newMenuItem");
@@ -286,7 +286,7 @@ class MenuLibraryView extends React.Component {
     let result = await falcorModel
       .call(
             ['restaurants', localStorage.restaurantID, 'menuItems','add'],
-            [newMenuItem]          
+            [newMenuItem]
           ).
       then((result) => {
         return result;
@@ -307,7 +307,7 @@ class MenuLibraryView extends React.Component {
       this.setState({
         requestSuccess: 'Added new item - successful!',
         modal: null
-      });     
+      });
     }
     else{
 
@@ -324,7 +324,7 @@ class MenuLibraryView extends React.Component {
       let sectionUpdateResult = await falcorModel
         .call(
               ['restaurants', localStorage.restaurantID, 'sections','update'],
-              [updatedSections[0]]          
+              [updatedSections[0]]
             ).
         then((result) => {
           return result;
@@ -340,7 +340,7 @@ class MenuLibraryView extends React.Component {
       });
     }
 
-    
+
 
   }
 
@@ -362,7 +362,7 @@ class MenuLibraryView extends React.Component {
     let allSections = this.props.section;
 
     let toUpdateSections = [];
-    allSections.forEach((sectionItem, key) => { 
+    allSections.forEach((sectionItem, key) => {
       let itemsArray = sectionItem.items;
 
       let newSectionItems = itemsArray.filter((id) => {
@@ -378,7 +378,7 @@ class MenuLibraryView extends React.Component {
     let sectionUpdateResult = await falcorModel
       .call(
             ['restaurants', localStorage.restaurantID, 'sections','update'],
-            [toUpdateSections]          
+            [toUpdateSections]
           ).
       then((result) => {
         return result;
@@ -387,7 +387,7 @@ class MenuLibraryView extends React.Component {
     let result = await falcorModel
       .call(
             ['restaurants', localStorage.restaurantID, 'menuItems', 'delete'],
-            [menuItemIdToDelete]          
+            [menuItemIdToDelete]
           ).
       then((result) => {
         return result;
@@ -461,15 +461,15 @@ class MenuLibraryView extends React.Component {
     menuItem.forEach((item, index) => {
       if(item.id) {
         items.push(
-          <div> 
-            <MenuListItem 
-              sections={this.props.section} 
-              menus={this.props.menu} 
-              item={item} 
-              key={item.id} 
-              onDeleteClick={this.onDeleteItemClick} 
-              onEditClick={this.onEditItemClick} /> 
-              <br/> 
+          <div>
+            <MenuListItem
+              sections={this.props.section}
+              menus={this.props.menu}
+              item={item}
+              key={item.id}
+              onDeleteClick={this.onDeleteItemClick}
+              onEditClick={this.onEditItemClick} />
+              <br/>
           </div>
         );
       }
@@ -496,10 +496,10 @@ class MenuLibraryView extends React.Component {
             onRequestClose={this.nullifyRequestState} />
         </div>);
     } else {
-        addingEditingItemJSX = 
-          localStorage.role !== 'admin' 
-        ? 
-          <span /> 
+        addingEditingItemJSX =
+          localStorage.role !== 'admin'
+        ?
+          <span />
         :
           (
             <FloatingActionButton style={btnStyle} onClick={ /* this.onAddItemDone.bind(this, "this","this")*/ this._openModal.bind(this, 'add-modal')}>
@@ -535,10 +535,10 @@ class MenuLibraryView extends React.Component {
                 <MenuSection
                   currentMenuId={this.props.currentMenuId}
                   isFromLibraryDelete={true}
-                  onDeleteClick={this.onRemoveItemClick} 
+                  onDeleteClick={this.onRemoveItemClick}
                   onEditClick={this.onEditItemClick}
-                  sections={this.props.section} 
-                  menus={this.props.menu} 
+                  sections={this.props.section}
+                  menus={this.props.menu}
                   sectionId={section}
                   key={section} />
               );

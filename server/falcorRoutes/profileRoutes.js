@@ -1,10 +1,11 @@
 import models from '../modelsMongoose';
 import jwt from 'jsonwebtoken';
 import jwtSecret from '../secret';
+import { uploadImage } from '../helpers/fileSystem';
+
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
 var $atom = jsonGraph.atom;
-
 
 module.exports = [
   {
@@ -19,14 +20,14 @@ module.exports = [
         if (err) throw err;
       }).then((result) => {
         return result;
-      });	
+      });
 
       if (user[0].password == oldPassword){
       	console.log("valid");
 	    console.log("valid");
 	    console.log("valid");
       	models.UserCollection.update(
-          { email: email }, 
+          { email: email },
           { $set: { "password": newPassword}},
           function(err) {
             if(err) { throw err; }
@@ -39,10 +40,10 @@ module.exports = [
             },
           ];
       }
-      else 
+      else
       	return [
 	        {
-	          path: ['profilePassword', 'validation'], 
+	          path: ['profilePassword', 'validation'],
 	          value: false
 	        },
       	];
@@ -55,7 +56,7 @@ module.exports = [
 
       let profileData = args[0];
       let email = args[1];
-      
+
       let newFirstName;
       let newLastName;
       let newEmail;
@@ -66,7 +67,7 @@ module.exports = [
         if (err) throw err;
       }).then((result) => {
         return result;
-      }); 
+      });
 
       console.log("user to update: ");
       console.log(user);
@@ -106,12 +107,12 @@ module.exports = [
 
       //UPDATE DB
       models.UserCollection.update(
-        { email: email }, 
-        { $set: { "firstName": newFirstName, 
+        { email: email },
+        { $set: { "firstName": newFirstName,
                   "lastName": newLastName,
                   "email": newEmail,
                   "imageUrl": newImageUrl
-                }    
+                }
         },
         function(err) {
           if(err) { throw err; }
@@ -122,7 +123,7 @@ module.exports = [
         if (err) throw err;
       }).then((result) => {
         return result;
-      }); 
+      });
 
       console.log("user after: ");
       console.log(user);
@@ -130,25 +131,43 @@ module.exports = [
 
       return [
           {
-            path: ['profileData', 'newEmail'], 
+            path: ['profileData', 'newEmail'],
             value: newEmail
           },
           {
-            path: ['profileData', 'newFirstName'], 
+            path: ['profileData', 'newFirstName'],
             value: newFirstName
           },
           {
-            path: ['profileData', 'newLastName'], 
+            path: ['profileData', 'newLastName'],
             value: newLastName
           },
           {
-            path: ['profileData', 'newImageUrl'], 
+            path: ['profileData', 'newImageUrl'],
             value: newImageUrl
           },
         ];
 
       return 0;
     }
-  }
+  },
 
+  {
+    route: 'profileData.updateAvatar',
+    call: async function(callPath, args) {
+      let file = args[0];
+      let email = args[2];
+
+      if (file) {
+        return uploadImage({
+          bucket: 'avatar',
+          id: email,
+          file
+        });
+      } else {
+        console.info('No file to upload');
+        return false;
+      }
+    }
+  }
 ];

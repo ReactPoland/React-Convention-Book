@@ -15,6 +15,7 @@ import CloseClearModalIcon from 'react-material-icons/icons/content/clear';
 
 import RichEditor from 'components/wyswig-draftjs/RichEditor';
 import { allergensDetails } from 'components/menu/Allergens';
+import UploadComponent from 'components/menu/modals/uploadAWS/UploadComponent';
 
 
 
@@ -40,6 +41,7 @@ export default class AddMenuItemModal extends React.Component {
     this.onSectionsChange = this.onSectionsChange.bind(this);
     this.onAllergensChange = this.onAllergensChange.bind(this);
     this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
+    this.onImgChange = this.onImgChange.bind(this);
     this.state = {
       canSubmit: false,
       contentJSON: {},
@@ -51,7 +53,7 @@ export default class AddMenuItemModal extends React.Component {
       allergensDetails.map((allergenItem) => {
         this.state.allergens[allergenItem.value] = false;
       });
-      
+
     }
   }
 
@@ -85,7 +87,6 @@ export default class AddMenuItemModal extends React.Component {
       }
     }
     formData.allergens = this.state.allergens;
-
     if(this.state.contentJSON["description"]) {
       formData.description = this.state.contentJSON["description"];
     }
@@ -99,6 +100,12 @@ export default class AddMenuItemModal extends React.Component {
     }
 
     if(this.props.editItemId) formData.id = this.props.editItemId;
+    if(this.state.currentAWSPicUrl)
+      formData.picUrl = this.state.currentAWSPicUrl; // this.state
+    else {
+      formData.picUrl = "http://pngimg.com/upload/scratches_PNG6173.png";
+    }
+
     const newMenuItem = new MenuItem(formData);
 
     this.props.onDone(newMenuItem, this.state.sectionsMap);
@@ -133,24 +140,32 @@ export default class AddMenuItemModal extends React.Component {
     this.setState({ contentJSON: newContentJSON});
   }
 
+  onImgChange(url) {
+    this.setState({
+      currentAWSPicUrl: url
+    });
+  }
+
   render() {
+
+
     let editItemId = this.props.editItemId;
     let editedItem;
     if(editItemId) {
       editedItem = this.props.menuItems.get(editItemId);
     }
-
+    
     return (
       <div style={{position: 'relative'}}>
-      <Dialog  
+      <Dialog
         title={this.props.title}
         open={this.props.open}
         autoScrollBodyContent>
-        <CloseClearModalIcon 
-          style={{position: 'absolute', top: 0, right: 0, cursor: 'pointer'}} 
+        <CloseClearModalIcon
+          style={{position: 'absolute', top: 0, right: 0, cursor: 'pointer'}}
           onClick={this.props.onHide} />
         <Form onSubmit={this._onDone.bind(this)} ref="form" onValid={this._enableBtn} onInvalid={this._disableBtn}>
-          
+
             <DefaultInput
               tabIndexProp="100000"
               name="title"
@@ -168,21 +183,21 @@ export default class AddMenuItemModal extends React.Component {
             validations="isExisty"
             validationError="Invalid date" />
 
-          <RichEditor 
+          <RichEditor
             tabIndexProp="100003"
             initialValue={ editedItem ? editedItem.description : "" }
             name="description"
             title="Description (Level 1)"
             onChangeTextJSON={this._onchangeDraftJSON} />
 
-          <RichEditor 
+          <RichEditor
             tabIndexProp="100005"
             initialValue={ editedItem && typeof editedItem.description2 !== 'undefined' ? editedItem.description2 : "" }
             name="description2"
             title="Description (Level 2)"
             onChangeTextJSON={this._onchangeDraftJSON} />
 
-          <RichEditor 
+          <RichEditor
             tabIndexProp="100010"
             initialValue={ editedItem && typeof editedItem.description3 !== 'undefined' ? editedItem.description3 : "" }
             name="description3"
@@ -192,9 +207,9 @@ export default class AddMenuItemModal extends React.Component {
           <h4 style={headerStyle}>Allergens</h4>
           <hr />
 
-          <Allergens 
-            mode="edit" 
-            allergens={ editedItem ? editedItem.allergens : undefined /* if undefined then is using defaultProps */ }  
+          <Allergens
+            mode="edit"
+            allergens={ editedItem ? editedItem.allergens : undefined /* if undefined then is using defaultProps */ }
             onChange={this.onAllergensChange} />
 
           <h4 style={headerStyle}>Add to menu</h4>
@@ -204,6 +219,11 @@ export default class AddMenuItemModal extends React.Component {
             onChange={this.onSectionsChange}
             menus={this.props.menus}
             sections={this.props.sections} />
+          <h4 style={headerStyle}>UPLOAD IMAGE</h4>
+          <UploadComponent
+            imgUrl={editedItem ? editedItem.picUrl : 'http://pngimg.com/upload/scratches_PNG6173.png'}
+            onImgChange={this.onImgChange} />
+
 
           <div style={footerStyles}>
             <FlatButton label="Close" onClick={this.props.onHide} />

@@ -64,13 +64,12 @@ class Inside extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-      if(typeof nextProps !== 'undefined' && nextProps.items !== this.props.items) {
-        this.setState({
-          items: nextProps.items
-        });
-      }
+    if(typeof nextProps !== 'undefined' && nextProps.items !== this.props.items) {
+      this.setState({
+        items: nextProps.items
+      });
     }
-  
+  }
 
   moveItem(dragItem, hoverIndex) {
     const { items } = this.state;
