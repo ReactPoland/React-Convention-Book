@@ -123,7 +123,109 @@ What we have done above? We have added the inline styles for ***buttonStyle*** a
 ![AppBar look v1](http://test.przeorski.pl/book/301_AppBar_app_look.png)
 
 
+Next step in order to improve look of our home page is to make articles' card based on Material Design CSS:
 
+```
+$ [[you are in the src/components/ directory of your project]]
+$ touch ArticleCard.js
+```
+
+... then into that file, let's init the ArticleCard's component with the followin content:
+```
+import React from 'react';
+import { 
+  Card, 
+  CardHeader, 
+  CardMedia, 
+  CardTitle, 
+  CardText 
+} from 'material-ui/Card';
+import { Paper } from 'material-ui';
+
+class ArticleCard extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <h1>here goes the article card</h1>;
+  }
+};
+export default ArticleCard;
+```
+
+... as you can find above, we have imported required components from the material-ui/Card that will help our home page looking prettier. The next step is to improve our ArticleCard's render function with the following:
+```
+render() {
+  let title = this.props.title || 'no title provided';
+  let content = this.props.content || 'no content provided';
+
+  let paperStyle = {
+    padding: 10, 
+    width: '100%', 
+    height: 300
+  };
+
+  let leftDivStyle = {
+    width: '30%', 
+    float: 'left'
+  }
+  
+  let rightDivStyle = {
+    width: '60%', 
+    float: 'left', 
+    padding: '10px 10px 10px 10px'
+  }
+
+  return (
+    <Paper style={paperStyle}>
+      <CardHeader
+        title={this.props.title}
+        subtitle="Subtitle"
+        avatar="/static/avatar.png"
+      />
+
+      <div style={leftDivStyle}>
+        <Card >
+          <CardMedia
+            overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
+            <img src="/static/placeholder.png" height="190" />
+          </CardMedia>
+        </Card>
+      </div>
+      <div style={rightDivStyle}>
+        {content}
+      </div>
+    </Paper>);
+}
+```
+
+... as you can find above, we have created an article card, there are some inline styles for ***Paper component***, ***left and right div***. Feel free to change them. 
+
+In general, we are missing two static images in the above's render function ***src="/static/placeholder.png"*** and ***avatar="/static/avatar.png"***. Let's add them now with the following steps:
+
+1) one
+
+2) two
+
+3) three
+
+### add static images avatar and placeholder into dist
+
+### add code to the layouts/PublishingApp
+
+
+After all those above steps, following them one-to-one in terms of styles, this is what you will see:
+
+![home page look v2](http://test.przeorski.pl/book/302_improved_home_page.png)
+
+
+
+
+STEPS:
+1) Add ArticleCard
+2) import ArticleCard
+3) change render with ArticleCard
 
 
 
