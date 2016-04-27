@@ -2,6 +2,14 @@
 
 Currently our app is a simple starter kit, which is a skeleton for our further development. We need focus more our time into the customer's facing front-end because it's important to have good looking front-end in 2016 :-) thanks to Material UI we can re-use many things to make our app looking prettier.
 
+The one important note, the Responsive Web Design is not in the scope at this point (and overally) of writing this book, so all the styles can be improved in that matter regarding mobile. The app that we are going to working on will be looking fine on tablets, the small mobile screens can be not so good.
+
+------------------------------------------
+------ TO DELETE BELOW -------------------
+note to the editor: if there will be not enough books count, then we can add an extra bonus chapter for the Responsive Web Design (if needed).
+------------------------------------------
+------------------------------------------
+
 
 #### Before working a prettier front-end
 In our last chapter we have done a server side rendering which will affect our users in order that they will see their articles quicker and will improve our website SEO as whole HTML markup is rendering on the server-side.
@@ -74,16 +82,34 @@ After that go to the ***src/CoreLayout.js*** and please import a new AppBar comp
 import AppBar from 'material-ui/AppBar';
 ```
 
-.. and add this AppBar into the render:
+.. and add this AppBar together with inline styles into the render:
 ```
   render () {
+    const buttonStyle = {
+      margin: 5
+    };
+    const homeIconStyle = {
+      margin: 5,
+      paddingTop: 5
+    };
+    
+    let menuLinksJSX = (<span>
+        <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
+        <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
+      </span>);
+
+    let homePageJSX = (<Link to='/'>
+        <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
+      </Link>);
+
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <AppBar
-            title="Publishing App"
-            iconClassNameRight="muidocs-icon-navigation-expand-more" />
-          <span>Links: <Link to='/register'>Register</Link> | <Link to='/login'>Login</Link> | <Link to='/'>Home Page</Link></span>
+            title='Publishing App'
+            iconElementLeft={homePageJSX}
+            iconElementRight={menuLinksJSX} />
             <br/>
             {this.props.children}
         </div>
@@ -91,6 +117,8 @@ import AppBar from 'material-ui/AppBar';
     );
   }
 ```
+
+
 
 
 
