@@ -42,7 +42,7 @@ class CoreLayout extends React.Component {
         <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
       </span>);
 
-    let homePageJSX = (<Link to='/'>
+    let homePageButtonJSX = (<Link to='/'>
         <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
       </Link>);
 
@@ -52,7 +52,7 @@ class CoreLayout extends React.Component {
         <div>
           <AppBar
             title='Publishing App'
-            iconElementLeft={homePageJSX}
+            iconElementLeft={homePageButtonJSX}
             iconElementRight={menuLinksJSX} />
             <br/>
             {this.props.children}

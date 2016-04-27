@@ -98,7 +98,7 @@ import AppBar from 'material-ui/AppBar';
         <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
       </span>);
 
-    let homePageJSX = (<Link to='/'>
+    let homePageButtonJSX = (<Link to='/'>
         <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
       </Link>);
 
@@ -108,7 +108,7 @@ import AppBar from 'material-ui/AppBar';
         <div>
           <AppBar
             title='Publishing App'
-            iconElementLeft={homePageJSX}
+            iconElementLeft={homePageButtonJSX}
             iconElementRight={menuLinksJSX} />
             <br/>
             {this.props.children}
@@ -118,6 +118,9 @@ import AppBar from 'material-ui/AppBar';
   }
 ```
 
+What we have done above? We have added the inline styles for ***buttonStyle*** and ***homeIconStyle*** in order to make the ***menuLinksJSX*** and ***homePageButtonJSX*** looking better. This is how your app shall be looking after those AppBar changes:
+
+![AppBar look v1](http://test.przeorski.pl/book/301_AppBar_app_look.png)
 
 
 
