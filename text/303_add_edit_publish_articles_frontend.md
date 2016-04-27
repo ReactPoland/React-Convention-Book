@@ -209,7 +209,7 @@ In general, we are missing two static images in the above's render function ***s
 
 1) Please make a png file with the name of ***placeholder.png*** in the ***dist*** directory. In my case this is how my placeholder.png is looking:
 
-![placeholder.png](http://test.przeorski.pl/book/303_placeholder_png.png)
+![placeholder.png](http://test.przeorski.pl/book/302_placeholder_img.png)
 
 2) Please also create an avatar.png in the ***dist*** that will be exposed in ***/static/avatar.png***. I won't put here the example, as you can find it's my personal photo ;-)
 
@@ -258,7 +258,7 @@ and we also have added some styles to the ***div style={{height: '100%', width: 
 
 After all those above steps, following them one-to-one in terms of styles, this is what you will see:
 
-![home page look v2](http://test.przeorski.pl/book/302_improved_home_page.png)
+![home page look v2](http://test.przeorski.pl/book/303_improved_home_page.png)
 
 
 
