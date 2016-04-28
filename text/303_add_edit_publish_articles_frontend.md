@@ -77,6 +77,17 @@ First please delete this below from server/server.js, we don't need anymore:
 ```
 <h1>Our publishing app</h1>
 ```
+
+... and H1 markups in the Registration and Login View (***src/LoginView.js***):
+```
+<h1>Login view</h1>
+```
+and registration in the ***src/RegisterView.js***:
+```
+<h1>Register</h1>
+```
+
+
 All both h1 paragraphs are not needed as we want to have nice looking design instead of old one.
 
 
@@ -259,6 +270,22 @@ and we also have added some styles to the ***div style={{height: '100%', width: 
 After all those above steps, following them one-to-one in terms of styles, this is what you will see:
 
 ![home page look v2](http://test.przeorski.pl/book/303_improved_home_page.png)
+
+Register user view:
+![register](http://test.przeorski.pl/book/304_registration_view.png)
+
+Login user view:
+![login](http://test.przeorski.pl/book/305_login_view.png)
+
+
+
+### Dashboard - listing articles & buttons for an add, edit and delete
+
+
+
+
+
+
 
 
 
