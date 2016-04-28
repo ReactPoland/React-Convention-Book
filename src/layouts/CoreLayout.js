@@ -130,14 +130,18 @@ class CoreLayout extends React.Component {
   }
 
   async _fetchRestaurantData() {
+    console.info('ODPALAM _fetchRestaurantData');
     let restaurantDetails = await API.get(
       ['restaurants', 'details', localStorage.restaurantID]
     ).then((results) => {
+      console.info('1111 restaurant fetch details');
+      console.info(results);
+      console.info('1111 restaurant fetch details');
+
       return results.restaurants.details[localStorage.restaurantID];
     });
 
     this.props.restaurantActions.restaurantsList(restaurantDetails);
-    //TEMP
     this.props.newsFeedActions.newsFeedList();
   }
 
