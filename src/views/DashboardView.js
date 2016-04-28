@@ -1,11 +1,11 @@
 "use strict";
 
 import React from 'react';
+import { Link } from 'react-router';
 import Falcor from 'falcor';
 import falcorModel from '../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { LoginForm } from '../components/LoginForm.js';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -20,26 +20,9 @@ import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 import FileFolder from 'material-ui/svg-icons/file/folder';
+import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
 
-const ListExampleFolder = () => (
-    <List>
-      <ListItem
-        leftAvatar={<Avatar icon={<ActionInfo />} />}
-        primaryText="Photos"
-        secondaryText="Jan 9, 2014"
-      />
-      <ListItem
-        leftAvatar={<Avatar icon={<ActionInfo />} />}
-        primaryText="Recipes"
-        secondaryText="Jan 17, 2014"
-      />
-      <ListItem
-        leftAvatar={<Avatar icon={<ActionInfo />} />}
-        primaryText="Work"
-        secondaryText="Jan 28, 2014"
-      />
-    </List>
-);
 
 class DashboardView extends React.Component {
   constructor(props) {
@@ -63,6 +46,13 @@ class DashboardView extends React.Component {
     }
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <Link to='/add-article'>
+          <RaisedButton 
+            label="Create an article" 
+            secondary={true} 
+            style={{margin: '20px 20px 20px 20px'}} />
+        </Link>
+
         <List>
           {articlesJSX}
         </List>

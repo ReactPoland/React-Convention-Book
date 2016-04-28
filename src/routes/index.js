@@ -12,6 +12,7 @@ import LoginView                    from '../views/LoginView';
 import RegisterView                    from '../views/RegisterView';
 
 import DashboardView                    from '../views/DashboardView';
+import AddArticleView                    from '../views/articles/AddArticleView';
 
 export default (
   <Route component={CoreLayout} path='/'>
@@ -19,5 +20,6 @@ export default (
     <Route component={LoginView} path='login' name='login' />
     <Route component={RegisterView} path='register' name='register' />
     <Route component={DashboardView} path='dashboard' name='dashboard' />
+    <Route component={AddArticleView} path='add-article' name='add-article' />
   </Route>
 );
