@@ -18,6 +18,7 @@ export default (
   <Route component={CoreLayout} path='/'>
     <IndexRoute component={PublishingApp} name='home' />
     <Route component={LoginView} path='login' name='login' />
+    <Route component={LoginView} path='logout' name='logout' />
     <Route component={RegisterView} path='register' name='register' />
     <Route component={DashboardView} path='dashboard' name='dashboard' />
     <Route component={AddArticleView} path='add-article' name='add-article' />
