@@ -9,6 +9,7 @@ import PublishingApp                    from '../layouts/PublishingApp';
 
 /* auth views */
 import LoginView                    from '../views/LoginView';
+import LogoutView                    from '../views/LogoutView';
 import RegisterView                    from '../views/RegisterView';
 
 import DashboardView                    from '../views/DashboardView';
@@ -18,7 +19,7 @@ export default (
   <Route component={CoreLayout} path='/'>
     <IndexRoute component={PublishingApp} name='home' />
     <Route component={LoginView} path='login' name='login' />
-    <Route component={LoginView} path='logout' name='logout' />
+    <Route component={LogoutView} path='logout' name='logout' />
     <Route component={RegisterView} path='register' name='register' />
     <Route component={DashboardView} path='dashboard' name='dashboard' />
     <Route component={AddArticleView} path='add-article' name='add-article' />
