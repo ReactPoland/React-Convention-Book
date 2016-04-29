@@ -59,6 +59,26 @@ class EmailTemplateView extends React.Component {
     });
   }
 
+  async newsFeedSendInfo() {
+    // this is just example
+    let newsItemID = '57230729ffc78524083e1205'; //mocked
+     // this will be array of emails in next iteration! (staff members from reducer)
+      
+    // tutaj ponizej bierzesz maile wszystkich ludzi w staff
+    // przypisanych do restaurancji (z reducera staff):
+    let newsSendEmail = "kamil.przeorski@gmail.com"; // ['dana@out.com', 'kamil@mobilewebpro.pl']
+
+    let newsFeedSendInfo = await falcorModel
+      .call(
+            ['newsFeedSendInfo'],
+            [newsSendEmail, localStorage.restaurantID, newsItemID]
+          ).
+      then((result) => {
+        return falcorModel.getValue(['newsFeedSendInfo']);
+      });
+    alert('sent! Check console log of node if the message=== success!');
+  }
+
   async _onFormSubmit(objInfo, model) {
 
     Object.keys(model).map((changedItem) => {
@@ -98,13 +118,13 @@ class EmailTemplateView extends React.Component {
   render() {
     let templ = this.state.emailTemplates;
     if(templ === null) return <span />;
-    let registrationTextField = <span />;
+    let templateEditTextField = <span />;
 
     if(this.state.itemToEdit) {
       let regInfo = templ[this.state.itemToEdit];
       let itemEDITname = this.state.itemToEdit;
       if(typeof regInfo === 'object') {
-        registrationTextField = (
+        templateEditTextField = (
           <Formsy.Form onSubmit={this._onFormSubmit.bind(this, regInfo)}>
             <h4>{itemEDITname} template in edit</h4>
             <DefaultInput
@@ -137,6 +157,16 @@ class EmailTemplateView extends React.Component {
           "ownedByRestaurantID" : localStorage.restaurantID
       };
     }
+
+    if(typeof templ['newsFeed'] === 'undefined') {
+      // handlujesz dodawanie obiektu zamiast update
+
+      templ['newsFeed'] = {
+          "templateText" : "News link: [[newsFeedLink]]",
+          "templateName" : "newsFeed",
+          "ownedByRestaurantID" : localStorage.restaurantID
+      };
+    }
     
     let itemListJSX = (<List subheader="Items List">
         {          
@@ -156,16 +186,21 @@ class EmailTemplateView extends React.Component {
 
     return (
       <div id='emailTemplateView' className="mt100 Content">
+          <h1 onClick={this.newsFeedSendInfo}>TEST SEND EMAIL (to kamil gmail)</h1>
           <div className='col-md-12' style={{padding: '20px 20px 20px 20px'}}>
-            {registrationTextField}
+            {templateEditTextField}
 
             {itemListJSX}
             <Paper zDepth={2} style={{padding: '20px 20px 20px 20px', 'margin': '50px 50px 50px 50px'}}>
               <h4>A LEGEND:</h4>
+              <h5>Registration:</h5>
               [[firstName]] - first name<br/>
               [[lastName]] - last name<br/>
               [[email]] - email<br/>
               [[confirmLink]] - confirmLink: REQUIRED, otherwise a new user won't be able to complete a registration<br/>
+              <h5>NewsFeed:</h5>
+              [[newsFeedLink]] - a link to the created news feed<br/>
+
             </Paper>
           </div>
       </div>

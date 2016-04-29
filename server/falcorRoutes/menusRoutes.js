@@ -3,10 +3,8 @@ var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
 
 export default ( sessionObject ) => {
-  // sessionObject = { isAuthorized, role, username, restaurantid };
-
   return [
-    { 
+    {
       route: 'menusById[{keys}]',
       get: function(pathSet) {
         let menusIDs = pathSet[1];
@@ -41,14 +39,13 @@ export default ( sessionObject ) => {
               });
 
             });
-
             return results;
           });
       }
     },
   {
       /*
-          USED on frontend in layouts/SideNav.js 
+          USED on frontend in layouts/SideNav.js
        */
       route: 'restaurants[{keys}].menus[{integers}]',
       get: (pathSet) => {
@@ -67,7 +64,7 @@ export default ( sessionObject ) => {
             let results = [];
             menusIndexes.map((index) => {
               let res;
-              if (menusArrayFromDB.length - 1 < index) { 
+              if (menusArrayFromDB.length - 1 < index) {
                 res = {
                   path: ['restaurants', sessionObject.restaurantid, 'menus', index],
                   invalidate: true
@@ -90,7 +87,7 @@ export default ( sessionObject ) => {
             return results;
           })
       }
-    },
+    }
   ];
 }
 

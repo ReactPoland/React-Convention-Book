@@ -24,7 +24,7 @@ class MenuSection extends React.Component {
       return menuItem.get(id);
     });
 
-    if(items.length ===0 && localStorage.role !== 'admin') 
+    if(items.length ===0 && localStorage.role !== 'admin')
       return <span />;
 
     return (
@@ -36,19 +36,19 @@ class MenuSection extends React.Component {
               if(!item) return null;
 
               return (<div>
-                <MenuListItem 
-                  onDeleteClick={this.props.onDeleteClick} 
+                <MenuListItem
+                  onDeleteClick={this.props.onDeleteClick}
                   onEditClick={this.props.onEditClick}
-                  item={item} 
+                  item={item}
                   currentMenuId={this.props.currentMenuId}
                   currentSectionId={sectionId}
-                  key={item.id} 
-                  sections={this.props.sections} 
-                  menus={this.props.menus} /> 
+                  key={item.id}
+                  sections={this.props.sections}
+                  menus={this.props.menus} />
                 <br/>
               </div>)
             })
-          : <AddPlaceholder />
+          : "Loading items..."
         }
       </div>
     );

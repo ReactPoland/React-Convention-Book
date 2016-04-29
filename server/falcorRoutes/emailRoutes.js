@@ -87,5 +87,62 @@ module.exports = [
           value: `sent to ${member.email} user with id ${member.id}`
         };
       }
+  },
+  { 
+    route: ['newsFeedSendInfo'] ,
+    call: async (callPath, args) => 
+      {
+        let emailArray = args[0]; // this will be array of emails in next iteration!
+        let restaurantID = args[1];
+        let newsItemID = args[1];
+
+        let andStatementQuery = {
+          $and: [
+            { ownedByRestaurantID: restaurantID },
+            { templateName: 'newsFeed' }
+          ]
+        }
+
+        let newsBroadcastTemplate = await models.EmailTemplateCollection.find(andStatementQuery, function(err, emailTemplatesDocs) {
+            return emailTemplatesDocs;
+          }).then ((templatesArray) => {
+            console.info('templatesArray', templatesArray);
+            if(templatesArray.length) {
+              return templatesArray[0].templateText;
+            } else {
+              return 'template has not been defined correctly';
+            }
+          });
+
+        // NOTE! 
+        let newsFeedLink  = 'http://localhost:3000/#/newsFeed/'+newsItemID;
+        try {
+          newsBroadcastTemplate = newsBroadcastTemplate.replaceAll('[[newsFeedLink]]', newsFeedLink);
+        } catch (e) {
+          console.info('error [[newsFeedLink]]');
+        }
+
+        let textToSend = newsBroadcastTemplate || '';
+
+        // emailArray.map((e ail) => {
+        // tutaj wysylasz maile
+          let sendInfo = {
+            to:       emailArray,
+            from:     'TheRestaurantReason',
+            subject:  'News Update: check your news feed in the Restaurant Reason',
+            text:     textToSend
+          };
+          
+          await sendgrid.send(sendInfo, function(err, json) {
+            if (err) { return console.error(err); }
+            console.log(json);
+          });
+        // })
+
+        return {
+          path: ['newsFeedSendInfo'],
+          value: `News link was sent to all staff members`
+        };
+      }
   }
 ];

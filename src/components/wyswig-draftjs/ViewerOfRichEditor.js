@@ -107,8 +107,6 @@ export default class  ViewerOfRichEditor extends React.Component {
       return (
         <div>
           <h4>{this.props.title}</h4>
-          <div className="RichEditor-root">
-            <div className={className} onClick={this.focus}>
               <Editor
                 tabIndex={this.props.tabIndexProp}
                 blockStyleFn={getBlockStyle}
@@ -117,8 +115,6 @@ export default class  ViewerOfRichEditor extends React.Component {
                 ref="editor"
                 spellCheck={true}
               />
-            </div>
-          </div>
         </div>
       );
     }

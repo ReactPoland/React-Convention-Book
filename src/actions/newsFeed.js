@@ -20,10 +20,10 @@ export default {
     };
   },
 
-  newsFeedDelete: (post) => {
+  newsFeedDelete: (id) => {
     return {
       type: NEWSFEED_DELETE,
-      payload: post
+      payload: id
     };
   },
 

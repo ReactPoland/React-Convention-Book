@@ -84,6 +84,7 @@ class CoreLayout extends React.Component {
     this._checkChildName = this._checkChildName.bind(this);
     this._navigate = this._navigate.bind(this);
     this._fetchRestaurantData = this._fetchRestaurantData.bind(this);
+    this._fetchNewsFeed = this._fetchNewsFeed.bind(this);
 
 
     // this makes sure that classes was updated
@@ -121,28 +122,46 @@ class CoreLayout extends React.Component {
         if(value !== "INVALID") {
           localStorage.setItem("restaurantID", value);
           this._fetchRestaurantData();
+          this._fetchNewsFeed();
         }
       });
     } else {
       this.setState({restaurantID: localStorage.restaurantID});
       this._fetchRestaurantData();
+      this._fetchNewsFeed();
     }
   }
 
   async _fetchRestaurantData() {
-    console.info('ODPALAM _fetchRestaurantData');
     let restaurantDetails = await API.get(
       ['restaurants', 'details', localStorage.restaurantID]
     ).then((results) => {
-      console.info('1111 restaurant fetch details');
-      console.info(results);
-      console.info('1111 restaurant fetch details');
-
       return results.restaurants.details[localStorage.restaurantID];
     });
 
     this.props.restaurantActions.restaurantsList(restaurantDetails);
-    this.props.newsFeedActions.newsFeedList();
+    //TEMP
+
+  }
+
+  async _fetchNewsFeed() {
+    const newsFeedLength = await falcorModel.getValue(
+      ['restaurants', localStorage.restaurantID, 'news', 'length']
+    );
+
+    let news = await API.get(
+      ['restaurants', localStorage.restaurantID, 'news', {from: 0, to: newsFeedLength - 1},
+       ['title', 'message', 'authorName', 'date', 'id']]
+    ).then((results) => {
+      return results['restaurants'][localStorage.restaurantID]['news']
+    });
+
+    let newsArray = Object.keys(news).map((post) => {
+      return news[post];
+    })
+
+    console.log('\n\n\n\n\n\n\n\n\n\n\n\nNEWS: ', newsArray)
+    this.props.newsFeedActions.newsFeedList(newsArray);
   }
 
   async _checkIfLoggedIn() {
@@ -154,6 +173,14 @@ class CoreLayout extends React.Component {
       );
 
       // check if token is valid
+
+      if(typeof response === 'undefined') {
+        delete localStorage.token;
+        delete localStorage.username;
+        delete localStorage.role;
+        this.props.sessionActions.logout();
+        return;
+      }
 
       console.info("response.v1.user.me", response.v1.user.me);
 

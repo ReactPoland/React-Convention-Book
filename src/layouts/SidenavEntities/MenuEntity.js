@@ -81,7 +81,7 @@ class MenuEntity extends React.Component {
 
     if(menusLength === 0 || sectionsLength === 0) {
       // manage empty menus sections here
-      
+
     } else {
       const response = await API.get(
         // I don't know yet exact number of items needed
@@ -331,6 +331,7 @@ class MenuEntity extends React.Component {
         }
 
         let newSection = secItem;
+        console.info('MENU ENTITY SECITEM: ', secItem);
         let response = await falcorModel
           .call(
                 ['restaurants', localStorage.restaurantID, 'sections','add'],

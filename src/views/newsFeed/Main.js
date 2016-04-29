@@ -7,7 +7,9 @@ import newsFeedActions from 'actions/newsFeed';
 import AddPostModal from 'components/newsFeed/modals/addPostModal';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import ToolbarTitle from 'material-ui/lib/toolbar/toolbar-title';
-
+import falcorModel from '../../falcorModel.js';
+import API from 'utils/API';
+import falcorUtils from 'utils/falcorUtils';
 
 const mapStateToProps = (state) => ({
   ...state
@@ -23,26 +25,13 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalOpen: false
     }
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onDeletePost = this.onDeletePost.bind(this);
   }
 
-
-    async onSubmit(post) {
-      console.log('\n#################\nCALL API: ADD NEWS\n#################\n');
-
-      let newPostID = new Date().valueOf().toString().substr(3) + Math.floor((Math.random() * 30000));
-
-      // await falcorModel
-      //   .call(
-      //         ['staffRoute', 'add'],
-      //         [member]
-      //       ).
-      //   then((result) => {
-      //     return result.json.staffRoute.newUserID;
-      //   });
+  async onSubmit(post) {
       let months = [
         'January',
         'February',
@@ -60,33 +49,50 @@ class Main extends React.Component {
       let author = `${user.firstName} ${user.lastName}`;
       let date = new Date();
       let prettyDate = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-      console.info(author);
       let newPost = {
-        id: newPostID,
         title: post.title,
-        excerpt: post.message,
+        message: post.message,
         date: prettyDate,
-        author: author
+        authorName: author
       }
-      // console.log(this.props)
 
-      // let emailWelcomeMessage = await falcorModel
-      //   .call(
-      //         ['emailWelcomeMessage'],
-      //         [member, localStorage.restaurantID]
-      //       ).
-      //   then((result) => {
-      //     return falcorModel.getValue(['emailWelcomeMessage']);
-      //   });
-      //
-      // this.setState({
-      //   requestSuccess: `An account for ${member.firstName} ${member.lastName} has been succesfully created - ${emailWelcomeMessage}`,
-      //   showAddForm: false
-      // });
+      console.log('\n#################\nCALL API: ADD NEWS\n#################\n');
+
+      let response = await falcorModel
+        .call(
+              ['restaurants', localStorage.restaurantID, 'news','add'],
+              [newPost]
+            ).
+        then((result) => {
+          return falcorModel.getValue(
+            ['restaurants', localStorage.restaurantID, 'news', 'length']
+          ).then((newsFeedLen) => {
+            return { newsFeedLen, result };
+          });;
+        });
+      let newsFeedLen = response.newsFeedLen;
+      let result = response.result;
+      let newPostId = result.json.restaurants[localStorage.restaurantID].news[newsFeedLen-1][1];
+      newPostId = newPostId ? newPostId : alert("error with newPostId");
+      newPost.id = newPostId;
+
       this.props.actions.newsFeed.newsFeedAdd(newPost);
 
     }
 
+  async onDeletePost(id) {
+
+    let result = await falcorModel
+      .call(
+            ['restaurants', localStorage.restaurantID, 'news', 'delete'],
+            [id]
+          ).
+      then((result) => {
+        return result;
+      });
+      alert(`RESULT: `, result)
+    this.props.actions.newsFeed.newsFeedDelete(id);
+  }
 
   handleButtonClick() {
     this.setState({
@@ -96,8 +102,8 @@ class Main extends React.Component {
   render() {
     let newsFeed = this.props.newsFeed;
     let nodesList = newsFeed.map((post) => {
-      return (<NewsFeedPost post={post} />);
-    })
+      return (<NewsFeedPost post={post} onDeletePost={this.onDeletePost}/>);
+    });
 
     return (
       <div style={{width: 'auto', marginRight: '250px'}}>

@@ -110,23 +110,23 @@ const schedule = [
   {
     id: 'sched1',
     title: 'Schedule: 00/00/00 - 00/00/00',
-    author: 'authorname',
+    authorName: 'authorname',
     date: 'Month 7, 2016',
-    excerpt: 'Preview of the content/text goes here...'
+    message: 'Preview of the content/text goes here...'
   },
   {
     id: 'sched2',
     title: 'Schedule: 00/00/00 - 00/00/00',
-    author: 'authorname',
+    authorName: 'authorname',
     date: 'Month 4, 2016',
-    excerpt: 'Preview of the content/text goes here...'
+    message: 'Preview of the content/text goes here...'
   },
   {
     id: 'sched3',
     title: 'Schedule: 00/00/00 - 00/00/00',
-    author: 'authorname',
+    authorName: 'authorname',
     date: 'Month 3, 2016',
-    excerpt: 'Preview of the content/text goes here...'
+    message: 'Preview of the content/text goes here...'
   }
 ]
 

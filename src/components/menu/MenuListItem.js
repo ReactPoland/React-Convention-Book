@@ -38,11 +38,6 @@ const menuStyle = {
   marginRight: -8
 };
 
-// mock below
-window.amazonURL = "https://restauranttestbucket.s3-us-west-2.amazonaws.com/";
-
-
-
 export default class MenuListItem extends React.Component {
   constructor(props) {
     super(props);
@@ -152,7 +147,6 @@ export default class MenuListItem extends React.Component {
       <Allergens
         readOnly={true}
         allergensObj={item.allergens}/>);
-
     return (
       <Card className="MenuItem">
         <div>
@@ -170,7 +164,7 @@ export default class MenuListItem extends React.Component {
             <div
               className="MenuItem-Thumbnail"
               onClick={this._handleOpenImg}
-              style={{backgroundImage: 'url("' + window.amazonURL+item.picUrl + '")'}} />
+              style={{backgroundImage: 'url("' + item.picUrl + '")'}} />
             <ActionZoomIn className="MenuItem-Zoom" color="#fff" />
           </CardMedia>
           <Popover
@@ -219,7 +213,11 @@ export default class MenuListItem extends React.Component {
             {AllergensJSX}
           </h4>
           <CardText style={{padding: 3, paddingLeft: 20}}>
-            <DraftExcerpt descriptionOne={item.description} descriptionTwo={item.description2} descriptionThree={item.description3} />
+            <DraftExcerpt
+              descriptionOne={item.description}
+              descriptionTwo={item.description2}
+              descriptionThree={item.description3}
+            />
           </CardText>
         </div>
       </Card>

@@ -207,10 +207,6 @@ class MenuLibraryView extends React.Component {
     console.info("onEditItemDone");
     console.info(menuItem);
     console.info("onEditItemDone");
-    /*
-        refMap is an information in what menus and sections, the item has been added
-     */
-    menuItem.picUrl = "http://lorempixel.com/700/500/food/";
     let menuItemArray = [menuItem] ; //.formatForWire();
     let resultUpdateMenuItems = await falcorModel
       .call(
@@ -278,7 +274,6 @@ class MenuLibraryView extends React.Component {
 
 
   async onAddItemDone(newMenuItem, refMap) {
-    alert(JSON.stringify(newMenuItem))
     console.info("newMenuItem");
     console.info(newMenuItem);
     console.info("newMenuItem");
@@ -451,8 +446,6 @@ class MenuLibraryView extends React.Component {
     return;
   }
 
-
-
   render() {
     const { requestError, requestSuccess } = this.state;
     const { menuItem } = this.props;
@@ -554,7 +547,7 @@ class MenuLibraryView extends React.Component {
       <div className="mt100 Content">
         <Allergens allergyGuide={true} />
         <h2>Menu items library</h2>
-        {items}
+        {items.length > 0 ? items : 'Loading, please wait...' }
         {addingEditingItemJSX}
       </div>
     );

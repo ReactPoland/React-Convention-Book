@@ -1,13 +1,12 @@
 import React from 'react';
 import {
-  Editor, 
-  EditorState, 
-  ContentState, 
-  RichUtils, 
+  Editor,
+  EditorState,
+  ContentState,
+  RichUtils,
   convertToRaw,
   convertFromRaw
 } from 'draft-js';
-
 
 export default class  RichEditor extends React.Component {
     constructor(props) {
@@ -30,13 +29,13 @@ export default class  RichEditor extends React.Component {
         editorState: initialEditorFromProps
       };
 
-      this.focus = () => this.refs.editor.focus();
-      this.onChange = (editorState) => { 
+      this.focus = () => this.refs['editor'+props.name].focus();
+      this.onChange = (editorState) => {
         var contentState = editorState.getCurrentContent();
 
         let contentJSON = convertToRaw(contentState);
         props.onChangeTextJSON(contentJSON, this.props.name);
-        this.setState({editorState}) 
+        this.setState({editorState})
       };
 
       this.handleKeyCommand = (command) => this._handleKeyCommand(command);
@@ -105,7 +104,7 @@ export default class  RichEditor extends React.Component {
                 editorState={editorState}
                 handleKeyCommand={this.handleKeyCommand}
                 onChange={this.onChange}
-                ref="editor"
+                ref={'editor'+this.props.name}
                 spellCheck={true}
               />
             </div>

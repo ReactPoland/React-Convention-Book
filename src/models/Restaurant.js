@@ -11,7 +11,7 @@ export default class Restaurant extends Model {
     this.siteName = restaurant.siteName;
     this.siteDescription = restaurant.siteDescription !== undefined ? restaurant.siteDescription : 'frontend default desc';
     this.RRAccountManager = restaurant.RRAccountManager;
-    this.positions = restaurant.positions.split(',');
+    this.positions = typeof restaurant.positions !== 'string' ? [] : restaurant.positions.split(',');
     this.clientName = restaurant.clientName;
     this.clientAddress = restaurant.clientAddress;
     this.clientPhoneNumber = restaurant.clientPhoneNumber;

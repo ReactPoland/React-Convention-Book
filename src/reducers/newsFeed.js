@@ -35,7 +35,7 @@ const initialState = [];
 
 export default createReducer(initialState, {
   [NEWSFEED_LIST]: (state, payload) => {
-    return state.concat(state, mock);
+    return state.concat(state, payload);
   },
 
   [NEWSFEED_ADD]: (state, payload) => {
@@ -45,11 +45,12 @@ export default createReducer(initialState, {
   },
 
   [NEWSFEED_DELETE]: (state, payload) => {
-    state.filter((obj) => {
+    let newState = state.filter((obj) => {
       if(obj.id !== payload) {
         return obj;
       }
     });
+    return newState;
   },
 
   [NEWSFEED_EDIT]: (state, payload) => {

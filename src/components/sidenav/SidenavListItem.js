@@ -20,8 +20,8 @@ export default function SidenavListItem(props, item, prefix, open) {
   }
 
   if(!open) {
-    excerpt = item.excerpt;
-    author = item.author + ' ';
+    excerpt = item.message;
+    author = item.authorName + ' ';
     date = ' ' + item.date;
   }
 

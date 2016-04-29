@@ -16,7 +16,7 @@ const compiler = webpack(webpackConfig);
 const app = express();
 
 // use body parser so we can get info from POST and/or URL parameters
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({limit: '5mb', extended: false}));
 
 app.use(historyApiFallback({
   verbose : false

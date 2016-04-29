@@ -21,6 +21,8 @@ var emailRoutes = require('./emailRoutes.js');
 var profileRoutes = require('./profileRoutes.js');
 var emailTemplatesRoutes = require('./emailTemplatesRoutes.js');
 var restaurantsRoutes = require('./restaurantsRoutes.js');
+var newsFeedRoutes = require('./newsFeedRoutes.js');
+var newsFeedCallRoutes = require('./newsFeedCallRoutes.js');
 
 
 export const getCurrentUser = ( db, req ) => db.map( db => [{
@@ -54,6 +56,8 @@ export default ( req, res ) => {
       ...emailRoutes,
       ...profileRoutes,
     ]
+      .concat(newsFeedCallRoutes( sessionObject ))
+      .concat(newsFeedRoutes( sessionObject ))
       .concat(restaurantsRoutes( sessionObject ))
       .concat(emailTemplatesRoutes( sessionObject ))
       .concat(loginRoutes( sessionObject ))

@@ -1,4 +1,5 @@
 import models from '../modelsMongoose';
+import { downloadImage, uploadImage } from '../helpers/fileSystem';
 var jsonGraph = require('falcor-json-graph');
 var $ref = jsonGraph.ref;
 var $atom = jsonGraph.atom;
@@ -6,21 +7,23 @@ var $atom = jsonGraph.atom;
 
 export default ( sessionObject ) => {
   // sessionObject = { isAuthorized, role, username, restaurantid };
-      
+
   return [
    {
       route: 'menuItemsById[{keys}]["title", "id", "description", "picUrl", "allergens"]',
-      get: function(pathSet) {
+      get: async function(pathSet) {
         let menuItemsIDs = pathSet[1];
         let allergensObject;
-        return models.MenuItemCollection.find({
-              '_id': { $in: menuItemsIDs}
-          }, function(err, menuItemsDocs) {
-            return menuItemsDocs;
-          }).then ((menuItemsArrayFromDB) => {
-            let results = [];
 
-            menuItemsArrayFromDB.map((menuItemObject) => {
+        let result = await models.MenuItemCollection.find({
+          '_id': { $in: menuItemsIDs}
+        }, function(err, menuItemsDocs) {
+          return menuItemsDocs;
+        }).then ((menuItemsArrayFromDB) => {
+          let results = [];
+
+          return new Promise((resolve, reject) => {
+            menuItemsArrayFromDB.map(async (menuItemObject) => {
               let resObj = menuItemObject.toObject();
               delete resObj.id;
 
@@ -30,19 +33,34 @@ export default ( sessionObject ) => {
               resObj.id = String(resObj["_id"]);
 
               delete resObj["_id"];
+
+              let awsImage = await downloadImage({
+                bucket: 'menu-item',
+                id: resObj.id
+              });
+
+              if (awsImage != null) {
+                resObj.picUrl = awsImage;
+              }
+
               resObj.allergens = $atom(resObj.allergens);
               results.push({
                 path: ["menuItemsById", resObj.id],
                 value: resObj
               });
-            });
 
-            return results;
+              if (results.length === menuItemsArrayFromDB.length) {
+                return resolve(results);
+              }
+            });
           });
+        });
+
+        return result;
       }
     }, {
       /*
-          USED on frontend in views/MenuLibraryView.js 
+          USED on frontend in views/MenuLibraryView.js
        */
       route: 'restaurants[{keys}].menuItems[{integers}]',
       get: (pathSet) => {
@@ -51,14 +69,14 @@ export default ( sessionObject ) => {
         let andStatementQuery = {
           ownedByRestaurantID: restIDnow
         }
-        
+
         return models.MenuItemCollection.find(andStatementQuery, '_id', function(err, menuItemsDocs) {
             return menuItemsDocs;
           }).then ((menuItemsArrayFromDB) => {
             let results = [];
             menuItemsIndexes.map((index) => {
               let res;
-              if (menuItemsArrayFromDB.length - 1 < index) { 
+              if (menuItemsArrayFromDB.length - 1 < index) {
                 res = {
                   path: ['restaurants', sessionObject.restaurantid, 'menuItems', index],
                   invalidate: true
@@ -79,6 +97,24 @@ export default ( sessionObject ) => {
 
             return results;
           })
+      }
+    },
+    {
+      route: 'menuItem.uploadPicture',
+      call: async function(callPath, args) {
+        let file = args[0];
+        let itemId = args[2];
+
+        if (file) {
+          return uploadImage({
+            bucket: 'menu-item',
+            id: itemId,
+            file
+          });
+        } else {
+          console.info('No file to upload');
+          return false;
+        }
       }
     }
   ];

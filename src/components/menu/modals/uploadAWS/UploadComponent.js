@@ -4,10 +4,6 @@ import { connect } from 'react-redux';
 import * as dashboardActions from 'actions/dashboard';
 import rolesUtils from 'utils/roles';
 import { FlatButton, Avatar, Dialog, Paper, IconButton, TextField, LinearProgress } from 'material-ui';
-import 'aws-sdk/dist/aws-sdk';
-
-// NOTE AWS SDK is global
-const AWS = window.AWS;
 
 const mapStateToProps = (state) => ({
   session: state.session
@@ -21,15 +17,8 @@ class UploadComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    // NOTE AWS credentials
-    AWS.config.update({
-      accessKeyId: 'AKIAJJR5LB7XHSYBGTCA',
-      secretAccessKey: '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'
-    });
-    AWS.config.region = 'us-west-2';
-
     this.state = {
-      imageUrl: null,
+      imageUrl: this.props.imgUrl,
       uploadAvatarDialogOpen: false,
 
       uploadTextField: {
@@ -37,12 +26,7 @@ class UploadComponent extends React.Component {
         error: null
       },
       uploading: false,
-      uploadMaxFileSizeMB: 5,
-
-      s3: new AWS.S3({
-        region: AWS.config.region
-      }),
-      s3Bucket: 'restauranttestbucket',
+      uploadMaxFileSize: 5242880,
 
       // TODO Remove when login is fixed
       user: {
@@ -51,81 +35,28 @@ class UploadComponent extends React.Component {
         lastName: 'test'
       }
     };
-      this.state.imageUrl = this.props.imgUrl;
-    // this.state.imageUrl = this.state.s3.getSignedUrl('getObject', {
-    //   Bucket: this.state.s3Bucket,
-    //   Key: this.state.user.id
-    // });
-  }
-  uploadFile = (file) => {
-    let s3 = this.state.s3;
-    let params = {
-      Bucket: this.state.s3Bucket,
-      Key: this.state.user.id,
-      ContentType: file.type,
-      Body: file,
-      ACL: 'public-read'
-    };
-
-    this.setState({
-      uploading: true
-    });
-
-    let fileReader = new FileReader();
-    let oldimageUrl = this.state.imageUrl;
-
-    fileReader.addEventListener('load', () => {
-      this.setState({
-        imageUrl: fileReader.result
-      });
-      this.setCurrentAWSPicUrl();
-
-      s3.putObject(params, (error, data) => {
-        if (error) {
-          this.setState({
-            imageUrl: oldimageUrl
-          });
-        }
-
-        this.setState({
-          uploading: false,
-          uploadTextField: {
-            error: error
-          }
-        });
-      });
-    });
-
-    fileReader.readAsDataURL(file);
+    this.state.imageUrl = this.props.imgUrl;
   }
 
   handleAvatarUpload = (event) => {
-    let result = {
-      error: null,
-      file: null
-    };
-    let avatarFile = event.currentTarget.files[0];
+    let imageFile = event.currentTarget.files[0];
 
-    if (avatarFile) {
-      let validFile = avatarFile.type.match(/image\/(png|jpe?g)/gm);
-      let fileSize = avatarFile.size / 1024 / 1024;
+    if (imageFile) {
+      let validFile = imageFile.type.match(/image\/(png|jpe?g)/gm);
+      let fileSize = imageFile.size;
 
-      if (validFile && fileSize <= this.state.uploadMaxFileSizeMB) {
-        this.uploadFile(avatarFile);
+      if (validFile && fileSize <= this.state.uploadMaxFileSize) {
+        this.setCurrentImage(imageFile);
       } else {
         if (!validFile) {
           result.error = 'File type invalid.';
-        } else if (fileSize > this.state.uploadMaxFileSizeMB) {
+        } else if (fileSize > this.state.uploadMaxFileSize) {
           result.error = 'Max file size is 5MB';
         }
       }
     } else {
       result.error = 'Error occurred, please try again.';
     }
-
-    this.setState({
-      uploadTextField: result
-    });
   }
 
   handleUploadDialogClose = () => {
@@ -144,11 +75,26 @@ class UploadComponent extends React.Component {
     });
   }
 
-  setCurrentAWSPicUrl() {
-    let url = this.state.user.id;
-    this.props.onImgChange(url);
-  }
+  setCurrentImage(file) {
+    let fileReader = new FileReader();
+    let oldImg = this.state.imageUrl;
 
+    fileReader.addEventListener('load', () => {
+      this.setState({
+        imageUrl: fileReader.result
+      });
+
+      if (typeof this.props.onImgChange === 'function') {
+        this.props.onImgChange([
+          fileReader.result,
+          file.type,
+          this.props.itemId
+        ]);
+      }
+    });
+
+    fileReader.readAsDataURL(file);
+  }
 
   render() {
     let avatarUploadFieldProps = {

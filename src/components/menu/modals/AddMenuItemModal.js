@@ -3,6 +3,7 @@ import {
   Dialog,
   FlatButton
 } from 'material-ui';
+import WarningIcon from 'material-ui/lib/svg-icons/alert/warning';
 import { Form } from 'formsy-react';
 
 import { MenuItem, Allergen } from 'models';
@@ -17,10 +18,12 @@ import RichEditor from 'components/wyswig-draftjs/RichEditor';
 import { allergensDetails } from 'components/menu/Allergens';
 import UploadComponent from 'components/menu/modals/uploadAWS/UploadComponent';
 
-
+import falcorModel from '../../../falcorModel.js';
 
 const d = new Date();
 const today = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+
+const STOCK_IMAGE = 'https://placeholdit.imgix.net/~text?txtsize=24&txt=No+Image+Selected&w=200&h=200&txttrack=0';
 
 const headerStyle = {
   margin: '32px auto -12px'
@@ -41,7 +44,12 @@ export default class AddMenuItemModal extends React.Component {
     this.onSectionsChange = this.onSectionsChange.bind(this);
     this.onAllergensChange = this.onAllergensChange.bind(this);
     this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
+    this._onchangeDraftJSON2 = this._onchangeDraftJSON2.bind(this);
+    this._onchangeDraftJSON3 = this._onchangeDraftJSON3.bind(this);
+
+
     this.onImgChange = this.onImgChange.bind(this);
+    this.uploadFile = this.uploadFile.bind(this);
     this.state = {
       canSubmit: false,
       contentJSON: {},
@@ -62,7 +70,15 @@ export default class AddMenuItemModal extends React.Component {
         let editedItem = this.props.menuItems.get(this.props.editItemId);
         this._enableBtn();
         // TODO - refactor delete setState somewhere else
-        this.setState({editedItem: editedItem, allergens: editedItem.allergens});
+        this.setState({
+          editedItem: editedItem,
+          allergens: editedItem.allergens,
+          contentJSON: {
+            description: editedItem.description,
+            description2: editedItem.description2,
+            description3: editedItem.description3
+          }
+        });
       }
   }
 
@@ -75,7 +91,27 @@ export default class AddMenuItemModal extends React.Component {
       }
   }
 
-  _onDone(formData) {
+  uploadFile = async (payload) => {
+    this.setState({
+      uploadingImage: true,
+      uploadError: null
+    });
+
+    let upload = falcorModel
+    .call(['menuItem', 'uploadPicture'], payload)
+    .then((result) => {
+      this.setState({
+        uploadingFile: false,
+        uploadError: result === false ? 'Upload error, please try again' : null
+      });
+
+      return payload[0];
+    });
+
+    return upload;
+  }
+
+  _onDone = async (formData) => {
     if(this.state.editedItem) {
       // only in edit mode
       for(var key in this.state.editedItem) {
@@ -87,23 +123,21 @@ export default class AddMenuItemModal extends React.Component {
       }
     }
     formData.allergens = this.state.allergens;
-    if(this.state.contentJSON["description"]) {
-      formData.description = this.state.contentJSON["description"];
-    }
 
-    if(this.state.contentJSON["description2"]) {
-      formData.description2 = this.state.contentJSON["description2"];
-    }
+    formData.description = this.state.contentJSON["description"] || "";
 
-    if(this.state.contentJSON["description3"]) {
-      formData.description3 = this.state.contentJSON["description3"];
-    }
+    formData.description2 = this.state.contentJSON["description2"] || '';
+
+    formData.description3 = this.state.contentJSON["description3"] || '';
 
     if(this.props.editItemId) formData.id = this.props.editItemId;
-    if(this.state.currentAWSPicUrl)
-      formData.picUrl = this.state.currentAWSPicUrl; // this.state
-    else {
-      formData.picUrl = "http://pngimg.com/upload/scratches_PNG6173.png";
+
+    if(this.state.uploadImagePayload) {
+      let uploadedImage = await this.uploadFile(this.state.uploadImagePayload);
+      formData.picUrl = uploadedImage;
+    } else {
+      let item = this.props.menuItems.get(this.props.editItemId);
+      formData.picUrl = (item ? item.picUrl : null) || STOCK_IMAGE;
     }
 
     const newMenuItem = new MenuItem(formData);
@@ -140,21 +174,48 @@ export default class AddMenuItemModal extends React.Component {
     this.setState({ contentJSON: newContentJSON});
   }
 
-  onImgChange(url) {
+  _onchangeDraftJSON2(contentJSON, descriptionName) {
+    let newContentJSON = this.state.contentJSON;
+    newContentJSON[descriptionName] = contentJSON;
+    this.setState({ contentJSON: newContentJSON});
+  }
+
+  _onchangeDraftJSON3(contentJSON, descriptionName) {
+    let newContentJSON = this.state.contentJSON;
+    newContentJSON[descriptionName] = contentJSON;
+    this.setState({ contentJSON: newContentJSON});
+  }
+
+  onImgChange(imagePayload) {
     this.setState({
-      currentAWSPicUrl: url
+      uploadImagePayload: imagePayload,
+      _canSubmit: true
     });
   }
 
   render() {
-
-
     let editItemId = this.props.editItemId;
     let editedItem;
     if(editItemId) {
       editedItem = this.props.menuItems.get(editItemId);
     }
-    
+
+    let richEditor1Value = '';
+    let richEditor2Value = '';
+    let richEditor3Value = '';
+
+    if(editedItem && editedItem.description) {
+      richEditor1Value = editedItem.description;
+    }
+
+    if(editedItem && editedItem.description2) {
+      richEditor2Value = editedItem.description2;
+    }
+
+    if(editedItem && editedItem.description3) {
+      richEditor3Value = editedItem.description3;
+    }
+
     return (
       <div style={{position: 'relative'}}>
       <Dialog
@@ -185,25 +246,24 @@ export default class AddMenuItemModal extends React.Component {
 
           <RichEditor
             tabIndexProp="100003"
-            initialValue={ editedItem ? editedItem.description : "" }
+            initialValue={ richEditor1Value }
             name="description"
             title="Description (Level 1)"
             onChangeTextJSON={this._onchangeDraftJSON} />
 
           <RichEditor
             tabIndexProp="100005"
-            initialValue={ editedItem && typeof editedItem.description2 !== 'undefined' ? editedItem.description2 : "" }
+            initialValue={ richEditor2Value }
             name="description2"
             title="Description (Level 2)"
-            onChangeTextJSON={this._onchangeDraftJSON} />
+            onChangeTextJSON={this._onchangeDraftJSON2} />
 
           <RichEditor
-            tabIndexProp="100010"
-            initialValue={ editedItem && typeof editedItem.description3 !== 'undefined' ? editedItem.description3 : "" }
+            tabIndexProp="100006"
+            initialValue={ richEditor3Value }
             name="description3"
             title="Description (Level 3)"
-            onChangeTextJSON={this._onchangeDraftJSON} />
-
+            onChangeTextJSON={this._onchangeDraftJSON3} />
           <h4 style={headerStyle}>Allergens</h4>
           <hr />
 
@@ -221,9 +281,19 @@ export default class AddMenuItemModal extends React.Component {
             sections={this.props.sections} />
           <h4 style={headerStyle}>UPLOAD IMAGE</h4>
           <UploadComponent
-            imgUrl={editedItem ? editedItem.picUrl : 'http://pngimg.com/upload/scratches_PNG6173.png'}
-            onImgChange={this.onImgChange} />
-
+            itemId={editItemId}
+            imgUrl={editedItem ? editedItem.picUrl : STOCK_IMAGE}
+            onImgChange={this.onImgChange}
+          />
+          <div className="col-md-12">
+            <FlatButton
+              disabled={true}
+              disabledBackgroundColor={'#fff'}
+              disabledLabelColor={'#000'}
+              icon={<WarningIcon />}
+              label={'Image preview only! Remember to submit the changes.'}
+            />
+          </div>
 
           <div style={footerStyles}>
             <FlatButton label="Close" onClick={this.props.onHide} />

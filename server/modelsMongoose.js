@@ -66,6 +66,19 @@ var sectionSchema = {
 };
 var SectionCollection = mongoose.model('SectionCollection', sectionSchema, 'sections');
 
+
+
+var newsSchema = {
+  title: { type: String, required: true, default: 'news mongoosedefault' },
+  message: { type: String, required: true, default: 'news mongoosedefault' },
+  ownedByRestaurantID: String,
+  authorName: String,
+  date: String
+};
+var NewsItemCollection = mongoose.model('NewsItemCollection', newsSchema, 'news');
+
+
+
 var menuSchema = {
   title: { type: String, required: true, default: 'mongoosedefault' },
   description: { type: String, required: true, default: 'mongoosedefault' },
@@ -121,5 +134,6 @@ module.exports = {
   SectionCollection,
   UserCollection,
   RestaurantCollection,
-  EmailTemplateCollection
+  EmailTemplateCollection,
+  NewsItemCollection
 };

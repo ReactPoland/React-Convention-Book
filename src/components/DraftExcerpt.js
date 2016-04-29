@@ -78,14 +78,14 @@ export default class DraftExcerpt extends React.Component {
       let descriptionTwoDivJSX = this.props.descriptionTwo ? (<ViewerOfRichEditor 
             tabIndexProp="100004"
             initialValue={ this.props.descriptionTwo }
-            name="description"
+            name="description2view"
             title="Description (Level 2)"
             onChangeTextJSON={() => {}} />) : <span />;
 
       let descriptionThreeDivJSX = this.props.descriptionThree ? (<ViewerOfRichEditor 
             tabIndexProp="100005"
             initialValue={ this.props.descriptionThree }
-            name="description"
+            name="description3view"
             title="Description (Level 3)"
             onChangeTextJSON={() => {}} />) : <span />;
 

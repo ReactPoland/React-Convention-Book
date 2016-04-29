@@ -6,30 +6,16 @@ import {
   TextField,
   LinearProgress
 } from 'material-ui';
-import 'aws-sdk/dist/aws-sdk';
 import falcorModel from '../../falcorModel.js';
-
-const AWS = window.AWS;
 
 class AvatarUpload extends React.Component {
   constructor(props) {
     super(props);
 
-    // NOTE AWS credentials (remove)
-    AWS.config.update({
-      accessKeyId: 'AKIAJJR5LB7XHSYBGTCA',
-      secretAccessKey: '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'
-    });
-    AWS.config.region = 'us-west-2';
-
     this.state = {
       uploading: false,
       error: false,
-      uploadMaxFileSizeMB: 5,
-      s3: new AWS.S3({
-        region: AWS.config.region
-      }),
-      s3Bucket: 'restaurant-reason-' + this.props.category
+      uploadMaxFileSize: 5242880
     };
 
     this.handleAvatarUpload = this.handleAvatarUpload.bind(this);
@@ -81,14 +67,14 @@ class AvatarUpload extends React.Component {
 
     if (avatarFile) {
       let validFile = avatarFile.type.match(/image\/(png|jpe?g)/gm);
-      let fileSize = avatarFile.size / 1024 / 1024;
+      let fileSize = avatarFile.size;
 
-      if (validFile && fileSize <= this.state.uploadMaxFileSizeMB) {
+      if (validFile && fileSize <= this.state.uploadMaxFileSize) {
         this.uploadFile(avatarFile);
       } else {
         if (!validFile) {
           validationError = 'File type invalid.';
-        } else if (fileSize > this.state.uploadMaxFileSizeMB) {
+        } else if (fileSize > this.state.uploadMaxFileSize) {
           validationError = 'Max file size is 5MB';
         }
       }
