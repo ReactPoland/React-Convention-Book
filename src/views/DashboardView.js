@@ -36,6 +36,7 @@ class DashboardView extends React.Component {
       let articleDetails = this.props.article[articleKey];
       let currentArticleJSX = (
         <ListItem
+          key={articleKey}
           leftAvatar={<img src="/static/placeholder.png" width="50" height="50" />}
           primaryText={articleDetails.articleTitle}
           secondaryText={articleDetails.articleContent}
