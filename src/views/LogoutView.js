@@ -2,16 +2,6 @@
 
 import React from 'react';
 import { Paper } from 'material-ui';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
-const mapStateToProps = (state) => ({
-  ...state
-});
-
-const mapDispatchToProps = (dispatch) => ({
-
-});
 
 class LogoutView extends React.Component {
   constructor(props) {
@@ -37,4 +27,4 @@ class LogoutView extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogoutView);
+export default LogoutView;
