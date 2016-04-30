@@ -7,6 +7,8 @@ import {
   CardText 
 } from 'material-ui/Card';
 import { Paper } from 'material-ui';
+import RichEditor from '../components/wyswig-draftjs/RichEditor';
+
 
 class ArticleCard extends React.Component {
   constructor(props) {
@@ -54,6 +56,13 @@ class ArticleCard extends React.Component {
         <div style={rightDivStyle}>
           {contentString}
           <h1>TUTAJ {typeof content.entityMap} WORKS </h1>
+          <RichEditor
+            tabIndexProp="100003"
+            initialValue={ contentString }
+            name="description"
+            title="Description (Level 1)"
+            onChangeTextJSON={() => console.info('change')}/>
+
         </div>
       </Paper>);
   }
