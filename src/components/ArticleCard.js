@@ -16,7 +16,7 @@ class ArticleCard extends React.Component {
   render() {
     let title = this.props.title || 'no title provided';
     let content = this.props.content || 'no content provided';
-    content = JSON.stringify(content);
+    let contentString = JSON.stringify(content);
 
     let paperStyle = {
       padding: 10, 
@@ -52,7 +52,8 @@ class ArticleCard extends React.Component {
           </Card>
         </div>
         <div style={rightDivStyle}>
-          {content}
+          {contentString}
+          <h1>TUTAJ {typeof content.entityMap} WORKS </h1>
         </div>
       </Paper>);
   }
