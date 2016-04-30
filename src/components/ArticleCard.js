@@ -16,6 +16,7 @@ class ArticleCard extends React.Component {
   render() {
     let title = this.props.title || 'no title provided';
     let content = this.props.content || 'no content provided';
+    content = JSON.stringify(content);
 
     let paperStyle = {
       padding: 10, 
