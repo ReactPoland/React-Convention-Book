@@ -1,6 +1,8 @@
 import configMongoose from './configMongoose';
 import sessionRoutes from './routesSession';
+import jsonGraph from 'falcor-json-graph';
 
+let $atom = jsonGraph.atom;
 let Article = configMongoose.Article;
 
 let PublishingAppRoutes = [
@@ -29,13 +31,15 @@ let PublishingAppRoutes = [
       let results = [];
       articlesIndex.forEach((index) => {
         let singleArticleObject = articlesArrayFromDB[index].toObject();
+        singleArticleObject.articleContent = $atom(singleArticleObject.articleContent);
         let falcorSingleArticleResult = {
           path: ['articles', index],
           value: singleArticleObject
         };
+
         results.push(falcorSingleArticleResult);
       });
-      console.info(">>>> results", results);
+      console.info(">>>> results", JSON.stringify(results));
       return results;
     })
   }
