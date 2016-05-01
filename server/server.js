@@ -76,53 +76,6 @@ let handleServerSideRender = async (req, res, next) => {
   });
 }
 
-
-let css = `
-<style  type="text/css">
-.RichEditor-root {
-  background: #fff;
-  border: 1px solid #ddd;
-  font-family: 'Georgia', serif;
-  font-size: 14px;
-  padding: 15px;
-}
-
-.RichEditor-editor {
-  border-top: 1px solid #ddd;
-  cursor: text;
-  font-size: 16px;
-  margin-top: 10px;
-  min-height: 100px;
-}
-
-.RichEditor-editor .RichEditor-blockquote {
-  border-left: 5px solid #eee;
-  color: #666;
-  font-family: 'Hoefler Text', 'Georgia', serif;
-  font-style: italic;
-  margin: 16px 0;
-  padding: 10px 20px;
-}
-
-.RichEditor-controls {
-  font-family: 'Helvetica', sans-serif;
-  font-size: 14px;
-  margin-bottom: 5px;
-  user-select: none;
-}
-
-.RichEditor-styleButton {
-  color: #999;
-  cursor: pointer;
-  margin-right: 16px;
-  padding: 2px 0;
-}
-
-.RichEditor-activeButton {
-  color: #5890ff;
-}
-</style>`;
-
 let renderFullPage = (html, initialState) =>
 {
   return `
@@ -130,7 +83,7 @@ let renderFullPage = (html, initialState) =>
     <html>
       <head>
         <title>Publishing App Server Side Rendering</title>
-        ${css}
+        <link rel="stylesheet" type="text/css" href="/static/styles-draft-js.css">
       </head>
       <body>
         <div id="publishingAppRoot">${html}</div>
