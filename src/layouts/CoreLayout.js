@@ -3,18 +3,18 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
 
 const muiTheme = getMuiTheme({ userAgent: 'all' });
 
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import IconButton from 'material-ui/IconButton';
-import ActionHome from 'material-ui/svg-icons/action/home';
+import RaisedButton from 'material-ui/lib/raised-button';
+import AppBar from 'material-ui/lib/app-bar';
+import ActionHome from 'material-ui/lib/svg-icons/action/home';
 
 
-
+console.info('MuiThemeProvider', MuiThemeProvider);
+console.info('getMuiTheme', getMuiTheme);
 
 
 
