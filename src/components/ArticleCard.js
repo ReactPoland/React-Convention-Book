@@ -18,7 +18,6 @@ class ArticleCard extends React.Component {
   render() {
     let title = this.props.title || 'no title provided';
     let content = this.props.content || 'no content provided';
-    let contentString = JSON.stringify(content);
 
     let paperStyle = {
       padding: 10, 
@@ -54,15 +53,7 @@ class ArticleCard extends React.Component {
           </Card>
         </div>
         <div style={rightDivStyle}>
-          {contentString}
-          <h1>TUTAJ {typeof content.entityMap} WORKS </h1>
-          <RichEditor
-            tabIndexProp="100003"
-            initialValue={ contentString }
-            name="description"
-            title="Description (Level 1)"
-            onChangeTextJSON={() => console.info('change')}/>
-
+          {content}
         </div>
       </Paper>);
   }

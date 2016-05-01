@@ -13,11 +13,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import ActionHome from 'material-ui/svg-icons/action/home';
 
-
-
-
-
-
 class CoreLayout extends React.Component {
   static propTypes = {
     children : React.PropTypes.element
