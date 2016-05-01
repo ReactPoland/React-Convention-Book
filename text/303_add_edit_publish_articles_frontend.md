@@ -585,6 +585,26 @@ Our new logout view page:
 
 #### Start working on our WYSWIG
 
+Let's install a Draft-JS' library which is "a framework for building rich text editors in React, powered by an immutable model and abstracting over cross-browser differences" as stated on their website.
+
+In general, Draft-JS is made by friends from Facebook and it helps making powerfull WYSWIG's tools. It will be useful in our Publishing's App as we want give a good tools for our editors in order to create interesting articles on our platform.
+
+Let's install it first:
+```
+npm i --save draft-js@0.3.0
+```
+
+We will use version ***0.3.0*** of draft-js in our book. Before we start coding let's install one more dependency which will be helpful later in fetching the articles' from DB via Falcor by:
+
+```
+npm i --save falcor-json-graph@1.1.7
+```
+
+In general, the ***falcor-json-graph@1.1.7*** provides us ability to use different sentinels provided via this Falcor's helper library (which will be described in details in the next chapter).
+
+
+
+
 
 
 
