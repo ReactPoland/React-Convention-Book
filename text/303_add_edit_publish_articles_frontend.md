@@ -279,7 +279,311 @@ Login user view:
 
 
 
-### Dashboard - listing articles & buttons for an add, edit and delete
+### Dashboard - add article button, logout and header's improvements
+
+Our plan for now is to:
+1) create logout mechanism
+2) make our header aware if a user is logged in or not and based on that information show different buttons in the header (Login/Register when is not logged in and Dashboard/Logout when a user is logged in)
+3) we will create an add article button in our dashboard and create a mocked view with a mocked WYSWIG (later we will unmock them)
+
+
+The WYSWIG mock will be located in ***src/components/articles/WYSWIGeditor.js*** so you need to create a new directory and file in components with following commands:
+```
+$ [[you are in the src/components/ directory of your project]]
+$ mkdir articles
+$ cd articles
+$ touch WYSWIGeditor.js
+```
+
+... and then our WYSWIGeditor.js mock content is:
+```
+import React from 'react';
+
+class WYSWIGeditor extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <h1>WYSWIG editor</h1>;
+  }
+};
+
+export default WYSWIGeditor;
+```
+
+The next step is to create a logout view at ***src/views/LogoutView.js*** location:
+```
+$ [[you are in the src/views/ directory of your project]]
+$ cd articles
+$ touch WYSWIGeditor.js
+```
+
+... and the ***src/views/LogoutView.js*** content is:
+```
+"use strict";
+
+import React from 'react';
+import { Paper } from 'material-ui';
+
+class LogoutView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentWillMount() {
+    if(typeof localStorage !== 'undefined' && localStorage.token) {
+      delete localStorage.token;
+      delete localStorage.username;
+      delete localStorage.role;
+    }
+  }
+
+  render () {
+    return (
+      <div style={{width: 400, margin: "auto"}}>
+        <Paper zDepth={3} style={{padding: 32, margin: 32}}>
+          Logout successful.
+        </Paper>
+      </div>
+    );
+  }
+}
+
+export default LogoutView;
+```
+
+The logout view above is a simple view without connect function to the redux (like in comparision the ***LoginView.js***). We are using some styling to make it nice with ***Paper***'s component from Material-UI.
+
+The ***componentWillMount*** function is deleting from localStorage information when user's lands on the logout page. As you can see it also checks if there is locaStorage with ***if(typeof localStorage !== 'undefined' && localStorage.token) *** because as you can imagine when you do server-side rendering then the ***localStorage*** is an undefined (server side doesn't have localStorage and window in comparision to the client-side).
+
+
+
+After we having the LogoutView and the WYSWIGeditor's components, let's create the last piece of missing components in our process - it's the ***src/views/articles/AddArticleView.js***, so let's create a directory and file now:
+```
+$ [[you are in the src/views/ directory of your project]]
+$ mkdir articles
+$ cd articles
+$ touch AddArticleView.js
+```
+
+After you have that file in your views/articles' directory then we need to put the content into that:
+```
+"use strict";
+
+import React from 'react';
+import { connect } from 'react-redux';
+import WYSWIGeditor from '../../components/articles/WYSWIGeditor.js';
+
+const mapStateToProps = (state) => ({
+  ...state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
+
+class AddArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render () {
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+        <WYSWIGeditor />
+      </div>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddArticleView);
+```
+
+As you can see above it's a simple React's view and it imports the WYSWIGeditor that we have created a moment ago (***import WYSWIGeditor from '../../components/articles/WYSWIGeditor.js'***). We have some inline styles in order to make the view looking nicer for our user.
+
+
+Let's create two new routes for a logout and for an add article feature with modyfing the routes file at the ***src/routes/index.js**'s location:
+```
+import React                        from 'react';
+import { Route, IndexRoute }        from 'react-router';
+
+/* wrappers */
+import CoreLayout                   from '../layouts/CoreLayout';
+
+/* home view */
+import PublishingApp                    from '../layouts/PublishingApp';
+
+/* auth views */
+import LoginView                    from '../views/LoginView';
+import LogoutView                    from '../views/LogoutView';
+import RegisterView                    from '../views/RegisterView';
+
+import DashboardView                    from '../views/DashboardView';
+import AddArticleView                    from '../views/articles/AddArticleView';
+
+export default (
+  <Route component={CoreLayout} path='/'>
+    <IndexRoute component={PublishingApp} name='home' />
+    <Route component={LoginView} path='login' name='login' />
+    <Route component={LogoutView} path='logout' name='logout' />
+    <Route component={RegisterView} path='register' name='register' />
+    <Route component={DashboardView} path='dashboard' name='dashboard' />
+    <Route component={AddArticleView} path='add-article' name='add-article' />
+  </Route>
+);
+```
+
+Above in our ***src/routes/index.js*** we have added two routes:
+```
+<Route component={LogoutView} path='logout' name='logout' />
+```
+and
+```
+<Route component={AddArticleView} path='add-article' name='add-article' />
+```
+
+Please don't forget to import those two views' components with:
+```
+import LogoutView                    from '../views/LogoutView';
+import AddArticleView                    from '../views/articles/AddArticleView';
+```
+
+Right now we have created the views and we have created routes into that view. The last piece is to show links into those two routes in our app.
+
+First let's create the ***src/layouts/CoreLayout.js***'s component so it will have a login/logout's login so a logged user will see other buttons than a non-logged user. Please modify the render function in the CoreLayout's component to this new below:
+```
+   render () {
+    const buttonStyle = {
+      margin: 5
+    };
+    const homeIconStyle = {
+      margin: 5,
+      paddingTop: 5
+    };
+    
+    let menuLinksJSX;
+    let userIsLoggedIn = typeof localStorage !== 'undefined' && localStorage.token && this.props.routes[1].name !== 'logout';
+    
+    if(userIsLoggedIn) {
+      menuLinksJSX = (<span>
+          <Link to='/dashboard'><RaisedButton label="Dashboard" style={buttonStyle}  /></Link> 
+          <Link to='/logout'><RaisedButton label="Logout" style={buttonStyle}  /></Link> 
+        </span>);
+    } else {
+      menuLinksJSX = (<span>
+          <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
+          <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
+        </span>);
+    }
+
+    let homePageButtonJSX = (<Link to='/'>
+        <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
+      </Link>);
+
+
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          <AppBar
+            title='Publishing App'
+            iconElementLeft={homePageButtonJSX}
+            iconElementRight={menuLinksJSX} />
+            <br/>
+            {this.props.children}
+        </div>
+      </MuiThemeProvider>
+    );
+  }
+```
+... as you can find above the new part of the mode is this:
+```
+  let menuLinksJSX;
+  let userIsLoggedIn = typeof localStorage !== 'undefined' && localStorage.token && this.props.routes[1].name !== 'logout';
+  
+  if(userIsLoggedIn) {
+    menuLinksJSX = (<span>
+        <Link to='/dashboard'><RaisedButton label="Dashboard" style={buttonStyle}  /></Link> 
+        <Link to='/logout'><RaisedButton label="Logout" style={buttonStyle}  /></Link> 
+      </span>);
+  } else {
+    menuLinksJSX = (<span>
+        <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
+        <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
+      </span>);
+  }
+```
+
+We have created a ***let userIsLoggedIn = typeof localStorage !== 'undefined' && localStorage.token && this.props.routes[1].name !== 'logout';***. The userIsLoggedIn's variable is finding if we are not on the server side (then it's doesn't have localStorage as mentioned already in that chapter). Then it checks if the ***localStorage.token*** and if yes, then it checks in case if a user didn't click the logout's button with the ***this.props.routes[1].name !== 'logout'***. The ***this.props.routes[1].name***'s value/information is provided by the redux's router and react-router - and this is always the name of our current route on the client-side so we can render the proper buttons based on that inforamtion.
+
+As you can find, we have added that ***if(userIsLoggedIn)*** statement and a new part are the dashboard && logout RaisedButtons with links to the correct routes.
+
+
+The last piece to wrap up at this stage is to modify the ***src/views/DashboardView.js***'s component. Import the Link from react-router by adding Link. Also we need to import new material-UI's components in order to make the DashboardView nicer:
+```
+import { Link } from 'react-router';
+import { List, ListItem } from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import ActionInfo from 'material-ui/svg-icons/action/info';
+import FileFolder from 'material-ui/svg-icons/file/folder';
+import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
+```
+
+After you have imported all this above in your ***src/views/DashboardView.js*** then we need to start work on improving the render function:
+
+```
+  render () {
+    
+    let articlesJSX = [];
+    for(let articleKey in this.props.article) {
+      let articleDetails = this.props.article[articleKey];
+      let currentArticleJSX = (
+        <ListItem
+          key={articleKey}
+          leftAvatar={<img src="/static/placeholder.png" width="50" height="50" />}
+          primaryText={articleDetails.articleTitle}
+          secondaryText={articleDetails.articleContent}
+        />
+      );
+
+      articlesJSX.push(currentArticleJSX);
+    }
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <Link to='/add-article'>
+          <RaisedButton 
+            label="Create an article" 
+            secondary={true} 
+            style={{margin: '20px 20px 20px 20px'}} />
+        </Link>
+
+        <List>
+          {articlesJSX}
+        </List>
+      </div>
+    );
+  }
+```
+
+Above is our new render function of the DashboardView. We are using the ListItem's component to make our nice lists. We have also added the link and button to the ***/add-article***'s routes. There are some inline styles but feel free to style this app on your own.
+
+Below you can find screenshots how the app looks after all those changes:
+
+
+
+Add an article button with a new view of articles:
+![306_add_article_button_articles_list](http://test.przeorski.pl/book/306_add_article_button_articles_list.png)
+
+Mocked WYSWIG on the /add-article view:
+![307_mocked_wyswig](http://test.przeorski.pl/book/307_mocked_wyswig.png)
+
+Our new logout view page:
+![308_logout_view](http://test.przeorski.pl/book/308_logout_view.png)
+
+
+#### Start working on our WYSWIG
 
 
 
