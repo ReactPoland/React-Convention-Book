@@ -884,7 +884,23 @@ After all those changes, the new view that you shall see is:
 
 #### Adding more feautres like bold text in our WYSWIG
 
+Let's starting working on version two of our WYSWIG, with more options as on the example below:
 
+![draftjs v2 wyswig](http://test.przeorski.pl/book/310_draftjs_wyswig_v2.png)
+
+After you will follow the steps below you will be able to format your text as below and extract HTML's markup from it as well so we can save both JSON's state of our WYSWIG and plain HTML in our MongoDB's articles collection.
+
+
+First we need to create the WYSWIG buttons in the ***src/components/articles/wyswig/WYSWIGbuttons.js***'s location:
+
+```
+$ [[you are in the src/components/articles directory of your project]]
+$ mkdir wyswig
+$ cd wyswig
+$ touch WYSWIGbuttons.js
+```
+
+Af
 
 
 NEXT STEPS AFTER FINISHED BOOK:
