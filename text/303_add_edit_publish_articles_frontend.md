@@ -1008,6 +1008,81 @@ Next step is to import both ***InlineStyleControls*** and ***BlockStyleControls*
 import { BlockStyleControls, InlineStyleControls } from './wyswig/WYSWIGbuttons';
 ```
 
+then in the WYSWIGeditor's constructor:
+```
+    this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+    this.toggleBlockType = (type) => this._toggleBlockType(type);
+```
+... bind to the ***toggleInlineStyle*** and ***toggleBlockType*** a this.
+
+and create these two new functions:
+```
+  _toggleBlockType(blockType) {
+    this.onChange(
+      RichUtils.toggleBlockType(
+        this.state.editorState,
+        blockType
+      )
+    );
+  }
+
+  _toggleInlineStyle(inlineStyle) {
+    this.onChange(
+      RichUtils.toggleInlineStyle(
+        this.state.editorState,
+        inlineStyle
+      )
+    );
+  }
+```
+
+Above both functions are using Draft-JS' RichUtils in order to set flags inside our WYSWIG that we are using certain formatting options from ***BLOCK_TYPES*** and ***INLINE_STYLES*** that we have defined in the ***import { BlockStyleControls, InlineStyleControls } from './wyswig/WYSWIGbuttons';***.
+
+
+After we are done with improving our WYSWIGeditor's construction and the _toggleBlockType and _toggleInlineStyle functions then we can start improving our render function:
+
+```
+  render() {
+    const { editorState } = this.state;
+    let className = 'RichEditor-editor';
+    var contentState = editorState.getCurrentContent();
+
+    return (
+      <div>
+        <h4>{this.props.title}</h4>
+        <div className="RichEditor-root">
+          <BlockStyleControls
+            editorState={editorState}
+            onToggle={this.toggleBlockType} />
+            
+          <InlineStyleControls
+            editorState={editorState}
+            onToggle={this.toggleInlineStyle} />
+
+          <div className={className} onClick={this.focus}>
+            <Editor
+              editorState={editorState}
+              handleKeyCommand={this.handleKeyCommand}
+              onChange={this.onChange}
+              ref='WYSWIGeditor' />
+          </div>
+        </div>
+      </div>
+    );
+  }
+```
+
+As you can notice above we have only added the ***BlockStyleControls*** and ***InlineStyleControls*** component. Please also notice that we are using callbacks with the ***onToggle={this.toggleBlockType}*** and ***onToggle={this.toggleInlineStyle}*** - this is for communicating between our WYSWIGbuttons and the Draft-JS' RichUtils about what a user has clicked and in which mode is currently (like bold, header1, UO or OL list, and so on, and so on).
+
+
+
+
+
+
+
+
+
+
 
 
 
