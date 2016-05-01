@@ -821,8 +821,66 @@ Next step is to improve the render function with the following code:
 
 Above what we do is simply using the Draft-JS's API in order to make a simple RichEditor - later we will make it more functional, but for now let's focus on something simple.
 
+#### Improving the views/articles/AddArtivleView's component
+
+Before we will move forward with adding all the WYSWIG's features like bolding, we need to improve the ***views/articles/AddArtivleView.js*** with few things:
+
+1) Install a library which will convert Draft-JS' state into a plain HTML with:
+```
+npm i --save draft-js-export-html@0.1.13
+```
+We will use this library in order to save a read-only plain HTML for our regular readers.
+
+2) next import that into the src/views/articles/AddArtivleView.js:
+
+```
+import { stateToHTML } from 'draft-js-export-html';
+```
+
+3) Improve the AddArticleView with changing a constructor and adding a new function called ***_onDraftJSChange***:
+```
+
+class AddArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
+
+    this.state = {
+      contentJSON: {},
+      htmlContent: ''
+    };
+  }
+
+  _onDraftJSChange(contentJSON, contentState) {
+    let htmlContent = stateToHTML(contentState);
+    this.setState({contentJSON, htmlContent});
+  }
+```
+
+##### THE EXPLANATION: 
+We need to save on each change a state of ***this.setState({contentJSON, htmlContent});***. This is because contentJSON will be saved into database in order to have an immutable information about our WYSWIG and the htmlContent will be server for our readers. Both variables htmlContent and contentJSON will be keept in the articles' collection.
+
+
+4) The last thing in the AddArticleView is to modify render to new code as following:
+```
+  render () {
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+          <WYSWIGeditor
+            initialValue=''
+            title="Create an article"
+            onChangeTextJSON={this._onchangeDraftJSON} />
+      </div>
+    );
+  }
+```
+
+After all those changes, the new view that you shall see is:
 
 ![draftjs v1 wyswig](http://test.przeorski.pl/book/309_draftjs_wyswig_v1.png)
+
+
 
 #### Adding more feautres like bold text in our WYSWIG
 
@@ -831,6 +889,4 @@ Above what we do is simply using the Draft-JS's API in order to make a simple Ri
 
 NEXT STEPS AFTER FINISHED BOOK:
 1) finish fetching with $atom at server/routes.js
-
-
 

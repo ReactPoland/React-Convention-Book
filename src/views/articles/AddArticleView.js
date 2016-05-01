@@ -6,7 +6,7 @@ import falcorModel from '../../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
-import {stateToHTML} from 'draft-js-export-html';
+import { stateToHTML } from 'draft-js-export-html';
 
 const mapStateToProps = (state) => ({
 	...state
