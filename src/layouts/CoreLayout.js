@@ -13,6 +13,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import RichEditor from '../components/wyswig-draftjs/RichEditor';
+import AddArticleView from '../views/articles/AddArticleView';
 
 
 
@@ -36,15 +37,12 @@ class CoreLayout extends React.Component {
 
   render () {
     return (
-      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
-        <h1>Add Article</h1>
-          <RichEditor
-            tabIndexProp="100005"
-            initialValue={''}
-            name="description2"
-            title="Description (Level 2)"
-            onChangeTextJSON={this._onchangeDraftJSON} />
-      </div>
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+          <h1>Add Article222</h1>
+            <AddArticleView />
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
