@@ -603,14 +603,86 @@ npm i --save falcor-json-graph@1.1.7
 In general, the ***falcor-json-graph@1.1.7*** provides us ability to use different sentinels provided via this Falcor's helper library (which will be described in details in the next chapter).
 
 
+#### Stylesheet for the DraftJS' WYSWIG
+
+It's the only place where I will put a CSS's stylesheet because of the Draft-JS, you need to create a new css file in the dist folder at ***dist/styles-draft-js.css***'s location:
+
+```
+.RichEditor-root {
+  background: #fff;
+  border: 1px solid #ddd;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  padding: 15px;
+}
+
+.RichEditor-editor {
+  border-top: 1px solid #ddd;
+  cursor: text;
+  font-size: 16px;
+  margin-top: 10px;
+  min-height: 100px;
+}
+
+.RichEditor-editor .RichEditor-blockquote {
+  border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Hoefler Text', 'Georgia', serif;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 10px 20px;
+}
+
+.RichEditor-controls {
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  margin-bottom: 5px;
+  user-select: none;
+}
+
+.RichEditor-styleButton {
+  color: #999;
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 2px 0;
+}
+
+.RichEditor-activeButton {
+  color: #5890ff;
+}
+```
+
+... and after you have created this file at ***dist/styles-draft-js.css*** then we need to import this in the server/server.js where we are creating the HTML's header so that code below which already exsits in server.js' file:
+```
+let renderFullPage = (html, initialState) =>
+{
+  return `
+    <!doctype html>
+    <html>
+      <head>
+        <title>Publishing App Server Side Rendering</title>
+        <link rel="stylesheet" type="text/css" href="/static/styles-draft-js.css" />
+      </head>
+      <body>
+        <div id="publishingAppRoot">${html}</div>
+        <script>
+          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+        </script>
+        <script src="/static/app.js"></script>
+      </body>
+    </html>
+    `
+};
+```
+... then you need to include the link to the stylesheet with:
+```
+<link rel="stylesheet" type="text/css" href="/static/styles-draft-js.css" />
+```
+
+Nothing fancy so far... after we are done with the styles for our Rich Text's WYSWIG editor then let's make a fun.
 
 
-
-
-
-
-
-
+#### Coding Draft-JS
 
 
 NEXT STEPS AFTER FINISHED BOOK:
