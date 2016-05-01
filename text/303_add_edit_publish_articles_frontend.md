@@ -822,9 +822,9 @@ Next step is to improve the render function with the following code:
 Above what we do is simply using the Draft-JS's API in order to make a simple RichEditor - later we will make it more functional, but for now let's focus on something simple.
 
 
+![draftjs v1 wyswig](http://test.przeorski.pl/book/309_draftjs_wyswig_v1.png)
 
-
-
+#### Adding more feautres like bold text in our WYSWIG
 
 
 
