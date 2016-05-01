@@ -613,3 +613,8 @@ In general, the ***falcor-json-graph@1.1.7*** provides us ability to use differe
 
 
 
+NEXT STEPS AFTER FINISHED BOOK:
+1) finish fetching with $atom at server/routes.js
+
+
+
