@@ -5,8 +5,9 @@ import {
   CardMedia, 
   CardTitle, 
   CardText 
-} from 'material-ui/Card';
-import { Paper } from 'material-ui';
+} from 'material-ui/lib/card';
+import { Paper } from 'material-ui/lib';
+
 
 class ArticleCard extends React.Component {
   constructor(props) {

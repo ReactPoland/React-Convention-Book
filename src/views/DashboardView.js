@@ -16,12 +16,12 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-import { List, ListItem } from 'material-ui/List';
-import Avatar from 'material-ui/Avatar';
-import ActionInfo from 'material-ui/svg-icons/action/info';
-import FileFolder from 'material-ui/svg-icons/file/folder';
-import RaisedButton from 'material-ui/RaisedButton';
-import Divider from 'material-ui/Divider';
+import { List, ListItem } from 'material-ui/lib/lists';
+import Avatar from 'material-ui/lib/avatar';
+import ActionInfo from 'material-ui/lib/svg-icons/action/info';
+import FileFolder from 'material-ui/lib/svg-icons/file/folder';
+import RaisedButton from 'material-ui/lib/raised-button';
+import Divider from 'material-ui/lib/divider';
 
 
 class DashboardView extends React.Component {

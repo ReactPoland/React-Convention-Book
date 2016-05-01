@@ -585,11 +585,252 @@ Our new logout view page:
 
 #### Start working on our WYSWIG
 
+Let's install a Draft-JS' library which is "a framework for building rich text editors in React, powered by an immutable model and abstracting over cross-browser differences" as stated on their website.
+
+In general, Draft-JS is made by friends from Facebook and it helps making powerfull WYSWIG's tools. It will be useful in our Publishing's App as we want give a good tools for our editors in order to create interesting articles on our platform.
+
+Let's install it first:
+```
+npm i --save draft-js@0.5.0
+```
+
+We will use version ***0.5.0*** of draft-js in our book. Before we start coding let's install one more dependency which will be helpful later in fetching the articles' from DB via Falcor by:
+
+```
+npm i --save falcor-json-graph@1.1.7
+```
+
+In general, the ***falcor-json-graph@1.1.7*** provides us ability to use different sentinels provided via this Falcor's helper library (which will be described in details in the next chapter).
+
+
+#### Stylesheet for the DraftJS' WYSWIG
+
+It's the only place where I will put a CSS's stylesheet because of the Draft-JS, you need to create a new css file in the dist folder at ***dist/styles-draft-js.css***'s location:
+
+```
+.RichEditor-root {
+  background: #fff;
+  border: 1px solid #ddd;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  padding: 15px;
+}
+
+.RichEditor-editor {
+  border-top: 1px solid #ddd;
+  cursor: text;
+  font-size: 16px;
+  margin-top: 10px;
+  min-height: 100px;
+}
+
+.RichEditor-editor .RichEditor-blockquote {
+  border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Hoefler Text', 'Georgia', serif;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 10px 20px;
+}
+
+.RichEditor-controls {
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  margin-bottom: 5px;
+  user-select: none;
+}
+
+.RichEditor-styleButton {
+  color: #999;
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 2px 0;
+}
+
+.RichEditor-activeButton {
+  color: #5890ff;
+}
+```
+
+... and after you have created this file at ***dist/styles-draft-js.css*** then we need to import this in the server/server.js where we are creating the HTML's header so that code below which already exsits in server.js' file:
+```
+let renderFullPage = (html, initialState) =>
+{
+  return `
+    <!doctype html>
+    <html>
+      <head>
+        <title>Publishing App Server Side Rendering</title>
+        <link rel="stylesheet" type="text/css" href="/static/styles-draft-js.css" />
+      </head>
+      <body>
+        <div id="publishingAppRoot">${html}</div>
+        <script>
+          window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+        </script>
+        <script src="/static/app.js"></script>
+      </body>
+    </html>
+    `
+};
+```
+... then you need to include the link to the stylesheet with:
+```
+<link rel="stylesheet" type="text/css" href="/static/styles-draft-js.css" />
+```
+
+Nothing fancy so far... after we are done with the styles for our Rich Text's WYSWIG editor then let's make a fun.
+
+
+#### Coding Draft-JS' skeleton
+Let's get back to the ***src/components/articles/WYSWIGeditor.js***'s file - it's currently mocked, but we will improve it right now.
+
+Just to make you aware, we will make a skeleton of WYSWIG right now - we will improve it later in that book. At this point, the WYSWIG won't have any functionalities like making text bold or creating a lists with OL or UL's elements.
+
+
+```
+import React from 'react';
+import {
+  Editor, 
+  EditorState, 
+  ContentState, 
+  RichUtils, 
+  convertToRaw,
+  convertFromRaw
+} from 'draft-js';
+
+
+export default class  WYSWIGeditor extends React.Component {
+  constructor(props) {
+    super(props);
+
+    let initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));
+
+    this.state = {
+      editorState: initialEditorFromProps
+    };
+
+    this.onChange = (editorState) => { 
+      var contentState = editorState.getCurrentContent();
+
+      let contentJSON = convertToRaw(contentState);
+      props.onChangeTextJSON(contentJSON, contentState);
+      this.setState({editorState}) 
+    };
+  }
+
+  render() {
+    return <h1>WYSWIG editor</h1>;
+  }
+}
+```
+
+Above we have created only a constructor of our new Draft-JS's WYSWIG. The ***let initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));*** is simply creating an empty WYSWIG container - later we will improve it so we will be able to receive a ContentState from database when we would like to edit our WYSWIG.
+
+The ***editorState: initialEditorFromProps*** is our current state. Our ***this.onChange = (editorState) => { *** is firing on each change, so our view component at ***src/views/articles/AddArticleView.js*** will know about any changes in the WYSWIG.
+
+Anyway, you shall check the documentation of Draft-JS at https://facebook.github.io/draft-js/ 
+
+This is just beginning, next step is to add under the onChange two new:
+``` 
+this.focus = () => this.refs['WYSWIGeditor'].focus();
+this.handleKeyCommand = (command) => this._handleKeyCommand(command);
+```
+
+and a new function in our WYSWIGeditor class:
+```
+  _handleKeyCommand(command) {
+    const {editorState} = this.state;
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      this.onChange(newState);
+      return true;
+    }
+    return false;
+  }
+```
+
+
+After all those changes this is how should looks like your construction of the WYSWIGeditor:
+```
+export default class  WYSWIGeditor extends React.Component {
+  constructor(props) {
+    super(props);
+
+    let initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));
+
+    this.state = {
+      editorState: initialEditorFromProps
+    };
+
+    this.onChange = (editorState) => { 
+      var contentState = editorState.getCurrentContent();
+
+      let contentJSON = convertToRaw(contentState);
+      props.onChangeTextJSON(contentJSON, contentState);
+      this.setState({editorState}) 
+    };
+
+    this.focus = () => this.refs['refWYSWIGeditor'].focus();
+    this.handleKeyCommand = (command) => this._handleKeyCommand(command);
+  }
+```
+
+... and rest of this class is as following:
+```
+
+  _handleKeyCommand(command) {
+    const {editorState} = this.state;
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      this.onChange(newState);
+      return true;
+    }
+    return false;
+  }
+
+  render() {
+    return <h1>WYSWIG editor</h1>;
+  }
+}
+```
+
+Next step is to improve the render function with the following code:
+```
+  render() {
+    const { editorState } = this.state;
+    let className = 'RichEditor-editor';
+    var contentState = editorState.getCurrentContent();
+
+    return (
+      <div>
+        <h4>{this.props.title}</h4>
+        <div className="RichEditor-root">
+          <div className={className} onClick={this.focus}>
+            <Editor
+              editorState={editorState}
+              handleKeyCommand={this.handleKeyCommand}
+              onChange={this.onChange}
+              ref='refWYSWIGeditor' />
+          </div>
+        </div>
+      </div>
+    );
+  }
+```
+
+Above what we do is simply using the Draft-JS's API in order to make a simple RichEditor - later we will make it more functional, but for now let's focus on something simple.
+
+
+![draftjs v1 wyswig](http://test.przeorski.pl/book/309_draftjs_wyswig_v1.png)
+
+#### Adding more feautres like bold text in our WYSWIG
 
 
 
 
-
+NEXT STEPS AFTER FINISHED BOOK:
+1) finish fetching with $atom at server/routes.js
 
 
 
