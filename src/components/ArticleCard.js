@@ -5,8 +5,8 @@ import {
   CardMedia, 
   CardTitle, 
   CardText 
-} from 'material-ui/Card';
-import { Paper } from 'material-ui';
+} from 'material-ui/lib/card';
+import { Paper } from 'material-ui/lib';
 import RichEditor from '../components/wyswig-draftjs/RichEditor';
 
 

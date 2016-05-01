@@ -1,105 +1,75 @@
+"use strict"; 
+  
 import React from 'react';
-import 'styles/core.scss';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import * as sessionActions from 'actions/session';
-import * as restaurantActions from 'actions/restaurant';
-import * as newsFeedActions from 'actions/newsFeed';
-import API from 'utils/API';
 import { Link } from 'react-router';
 
-import { Paper, FlatButton } from 'material-ui';
-import Colors from 'material-ui/lib/styles/colors';
-import AlertWarning from 'material-ui/lib/svg-icons/alert/warning';
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
 
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+const muiTheme = getMuiTheme({ userAgent: 'all' });
 
-import falcorModel from '../falcorModel.js';
-import RichEditor from 'components/wyswig-draftjs/RichEditor';
+import RaisedButton from 'material-ui/lib/raised-button';
+import AppBar from 'material-ui/lib/app-bar';
+import ActionHome from 'material-ui/lib/svg-icons/action/home';
 
-const mapStateToProps = (state) => ({
-  ...state
-});
 
-const mapDispatchToProps = (dispatch) => ({
-  sessionActions: bindActionCreators(sessionActions, dispatch),
-  restaurantActions: bindActionCreators(restaurantActions, dispatch),
-  newsFeedActions: bindActionCreators(newsFeedActions, dispatch)
-});
+console.info('MuiThemeProvider', MuiThemeProvider);
+console.info('getMuiTheme', getMuiTheme);
 
-const whiteList = [
-  'home', 'login', 'register', 'reset-password1',
-  'reset-password2', 'token-not-found', 'staff-register'
-];
-const fullWidth = whiteList.concat([
-  'dashboard', 'account-settings', 'resend-confirmation-email',
-  'change-confirmation-email', 'reset-password'
-]);
-
-function isFullWidth() {
-  console.log()
-  for(let i = fullWidth.length - 1; i >= 0; i--) {
-    if(window.location.hash.includes(fullWidth[i])) {
-      return false;
-    }
-  }
-
-  if(window.location.hash === '#/') {
-    return false;
-  }
-
-  return true;
-}
-
-const warningPanelStyles = {
-  margin: '12px auto',
-  width: 800,
-  textAlign: 'center',
-  padding: 12,
-  position: 'absolute',
-  top: 0,
-  left: '50%',
-  transform: "translateX(-50%)"
-};
-
-const iconStyles = {
-  lineHeight: 48,
-  verticalAlign: 'middle',
-  margin: '0 24',
-  width: 24,
-  height: 24
-};
 
 
 class CoreLayout extends React.Component {
+  static propTypes = {
+    children : React.PropTypes.element
+  }
+
   constructor(props) {
     super(props);
-    this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
 
-    this.state = {
-      contentJSON: {}
-    };
   }
-
-  _onchangeDraftJSON(contentJSON, descriptionName) {
-    console.info('contentJSON', contentJSON);
-    this.setState({contentJSON: contentJSON});
-  }
-
 
   render () {
+    const buttonStyle = {
+      margin: 5
+    };
+    const homeIconStyle = {
+      margin: 5,
+      paddingTop: 5
+    };
+    
+    let menuLinksJSX;
+    let userIsLoggedIn = typeof localStorage !== 'undefined' && localStorage.token && this.props.routes[1].name !== 'logout';
+    
+    if(userIsLoggedIn) {
+      menuLinksJSX = (<span>
+          <Link to='/dashboard'><RaisedButton label="Dashboard" style={buttonStyle}  /></Link> 
+          <Link to='/logout'><RaisedButton label="Logout" style={buttonStyle}  /></Link> 
+        </span>);
+    } else {
+      menuLinksJSX = (<span>
+          <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
+          <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
+        </span>);
+    }
+
+    let homePageButtonJSX = (<Link to='/'>
+        <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
+      </Link>);
+
+
     return (
-      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
-        <h1>Add Article</h1>
-          <RichEditor
-            tabIndexProp="100005"
-            initialValue={''}
-            name="description2"
-            title="Description (Level 2)"
-            onChangeTextJSON={this._onchangeDraftJSON} />
-      </div>
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          <AppBar
+            title='Publishing App'
+            iconElementLeft={homePageButtonJSX}
+            iconElementRight={menuLinksJSX} />
+            <br/>
+            {this.props.children}
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout);
+export default CoreLayout;
