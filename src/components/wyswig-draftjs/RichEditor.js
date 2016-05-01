@@ -35,7 +35,7 @@ export default class  RichEditor extends React.Component {
         var contentState = editorState.getCurrentContent();
 
         let contentJSON = convertToRaw(contentState);
-        props.onChangeTextJSON(contentJSON, this.props.name);
+        props.onChangeTextJSON(contentJSON, contentState);
         this.setState({editorState}) 
       };
 

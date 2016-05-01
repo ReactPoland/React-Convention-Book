@@ -13,11 +13,6 @@ import AppBar from 'material-ui/lib/app-bar';
 import ActionHome from 'material-ui/lib/svg-icons/action/home';
 
 
-console.info('MuiThemeProvider', MuiThemeProvider);
-console.info('getMuiTheme', getMuiTheme);
-
-
-
 class CoreLayout extends React.Component {
   static propTypes = {
     children : React.PropTypes.element

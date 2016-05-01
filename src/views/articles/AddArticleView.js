@@ -6,6 +6,7 @@ import falcorModel from '../../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import RichEditor from '../../components/wyswig-draftjs/RichEditor';
+import {stateToHTML} from 'draft-js-export-html';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -25,8 +26,13 @@ class AddArticleView extends React.Component {
     };
   }
 
-  _onchangeDraftJSON(contentJSON, descriptionName) {
+  _onchangeDraftJSON(contentJSON, contentState) {
     console.info('contentJSON', contentJSON);
+    let html = stateToHTML(contentState);
+    console.info('html');
+    console.info(html);
+    console.info('html');
+
     this.setState({contentJSON: contentJSON});
   }
 
@@ -36,10 +42,9 @@ class AddArticleView extends React.Component {
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Add Article</h1>
           <RichEditor
-            tabIndexProp="100005"
             initialValue={''}
-            name="description2"
-            title="Description (Level 2)"
+            name="addarticle"
+            title="Create an article"
             onChangeTextJSON={this._onchangeDraftJSON} />
       </div>
     );
