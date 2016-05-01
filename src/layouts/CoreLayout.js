@@ -6,7 +6,6 @@ import * as sessionActions from 'actions/session';
 import * as restaurantActions from 'actions/restaurant';
 import * as newsFeedActions from 'actions/newsFeed';
 import API from 'utils/API';
-import Header from './Header';
 import { Link } from 'react-router';
 
 import { Paper, FlatButton } from 'material-ui';
@@ -15,9 +14,8 @@ import AlertWarning from 'material-ui/lib/svg-icons/alert/warning';
 
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import SideNav from './SideNav';
-
 import falcorModel from '../falcorModel.js';
+import RichEditor from 'components/wyswig-draftjs/RichEditor';
 
 const mapStateToProps = (state) => ({
   ...state
@@ -74,167 +72,33 @@ const iconStyles = {
 
 
 class CoreLayout extends React.Component {
-  static propTypes = {
-    children : React.PropTypes.element
-  }
-
   constructor(props) {
     super(props);
-    this._checkIfLoggedIn = this._checkIfLoggedIn.bind(this);
-    this._checkChildName = this._checkChildName.bind(this);
-    this._navigate = this._navigate.bind(this);
-    this._fetchRestaurantData = this._fetchRestaurantData.bind(this);
-    this._fetchNewsFeed = this._fetchNewsFeed.bind(this);
-
-
-    // this makes sure that classes was updated
-    // visual matter
-    const pushState = this.props.history.pushState;
-    const _this = this;
-    this.props.history.pushState = function() {
-      _this.forceUpdate();
-      pushState(...arguments);
-    }.bind(this.props.history);
+    this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
 
     this.state = {
-      restaurantID: null
-    }
+      contentJSON: {}
+    };
   }
 
-  componentWillMount() {
-    function getSubdomain() {
-            var regexParse = new RegExp('[a-z\-0-9]{2,63}\.[a-z\.]{2,5}$');
-            var urlParts = regexParse.exec(window.location.hostname);
-            return window.location.hostname.replace(urlParts[0],'').slice(0, -1);
-    }
-
-    // TEMP solution
-    if(true) { // && localStorage.restaurantID === 'undefined' || !localStorage.restaurantID) {
-      let currentSubdomain = getSubdomain();
-      if(currentSubdomain.length < 2) {
-        currentSubdomain = "starbucks";
-      }
-
-      falcorModel.getValue(
-        ['restaurants', 'lookup', currentSubdomain]
-      ).then((value) => {
-        this.setState({restaurantID: value});
-        if(value !== "INVALID") {
-          localStorage.setItem("restaurantID", value);
-          this._fetchRestaurantData();
-          this._fetchNewsFeed();
-        }
-      });
-    } else {
-      this.setState({restaurantID: localStorage.restaurantID});
-      this._fetchRestaurantData();
-      this._fetchNewsFeed();
-    }
+  _onchangeDraftJSON(contentJSON, descriptionName) {
+    console.info('contentJSON', contentJSON);
+    this.setState({contentJSON: contentJSON});
   }
 
-  async _fetchRestaurantData() {
-    let restaurantDetails = await API.get(
-      ['restaurants', 'details', localStorage.restaurantID]
-    ).then((results) => {
-      return results.restaurants.details[localStorage.restaurantID];
-    });
-
-    this.props.restaurantActions.restaurantsList(restaurantDetails);
-    //TEMP
-
-  }
-
-  async _fetchNewsFeed() {
-    const newsFeedLength = await falcorModel.getValue(
-      ['restaurants', localStorage.restaurantID, 'news', 'length']
-    );
-
-    let news = await API.get(
-      ['restaurants', localStorage.restaurantID, 'news', {from: 0, to: newsFeedLength - 1},
-       ['title', 'message', 'authorName', 'date', 'id']]
-    ).then((results) => {
-      return results['restaurants'][localStorage.restaurantID]['news']
-    });
-
-    let newsArray = Object.keys(news).map((post) => {
-      return news[post];
-    })
-
-    console.log('\n\n\n\n\n\n\n\n\n\n\n\nNEWS: ', newsArray)
-    this.props.newsFeedActions.newsFeedList(newsArray);
-  }
-
-  async _checkIfLoggedIn() {
-    /////////// mock
-    if(localStorage.token) {
-      console.info("IMPLEMENTED #1");
-      let response = await API.get(
-        ['v1', 'user', 'me', ['firstName', 'lastName', 'token', 'verified', 'role', 'gender', 'imageUrl', 'email', 'address', 'startDate', 'position', 'location', 'phoneNumber']]
-      );
-
-      // check if token is valid
-
-      if(typeof response === 'undefined') {
-        delete localStorage.token;
-        delete localStorage.username;
-        delete localStorage.role;
-        this.props.sessionActions.logout();
-        return;
-      }
-
-      console.info("response.v1.user.me", response.v1.user.me);
-
-      console.info("RESULT #1", response);
-      return this.props.sessionActions.login(response.v1.user.me);
-    }
-    /////////// endof mock
-    this.props.history.pushState(null, '/login');
-  }
-
-  _navigate(route) {
-    alert(1);
-    this.props.history.pushState(null, route);
-  }
-
-  _checkChildName(names) {
-    let childName = this.props.children.props.route.name;
-    for (let i = 0; i < names.length; i++) {
-      if (childName === names[i]) {
-        return true;
-      }
-    }
-  }
 
   render () {
-    console.info("--> this.state.restaurantID -->", this.state.restaurantID);
-    console.log('CORELAYOUT STATE', this.props)
-    if(this.state.restaurantID === null) {
-      return <h1>Restaurant details look up in progress</h1>;
-    } else if(this.state.restaurantID === 'INVALID') {
-      return <h1>Restaurant not found</h1>;
-    } else if(typeof this.state.restaurantID === 'undefined') {
-      return <h1>backend error, please contact admin</h1>;
-    }
-
-    const classes = ["ContentWrapper"];
-    if(isFullWidth()) {
-      classes.push('fullsize');
-    }
-
-    if (this.props.session.loggedIn || this._checkChildName(whiteList)) {
-      return (
-        <div>
-          <Header history={this.props.history} />
-          <div className={classes.join(" ")}>
-            <SideNav {...this.props} />
-            {this.props.children}
-          </div>
-        </div>
-      );
-    } else {
-      this._checkIfLoggedIn();
-      return null;
-    }
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+          <RichEditor
+            tabIndexProp="100005"
+            initialValue={''}
+            name="description2"
+            title="Description (Level 2)"
+            onChangeTextJSON={this._onchangeDraftJSON} />
+      </div>
+    );
   }
 }
 
