@@ -7,7 +7,6 @@ import {
   CardText 
 } from 'material-ui/lib/card';
 import { Paper } from 'material-ui/lib';
-import RichEditor from '../components/wyswig-draftjs/RichEditor';
 
 
 class ArticleCard extends React.Component {

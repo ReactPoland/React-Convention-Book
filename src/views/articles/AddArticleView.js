@@ -5,7 +5,7 @@ import Falcor from 'falcor';
 import falcorModel from '../../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import RichEditor from '../../components/wyswig-draftjs/RichEditor';
+import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import {stateToHTML} from 'draft-js-export-html';
 
 const mapStateToProps = (state) => ({
@@ -41,7 +41,7 @@ class AddArticleView extends React.Component {
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Add Article</h1>
-          <RichEditor
+          <WYSWIGeditor
             initialValue={''}
             name="addarticle"
             title="Create an article"
