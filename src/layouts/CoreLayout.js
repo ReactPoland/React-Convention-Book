@@ -3,15 +3,14 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
 
 const muiTheme = getMuiTheme({ userAgent: 'all' });
 
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import IconButton from 'material-ui/IconButton';
-import ActionHome from 'material-ui/svg-icons/action/home';
+import RaisedButton from 'material-ui/lib/raised-button';
+import AppBar from 'material-ui/lib/app-bar';
+import ActionHome from 'material-ui/lib/svg-icons/action/home';
 
 
 class CoreLayout extends React.Component {
@@ -26,18 +25,30 @@ class CoreLayout extends React.Component {
 
   render () {
     const buttonStyle = {
-      margin: 12
+      margin: 5
+    };
+    const homeIconStyle = {
+      margin: 5,
+      paddingTop: 5
     };
     
-    let menuLinksJSX = (<span>
-        <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
-        <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
-      </span>);
+    let menuLinksJSX;
+    let userIsLoggedIn = typeof localStorage !== 'undefined' && localStorage.token && this.props.routes[1].name !== 'logout';
+    
+    if(userIsLoggedIn) {
+      menuLinksJSX = (<span>
+          <Link to='/dashboard'><RaisedButton label="Dashboard" style={buttonStyle}  /></Link> 
+          <Link to='/logout'><RaisedButton label="Logout" style={buttonStyle}  /></Link> 
+        </span>);
+    } else {
+      menuLinksJSX = (<span>
+          <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
+          <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
+        </span>);
+    }
 
-    let homePageJSX = (<Link to='/'>
-        <IconButton tooltip="Home Page">
-          <ActionHome />
-        </IconButton>
+    let homePageButtonJSX = (<Link to='/'>
+        <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
       </Link>);
 
 
@@ -45,9 +56,8 @@ class CoreLayout extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <AppBar
-            title="Publishing App"
-            iconClassNameRight="muidocs-icon-navigation-expand-more" 
-            iconElementLeft={homePageJSX}
+            title='Publishing App'
+            iconElementLeft={homePageButtonJSX}
             iconElementRight={menuLinksJSX} />
             <br/>
             {this.props.children}
