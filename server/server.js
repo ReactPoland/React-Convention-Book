@@ -92,20 +92,7 @@ let css = `
   cursor: text;
   font-size: 16px;
   margin-top: 10px;
-}
-
-.RichEditor-editor .public-DraftEditorPlaceholder-root,
-.RichEditor-editor .public-DraftEditor-content {
-  margin: 0 -15px -15px;
-  padding: 15px;
-}
-
-.RichEditor-editor .public-DraftEditor-content {
   min-height: 100px;
-}
-
-.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
-  display: none;
 }
 
 .RichEditor-editor .RichEditor-blockquote {
@@ -115,13 +102,6 @@ let css = `
   font-style: italic;
   margin: 16px 0;
   padding: 10px 20px;
-}
-
-.RichEditor-editor .public-DraftStyleDefault-pre {
-  background-color: rgba(0, 0, 0, 0.05);
-  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
-  font-size: 16px;
-  padding: 20px;
 }
 
 .RichEditor-controls {
@@ -141,10 +121,7 @@ let css = `
 .RichEditor-activeButton {
   color: #5890ff;
 }
-
-
-
-  </style>`;
+</style>`;
 
 let renderFullPage = (html, initialState) =>
 {
