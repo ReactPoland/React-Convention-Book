@@ -900,7 +900,116 @@ $ cd wyswig
 $ touch WYSWIGbuttons.js
 ```
 
-Af
+The content of this file will be the buttons' component:
+```
+import React from 'react';
+
+class StyleButton extends React.Component {
+  constructor() {
+    super();
+    this.onToggle = (e) => {
+      e.preventDefault();
+      this.props.onToggle(this.props.style);
+    };
+  }
+
+  render() {
+    let className = 'RichEditor-styleButton';
+    if (this.props.active) {
+      className += ' RichEditor-activeButton';
+    }
+
+    return (
+      <span className={className} onMouseDown={this.onToggle}>
+        {this.props.label}
+      </span>
+    );
+  }
+}
+```
+
+The code above is giving us a reusable button with a certain label at ***this.props.label***.
+
+Next under that component you can put following object:
+```
+
+const BLOCK_TYPES = [
+  {label: 'H1', style: 'header-one'},
+  {label: 'H2', style: 'header-two'},
+  {label: 'Blockquote', style: 'blockquote'},
+  {label: 'UL', style: 'unordered-list-item'},
+  {label: 'OL', style: 'ordered-list-item'}
+];
+```
+
+This object is block types that we can create in our Draft-JS' WYSWIG, it is used in the component below:
+```
+export const BlockStyleControls = (props) => {
+  const {editorState} = props;
+  const selection = editorState.getSelection();
+  const blockType = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey())
+    .getType();
+
+  return (
+    <div className="RichEditor-controls">
+      {BLOCK_TYPES.map((type) =>
+        <StyleButton
+          key={type.label}
+          active={type.style === blockType}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+Above is a whole bunch of buttons for BlockStyles' formatting, we will import it in the WYSWIGeditor in a while as you can see we are exporting it with ***export const BlockStyleControls = (props) => {*** that statement.
+
+Under the ***BlockStyleControls***'s component put next object, but this time for inline styles like BOLD (etc.):
+```
+var INLINE_STYLES = [
+  {label: 'Bold', style: 'BOLD'},
+  {label: 'Italic', style: 'ITALIC'},
+  {label: 'Underline', style: 'UNDERLINE'}
+];
+```
+
+As you can see above in our WYSWIG an editor will be able to use bold, italic and underline.
+
+... and the last component for those inline styles that you can put under all this is:
+```
+export const InlineStyleControls = (props) => {
+  var currentStyle = props.editorState.getCurrentInlineStyle();
+  return (
+    <div className="RichEditor-controls">
+      {INLINE_STYLES.map(type =>
+        <StyleButton
+          key={type.label}
+          active={currentStyle.has(type.style)}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+As you can see this is very simple, each time in the blocks and inline styles we are mapping the defined styles and based on each iteration we are creating a ***StyleButton***.
+
+Next step is to import both ***InlineStyleControls*** and ***BlockStyleControls*** in our WYSWIGeditor's component (***src/components/articles/WYSWIGeditor.js***):
+```
+import { BlockStyleControls, InlineStyleControls } from './wyswig/WYSWIGbuttons';
+```
+
+
+
 
 
 NEXT STEPS AFTER FINISHED BOOK:
