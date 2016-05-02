@@ -5,6 +5,7 @@ import Falcor from 'falcor';
 import falcorModel from '../../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import articleActions from '../../actions/article.js';
 import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
@@ -15,7 +16,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-
+  articleActions: bindActionCreators(articleActions, dispatch)
 });
 
 class AddArticleView extends React.Component {
@@ -57,7 +58,9 @@ class AddArticleView extends React.Component {
           });
       });
 
-    alert('id = '+JSON.stringify(newArticleID));
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    
   }
 
   render () {
