@@ -25,6 +25,7 @@ class AddArticleView extends React.Component {
     this._articleSubmit = this._articleSubmit.bind(this);
 
     this.state = {
+      title: 'test',
       contentJSON: {},
       htmlContent: ''
     };
@@ -39,7 +40,24 @@ class AddArticleView extends React.Component {
     console.info('_articleSubmit');
     console.info(JSON.stringify(this.state));
     console.info(JSON.stringify(this.state.contentJSON));
+    let newArticle = {
+      articleTitle: this.state.title
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
 
+    console.info('newArticle', JSON.stringify(newArticle));
+    
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [model]
+          ).
+      then((result) => {
+        return falcorModel.getValue(['articles', 'newArticleID']);
+      });
+
+    alert('id = '+JSON.stringify(newArticleID));
   }
 
   render () {

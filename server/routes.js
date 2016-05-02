@@ -111,6 +111,10 @@ let PublishingAppRoutes = [
           value: NewArticleRef
         },
         {
+          path: ['articles', 'newArticleID'],
+          value: newArticleDetail["_id"]
+        },
+        {
           path: ['articles', 'length'],
           value: res.count
         }
