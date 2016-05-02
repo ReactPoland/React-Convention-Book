@@ -1239,6 +1239,78 @@ export default article
 What's new in the ***src/reducers/article.js***'s file? So as you can see we have improved the ***ARTICLES_LIST_ADD*** (already discussed in previous pages). We have added a new ***PUSH_NEW_ARTICLE*** - this will push a new object into our reducer's state tree. It's similar to push an item to the array, but instead we use our reducer and maps.
 
 
+#### Improving the PublishingApp and DashboardView
+
+In the ***src/layouts/PublishingApp.js*** we need to improve our render function:
+```
+render () {
+
+  let articlesJSX = [];
+
+  this.props.article.forEach((articleDetails, articleKey) => {
+    let currentArticleJSX = (
+      <div key={articleKey}>
+        <ArticleCard 
+          title={articleDetails.articleTitle}
+          content={articleDetails.articleContent} />
+      </div>
+    );
+
+    articlesJSX.push(currentArticleJSX);
+  });
+
+  return (
+    <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        {articlesJSX}
+    </div>
+  );
+}
+```
+
+As you can see above, we switched old ***for(let articleKey in this.props.article) {*** into new ***this.props.article.forEach*** because we have switched from objects to using maps.
+
+The same we need to do in the ***src/views/DashboardView.js***'s render function:
+```
+  render () {
+    
+    let articlesJSX = [];
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let currentArticleJSX = (
+        <ListItem
+          key={articleKey}
+          leftAvatar={<img src="/static/placeholder.png" width="50" height="50" />}
+          primaryText={articleDetails.articleTitle}
+          secondaryText={articleDetails.articleContent}
+        />
+      );
+
+      articlesJSX.push(currentArticleJSX);
+    });
+
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <Link to='/add-article'>
+          <RaisedButton 
+            label="Create an article" 
+            secondary={true} 
+            style={{margin: '20px 20px 20px 20px'}} />
+        </Link>
+
+        <List>
+          {articlesJSX}
+        </List>
+      </div>
+    );
+  }
+```
+
+The same reason as in the PublishingApp's component, we switched to using ES6's ***new Map*** we use new ES6 forEach:
+
+```
+this.props.article.forEach((articleDetails, articleKey) => {
+```
+
+TODO new: opisać src/views/articles/AddArticleView.js z https://github.com/ReactConvention/React-Convention-Book/pull/6/files
 
 
 
