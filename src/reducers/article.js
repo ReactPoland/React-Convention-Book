@@ -17,18 +17,22 @@ import mapHelpers from '../utils/mapHelpers';
 const article = (state = {}, action) => {
 	switch (action.type) {
 		case 'RETURN_ALL_ARTICLES':
+      alert(1);
 			return Object.assign({}, state);
 		case 'ARTICLES_LIST_ADD':
 			let articlesList = action.payload.response;
-      console.info('articlesList');
-      console.info(articlesList);
-      // const articlesMap = articlesList.map((articleItem) => {
-      //   return new Map(articleItem);
-      // });
-
+      console.info('--------');
+      console.info('---state-----');
+      console.info(state);
+      console.info('---state-----');
+      console.info('--------');
+      console.info('--------');
+      // at this point the articlesList is an object, we need transform it into array
+      articlesList = Object.keys(articlesList).map((itemIndex) => {
+        return articlesList[itemIndex];
+      });
 
 			return mapHelpers.addMultipleItems(state, articlesList);
-			// return Object.assign({}, articlesList);
 		case 'PUSH_NEW_ARTICLE':
 			let newArticleObject = action.payload.response;
 			alert('pushed id = '+JSON.stringify(newArticleObject));
