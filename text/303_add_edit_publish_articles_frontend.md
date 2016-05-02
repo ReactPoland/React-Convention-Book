@@ -867,10 +867,10 @@ We need to save on each change a state of ***this.setState({contentJSON, htmlCon
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Add Article</h1>
-          <WYSWIGeditor
-            initialValue=''
-            title="Create an article"
-            onChangeTextJSON={this._onDraftJSChange} />
+        <WYSWIGeditor
+          initialValue=''
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
       </div>
     );
   }

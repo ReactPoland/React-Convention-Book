@@ -52,7 +52,7 @@ class ArticleCard extends React.Component {
           </Card>
         </div>
         <div style={rightDivStyle}>
-          {content}
+          <div dangerouslySetInnerHTML={{__html: content}} />
         </div>
       </Paper>);
   }

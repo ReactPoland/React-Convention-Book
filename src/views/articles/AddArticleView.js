@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import { stateToHTML } from 'draft-js-export-html';
+import RaisedButton from 'material-ui/lib/raised-button';
+
 
 const mapStateToProps = (state) => ({
 	...state
@@ -20,9 +22,11 @@ class AddArticleView extends React.Component {
   constructor(props) {
     super(props);
     this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleSubmit = this._articleSubmit.bind(this);
 
     this.state = {
-      contentJSON: {}
+      contentJSON: {},
+      htmlContent: ''
     };
   }
 
@@ -31,16 +35,28 @@ class AddArticleView extends React.Component {
     this.setState({contentJSON, htmlContent});
   }
 
+  _articleSubmit() {
+    console.info('_articleSubmit');
+    console.info(JSON.stringify(this.state));
+    console.info(JSON.stringify(this.state.contentJSON));
+
+  }
 
   render () {
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Add Article</h1>
-          <WYSWIGeditor
-            initialValue={''}
-            name="addarticle"
-            title="Create an article"
-            onChangeTextJSON={this._onDraftJSChange} />
+        <WYSWIGeditor
+          initialValue={''}
+          name="addarticle"
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+          <RaisedButton
+            onClick={this._articleSubmit}
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Article'} />
       </div>
     );
   }
