@@ -3,6 +3,7 @@ import sessionRoutes from './routesSession';
 import jsonGraph from 'falcor-json-graph';
 
 let $atom = jsonGraph.atom;
+let $ref = jsonGraph.ref;
 let Article = configMongoose.Article;
 
 let PublishingAppRoutes = [
@@ -25,25 +26,22 @@ let PublishingAppRoutes = [
   get: (pathSet) => {
     let articlesIndex = pathSet[1];
 
-    return Article.find({}, function(err, articlesDocs) {
+    return Article.find({}, '_id', function(err, articlesDocs) {
       return articlesDocs;
     }).then ((articlesArrayFromDB) => {
       let results = [];
       articlesIndex.forEach((index) => {
-        let singleArticleObject = articlesArrayFromDB[index].toObject();
-
-        if(typeof singleArticleObject.articleContentJSON !== 'undefined') {
-          singleArticleObject.articleContentJSON = $atom(singleArticleObject.articleContentJSON);
-        }
+        let currentMongoID = String(articlesArrayFromDB[index]['_id']);
+        let articleRef = $ref(['articlesById', currentMongoID]);
 
         let falcorSingleArticleResult = {
           path: ['articles', index],
-          value: singleArticleObject
+          value: articleRef
         };
 
         results.push(falcorSingleArticleResult);
       });
-      console.info(">>>> results", JSON.stringify(results));
+      console.info('>>>> results', JSON.stringify(results));
       return results;
     })
   }
@@ -51,31 +49,27 @@ let PublishingAppRoutes = [
 {
   route: 'articlesById[{keys}]["id","articleTitle","articleContent","articleContentJSON"]',
   get: function(pathSet) {
-    console.info(1);
     let articlesIDs = pathSet[1];
-    console.info(2);
-    return models.Article.find({
+    return Article.find({
           '_id': { $in: articlesIDs}
       }, function(err, articlesDocs) {
-        console.info(3);
         return articlesDocs;
       }).then ((articlesArrayFromDB) => {
-        console.info(4);
         let results = [];
 
         articlesArrayFromDB.map((articleObject) => {
           let articleResObj = articleObject.toObject();
+          let currentIdString = String(articleResObj['_id']);
 
-          console.info('articleResObj');
-          console.info(articleResObj);
-          console.info('articleResObj');
+          if(typeof articleResObj.articleContentJSON !== 'undefined') {
+            articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+          }
 
           results.push({
-            path: ["articlesById", articleResObj.id],
+            path: ['articlesById', currentIdString],
             value: articleResObj
           });
         });
-
         return results;
       });
   }
