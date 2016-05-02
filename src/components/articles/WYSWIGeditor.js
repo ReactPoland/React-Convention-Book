@@ -7,7 +7,7 @@ import {
   convertToRaw,
   convertFromRaw
 } from 'draft-js';
-
+import { BlockStyleControls, InlineStyleControls } from './wyswig/WYSWIGbuttons';
 
 export default class  WYSWIGeditor extends React.Component {
   constructor(props) {
@@ -29,8 +29,10 @@ export default class  WYSWIGeditor extends React.Component {
     };
 
     this.handleKeyCommand = (command) => this._handleKeyCommand(command);
-    this.toggleBlockType = (type) => this._toggleBlockType(type);
+    
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+
+    this.toggleBlockType = (type) => this._toggleBlockType(type);
   }
 
   _handleKeyCommand(command) {
@@ -43,6 +45,24 @@ export default class  WYSWIGeditor extends React.Component {
     return false;
   }
 
+  _toggleBlockType(blockType) {
+    this.onChange(
+      RichUtils.toggleBlockType(
+        this.state.editorState,
+        blockType
+      )
+    );
+  }
+
+  _toggleInlineStyle(inlineStyle) {
+    this.onChange(
+      RichUtils.toggleInlineStyle(
+        this.state.editorState,
+        inlineStyle
+      )
+    );
+  }
+
   render() {
     const { editorState } = this.state;
     let className = 'RichEditor-editor';
@@ -52,6 +72,14 @@ export default class  WYSWIGeditor extends React.Component {
       <div>
         <h4>{this.props.title}</h4>
         <div className="RichEditor-root">
+          <BlockStyleControls
+            editorState={editorState}
+            onToggle={this.toggleBlockType} />
+            
+          <InlineStyleControls
+            editorState={editorState}
+            onToggle={this.toggleInlineStyle} />
+
           <div className={className} onClick={this.focus}>
             <Editor
               editorState={editorState}
@@ -64,3 +92,8 @@ export default class  WYSWIGeditor extends React.Component {
     );
   }
 }
+
+
+
+
+

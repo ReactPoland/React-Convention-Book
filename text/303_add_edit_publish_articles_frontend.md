@@ -821,16 +821,272 @@ Next step is to improve the render function with the following code:
 
 Above what we do is simply using the Draft-JS's API in order to make a simple RichEditor - later we will make it more functional, but for now let's focus on something simple.
 
+#### Improving the views/articles/AddArtivleView's component
+
+Before we will move forward with adding all the WYSWIG's features like bolding, we need to improve the ***views/articles/AddArtivleView.js*** with few things:
+
+1) Install a library which will convert Draft-JS' state into a plain HTML with:
+```
+npm i --save draft-js-export-html@0.1.13
+```
+We will use this library in order to save a read-only plain HTML for our regular readers.
+
+2) next import that into the src/views/articles/AddArtivleView.js:
+
+```
+import { stateToHTML } from 'draft-js-export-html';
+```
+
+3) Improve the AddArticleView with changing a constructor and adding a new function called ***_onDraftJSChange***:
+```
+
+class AddArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+
+    this.state = {
+      contentJSON: {},
+      htmlContent: ''
+    };
+  }
+
+  _onDraftJSChange(contentJSON, contentState) {
+    let htmlContent = stateToHTML(contentState);
+    this.setState({contentJSON, htmlContent});
+  }
+```
+
+##### THE EXPLANATION: 
+We need to save on each change a state of ***this.setState({contentJSON, htmlContent});***. This is because contentJSON will be saved into database in order to have an immutable information about our WYSWIG and the htmlContent will be server for our readers. Both variables htmlContent and contentJSON will be keept in the articles' collection.
+
+
+4) The last thing in the AddArticleView is to modify render to new code as following:
+```
+  render () {
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+        <WYSWIGeditor
+          initialValue=''
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+      </div>
+    );
+  }
+```
+
+After all those changes, the new view that you shall see is:
 
 ![draftjs v1 wyswig](http://test.przeorski.pl/book/309_draftjs_wyswig_v1.png)
 
+
+
 #### Adding more feautres like bold text in our WYSWIG
+
+Let's starting working on version two of our WYSWIG, with more options as on the example below:
+
+![draftjs v2 wyswig](http://test.przeorski.pl/book/310_draftjs_wyswig_v2.png)
+
+After you will follow the steps below you will be able to format your text as below and extract HTML's markup from it as well so we can save both JSON's state of our WYSWIG and plain HTML in our MongoDB's articles collection.
+
+
+First we need to create the WYSWIG buttons in the ***src/components/articles/wyswig/WYSWIGbuttons.js***'s location:
+
+```
+$ [[you are in the src/components/articles directory of your project]]
+$ mkdir wyswig
+$ cd wyswig
+$ touch WYSWIGbuttons.js
+```
+
+The content of this file will be the buttons' component:
+```
+import React from 'react';
+
+class StyleButton extends React.Component {
+  constructor() {
+    super();
+    this.onToggle = (e) => {
+      e.preventDefault();
+      this.props.onToggle(this.props.style);
+    };
+  }
+
+  render() {
+    let className = 'RichEditor-styleButton';
+    if (this.props.active) {
+      className += ' RichEditor-activeButton';
+    }
+
+    return (
+      <span className={className} onMouseDown={this.onToggle}>
+        {this.props.label}
+      </span>
+    );
+  }
+}
+```
+
+The code above is giving us a reusable button with a certain label at ***this.props.label***.
+
+Next under that component you can put following object:
+```
+
+const BLOCK_TYPES = [
+  {label: 'H1', style: 'header-one'},
+  {label: 'H2', style: 'header-two'},
+  {label: 'Blockquote', style: 'blockquote'},
+  {label: 'UL', style: 'unordered-list-item'},
+  {label: 'OL', style: 'ordered-list-item'}
+];
+```
+
+This object is block types that we can create in our Draft-JS' WYSWIG, it is used in the component below:
+```
+export const BlockStyleControls = (props) => {
+  const {editorState} = props;
+  const selection = editorState.getSelection();
+  const blockType = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey())
+    .getType();
+
+  return (
+    <div className="RichEditor-controls">
+      {BLOCK_TYPES.map((type) =>
+        <StyleButton
+          key={type.label}
+          active={type.style === blockType}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+Above is a whole bunch of buttons for BlockStyles' formatting, we will import it in the WYSWIGeditor in a while as you can see we are exporting it with ***export const BlockStyleControls = (props) => {*** that statement.
+
+Under the ***BlockStyleControls***'s component put next object, but this time for inline styles like BOLD (etc.):
+```
+var INLINE_STYLES = [
+  {label: 'Bold', style: 'BOLD'},
+  {label: 'Italic', style: 'ITALIC'},
+  {label: 'Underline', style: 'UNDERLINE'}
+];
+```
+
+As you can see above in our WYSWIG an editor will be able to use bold, italic and underline.
+
+... and the last component for those inline styles that you can put under all this is:
+```
+export const InlineStyleControls = (props) => {
+  var currentStyle = props.editorState.getCurrentInlineStyle();
+  return (
+    <div className="RichEditor-controls">
+      {INLINE_STYLES.map(type =>
+        <StyleButton
+          key={type.label}
+          active={currentStyle.has(type.style)}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+As you can see this is very simple, each time in the blocks and inline styles we are mapping the defined styles and based on each iteration we are creating a ***StyleButton***.
+
+Next step is to import both ***InlineStyleControls*** and ***BlockStyleControls*** in our WYSWIGeditor's component (***src/components/articles/WYSWIGeditor.js***):
+```
+import { BlockStyleControls, InlineStyleControls } from './wyswig/WYSWIGbuttons';
+```
+
+then in the WYSWIGeditor's constructor:
+```
+    this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+    this.toggleBlockType = (type) => this._toggleBlockType(type);
+```
+... bind to the ***toggleInlineStyle*** and ***toggleBlockType*** a this.
+
+and create these two new functions:
+```
+  _toggleBlockType(blockType) {
+    this.onChange(
+      RichUtils.toggleBlockType(
+        this.state.editorState,
+        blockType
+      )
+    );
+  }
+
+  _toggleInlineStyle(inlineStyle) {
+    this.onChange(
+      RichUtils.toggleInlineStyle(
+        this.state.editorState,
+        inlineStyle
+      )
+    );
+  }
+```
+
+Above both functions are using Draft-JS' RichUtils in order to set flags inside our WYSWIG that we are using certain formatting options from ***BLOCK_TYPES*** and ***INLINE_STYLES*** that we have defined in the ***import { BlockStyleControls, InlineStyleControls } from './wyswig/WYSWIGbuttons';***.
+
+
+After we are done with improving our WYSWIGeditor's construction and the _toggleBlockType and _toggleInlineStyle functions then we can start improving our render function:
+
+```
+  render() {
+    const { editorState } = this.state;
+    let className = 'RichEditor-editor';
+    var contentState = editorState.getCurrentContent();
+
+    return (
+      <div>
+        <h4>{this.props.title}</h4>
+        <div className="RichEditor-root">
+          <BlockStyleControls
+            editorState={editorState}
+            onToggle={this.toggleBlockType} />
+            
+          <InlineStyleControls
+            editorState={editorState}
+            onToggle={this.toggleInlineStyle} />
+
+          <div className={className} onClick={this.focus}>
+            <Editor
+              editorState={editorState}
+              handleKeyCommand={this.handleKeyCommand}
+              onChange={this.onChange}
+              ref='WYSWIGeditor' />
+          </div>
+        </div>
+      </div>
+    );
+  }
+```
+
+As you can notice above we have only added the ***BlockStyleControls*** and ***InlineStyleControls*** component. Please also notice that we are using callbacks with the ***onToggle={this.toggleBlockType}*** and ***onToggle={this.toggleInlineStyle}*** - this is for communicating between our WYSWIGbuttons and the Draft-JS' RichUtils about what a user has clicked and in which mode is currently (like bold, header1, UO or OL list, and so on, and so on).
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 NEXT STEPS AFTER FINISHED BOOK:
 1) finish fetching with $atom at server/routes.js
-
-
 

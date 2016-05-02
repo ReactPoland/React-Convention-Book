@@ -32,8 +32,7 @@ class DashboardView extends React.Component {
   render () {
     
     let articlesJSX = [];
-    for(let articleKey in this.props.article) {
-      let articleDetails = this.props.article[articleKey];
+    this.props.article.forEach((articleDetails, articleKey) => {
       let currentArticleJSX = (
         <ListItem
           key={articleKey}
@@ -44,7 +43,8 @@ class DashboardView extends React.Component {
       );
 
       articlesJSX.push(currentArticleJSX);
-    }
+    });
+
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <Link to='/add-article'>
