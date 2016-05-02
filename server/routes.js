@@ -21,7 +21,7 @@ let PublishingAppRoutes = [
   }
 }, 
 {
-  route: 'articles[{integers}]["id","articleTitle","articleContent"]',
+  route: 'articles[{integers}]["id","articleTitle","articleContent","articleContentJSON"]',
   get: (pathSet) => {
     let articlesIndex = pathSet[1];
 
@@ -30,20 +30,12 @@ let PublishingAppRoutes = [
     }).then ((articlesArrayFromDB) => {
       let results = [];
       articlesIndex.forEach((index) => {
-        console.info('*********');
-        console.info(JSON.stringify(articlesArrayFromDB[index]));
-        console.info('*********');
         let singleArticleObject = articlesArrayFromDB[index].toObject();
-        console.info('--------');
-        console.info(JSON.stringify(singleArticleObject.articleContent));
-        console.info('--------');
 
-        console.info(typeof singleArticleObject.articleContent);
-        console.info(typeof singleArticleObject.articleContent.entityMap);
-        console.info(typeof singleArticleObject.articleContent.entityMap);
+        if(typeof singleArticleObject.articleContentJSON !== 'undefined') {
+          singleArticleObject.articleContentJSON = $atom(singleArticleObject.articleContentJSON);
+        }
 
-
-        singleArticleObject.articleContent = $atom(singleArticleObject.articleContent);
         let falcorSingleArticleResult = {
           path: ['articles', index],
           value: singleArticleObject
