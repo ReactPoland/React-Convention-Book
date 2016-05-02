@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Falcor from 'falcor';
+import { Link } from 'react-router';
 import falcorModel from '../../falcorModel.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -28,7 +29,8 @@ class AddArticleView extends React.Component {
     this.state = {
       title: 'test',
       contentJSON: {},
-      htmlContent: ''
+      htmlContent: '',
+      newArticleID: null
     };
   }
 
@@ -60,10 +62,29 @@ class AddArticleView extends React.Component {
 
     newArticle['_id'] = newArticleID;
     this.props.articleActions.pushNewArticle(newArticle);
-    
+    this.setState({ newArticleID: newArticleID});
   }
 
   render () {
+    console.info('this.state.newArticleID', this.state.newArticleID);
+    console.info('this.state.newArticleID', this.state.newArticleID);
+    console.info('this.state.newArticleID', this.state.newArticleID);
+
+    if(this.state.newArticleID) {
+      return (
+        <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+          <h3>Your new article ID is {this.state.newArticleID}</h3>
+          <Link to='/dashboard'>
+            <RaisedButton
+              secondary={true}
+              type="submit"
+              style={{margin: '10px auto', display: 'block', width: 150}}
+              label='Done' />
+          </Link>
+        </div>
+      );
+    }
+
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Add Article</h1>
