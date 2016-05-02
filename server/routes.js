@@ -41,7 +41,6 @@ let PublishingAppRoutes = [
 
         results.push(falcorSingleArticleResult);
       });
-      console.info('>>>> results', JSON.stringify(results));
       return results;
     })
   }
@@ -81,7 +80,6 @@ let PublishingAppRoutes = [
     var article = new Article(newArticleObj);
 
     return article.save(function (err, data) {
-      console.info(4);
       if (err) {
         console.info("ERROR", err);
         return err;

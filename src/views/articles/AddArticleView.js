@@ -55,7 +55,6 @@ class AddArticleView extends React.Component {
         return falcorModel.getValue(
             ['articles', 'newArticleID']
           ).then((articleID) => {
-            console.info('articleID', articleID);
             return articleID;
           });
       });
@@ -66,10 +65,6 @@ class AddArticleView extends React.Component {
   }
 
   render () {
-    console.info('this.state.newArticleID', this.state.newArticleID);
-    console.info('this.state.newArticleID', this.state.newArticleID);
-    console.info('this.state.newArticleID', this.state.newArticleID);
-
     if(this.state.newArticleID) {
       return (
         <div style={{height: '100%', width: '75%', margin: 'auto'}}>
