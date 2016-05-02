@@ -6,11 +6,11 @@ export default () => {
     return articlesDocs;
   }).then ((articlesArrayFromDB) => {
     
-    let newArticlesMap = new Map();
-    articlesArrayFromDB.forEach((item) => {
-      newArticlesMap.set(String(item['_id']), item);
-    });
+    // let newArticlesMap = new Map();
+    // articlesArrayFromDB.forEach((item) => {
+    //   newArticlesMap.set(String(item['_id']), item);
+    // });
 
-    return newArticlesMap;
+    return articlesArrayFromDB;
   });
 }

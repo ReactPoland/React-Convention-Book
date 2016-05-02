@@ -1,20 +1,21 @@
 const duplicate = (map) => {
   const newMap = new Map();
-  map.forEach((item, key) => { 
-    newMap.set(key, item);
+  map.forEach((item, key) => {
+    if(key === item['_id']) {
+      newMap.set(key, item);
+    }
   });
   return newMap;
 };
 
 const addMultipleItems = (map, items) => {
-  console.info('map', map);
-  console.info('--------------');
-  
   const newMap = duplicate(map);
 
-  items.forEach((item) => {
+  Object.keys(items).map((itemIndex) => {
+    let item = items[itemIndex];
     newMap.set(item['_id'], item);
   });
+
   return newMap;
 };
 
