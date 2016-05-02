@@ -843,7 +843,7 @@ import { stateToHTML } from 'draft-js-export-html';
 class AddArticleView extends React.Component {
   constructor(props) {
     super(props);
-    this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
 
     this.state = {
       contentJSON: {},
@@ -870,7 +870,7 @@ We need to save on each change a state of ***this.setState({contentJSON, htmlCon
           <WYSWIGeditor
             initialValue=''
             title="Create an article"
-            onChangeTextJSON={this._onchangeDraftJSON} />
+            onChangeTextJSON={this._onDraftJSChange} />
       </div>
     );
   }

@@ -19,21 +19,16 @@ const mapDispatchToProps = (dispatch) => ({
 class AddArticleView extends React.Component {
   constructor(props) {
     super(props);
-    this._onchangeDraftJSON = this._onchangeDraftJSON.bind(this);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
 
     this.state = {
       contentJSON: {}
     };
   }
 
-  _onchangeDraftJSON(contentJSON, contentState) {
-    console.info('contentJSON', contentJSON);
-    let html = stateToHTML(contentState);
-    console.info('html');
-    console.info(html);
-    console.info('html');
-
-    this.setState({contentJSON: contentJSON});
+  _onDraftJSChange(contentJSON, contentState) {
+    let htmlContent = stateToHTML(contentState);
+    this.setState({contentJSON, htmlContent});
   }
 
 
@@ -45,7 +40,7 @@ class AddArticleView extends React.Component {
             initialValue={''}
             name="addarticle"
             title="Create an article"
-            onChangeTextJSON={this._onchangeDraftJSON} />
+            onChangeTextJSON={this._onDraftJSChange} />
       </div>
     );
   }
