@@ -74,7 +74,52 @@ let PublishingAppRoutes = [
       });
   }
 },
+{
+  route: 'articles.add',
+  call: (callPath, args) => {
+    console.info(1);
+    let newArticleObj = args[0];
+    console.info(2);
+    var article = new Article(newArticleObj);
+    console.info(3);
+    return article.save(function (err, data) {
+      console.info(4);
+      if (err) {
+        console.info("ERROR", err);
+        return err;
+      }
+      else {
+        return data;
+      }
+    }).then ((data) => {
+      console.info(5);
+      return Article.count({}, function(err, count) {
+      }).then((count) => {
+        console.info(6);
+        return { count, data };
+      });
+    }).then ((res) => {
+      console.info(7);
+      let newArticleDetail = res.data.toObject();
+      console.info(8);
+      let NewArticleRef = $ref(['articlesById', newArticleDetail["_id"]]);
+      console.info(9);
+      
+      let results = [
+        {
+          path: ['articles', res.count-1],
+          value: NewArticleRef
+        },
+        {
+          path: ['articles', 'length'],
+          value: res.count
+        }
+      ];
 
+      return results;
+    });
+  }
+}
 ];
 
 export default PublishingAppRoutes;
