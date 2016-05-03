@@ -13,8 +13,16 @@ export default class  WYSWIGeditor extends React.Component {
   constructor(props) {
     super(props);
 
-    let initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));
+    let initialEditorFromProps;
 
+    if(typeof props.initialValue === 'undefined') {
+      initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));
+    } else {
+      let draftBlocks = convertFromRaw(props.initialValue);
+      let contentToConsume = ContentState.createFromBlockArray(draftBlocks);
+      initialEditorFromProps = EditorState.createWithContent(contentToConsume);
+    }
+     
     this.state = {
       editorState: initialEditorFromProps
     };
