@@ -1310,11 +1310,121 @@ The same reason as in the PublishingApp's component, we switched to using ES6's 
 this.props.article.forEach((articleDetails, articleKey) => {
 ```
 
-TODO new: opisać src/views/articles/AddArticleView.js z https://github.com/ReactConvention/React-Convention-Book/pull/6/files
 
+#### Tweaks in the AddArticleView
 
+After we are finished with preparing our app for saving a new article into the article's reducer, then we need to tweak the ***src/views/articles/AddArticleView.js*** component.
 
+1) New imports in the ***AddArticleView.js***:
+```
+import { bindActionCreators } from 'redux';
+import { Link } from 'react-router';
+import articleActions from '../../actions/article.js';
+import RaisedButton from 'material-ui/lib/raised-button';
+```
 
+As you can see above, we are importing RaisedButton and Link which will be useful for redirecting an editor to the dashboard's view after a successful article addition. Then we import ***the articleActions*** because we need make the ***this.props.articleActions.pushNewArticle(newArticle);*** action on article submit. The ***bindActionCreators*** already shall be imported in your AddArticleView if you followed instructions from previous chapters.
+
+2) Use the ***bindActionCreators*** for having the ***articleActions*** in the AddArticleView's component by replacing this below:
+
+```
+// this is old code, you shall have it already
+const mapDispatchToProps = (dispatch) => ({
+});
+```
+
+... to a new with the bindActionCreators:
+```
+const mapDispatchToProps = (dispatch) => ({
+  articleActions: bindActionCreators(articleActions, dispatch)
+});
+```
+
+3) An updated constructor of the AddArticleView's component:
+```
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleSubmit = this._articleSubmit.bind(this);
+
+    this.state = {
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      newArticleID: null
+    };
+  }
+```
+The ***_articleSubmit*** will be required after an editor wants add an article. We also have added some default states for our title, contentJSON (we will keep there the Draft-JS' article state), htmlContent and the newArticleID.
+
+4) Next step is to create the _articleSubmit's function:
+```
+  _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    let newArticleID = "MOCKEDRandomid"+Math.floor(Math.random() * 10000);
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID});
+  }
+```
+
+As you can see above, we get's the state of our current writings with the this.state.title, this.state.htmlContent, this.state.contentJSON and then based on that we create a newArticle model:
+```
+let newArticle = {
+  articleTitle: this.state.title,
+  articleContent: this.state.htmlContent,
+  articleContentJSON: this.state.contentJSON
+}
+```
+
+Then we mock the new article's ID (later we will save it into the DB) with ***newArticle['_id'] = newArticleID;*** and push it into our article's reducer with ***this.props.articleActions.pushNewArticle(newArticle);***. The only thing is to set-up our new articleID with ***this.setState({ newArticleID: newArticleID});***.
+
+5) The last step is to update our render method of the AddNewArticle's component:
+```
+  render () {
+    if(this.state.newArticleID) {
+      return (
+        <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+          <h3>Your new article ID is {this.state.newArticleID}</h3>
+          <Link to='/dashboard'>
+            <RaisedButton
+              secondary={true}
+              type="submit"
+              style={{margin: '10px auto', display: 'block', width: 150}}
+              label='Done' />
+          </Link>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+        <WYSWIGeditor
+          initialValue={''}
+          name="addarticle"
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+          <RaisedButton
+            onClick={this._articleSubmit}
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Article'} />
+      </div>
+    );
+  }
+```
+
+Above in the render, we have one statement that checks if an article's editor has already created an article (clicked Submit Article's button) with ***if(this.state.newArticleID)***. If yes, then an editor see his new article's ID and a button that links to the ***/dashboard*** (Link to='/dashboard').
+
+And the second return is in case if an editor is in "edit mode", if yes then he can submit it by clicking on the ***RaisedButton***'s component with onClick method's called ***_articleSubmit***.
 
 
 
