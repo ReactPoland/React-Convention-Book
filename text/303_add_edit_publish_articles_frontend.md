@@ -30,7 +30,11 @@ export default () => {
 }
 ```
 
+
 As you can find above, that function is returning a ***promise*** with ***Article.find*** (the find function comes from Mongoose). You can also find that we are returning an array of articles that are fetched from our MongoDB.
+
+#### Improving the handleServerSideRender
+
 
 
 The next step is to tweak the ***handleServerSideRender*** function that is currently kept in the /server/server.js file ... the current function as below:
@@ -61,6 +65,36 @@ let handleServerSideRender = async (req, res, next) => {
 ```
 
 What is new in our improved handleServerSideRender? As you can see we have added ***async await***. I will recall that it is helping to make our code less painful with asynchronous calls like queries to the database (synchronous-looking generator style code). This ES7's feature helps us to write the asynchronous calls the way as it's a synchronous one - under the hood the async await is much more complicated (after it's transpiled into ES5 so it can be ran in any modern browser) but we won't get into details of how async await because it's not in the scope of this chapter right now.
+
+
+
+#### Changing routes in Falcor (frontend and backend)
+
+You need also replace in two placed the ***id***'s variable name into the ***_id*** (the _id is a default name for the ID of a document in a Mongo's collection):
+
+1) Changes in ***server/routes.js***:
+
+```
+route: 'articles[{integers}]["id","articleTitle","articleContent"]',
+```
+
+... and new one:
+```
+route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
+```
+
+The only change is that we will return _id instead of id.
+
+2) We need to fetch the _id in the src/layouts/PublishingApp.js:
+```
+get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+```
+
+.. into the new one with _id:
+```
+get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent']]). 
+```
+
 
 
 
