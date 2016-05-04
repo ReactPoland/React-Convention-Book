@@ -10,6 +10,7 @@ const muiTheme = getMuiTheme({ userAgent: 'all' });
 
 import RaisedButton from 'material-ui/lib/raised-button';
 import AppBar from 'material-ui/lib/app-bar';
+
 import ActionHome from 'material-ui/lib/svg-icons/action/home';
 
 import { connect } from 'react-redux';
@@ -68,12 +69,11 @@ class CoreLayout extends React.Component {
         <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
       </Link>);
 
-
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <AppBar
-            title='Publishing App'
+            title="Publishing App"
             iconElementLeft={homePageButtonJSX}
             iconElementRight={menuLinksJSX} />
             <br/>
