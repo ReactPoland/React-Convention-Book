@@ -11,6 +11,9 @@ const article = (state = {}, action) => {
     case 'EDIT_ARTICLE':
       let editedArticleObject = action.payload.response;
       return mapHelpers.addItem(state, editedArticleObject['_id'], editedArticleObject);
+    case 'DELETE_ARTICLE':
+      let deleteArticleId = action.payload.response;
+      return mapHelpers.deleteItem(state, deleteArticleId);
     default:
       return state;
   }

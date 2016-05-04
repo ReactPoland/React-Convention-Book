@@ -26,6 +26,9 @@ class EditArticleView extends React.Component {
     this._onDraftJSChange = this._onDraftJSChange.bind(this);
     this._articleEditSubmit = this._articleEditSubmit.bind(this);
     this._fetchArticleData = this._fetchArticleData.bind(this);
+    this._handleDeleteTap = this._handleDeleteTap.bind(this);
+    this._handleDeletion = this._handleDeletion.bind(this);
+    this._handleClosePopover = this._handleClosePopover.bind(this);
 
     this.state = {
       articleFetchError: null,
@@ -36,7 +39,7 @@ class EditArticleView extends React.Component {
       contentJSON: {},
       htmlContent: '',
       openDelete: false,
-      deleteAnchorEl: null
+      deleteAnchorEl: undefined
     };
   }
 
@@ -87,7 +90,16 @@ class EditArticleView extends React.Component {
   }
 
   _handleDeletion() {
-    alert('_handleDeletion');
+    let articleID = this.state.editedArticleID;
+    this.props.articleActions.deleteArticle(articleID);
+
+    this.setState({
+      openDelete: false
+    });
+    this.props.history.pushState(null, '/dashboard');
+  }
+
+  _handleClosePopover() {
     this.setState({
       openDelete: false
     });
@@ -129,18 +141,22 @@ class EditArticleView extends React.Component {
             type="submit"
             style={{margin: '10px auto', display: 'block', width: 150}}
             label={'Submit Edition'} />
+        <hr />
         <h1>Delete permamently this article</h1>
           <RaisedButton
-            onTouchTap={this._handleDeleteTap}
+            onClick={this._handleDeleteTap}
             label="Delete" />
           <Popover
             open={this.state.openDelete}
             anchorEl={this.state.deleteAnchorEl}
             anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={this._handleDeletion}>
+            onRequestClose={this._handleClosePopover}>
             <div style={{padding: 20}}>
-              <RaisedButton primary={true} label="Permament delete, click here"/>
+              <RaisedButton 
+                onClick={this._handleDeletion} 
+                primary={true} 
+                label="Permament delete, click here"/>
             </div>
           </Popover>
       </div>

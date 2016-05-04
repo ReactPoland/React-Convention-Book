@@ -16,6 +16,11 @@ export default {
       type: 'EDIT_ARTICLE',
       payload: { response: response }
     }
+  },
+  deleteArticle: (response) => {
+    return {
+      type: 'DELETE_ARTICLE',
+      payload: { response: response }
+    }
   }
-
 }
