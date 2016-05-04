@@ -72,20 +72,20 @@ What is new in our improved handleServerSideRender? As you can see we have added
 
 You need also replace in two placed the ***id***'s variable name into the ***_id*** (the _id is a default name for the ID of a document in a Mongo's collection):
 
-1) Changes in ***server/routes.js***:
+1) Changes in ***server/routes.js*** from old code below:
 
 ```
 route: 'articles[{integers}]["id","articleTitle","articleContent"]',
 ```
 
-... and new one:
+... into a new one:
 ```
 route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
 ```
 
 The only change is that we will return _id instead of id.
 
-2) We need to fetch the _id in the src/layouts/PublishingApp.js:
+2) We need to fetch the _id in the src/layouts/PublishingApp.js so please change this below:
 ```
 get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
 ```
@@ -392,6 +392,13 @@ The logout view above is a simple view without connect function to the redux (li
 The ***componentWillMount*** function is deleting from localStorage information when user's lands on the logout page. As you can see it also checks if there is locaStorage with ***if(typeof localStorage !== 'undefined' && localStorage.token) *** because as you can imagine when you do server-side rendering then the ***localStorage*** is an undefined (server side doesn't have localStorage and window in comparision to the client-side).
 
 
+#### IMPORTANT: Before creating an add article feature on front-end
+
+We came into the point, where you need to delete all documents from your articles collection, otherwise if not then you may have some trouble with next steps as we are going to use a Draft-JS's library and some other stuff that will need a new schema on the backend. We will create that backend's schema in the next chapter as this chapter is focused on front-end.
+
+PLEASE delete all documents in your articles' MongoDB's collection right now, but please keep the users' collection as it was (please don't delete users' from database).
+
+#### The AddArticleView's component
 
 After we having the LogoutView and the WYSWIGeditor's components, let's create the last piece of missing components in our process - it's the ***src/views/articles/AddArticleView.js***, so let's create a directory and file now:
 ```
@@ -1548,9 +1555,58 @@ A small tweak in the ***src/views/DashboardView.js***:
 Above the only thing that we have changes is adding a Link with the ***to={`/edit-article/${articleDetails['_id']}`***. This will redirect a user to the article's edition view after clicking on a ListItem.
 
 
+#### Creating a new action and reducer (EDIT_ARTICLE)
 
-WAZNE:
-gdzies po drodze user musi usunac wszystkie rekordy z artciles w mongodb!
+Modify the ***src/actions/article.js*** file and add this new action called EDIT_ARTICLE:
+```
+export default {
+  articlesList: (response) => {
+    return {
+      type: 'ARTICLES_LIST_ADD',
+      payload: { response: response }
+    }
+  },
+  pushNewArticle: (response) => {
+    return {
+      type: 'PUSH_NEW_ARTICLE',
+      payload: { response: response }
+    }
+  },
+  editArticle: (response) => {
+    return {
+      type: 'EDIT_ARTICLE',
+      payload: { response: response }
+    }
+  }
+}
+```
+
+Next step is to improve our reducer at ***src/reducers/article.js***:
+```
+import mapHelpers from '../utils/mapHelpers';
+
+const article = (state = {}, action) => {
+  switch (action.type) {
+    case 'ARTICLES_LIST_ADD':
+      let articlesList = action.payload.response;
+      return mapHelpers.addMultipleItems(state, articlesList);
+    case 'PUSH_NEW_ARTICLE':
+      let newArticleObject = action.payload.response;
+      return mapHelpers.addItem(state, newArticleObject['_id'], newArticleObject);
+    case 'EDIT_ARTICLE':
+      let editedArticleObject = action.payload.response;
+      return mapHelpers.addItem(state, editedArticleObject['_id'], editedArticleObject);
+    default:
+      return state;
+  }
+}
+
+export default article
+```
+
+As you can find above, we have added a new switch case for ***EDIT_ARTICLE***. We use our mapHelpers.addItem - in general, if an _id does exsits in a Map then it replaces a value (it works great for editing actions).
+
+
 
 NEXT STEPS AFTER FINISHED BOOK:
 1) finish fetching with $atom at server/routes.js
