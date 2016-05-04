@@ -2045,23 +2045,23 @@ a) AddArticleView's component:
 
 b) AddArticleView's component after a submit button has been hit:
 
-![312_after_add_article](http://test.przeorski.pl/book/311_adding_article_formatted.png)
+![312_after_add_article](http://test.przeorski.pl/book/312_after_add_article.png)
 
 c) Dashboard's component:
 
-![313_dashboard_list_articles](http://test.przeorski.pl/book/311_adding_article_formatted.png)
+![313_dashboard_list_articles](http://test.przeorski.pl/book/313_dashboard_list_articles.png)
 
 d) EditArticleView's component:
 
-![314_edit_article](http://test.przeorski.pl/book/311_adding_article_formatted.png)
+![314_edit_article](http://test.przeorski.pl/book/314_edit_article.png)
 
 e) A delete button on the EditArticleView's component:
 
-![315_delete_1](http://test.przeorski.pl/book/311_adding_article_formatted.png)
+![315_delete_1](http://test.przeorski.pl/book/315_delete_1.png)
 
 f) A delete button on the EditArticleView's component after first click (Popover's component):
 
-![316_delete_popover](http://test.przeorski.pl/book/311_adding_article_formatted.png)
+![316_delete_popover](http://test.przeorski.pl/book/316_delete_popover.png)
 
 g) A PublishingApp's component (main page):
 
