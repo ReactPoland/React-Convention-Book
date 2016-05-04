@@ -36,7 +36,6 @@ class CoreLayout extends React.Component {
 
   componentWillMount() {
     if(typeof window !== 'undefined' && !this.props.article.get) {
-      // let articlesMap = new Map(this.props.article);
       this.props.articleActions.articlesList(this.props.article);
     }
   }

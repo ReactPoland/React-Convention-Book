@@ -1205,8 +1205,8 @@ $ touch mapHelpers.js
 const duplicate = (map) => {
   const newMap = new Map();
   map.forEach((item, key) => {
-    if(key === item['_id']) {
-      newMap.set(key, item);
+    if(item['_id']) {
+      newMap.set(item['_id'], item);
     }
   });
   return newMap;
@@ -1217,7 +1217,9 @@ const addMultipleItems = (map, items) => {
 
   Object.keys(items).map((itemIndex) => {
     let item = items[itemIndex];
-    newMap.set(item['_id'], item);
+    if(item['_id']) {
+      newMap.set(item['_id'], item);
+    }
   });
 
   return newMap;
@@ -1279,6 +1281,55 @@ export default article
 
 What's new in the ***src/reducers/article.js***'s file? So as you can see we have improved the ***ARTICLES_LIST_ADD*** (already discussed in previous pages). We have added a new ***PUSH_NEW_ARTICLE*** - this will push a new object into our reducer's state tree. It's similar to push an item to the array, but instead we use our reducer and maps.
 
+#### The CoreLayout improvements
+
+Because we are switching to the ES6's Map in front-end we need also to make sure that after we receive an Object with server-side rendering, then it is also a Map (not a plain JS object).
+
+```
+"use strict"; 
+  
+import React from 'react';
+import { Link } from 'react-router';
+
+import MuiThemeProvider from 'material-ui/lib/MuiThemeProvider';
+import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
+
+const muiTheme = getMuiTheme({ userAgent: 'all' });
+
+import RaisedButton from 'material-ui/lib/raised-button';
+import AppBar from 'material-ui/lib/app-bar';
+import ActionHome from 'material-ui/lib/svg-icons/action/home';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import articleActions from '../actions/article.js';
+
+const mapStateToProps = (state) => ({
+  ...state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  articleActions: bindActionCreators(articleActions, dispatch)
+});
+```
+
+Above on top of the CoreLayout we have added the redux's tools so we will have a state tree and the actions available in the CoreLayout's component.
+
+Then also in the CoreLayout please add this componentWillMount's function:
+```
+  componentWillMount() {
+    if(typeof window !== 'undefined' && !this.props.article.get) {
+      this.props.articleActions.articlesList(this.props.article);
+    }
+  }
+```
+
+This function is responsible to check if an article props are an ES6's Map or not. If not then we send an action to articlesList which makes the job done, and after that we have maps in our ***this.props.article***.
+
+#### Explanation, why maps over a JS object?
+In general, an ES6 Map has some features for easy data manipulation like functions ***.get***, ***.set*** which makes programming more pleasurable. It also helps us to have esier code to ready with keeping our immutability required by Redux. 
+
+Maps' methods are much easier to use than ***slice/concat/Object.assign's*** etc. I am sure that there are always some cons/pros for each approach, but in our app we will use ES6 Map-wise approach in order to keep things simpler after we are set-up in 100% with it.
 
 #### Improving the PublishingApp and DashboardView
 
