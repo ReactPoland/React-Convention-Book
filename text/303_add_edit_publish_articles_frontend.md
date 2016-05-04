@@ -1459,9 +1459,93 @@ Above in the render, we have one statement that checks if an article's editor ha
 
 And the second return is in case if an editor is in "edit mode", if yes then he can submit it by clicking on the ***RaisedButton***'s component with onClick method's called ***_articleSubmit***.
 
+#### Ability to edit an article
 
+We can add an article, but we can't edit it, yet. Let's implement that feature.
 
+First thing to do is to create a route in the ***src/routes/index.js***:
+```
+import EditArticleView                    from '../views/articles/EditArticleView';
+```
 
+.. and then edit the routes:
+```
+export default (
+  <Route component={CoreLayout} path='/'>
+    <IndexRoute component={PublishingApp} name='home' />
+    <Route component={LoginView} path='login' name='login' />
+    <Route component={LogoutView} path='logout' name='logout' />
+    <Route component={RegisterView} path='register' name='register' />
+    <Route component={DashboardView} path='dashboard' name='dashboard' />
+    <Route component={AddArticleView} path='add-article' name='add-article' />
+    <Route component={EditArticleView} path='/edit-article/:articleID' name='edit-article' />
+    
+  </Route>
+);
+```
+
+As you can see we have added the ***EditArticleView's route*** with ***path='/edit-article/:articleID'*** - as you should know already, the articleID will be sent to us with props as ***this.props.params.articleID*** (this is default feature of the redux-router).
+
+The next step is to create the ***src/views/articles/EditArticleView.js*** which is a new component (for now mocked one):
+```
+"use strict";
+
+import React from 'react';
+import Falcor from 'falcor';
+import { Link } from 'react-router';
+import falcorModel from '../../falcorModel.js';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import articleActions from '../../actions/article.js';
+import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
+import { stateToHTML } from 'draft-js-export-html';
+import RaisedButton from 'material-ui/lib/raised-button';
+
+const mapStateToProps = (state) => ({
+  ...state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  articleActions: bindActionCreators(articleActions, dispatch)
+});
+
+class EditArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render () {
+    return <h1>An edit article MOCK</h1>
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditArticleView);
+```
+
+Above you can find a standard view component with render function that returns a mock (we will improve it later). We have already put all required imports in place (we will use all them in next iteration of that EditArticleView's component).
+
+#### Let's add a dashboard link to an article's edition
+
+A small tweak in the ***src/views/DashboardView.js***:
+
+```
+  let articlesJSX = [];
+  this.props.article.forEach((articleDetails, articleKey) => {
+    let currentArticleJSX = (
+      <Link to={`/edit-article/${articleDetails['_id']}`}>
+        <ListItem
+          key={articleKey}
+          leftAvatar={<img src="/static/placeholder.png" width="50" height="50" />}
+          primaryText={articleDetails.articleTitle}
+          secondaryText={articleDetails.articleContent}
+        />
+      </Link>
+    );
+
+    articlesJSX.push(currentArticleJSX);
+  });
+```
+Above the only thing that we have changes is adding a Link with the ***to={`/edit-article/${articleDetails['_id']}`***. This will redirect a user to the article's edition view after clicking on a ListItem.
 
 
 
