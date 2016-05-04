@@ -1,8 +1,8 @@
 const duplicate = (map) => {
   const newMap = new Map();
   map.forEach((item, key) => {
-    if(key === item['_id']) {
-      newMap.set(key, item);
+    if(item['_id']) {
+      newMap.set(item['_id'], item);
     }
   });
   return newMap;
@@ -13,7 +13,9 @@ const addMultipleItems = (map, items) => {
 
   Object.keys(items).map((itemIndex) => {
     let item = items[itemIndex];
-    newMap.set(item['_id'], item);
+    if(item['_id']) {
+      newMap.set(item['_id'], item);
+    }
   });
 
   return newMap;

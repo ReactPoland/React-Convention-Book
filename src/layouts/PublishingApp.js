@@ -35,7 +35,7 @@ class PublishingApp extends React.Component {
       });
 
     let articles = await falcorModel.
-      get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent']]). 
       then(function(articlesResponse) {  
         return articlesResponse.json.articles;
       });

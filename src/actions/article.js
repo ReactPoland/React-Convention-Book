@@ -10,6 +10,12 @@ export default {
       type: 'PUSH_NEW_ARTICLE',
       payload: { response: response }
     }
+  },
+  editArticle: (response) => {
+    return {
+      type: 'EDIT_ARTICLE',
+      payload: { response: response }
+    }
   }
 
 }
