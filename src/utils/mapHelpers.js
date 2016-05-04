@@ -1,10 +1,23 @@
 const duplicate = (map) => {
+  console.info('########');
+  console.info('########');
+  console.info('########');
   const newMap = new Map();
   map.forEach((item, key) => {
-    if(key === item['_id']) {
-      newMap.set(key, item);
+    console.info('item', item);
+    console.info('key', key);
+    console.info('TRUE?', key === item['_id']);
+    if(item['_id']) {
+      newMap.set(item['_id'], item);
     }
   });
+  console.info('########');
+  console.info('########');
+  console.info('TERAZ:');
+  console.info('TERAZ:');
+  console.info('TERAZ:');
+  console.info(newMap);
+  console.info('########');
   return newMap;
 };
 

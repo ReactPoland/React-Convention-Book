@@ -25,7 +25,6 @@ class PublishingApp extends React.Component {
     if(typeof window !== 'undefined') {
       this._fetch(); // we are server side rendering, no fetching
     }
-    console.info(this.props.article);
   }
 
   async _fetch() {
@@ -36,7 +35,7 @@ class PublishingApp extends React.Component {
       });
 
     let articles = await falcorModel.
-      get(['articles', {from: 0, to: articlesLength-1}, ['id','articleTitle', 'articleContent']]). 
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent']]). 
       then(function(articlesResponse) {  
         return articlesResponse.json.articles;
       });
@@ -49,6 +48,7 @@ class PublishingApp extends React.Component {
     let articlesJSX = [];
 
     this.props.article.forEach((articleDetails, articleKey) => {
+      console.info('articleKey', articleKey);
       let currentArticleJSX = (
         <div key={articleKey}>
           <ArticleCard 
