@@ -10,6 +10,7 @@ import articleActions from '../../actions/article.js';
 import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
+import Popover from 'material-ui/lib/popover/popover';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -25,6 +26,9 @@ class EditArticleView extends React.Component {
     this._onDraftJSChange = this._onDraftJSChange.bind(this);
     this._articleEditSubmit = this._articleEditSubmit.bind(this);
     this._fetchArticleData = this._fetchArticleData.bind(this);
+    this._handleDeleteTap = this._handleDeleteTap.bind(this);
+    this._handleDeletion = this._handleDeletion.bind(this);
+    this._handleClosePopover = this._handleClosePopover.bind(this);
 
     this.state = {
       articleFetchError: null,
@@ -33,7 +37,9 @@ class EditArticleView extends React.Component {
       articleDetails: null,
       title: 'test',
       contentJSON: {},
-      htmlContent: ''
+      htmlContent: '',
+      openDelete: false,
+      deleteAnchorEl: null
     };
   }
 
@@ -76,6 +82,29 @@ class EditArticleView extends React.Component {
     this.setState({ articleEditSuccess: true });
   }
 
+  _handleDeleteTap(event) {
+    this.setState({
+      openDelete: true,
+      deleteAnchorEl: event.currentTarget
+    });
+  }
+
+  _handleDeletion() {
+    let articleID = this.state.editedArticleID;
+    this.props.articleActions.deleteArticle(articleID);
+
+    this.setState({
+      openDelete: false
+    });
+    this.props.history.pushState(null, '/dashboard');
+  }
+
+  _handleClosePopover() {
+    this.setState({
+      openDelete: false
+    });
+  }
+
   render () {
     if(this.state.articleFetchError) {
       return <h1>Article not found (invalid article's ID {this.props.params.articleID})</h1>;
@@ -112,6 +141,24 @@ class EditArticleView extends React.Component {
             type="submit"
             style={{margin: '10px auto', display: 'block', width: 150}}
             label={'Submit Edition'} />
+        <hr />
+        <h1>Delete permamently this article</h1>
+          <RaisedButton
+            onClick={this._handleDeleteTap}
+            label="Delete" />
+          <Popover
+            open={this.state.openDelete}
+            anchorEl={this.state.deleteAnchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this._handleClosePopover}>
+            <div style={{padding: 20}}>
+              <RaisedButton 
+                onClick={this._handleDeletion} 
+                primary={true} 
+                label="Permament delete, click here"/>
+            </div>
+          </Popover>
       </div>
     );
   }
