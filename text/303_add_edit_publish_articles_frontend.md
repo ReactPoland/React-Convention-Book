@@ -1326,10 +1326,18 @@ Then also in the CoreLayout please add this componentWillMount's function:
 
 This function is responsible to check if an article props are an ES6's Map or not. If not then we send an action to articlesList which makes the job done, and after that we have maps in our ***this.props.article***.
 
+The last thing is to improve export's in the CoreLayout:
+```
+export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout);
+```
+
+Above helps us to connect to the Redux's single-state-tree and the actions.
+
 #### Explanation, why maps over a JS object?
 In general, an ES6 Map has some features for easy data manipulation like functions ***.get***, ***.set*** which makes programming more pleasurable. It also helps us to have esier code to ready with keeping our immutability required by Redux. 
 
 Maps' methods are much easier to use than ***slice/concat/Object.assign's*** etc. I am sure that there are always some cons/pros for each approach, but in our app we will use ES6 Map-wise approach in order to keep things simpler after we are set-up in 100% with it.
+
 
 #### Improving the PublishingApp and DashboardView
 
@@ -1656,6 +1664,71 @@ export default article
 ```
 
 As you can find above, we have added a new switch case for ***EDIT_ARTICLE***. We use our mapHelpers.addItem - in general, if an _id does exsits in a Map then it replaces a value (it works great for editing actions).
+
+
+#### Edit mode in the ***src/components/articles/WYSWIGeditor.js***
+
+Let's implement now ability to use edit mode in our WYSWIGeditor components by improving our construction in the WYSWIGeditor.js:
+```
+export default class  WYSWIGeditor extends React.Component {
+  constructor(props) {
+    super(props);
+
+    let initialEditorFromProps;
+
+    if(typeof props.initialValue === 'undefined' || typeof props.initialValue !== 'object') {
+      initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));
+    } else {
+      let isInvalidObject = typeof props.initialValue.entityMap === 'undefined' || typeof blocks === 'undefined';
+      if(isInvalidObject) {
+        alert('Invalid article-edit error provided, exit');
+        return;
+      }
+      let draftBlocks = convertFromRaw(props.initialValue);
+      let contentToConsume = ContentState.createFromBlockArray(draftBlocks);
+      initialEditorFromProps = EditorState.createWithContent(contentToConsume);
+    }
+     
+    this.state = {
+      editorState: initialEditorFromProps
+    };
+
+    this.focus = () => this.refs['WYSWIGeditor'].focus();
+    this.onChange = (editorState) => { 
+      var contentState = editorState.getCurrentContent();
+
+      let contentJSON = convertToRaw(contentState);
+      props.onChangeTextJSON(contentJSON, contentState);
+      this.setState({editorState}) 
+    };
+
+    this.handleKeyCommand = (command) => this._handleKeyCommand(command);
+    this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+    this.toggleBlockType = (type) => this._toggleBlockType(type);
+  }
+```
+
+Above you can find how your constructor shall looks like after changes. 
+
+As you already know, the Draft-JS is required to be an object so we check in first if statement if it is, and then if not we put empty WYSWIG '' as a default (check the ***if(typeof props.initialValue === 'undefined' || typeof props.initialValue !== 'object')***).
+
+In the else statement we do:
+```
+let isInvalidObject = typeof props.initialValue.entityMap === 'undefined' || typeof blocks === 'undefined';
+if(isInvalidObject) {
+  alert('Invalid article-edit error provided, exit');
+  return;
+}
+let draftBlocks = convertFromRaw(props.initialValue);
+let contentToConsume = ContentState.createFromBlockArray(draftBlocks);
+initialEditorFromProps = EditorState.createWithContent(contentToConsume);
+```
+
+Above we check if we have got a valid for a Draft-JS's JSON object, if not we need to make a critical error and return, because otherwise in case of that error the whole browser can crash (we need to handle that edge case with ***if(isInvalidObject)***).
+
+After we have a valid object, then we recover the state of our WYSWIG with use of convertFromRaw, ContentState.createFromBlockArray and EditorState.createWithContent's functions provided by the Draft-JS's library.
+
+
 
 
 

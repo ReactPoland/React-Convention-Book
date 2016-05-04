@@ -15,9 +15,14 @@ export default class  WYSWIGeditor extends React.Component {
 
     let initialEditorFromProps;
 
-    if(typeof props.initialValue === 'undefined') {
+    if(typeof props.initialValue === 'undefined' || typeof props.initialValue !== 'object') {
       initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));
     } else {
+      let isInvalidObject = typeof props.initialValue.entityMap === 'undefined' || typeof blocks === 'undefined';
+      if(isInvalidObject) {
+        alert('Invalid article-edit error provided, exit');
+        return;
+      }
       let draftBlocks = convertFromRaw(props.initialValue);
       let contentToConsume = ContentState.createFromBlockArray(draftBlocks);
       initialEditorFromProps = EditorState.createWithContent(contentToConsume);
@@ -37,9 +42,7 @@ export default class  WYSWIGeditor extends React.Component {
     };
 
     this.handleKeyCommand = (command) => this._handleKeyCommand(command);
-    
     this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-
     this.toggleBlockType = (type) => this._toggleBlockType(type);
   }
 
