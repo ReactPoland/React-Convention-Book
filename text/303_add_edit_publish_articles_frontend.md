@@ -1465,7 +1465,8 @@ And the second return is in case if an editor is in "edit mode", if yes then he 
 
 
 
-
+WAZNE:
+gdzies po drodze user musi usunac wszystkie rekordy z artciles w mongodb!
 
 NEXT STEPS AFTER FINISHED BOOK:
 1) finish fetching with $atom at server/routes.js
