@@ -5,6 +5,12 @@ export default () => {
   return Article.find({}, function(err, articlesDocs) {
     return articlesDocs;
   }).then ((articlesArrayFromDB) => {
-    return articlesArrayFromDB;
+	  const articlesMap = new Map();
+	  articlesArrayFromDB.forEach((item, key) => {
+	    if(key === item['_id']) {
+	      articlesMap.set(key, item);
+	    }	
+	  });
+    return articlesMap;
   });
 }

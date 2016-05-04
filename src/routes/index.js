@@ -24,7 +24,7 @@ export default (
     <Route component={RegisterView} path='register' name='register' />
     <Route component={DashboardView} path='dashboard' name='dashboard' />
     <Route component={AddArticleView} path='add-article' name='add-article' />
-    <Route component={EditArticleView} path='edit-article' name='edit-article' />
+    <Route component={EditArticleView} path='/edit-article/:articleID' name='edit-article' />
     
   </Route>
 );

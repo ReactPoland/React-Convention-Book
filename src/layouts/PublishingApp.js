@@ -25,6 +25,7 @@ class PublishingApp extends React.Component {
     if(typeof window !== 'undefined') {
       this._fetch(); // we are server side rendering, no fetching
     }
+    console.info(this.props.article);
   }
 
   async _fetch() {

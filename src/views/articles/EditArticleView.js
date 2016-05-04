@@ -78,10 +78,25 @@ class EditArticleView extends React.Component {
     super(props);
     this._onDraftJSChange = this._onDraftJSChange.bind(this);
     this._articleEditSubmit = this._articleEditSubmit.bind(this);
+    this._fetchArticleData = this._fetchArticleData.bind(this);
 
     this.state = {
       editedArticleID: null
     };
+  }
+
+  componentWillMount() {
+    console.info(this.props.params.articleID);
+    this._fetchArticleData();
+  }
+
+  _fetchArticleData() {
+    let articleID = this.props.params.articleID;
+    if(articleID) {
+        console.info(this.props.article);
+
+        this.setState({ editedArticleID: articleID});
+    }
   }
 
   _onDraftJSChange(contentJSON, contentState) {
@@ -95,6 +110,10 @@ class EditArticleView extends React.Component {
 
   render () {
     let initialWYSWIGValue = MOCK;
+
+    if(!this.state.editedArticleID) {
+        return <h1>Loading article details</h1>;
+    }
 
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
