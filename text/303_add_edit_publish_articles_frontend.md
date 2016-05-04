@@ -1679,7 +1679,7 @@ export default class  WYSWIGeditor extends React.Component {
     if(typeof props.initialValue === 'undefined' || typeof props.initialValue !== 'object') {
       initialEditorFromProps = EditorState.createWithContent(ContentState.createFromText(''));
     } else {
-      let isInvalidObject = typeof props.initialValue.entityMap === 'undefined' || typeof blocks === 'undefined';
+      let isInvalidObject = typeof props.initialValue.entityMap === 'undefined' || typeof props.initialValue.blocks === 'undefined';
       if(isInvalidObject) {
         alert('Invalid article-edit error provided, exit');
         return;

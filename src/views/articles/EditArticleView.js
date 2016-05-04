@@ -10,6 +10,7 @@ import articleActions from '../../actions/article.js';
 import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
+import Popover from 'material-ui/lib/popover/popover';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -33,7 +34,9 @@ class EditArticleView extends React.Component {
       articleDetails: null,
       title: 'test',
       contentJSON: {},
-      htmlContent: ''
+      htmlContent: '',
+      openDelete: false,
+      deleteAnchorEl: null
     };
   }
 
@@ -76,6 +79,20 @@ class EditArticleView extends React.Component {
     this.setState({ articleEditSuccess: true });
   }
 
+  _handleDeleteTap(event) {
+    this.setState({
+      openDelete: true,
+      deleteAnchorEl: event.currentTarget
+    });
+  }
+
+  _handleDeletion() {
+    alert('_handleDeletion');
+    this.setState({
+      openDelete: false
+    });
+  }
+
   render () {
     if(this.state.articleFetchError) {
       return <h1>Article not found (invalid article's ID {this.props.params.articleID})</h1>;
@@ -112,6 +129,20 @@ class EditArticleView extends React.Component {
             type="submit"
             style={{margin: '10px auto', display: 'block', width: 150}}
             label={'Submit Edition'} />
+        <h1>Delete permamently this article</h1>
+          <RaisedButton
+            onTouchTap={this._handleDeleteTap}
+            label="Delete" />
+          <Popover
+            open={this.state.openDelete}
+            anchorEl={this.state.deleteAnchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this._handleDeletion}>
+            <div style={{padding: 20}}>
+              <RaisedButton primary={true} label="Permament delete, click here"/>
+            </div>
+          </Popover>
       </div>
     );
   }
