@@ -81,21 +81,36 @@ class EditArticleView extends React.Component {
     this._fetchArticleData = this._fetchArticleData.bind(this);
 
     this.state = {
-      editedArticleID: null
+      articleFetchError: null,
+      editedArticleID: null,
+      articleDetails: null,
+      title: 'test',
+      contentJSON: {},
+      htmlContent: ''
     };
   }
 
   componentWillMount() {
-    console.info(this.props.params.articleID);
     this._fetchArticleData();
   }
 
   _fetchArticleData() {
     let articleID = this.props.params.articleID;
-    if(articleID) {
+    if(typeof window !== 'undefined' && articleID) {
         console.info(this.props.article);
+        console.info('WORKS!!!!????');
 
-        this.setState({ editedArticleID: articleID});
+        let articleDetails = this.props.article.get(articleID);
+        if(articleDetails) {
+          this.setState({ 
+            editedArticleID: articleID, 
+            articleDetails: articleDetails
+          });
+        } else {
+          this.setState({
+            articleFetchError: true
+          })
+        }
     }
   }
 
@@ -109,11 +124,13 @@ class EditArticleView extends React.Component {
   }
 
   render () {
-    let initialWYSWIGValue = MOCK;
-
-    if(!this.state.editedArticleID) {
+    if(this.state.articleFetchError) {
+      return <h1>Article not found (invalid article's ID {this.props.params.articleID})</h1>;
+    } else if(!this.state.editedArticleID) {
         return <h1>Loading article details</h1>;
     }
+
+    let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;
 
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
@@ -124,7 +141,7 @@ class EditArticleView extends React.Component {
           title="Edit an article"
           onChangeTextJSON={this._onDraftJSChange} />
           <RaisedButton
-            onClick={this._articleSubmit}
+            onClick={this._articleEditSubmit}
             secondary={true}
             type="submit"
             style={{margin: '10px auto', display: 'block', width: 150}}
