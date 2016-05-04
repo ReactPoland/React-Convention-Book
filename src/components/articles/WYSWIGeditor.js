@@ -20,7 +20,7 @@ export default class  WYSWIGeditor extends React.Component {
     } else {
       let isInvalidObject = typeof props.initialValue.entityMap === 'undefined' || typeof blocks === 'undefined';
       if(isInvalidObject) {
-        alert('Invalid article-edit error provided, exit');
+        alert('Error: Invalid article-edit object provided, exit');
         return;
       }
       let draftBlocks = convertFromRaw(props.initialValue);

@@ -1716,7 +1716,7 @@ In the else statement we do:
 ```
 let isInvalidObject = typeof props.initialValue.entityMap === 'undefined' || typeof blocks === 'undefined';
 if(isInvalidObject) {
-  alert('Invalid article-edit error provided, exit');
+  alert('Error: Invalid article-edit object provided, exit');
   return;
 }
 let draftBlocks = convertFromRaw(props.initialValue);
@@ -1727,6 +1727,173 @@ initialEditorFromProps = EditorState.createWithContent(contentToConsume);
 Above we check if we have got a valid for a Draft-JS's JSON object, if not we need to make a critical error and return, because otherwise in case of that error the whole browser can crash (we need to handle that edge case with ***if(isInvalidObject)***).
 
 After we have a valid object, then we recover the state of our WYSWIG with use of convertFromRaw, ContentState.createFromBlockArray and EditorState.createWithContent's functions provided by the Draft-JS's library.
+
+
+#### Improvements in the EditArticleView
+
+The last improvements before finishing the article edit mode is improving the ***src/views/articles/EditArticleView.js***:
+
+```
+class EditArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleEditSubmit = this._articleEditSubmit.bind(this);
+    this._fetchArticleData = this._fetchArticleData.bind(this);
+
+    this.state = {
+      articleFetchError: null,
+      articleEditSuccess: null,
+      editedArticleID: null,
+      articleDetails: null,
+      title: 'test',
+      contentJSON: {},
+      htmlContent: ''
+    };
+  }
+```
+
+This is our constructor, we will have some state's variables as articleFetchError, articleEditSuccess, editedArticleID, articleDetails, title, contentJSON, htmlContent.
+
+In general, all those variables are self-explaining. Regarding the ***articleDetails*** here we will keep the whole object fetched from a reducer/mongoDB (things like title, contentHTML and contentJSON is keept in the articleDetails' state as you can find in a moment).
+
+
+After you are done with the EditArticleView's constructor add new functions:
+```
+  componentWillMount() {
+    this._fetchArticleData();
+  }
+
+  _fetchArticleData() {
+    let articleID = this.props.params.articleID;
+    if(typeof window !== 'undefined' && articleID) {
+        let articleDetails = this.props.article.get(articleID);
+        if(articleDetails) {
+          this.setState({ 
+            editedArticleID: articleID, 
+            articleDetails: articleDetails
+          });
+        } else {
+          this.setState({
+            articleFetchError: true
+          })
+        }
+    }
+  }
+
+  _onDraftJSChange(contentJSON, contentState) {
+    let htmlContent = stateToHTML(contentState);
+    this.setState({contentJSON, htmlContent});
+  }
+
+  _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    this.props.articleActions.editArticle(editedArticle);
+    this.setState({ articleEditSuccess: true });
+  }
+```
+
+1) On the ***componentWillMount*** we will fetch data about the article with ***_fetchArticleData***
+
+2) The ***_fetchArticleData*** is getting the article's ID from props via react-redux (***let articleID = this.props.params.articleID;***)
+
+3) Then we check if we are not on the server-side with ***if(typeof window !== 'undefined' && articleID)***
+
+4) Then we use Map's function ***.get*** in order to get details from a reducer (***let articleDetails = this.props.article.get(articleID);***)
+
+5) And based on the case, we setState of our component with:
+```
+if(articleDetails) {
+  this.setState({ 
+    editedArticleID: articleID, 
+    articleDetails: articleDetails
+  });
+} else {
+  this.setState({
+    articleFetchError: true
+  })
+}
+```
+
+Above you can find that in the ***articleDetails*** we keep all data fetched from reducer/DB. In general now it's only front-end side because a backend side fetching of an edited article will be introducer later in that book.
+
+
+The ***_onDraftJSChange***'s function is similar to the one in AddArticleView' component.
+
+The ***_articleEditSubmit*** is quite standard so I will keep you to read the code on your own - I will only mention that the ***_id: currentArticleID*** is very important, because it's used later in our reducer/mapUtils in order to update the article correctly in the article's reducer.
+
+
+#### EditArticleView's render improvements
+
+Last part if to improve our render function in the EditArticleView's component:
+```
+render () {
+    if(this.state.articleFetchError) {
+      return <h1>Article not found (invalid article's ID {this.props.params.articleID})</h1>;
+    } else if(!this.state.editedArticleID) {
+        return <h1>Loading article details</h1>;
+    } else if(this.state.articleEditSuccess) {
+      return (
+        <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+          <h3>Your article has been edited successfully</h3>
+          <Link to='/dashboard'>
+            <RaisedButton
+              secondary={true}
+              type="submit"
+              style={{margin: '10px auto', display: 'block', width: 150}}
+              label='Done' />
+          </Link>
+        </div>
+      );
+    }
+
+    let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;
+
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Edit an exisitng article</h1>
+        <WYSWIGeditor
+          initialValue={initialWYSWIGValue}
+          name="editarticle"
+          title="Edit an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+          <RaisedButton
+            onClick={this._articleEditSubmit}
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Edition'} />
+      </div>
+    );
+  }
+```
+
+We are managing different state's of our component with ***if(this.state.articleFetchError***, ***else if(!this.state.editedArticleID)*** and ***else if(this.state.articleEditSuccess)***.
+
+```
+<WYSWIGeditor
+  initialValue={initialWYSWIGValue}
+  name="editarticle"
+  title="Edit an article"
+  onChangeTextJSON={this._onDraftJSChange} />
+```
+
+In that part's above, the major changes is adding a new prop called ***initialValue*** which passed down to the WYSWIGeditor the Draft-JS's JSON object.
+
+#### Delete an article action
+
+
+
+
+
+
 
 
 
