@@ -1,23 +1,10 @@
 const duplicate = (map) => {
-  console.info('########');
-  console.info('########');
-  console.info('########');
   const newMap = new Map();
   map.forEach((item, key) => {
-    console.info('item', item);
-    console.info('key', key);
-    console.info('TRUE?', key === item['_id']);
     if(item['_id']) {
       newMap.set(item['_id'], item);
     }
   });
-  console.info('########');
-  console.info('########');
-  console.info('TERAZ:');
-  console.info('TERAZ:');
-  console.info('TERAZ:');
-  console.info(newMap);
-  console.info('########');
   return newMap;
 };
 
@@ -26,7 +13,9 @@ const addMultipleItems = (map, items) => {
 
   Object.keys(items).map((itemIndex) => {
     let item = items[itemIndex];
-    newMap.set(item['_id'], item);
+    if(item['_id']) {
+      newMap.set(item['_id'], item);
+    }
   });
 
   return newMap;

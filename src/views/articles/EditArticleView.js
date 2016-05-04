@@ -11,60 +11,6 @@ import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
 
-let MOCK = {
-        "entityMap" : {},
-        "blocks" : [ 
-            {
-                "key" : "a9snp",
-                "text" : "test",
-                "type" : "unstyled",
-                "depth" : 0,
-                "inlineStyleRanges" : [],
-                "entityRanges" : []
-            }, 
-            {
-                "key" : "8sbm6",
-                "text" : "test",
-                "type" : "unordered-list-item",
-                "depth" : 0,
-                "inlineStyleRanges" : [],
-                "entityRanges" : []
-            }, 
-            {
-                "key" : "78eiu",
-                "text" : "test",
-                "type" : "unordered-list-item",
-                "depth" : 0,
-                "inlineStyleRanges" : [],
-                "entityRanges" : []
-            }, 
-            {
-                "key" : "c9prl",
-                "text" : "test",
-                "type" : "unordered-list-item",
-                "depth" : 0,
-                "inlineStyleRanges" : [],
-                "entityRanges" : []
-            }, 
-            {
-                "key" : "3k279",
-                "text" : "test",
-                "type" : "unordered-list-item",
-                "depth" : 0,
-                "inlineStyleRanges" : [],
-                "entityRanges" : []
-            }, 
-            {
-                "key" : "dln2i",
-                "text" : "test",
-                "type" : "unordered-list-item",
-                "depth" : 0,
-                "inlineStyleRanges" : [],
-                "entityRanges" : []
-            }
-        ]
-    };
-
 const mapStateToProps = (state) => ({
 	...state
 });
@@ -82,6 +28,7 @@ class EditArticleView extends React.Component {
 
     this.state = {
       articleFetchError: null,
+      articleEditSuccess: null,
       editedArticleID: null,
       articleDetails: null,
       title: 'test',
@@ -97,9 +44,6 @@ class EditArticleView extends React.Component {
   _fetchArticleData() {
     let articleID = this.props.params.articleID;
     if(typeof window !== 'undefined' && articleID) {
-        console.info(this.props.article);
-        console.info('WORKS!!!!????');
-
         let articleDetails = this.props.article.get(articleID);
         if(articleDetails) {
           this.setState({ 
@@ -121,6 +65,15 @@ class EditArticleView extends React.Component {
 
   _articleEditSubmit() {
     let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    this.props.articleActions.editArticle(editedArticle);
+    this.setState({ articleEditSuccess: true });
   }
 
   render () {
@@ -128,6 +81,19 @@ class EditArticleView extends React.Component {
       return <h1>Article not found (invalid article's ID {this.props.params.articleID})</h1>;
     } else if(!this.state.editedArticleID) {
         return <h1>Loading article details</h1>;
+    } else if(this.state.articleEditSuccess) {
+      return (
+        <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+          <h3>Your article has been edited successfully</h3>
+          <Link to='/dashboard'>
+            <RaisedButton
+              secondary={true}
+              type="submit"
+              style={{margin: '10px auto', display: 'block', width: 150}}
+              label='Done' />
+          </Link>
+        </div>
+      );
     }
 
     let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;

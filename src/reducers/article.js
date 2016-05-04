@@ -8,6 +8,9 @@ const article = (state = {}, action) => {
     case 'PUSH_NEW_ARTICLE':
       let newArticleObject = action.payload.response;
       return mapHelpers.addItem(state, newArticleObject['_id'], newArticleObject);
+    case 'EDIT_ARTICLE':
+      let editedArticleObject = action.payload.response;
+      return mapHelpers.addItem(state, editedArticleObject['_id'], editedArticleObject);
     default:
       return state;
   }

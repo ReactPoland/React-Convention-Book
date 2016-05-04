@@ -48,7 +48,6 @@ class PublishingApp extends React.Component {
     let articlesJSX = [];
 
     this.props.article.forEach((articleDetails, articleKey) => {
-      console.info('articleKey', articleKey);
       let currentArticleJSX = (
         <div key={articleKey}>
           <ArticleCard 
