@@ -39,7 +39,7 @@ class EditArticleView extends React.Component {
       contentJSON: {},
       htmlContent: '',
       openDelete: false,
-      deleteAnchorEl: undefined
+      deleteAnchorEl: null
     };
   }
 

@@ -73,7 +73,7 @@ class CoreLayout extends React.Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <AppBar
-            title="Publishing App"
+            title='Publishing App'
             iconElementLeft={homePageButtonJSX}
             iconElementRight={menuLinksJSX} />
             <br/>

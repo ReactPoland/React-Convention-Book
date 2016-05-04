@@ -1889,16 +1889,181 @@ In that part's above, the major changes is adding a new prop called ***initialVa
 
 #### Delete an article action
 
+Let's create a new action for delete at ***src/actions/article.js***:
+```
+  deleteArticle: (response) => {
+    return {
+      type: 'DELETE_ARTICLE',
+      payload: { response: response }
+    }
+  }
+```
+
+Next let's add a DELETE_ARTICLE switch case into the ***src/reducers/article.js***:
+```
+import mapHelpers from '../utils/mapHelpers';
+
+const article = (state = {}, action) => {
+  switch (action.type) {
+    case 'ARTICLES_LIST_ADD':
+      let articlesList = action.payload.response;
+      return mapHelpers.addMultipleItems(state, articlesList);
+    case 'PUSH_NEW_ARTICLE':
+      let newArticleObject = action.payload.response;
+      return mapHelpers.addItem(state, newArticleObject['_id'], newArticleObject);
+    case 'EDIT_ARTICLE':
+      let editedArticleObject = action.payload.response;
+      return mapHelpers.addItem(state, editedArticleObject['_id'], editedArticleObject);
+    case 'DELETE_ARTICLE':
+      let deleteArticleId = action.payload.response;
+      return mapHelpers.deleteItem(state, deleteArticleId);
+    default:
+      return state;
+  }
+}
+
+export default article
+```
+
+The last step in implementing a delete button is to modify the ***src/views/articles/EditArticleView.js***'s component.
+
+1) Import PopOver (it will ask second time if a use is sure to delete an article):
+```
+import Popover from 'material-ui/lib/popover/popover';
+```
+
+2) Improve the constructor of EditArticleView:
+```
+class EditArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleEditSubmit = this._articleEditSubmit.bind(this);
+    this._fetchArticleData = this._fetchArticleData.bind(this);
+    this._handleDeleteTap = this._handleDeleteTap.bind(this);
+    this._handleDeletion = this._handleDeletion.bind(this);
+    this._handleClosePopover = this._handleClosePopover.bind(this);
+
+    this.state = {
+      articleFetchError: null,
+      articleEditSuccess: null,
+      editedArticleID: null,
+      articleDetails: null,
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      openDelete: false,
+      deleteAnchorEl: null
+    };
+  }
+```
+
+The new thing above are: _handleDeleteTap, _handleDeletion, _handleClosePopover and the state (htmlContent, openDelete, deleteAnchorEl).
+
+3) Then add three new functions in the EditArticleView:
+```
+  _handleDeleteTap(event) {
+    this.setState({
+      openDelete: true,
+      deleteAnchorEl: event.currentTarget
+    });
+  }
+
+  _handleDeletion() {
+    let articleID = this.state.editedArticleID;
+    this.props.articleActions.deleteArticle(articleID);
+
+    this.setState({
+      openDelete: false
+    });
+    this.props.history.pushState(null, '/dashboard');
+  }
+
+  _handleClosePopover() {
+    this.setState({
+      openDelete: false
+    });
+  }
+```
+
+4) Improve the return in the render's function:
+```
+    let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;
+
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Edit an exisitng article</h1>
+        <WYSWIGeditor
+          initialValue={initialWYSWIGValue}
+          name="editarticle"
+          title="Edit an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+          <RaisedButton
+            onClick={this._articleEditSubmit}
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Edition'} />
+        <hr />
+        <h1>Delete permamently this article</h1>
+          <RaisedButton
+            onClick={this._handleDeleteTap}
+            label="Delete" />
+          <Popover
+            open={this.state.openDelete}
+            anchorEl={this.state.deleteAnchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this._handleClosePopover}>
+            <div style={{padding: 20}}>
+              <RaisedButton 
+                onClick={this._handleDeletion} 
+                primary={true} 
+                label="Permament delete, click here"/>
+            </div>
+          </Popover>
+      </div>
+    );
+```
+
+Regarding the render, new things are all things under the new hr's tag:
+
+a) ***Header1:*** Delete permamently this article
+
+b) ***RaisedButton:*** Delete
+
+c) ***Popover:*** it's a component from material-ui. You can find more documentaction of that component at http://www.material-ui.com/v0.15.0-alpha.1/#/components/popover ... you can find below how it should looks in the browser
+
+d) ***RaisedButton:*** Permament delete, click here
 
 
+#### Images of current state of our app:
 
+a) AddArticleView's component:
 
+![311_adding_article_formatted](http://test.przeorski.pl/book/311_adding_article_formatted.png)
 
+b) AddArticleView's component after a submit button has been hit:
 
+![312_after_add_article](http://test.przeorski.pl/book/311_adding_article_formatted.png)
 
+c) Dashboard's component:
 
+![313_dashboard_list_articles](http://test.przeorski.pl/book/311_adding_article_formatted.png)
 
+d) EditArticleView's component:
 
-NEXT STEPS AFTER FINISHED BOOK:
-1) finish fetching with $atom at server/routes.js
+![314_edit_article](http://test.przeorski.pl/book/311_adding_article_formatted.png)
+
+e) A delete button on the EditArticleView's component:
+
+![315_delete_1](http://test.przeorski.pl/book/311_adding_article_formatted.png)
+
+f) A delete button on the EditArticleView's component after first click (Popover's component):
+
+![316_delete_popover](http://test.przeorski.pl/book/311_adding_article_formatted.png)
+
+g) A PublishingApp's component (main page):
+
+![317_home_page_articles](http://test.przeorski.pl/book/317_home_page_articles.png)
 
