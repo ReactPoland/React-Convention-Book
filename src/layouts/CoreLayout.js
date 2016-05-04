@@ -12,6 +12,17 @@ import RaisedButton from 'material-ui/lib/raised-button';
 import AppBar from 'material-ui/lib/app-bar';
 import ActionHome from 'material-ui/lib/svg-icons/action/home';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import articleActions from '../actions/article.js';
+
+const mapStateToProps = (state) => ({
+  ...state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  articleActions: bindActionCreators(articleActions, dispatch)
+});
 
 class CoreLayout extends React.Component {
   static propTypes = {
@@ -21,6 +32,13 @@ class CoreLayout extends React.Component {
   constructor(props) {
     super(props);
 
+  }
+
+  componentWillMount() {
+    if(typeof window !== 'undefined' && !this.props.article.get) {
+      // let articlesMap = new Map(this.props.article);
+      this.props.articleActions.articlesList(this.props.article);
+    }
   }
 
   render () {
@@ -67,4 +85,4 @@ class CoreLayout extends React.Component {
   }
 }
 
-export default CoreLayout;
+export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout);

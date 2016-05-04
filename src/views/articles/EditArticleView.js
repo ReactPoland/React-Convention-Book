@@ -11,7 +11,6 @@ import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
 
-
 const mapStateToProps = (state) => ({
 	...state
 });
@@ -20,18 +19,43 @@ const mapDispatchToProps = (dispatch) => ({
   articleActions: bindActionCreators(articleActions, dispatch)
 });
 
-class AddArticleView extends React.Component {
+class EditArticleView extends React.Component {
   constructor(props) {
     super(props);
     this._onDraftJSChange = this._onDraftJSChange.bind(this);
-    this._articleSubmit = this._articleSubmit.bind(this);
+    this._articleEditSubmit = this._articleEditSubmit.bind(this);
+    this._fetchArticleData = this._fetchArticleData.bind(this);
 
     this.state = {
+      articleFetchError: null,
+      articleEditSuccess: null,
+      editedArticleID: null,
+      articleDetails: null,
       title: 'test',
       contentJSON: {},
-      htmlContent: '',
-      newArticleID: null
+      htmlContent: ''
     };
+  }
+
+  componentWillMount() {
+    this._fetchArticleData();
+  }
+
+  _fetchArticleData() {
+    let articleID = this.props.params.articleID;
+    if(typeof window !== 'undefined' && articleID) {
+        let articleDetails = this.props.article.get(articleID);
+        if(articleDetails) {
+          this.setState({ 
+            editedArticleID: articleID, 
+            articleDetails: articleDetails
+          });
+        } else {
+          this.setState({
+            articleFetchError: true
+          })
+        }
+    }
   }
 
   _onDraftJSChange(contentJSON, contentState) {
@@ -39,25 +63,28 @@ class AddArticleView extends React.Component {
     this.setState({contentJSON, htmlContent});
   }
 
-  _articleSubmit() {
-    let newArticle = {
+  _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
       articleTitle: this.state.title,
       articleContent: this.state.htmlContent,
       articleContentJSON: this.state.contentJSON
     }
 
-    let newArticleID = "MOCKEDRandomid"+Math.floor(Math.random() * 10000);
-
-    newArticle['_id'] = newArticleID;
-    this.props.articleActions.pushNewArticle(newArticle);
-    this.setState({ newArticleID: newArticleID});
+    this.props.articleActions.editArticle(editedArticle);
+    this.setState({ articleEditSuccess: true });
   }
 
   render () {
-    if(this.state.newArticleID) {
+    if(this.state.articleFetchError) {
+      return <h1>Article not found (invalid article's ID {this.props.params.articleID})</h1>;
+    } else if(!this.state.editedArticleID) {
+        return <h1>Loading article details</h1>;
+    } else if(this.state.articleEditSuccess) {
       return (
         <div style={{height: '100%', width: '75%', margin: 'auto'}}>
-          <h3>Your new article ID is {this.state.newArticleID}</h3>
+          <h3>Your article has been edited successfully</h3>
           <Link to='/dashboard'>
             <RaisedButton
               secondary={true}
@@ -69,22 +96,25 @@ class AddArticleView extends React.Component {
       );
     }
 
+    let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;
+
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
-        <h1>Add Article</h1>
+        <h1>Edit an exisitng article</h1>
         <WYSWIGeditor
-          name="addarticle"
-          title="Create an article"
+          initialValue={initialWYSWIGValue}
+          name="editarticle"
+          title="Edit an article"
           onChangeTextJSON={this._onDraftJSChange} />
           <RaisedButton
-            onClick={this._articleSubmit}
+            onClick={this._articleEditSubmit}
             secondary={true}
             type="submit"
             style={{margin: '10px auto', display: 'block', width: 150}}
-            label={'Submit Article'} />
+            label={'Submit Edition'} />
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddArticleView);
+export default connect(mapStateToProps, mapDispatchToProps)(EditArticleView);

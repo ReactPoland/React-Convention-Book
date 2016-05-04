@@ -21,7 +21,7 @@ let PublishingAppRoutes = [
   }
 }, 
 {
-  route: 'articles[{integers}]["id","articleTitle","articleContent"]',
+  route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
   get: (pathSet) => {
     let articlesIndex = pathSet[1];
 
