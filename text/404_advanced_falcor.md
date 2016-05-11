@@ -59,7 +59,60 @@ Let's try to compare these both.
 
 #### Falcor vs. Relay/GraphQL (in which cases Falcor is much better than Relay/GraphQL)
 
-#### 
+
+
+#### Securing the auth required's routes
+
+Currently our app has ability to add/edit/delete a route, the problem with our current implementation is that currently, we don't check if a client who is making any CRUD operation has privilitages to do so... 
+
+The solution of securing the falcor-routes requires some changes in our current implementation, so on each request before doing the opration we will check if we have got from the client a correct token, and if the user who is making the call has ability to edit (in our case it means that if anyone has a role as an editor and is authenticated correctly with his username and password, then he can add/edit/delete an article).
+
+#### Improving the server.js & routes.js
+
+
+In the server/server.js file, change this old code:
+```
+// this shall be already in your
+app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
+  return new FalcorRouter(routes);
+}));
+```
+
+.. to this improved one:
+```
+todo
+```
+
+The next step is to improve the server/routes.js in order to make a function that recives the currentSession's object which will keep all the information about a request. We need to change this below in the routes.js:
+```
+
+let PublishingAppRoutes = [
+    ...sessionRoutes,
+  {
+  route: 'articles.length',
+    get: () => {
+      return Article.count({}, function(err, count) {
+        return count;
+      }).then ((articlesCountInDB) => {
+        return {
+          path: ['articles', 'length'],
+          value: articlesCountInDB
+        }
+      })
+  }
+}, 
+```
+
+.. and instead of exporting array of routes, we need to export a function that will return routes based on a current request's headers details:
+```
+todo
+```
+
+
+
+
+
+
 
 
 
