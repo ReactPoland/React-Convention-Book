@@ -57,7 +57,71 @@ Let's try to compare these both.
 
 
 
-#### Falcor vs. Relay/GraphQL (in which cases Falcor is much better than Relay/GraphQL)
+### Falcor vs. Relay/GraphQL
+
+As any tool, there are always pros and cons.
+
+For certain Falcor is always better than Relay/GraphQL in small/mid sized projects at least until you have masters' developers (or you a master yourself) who knows Relay/GraphQL very well. Why? 
+
+In general, the Relay (for front-end) and GrapQL (for backend) are two different set tools that YOU must be efficient to use it properly.
+
+Very often  in commercial's enviroment you don't have too much time to learn things from scratch. This reasons is also behind the success of React. Why React has succeded? React is much easier to grasp in order to be an efficient front-end developer. Then a CTO or Technical Director hires a newbie developer who knows jQuery (for example), then the CTO can easily project that this junior guy will be effective in React in 7-14 days - I was teaching junior frontend devs with basic knowledge of JavaScript/jQuery, and I found out that they quite quickly become efficient in creating client-side apps with React.
+
+The same situation as with React, we may find with Falcor. Falcor in comparision to Relay+GraphQL, is like simplicity of React compared to monolith framework of Angular.
+
+This single factor described in previous three paragraphs cause that Falcor is better for small/mid size projects with limited budget.
+
+You may find some opportunities to learn Relay/GraphQL in bigger companies with much bigger budgets like Facebook when you have 6 months to master a technology.
+
+FalcorJS can be mastered effectively in two weeks, but GraphQL+Relay not.
+
+#### Technical differences overview
+
+Regarding the technical overview, we can find out that in general Relay allows you to query not-defined number of items from the GraphQL's server. In Falcor for comparision, you need first ask backend how much items it has before being able to query for the collections' objects details (like articles in our book's case).
+
+In general, the biggest difference here is that GraphQL/Relay is a query language's tool and Falcor is not. What means a query language? This means that you can make a queries from front-end similar to SQL like:
+```
+post: () => Relay.QL`
+  fragment on Articles {
+    title,
+    content
+  }
+`,
+```
+
+This above can be made as a query from front-end via Relay.QL, then the GraphQL is processing the query the same way as SQL is processing a query like this:
+```
+SELECT title, content FROM Articles
+```
+
+The things may get harder, if there is for example 1 000 000 articles in the DB, and you didn't expected so many on front-end.
+
+In Falcor you do it differently as you already learned:
+```
+let articlesLength = await falcorModel.
+  getValue("articles.length").
+  then(function(length) {  
+    return length;
+  });
+
+let articles = await falcorModel.
+  get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent']]). 
+  then(function(articlesResponse) {  
+    return articlesResponse.json.articles;
+  });
+```
+
+As in the above's Falcor example, you must first know how many records are in the MongoDB as in our case.
+
+
+That above is one of most important differences, that creates some sort of challenges for both sides.
+
+For GraphQL and Relay, the question is if whether the power from that query languages is worth the complexity that creates the learning curve... because of that complexity may not be worth it for small/mid sized projects.
+
+Basic differences have been discussed, let's focus on Falcor and improving our current PublishingApp.
+
+### Improving our application
+
 
 
 
@@ -109,7 +173,7 @@ todo
 ```
 
 
-
+### Improving our falcor code on front-end
 
 
 
