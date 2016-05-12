@@ -127,11 +127,30 @@ For GraphQL and Relay, the question is if whether the power from that query lang
 
 Basic differences have been discussed, let's focus on Falcor and improving our current PublishingApp.
 
-### Improving our application
+### Improving our application and making it more reliable
+
+We need to improve things like:
+
+1) we will implement hot reload in our project
+
+2) we will implement better server-side rendering errors catching
+
+3) securing the backend so we check the authorization before running add/edit/delete on backend
+
+4) we need to give ability to catch errors on backend and give a notification to user on front-end that something didn't work correctly
 
 
 
 
+
+
+
+
+------------------
+------------------
+------------------
+
+PONIZEJ konczyc robic jak bedziemy miec hot reload i error catching server rendering with renderToStaticMarkup solved!!!
 #### Securing the auth required's routes
 
 Currently our app has ability to add/edit/delete a route, the problem with our current implementation is that currently, we don't check if a client who is making any CRUD operation has privilitages to do so... 
