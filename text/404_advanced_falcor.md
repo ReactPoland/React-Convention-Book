@@ -75,6 +75,13 @@ You may find some opportunities to learn Relay/GraphQL in bigger companies with 
 
 FalcorJS can be mastered effectively in two weeks, but GraphQL+Relay not.
 
+#### Big picture similarities
+
+Both are trying to solve the same problem. They are efficient by design for both developers and network (trying to optimize amount of queries in comparision to RESTful's approach).
+
+They have ability to query backend server in order to fetch data and also have batching ability (so you can fetch more than two different sets of data with one network's requrest). Both have some caching abilities.
+
+
 #### Technical differences overview
 
 Regarding the technical overview, we can find out that in general Relay allows you to query not-defined number of items from the GraphQL's server. In Falcor for comparision, you need first ask backend how much items it has before being able to query for the collections' objects details (like articles in our book's case).
