@@ -343,6 +343,16 @@ This is the route that fetches the artciles from databases and returns a falcor-
 
 
 
+NEXT STEPS:
+NEXT STEPS:
+NEXT STEPS:
+
+2) securing the backend so we check the authorization before running add/edit/delete on backend ((((CH4 has some code for add/update/delete))))
+
+3) we need to give ability to catch errors on backend and give a notification to user on front-end that something didn't work correctly
+
+
+
 
 ***** TO-IMPROVE BELOW:
 ***** TO-IMPROVE BELOW:
