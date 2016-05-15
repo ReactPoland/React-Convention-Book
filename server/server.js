@@ -19,18 +19,6 @@ import rootReducer from '../src/reducers';
 import reactRoutes from '../src/routes';
 import fetchServerSide from './fetchServerSide';
 
-
-import webpack              from 'webpack';
-import WebpackDevMiddleware from 'webpack-dev-middleware';
-import WebpackHotMiddleware from 'webpack-hot-middleware';
-import historyApiFallback   from 'connect-history-api-fallback';
-import chalk                from 'chalk';
-import config               from '../config';
-import webpackConfig        from '../build/webpack/development_hot';
-
-const paths = config.get('utils_paths');
-const compiler = webpack(webpackConfig);
-
 var app = express();
 app.server = http.createServer(app);
 
