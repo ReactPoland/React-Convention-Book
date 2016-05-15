@@ -242,6 +242,7 @@ Let's improve the routes itself so we won't return an array anymore, but a funct
 
 The next step is to improve the server/routes.js in order to make a function that recives the currentSession's object which will keep all the information about a request. We need to change this below in the routes.js:
 ```
+// this code is already in your codebase:
 let PublishingAppRoutes = [
     ...sessionRoutes,
   {
@@ -257,11 +258,92 @@ let PublishingAppRoutes = [
       })
   }
 }, 
+// ...... here is more code between
+export default PublishingAppRoutes; 
+```
+PLEASE NOTE: above is just a part of the routes.js file, but for sake of brevity there is a comment ***...... here is more code between*** which strips code between.
+
+.. and instead of exporting array of routes, we need to export a function that will return routes based on a current request's headers details. 
+
+The top part of the ***server/routes.js*** file (with imports):
+
+```
+import configMongoose from './configMongoose';
+import sessionRoutes from './routesSession';
+import jsonGraph from 'falcor-json-graph';
+import jwt from 'jsonwebtoken';
+import jwtSecret from './configSecret';
+
+let $atom = jsonGraph.atom;
+let Article = configMongoose.Article;
 ```
 
-.. and instead of exporting array of routes, we need to export a function that will return routes based on a current request's headers details:
+
+... and after that, follow with exporting a new function:
 ```
-todo
+export default ( req, res ) => {
+  let { token, role, username } = req.headers;
+  let userDetailsToHash = username+role;
+  let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret);
+  let isAuthorized = authSign === token;
+  let sessionObject = {isAuthorized, role, username};
+
+  console.info(`The ${username} is authorized === `, isAuthorized);
+
+  let PublishingAppRoutes = [
+      ...sessionRoutes,
+    {
+    route: 'articles.length',
+      get: () => {
+        return Article.count({}, function(err, count) {
+          return count;
+        }).then ((articlesCountInDB) => {
+          return {
+            path: ['articles', 'length'],
+            value: articlesCountInDB
+          }
+        })
+    }
+  }];
+
+
+  return PublishingAppRoutes;
+}
+```
+
+First of all, we receive the req (request's details) and res (object that represents the HTTP response) variables into that arrow functions.  Based on the information provided by ***req*** we get the headers' details (***let { token, role, username } = req.headers;***). Next we have the ***userDetailsToHash*** and then we check what shall be the correct authToken with ***let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret)***. Later we check if the user is authorized with ***let isAuthorized = authSign === token***. Then we create a sessionObject which will be re-used accross all falcor's routes later (***let sessionObject = {isAuthorized, role, username};***).
+
+Currently, we have there a one route (***articles.length***) which was described in chapter 2 (so it's nothing new so far).
+
+As you can see above in the code, instead of exporting the ***PublishingAppRoutes*** directly, we are exporting the arrow function ***export default ( req, res )***.
+
+
+We need to re-add (under articles.lenght) second route called ***articles[{integers}]["_id","articleTitle","articleContent"]***, with the following code in the server/routes:
+```
+  {
+    route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return Article.find({}, function(err, articlesDocs) {
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let singleArticleObject = articlesArrayFromDB[index].toObject();
+
+          singleArticleObject.articleContent = $atom(singleArticleObject.articleContent);
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: singleArticleObject
+          };
+
+          results.push(falcorSingleArticleResult);
+        });
+        return results;
+      })
+    }
+  }
 ```
 
 

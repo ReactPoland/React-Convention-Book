@@ -13,7 +13,7 @@ let Article = configMongoose.Article;
 export default ( req, res ) => {
   let { token, role, username } = req.headers;
   let userDetailsToHash = username+role;
-  let authSign = jwt.sign(userDetailsToHash, jwtSecret.secret);
+  let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret);
   let isAuthorized = authSign === token;
   let sessionObject = {isAuthorized, role, username};
 
@@ -57,7 +57,8 @@ export default ( req, res ) => {
         return results;
       })
     }
-  }];
+  }
+  ];
 
 
   return PublishingAppRoutes;
