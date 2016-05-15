@@ -206,7 +206,7 @@ What we have done above? The ***extends*** keyword from EcmaScript6 show an exam
 
 After you will implement the above's code in the falcorMode.js and a user will be logged those variables will be added to each request:
 
-![localStorage data](http://test.przeorski.pl/book/402_requests_headers.png)
+![localStorage data](http://test.przeorski.pl/book/402_requests_heaers_arrows.png)
 
 
 Beside the token, username and role we have made a small cleanup as following: we have deleted the $ref and $atom because we don't need it on the front-end anymore (all that stuff has been moved to the falcor-router).
