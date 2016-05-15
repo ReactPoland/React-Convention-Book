@@ -338,7 +338,7 @@ We need to re-add (under articles.lenght) second route called ***articles[{integ
   }
 ```
 
-This is the route that fetches the artciles from databases and returns a falcor-route for it. The new thing here is the $atom
+This is the route that fetches the artciles from databases and returns a falcor-route for it - it's exactly the same as introduced before, the only different is that now it's part of the function (***export default ( req, res ) => { ... }***).
 
 
 
