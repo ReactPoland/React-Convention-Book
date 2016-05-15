@@ -24,11 +24,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.5.2",
     "body-parser": "^1.15.0",
-    "chalk": "^1.1.1",
-    "connect-history-api-fallback": "^1.1.0",
     "cors": "^2.7.1",
-    "cssnano": "^3.5.2",
-    "dotenv": "^2.0.0",
     "draft-js": "0.5.0",
     "draft-js-export-html": "0.1.13",
     "express": "^4.13.4",
@@ -39,7 +35,6 @@
     "falcor-router": "^0.3.0",
     "formsy-react": "^0.17.0",
     "history": "1.13.1",
-    "html-webpack-plugin": "^1.6.1",
     "jsonwebtoken": "^5.7.0",
     "material-ui": "0.15.0-alpha.1",
     "mongoose": "^4.4.5",
@@ -49,11 +44,7 @@
     "react-router": "1.0.0",
     "redux": "^3.3.1",
     "redux-simple-router": "0.0.10",
-    "redux-thunk": "^1.0.0",
-    "webpack": "^1.11.0",
-    "webpack-dev-middleware": "^1.4.0",
-    "webpack-hot-middleware": "^2.5.0",
-    "yargs": "^4.7.0"
+    "redux-thunk": "^1.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.6.5",
