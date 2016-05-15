@@ -160,8 +160,52 @@ This below is specifically important for security reasons, so none non-authorize
 Above you can find where you can get the info about the localStorage's data.
 
 
+Below this is our ***current code in src/falcorModel.js***:
+```
+// this code is already in the codebase
+const falcor = require('falcor');
+const FalcorDataSource = require('falcor-http-datasource');
+const $ref = falcor.Model.ref;
+const $atom = falcor.Model.atom;
 
-.... HERE GOES THE CODING ....
+
+const model = new falcor.Model({
+  source: new FalcorDataSource('/model.json')
+});
+
+export default model;
+```
+
+We need to improve this above to a new improved version:
+```
+const falcor = require('falcor');
+const $ref = falcor.Model.ref;
+const $atom = falcor.Model.atom;
+
+import HttpDataSource from 'falcor-http-datasource';
+
+class FalcorDataSource extends HttpDataSource {
+
+  onBeforeRequest ( config ) {
+    const jwt = localStorage.token;
+
+    if (jwt) {
+      config.headers[ 'Authorization' ] = jwt;
+    }
+  }
+}
+
+const model = new falcor.Model({
+  source: new FalcorDataSource('/model.json')
+});
+
+export default model;
+```
+
+
+
+TO REWRITE---Using the extends keyword to extend a class is a great example of where the simplicity of the class syntax shines. Extending View means that LogView inherits everything that View has. If we were to just have: class LogView extends View {}----
+
 
 
 
