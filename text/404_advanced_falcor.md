@@ -1,4 +1,6 @@
-### Mastering React and Node with FalcorJS as a glue for effective data fetching
+### Publishing App - full-stack improvements
+
+Mastering React and Node with FalcorJS as a glue for effective data fetching
 
 Let's discuss about React, Node and Falcor more in details.
 
@@ -131,32 +133,43 @@ Basic differences have been discussed, let's focus on Falcor and improving our c
 
 We need to improve things like:
 
-1) we will implement hot reload in our project
+1) after a login, we shall send user details in each request (the token, username and a role - you can find a screenshot in next sub-chapter called "Improving our falcor code on front-end")
 
-2) we will implement better server-side rendering errors catching
+2) securing the backend so we check the authorization before running add/edit/delete on backend
 
-3) securing the backend so we check the authorization before running add/edit/delete on backend
-
-4) we need to give ability to catch errors on backend and give a notification to user on front-end that something didn't work correctly
+3) we need to give ability to catch errors on backend and give a notification to user on front-end that something didn't work correctly
 
 
-
-
-
-
-
-
-------------------
-------------------
-------------------
-
-PONIZEJ konczyc robic jak bedziemy miec hot reload i error catching server rendering with renderToStaticMarkup solved!!!
 #### Securing the auth required's routes
 
 Currently our app has ability to add/edit/delete a route, the problem with our current implementation is that currently, we don't check if a client who is making any CRUD operation has privilitages to do so... 
 
 The solution of securing the falcor-routes requires some changes in our current implementation, so on each request before doing the opration we will check if we have got from the client a correct token, and if the user who is making the call has ability to edit (in our case it means that if anyone has a role as an editor and is authenticated correctly with his username and password, then he can add/edit/delete an article).
 
+
+
+
+### Improving our falcor code on front-end
+
+Currently, after a user authorize himself, all the data is saved into localStorage. We need to close the loop by sending that data like token, username and role back to the backend with each request so we can check again if a user is authenticated correctly. If not, then we need to send an authentication error with the request and show it back in front-end.
+
+This below is specifically important for security reasons, so none non-authorized can add/edit/delete an article in our database.
+
+![localStorage data](http://test.przeorski.pl/book/401_data_from_localstorage.png)
+
+Above you can find where you can get the info about the localStorage's data.
+
+
+
+.... HERE GOES THE CODING ....
+
+
+
+
+----------- na dole skonczyc 
+----------- na dole skonczyc 
+----------- na dole skonczyc 
+----------- na dole skonczyc 
 #### Improving the server.js & routes.js
 
 
@@ -172,6 +185,10 @@ app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
 ```
 todo
 ```
+
+
+
+
 
 The next step is to improve the server/routes.js in order to make a function that recives the currentSession's object which will keep all the information about a request. We need to change this below in the routes.js:
 ```
@@ -197,9 +214,6 @@ let PublishingAppRoutes = [
 ```
 todo
 ```
-
-
-### Improving our falcor code on front-end
 
 
 
