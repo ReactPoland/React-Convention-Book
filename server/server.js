@@ -19,7 +19,6 @@ import rootReducer from '../src/reducers';
 import reactRoutes from '../src/routes';
 import fetchServerSide from './fetchServerSide';
 
-
 var app = express();
 app.server = http.createServer(app);
 
@@ -31,7 +30,10 @@ app.use(bodyParser.json({extended: false}));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
-  return new FalcorRouter(routes);
+  return new FalcorRouter(
+      []
+        .concat(routes(req, res))
+    );
 }));
 
 app.use('/static', express.static('dist'));
