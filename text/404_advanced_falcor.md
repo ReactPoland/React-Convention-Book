@@ -178,33 +178,38 @@ export default model;
 
 We need to improve this above to a new improved version:
 ```
-const falcor = require('falcor');
-const $ref = falcor.Model.ref;
-const $atom = falcor.Model.atom;
+import falcor from 'falcor';
+import FalcorDataSource from 'falcor-http-datasource';
 
-import HttpDataSource from 'falcor-http-datasource';
-
-class FalcorDataSource extends HttpDataSource {
-
+class PublishingAppDataSource extends FalcorDataSource {
   onBeforeRequest ( config ) {
-    const jwt = localStorage.token;
+    const token = localStorage.token;
+    const username = localStorage.username;
+    const role = localStorage.role;
 
-    if (jwt) {
-      config.headers[ 'Authorization' ] = jwt;
+    if(token && username && role) {
+      config.headers['token'] = token;
+      config.headers['username'] = username;
+      config.headers['role'] = role;
     }
   }
 }
 
 const model = new falcor.Model({
-  source: new FalcorDataSource('/model.json')
+  source: new PublishingAppDataSource('/model.json')
 });
 
 export default model;
 ```
 
+What we have done above? The ***extends*** keyword from EcmaScript6 show an example of where the simplicity of the class syntax shines. Extending the ***FalcorDataSource*** means that ***PublishingAppDataSource***  inhertis everything that the ***FalcorDataSource*** has plus a method custom method ***onBeforeRequest***. The ***onBeforeRequest*** is checking mutating the config before a our xhr instance is created - this helps us to modify the ***the XMLHttpRequest with token && username && role*** in case if our app's user has logged in the meantime, so we can send that information to the back-end.
+
+After you will implement the above's code in the falcorMode.js and a user will be logged those variables will be added to each request:
+
+![localStorage data](http://test.przeorski.pl/book/402_requests_headers.png)
 
 
-TO REWRITE---Using the extends keyword to extend a class is a great example of where the simplicity of the class syntax shines. Extending View means that LogView inherits everything that View has. If we were to just have: class LogView extends View {}----
+Beside the token, username and role we have made a small cleanup as following: we have deleted the $ref and $atom because we don't need it on the front-end anymore (all that stuff has been moved to the falcor-router).
 
 
 

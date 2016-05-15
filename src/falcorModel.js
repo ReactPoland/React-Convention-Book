@@ -1,22 +1,22 @@
-const falcor = require('falcor');
-const $ref = falcor.Model.ref;
-const $atom = falcor.Model.atom;
+import falcor from 'falcor';
+import FalcorDataSource from 'falcor-http-datasource';
 
-import HttpDataSource from 'falcor-http-datasource';
-
-class FalcorDataSource extends HttpDataSource {
-
+class PublishingAppDataSource extends FalcorDataSource {
   onBeforeRequest ( config ) {
-    const jwt = localStorage.token;
+    const token = localStorage.token;
+    const username = localStorage.username;
+    const role = localStorage.role;
 
-    if (jwt) {
-      config.headers[ 'Authorization' ] = jwt;
+    if (token && username && role) {
+      config.headers['token'] = token;
+      config.headers['username'] = username;
+      config.headers['role'] = role;
     }
   }
 }
 
 const model = new falcor.Model({
-  source: new FalcorDataSource('/model.json')
+  source: new PublishingAppDataSource('/model.json')
 });
 
 export default model;
