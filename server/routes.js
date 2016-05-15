@@ -46,7 +46,6 @@ export default ( req, res ) => {
         articlesIndex.forEach((index) => {
           let singleArticleObject = articlesArrayFromDB[index].toObject();
 
-          singleArticleObject.articleContent = $atom(singleArticleObject.articleContent);
           let falcorSingleArticleResult = {
             path: ['articles', index],
             value: singleArticleObject

@@ -165,9 +165,6 @@ Below this is our ***current code in src/falcorModel.js***:
 // this code is already in the codebase
 const falcor = require('falcor');
 const FalcorDataSource = require('falcor-http-datasource');
-const $ref = falcor.Model.ref;
-const $atom = falcor.Model.atom;
-
 
 const model = new falcor.Model({
   source: new FalcorDataSource('/model.json')
@@ -207,10 +204,6 @@ What we have done above? The ***extends*** keyword from EcmaScript6 shows an exa
 After you will implement the above's code in the falcorMode.js and a user will be logged those variables will be added to each request:
 
 ![localStorage data](http://test.przeorski.pl/book/402_requests_heaers_arrows.png)
-
-
-Beside the token, username and role we have made a small cleanup as following: we have deleted the $ref and $atom because we don't need it on the front-end anymore (all that stuff has been moved to the falcor-router).
-
 
 
 #### Improving the server.js & routes.js
@@ -332,7 +325,6 @@ We need to re-add (under articles.lenght) second route called ***articles[{integ
         articlesIndex.forEach((index) => {
           let singleArticleObject = articlesArrayFromDB[index].toObject();
 
-          singleArticleObject.articleContent = $atom(singleArticleObject.articleContent);
           let falcorSingleArticleResult = {
             path: ['articles', index],
             value: singleArticleObject
@@ -346,6 +338,7 @@ We need to re-add (under articles.lenght) second route called ***articles[{integ
   }
 ```
 
+This is the route that fetches the artciles from databases and returns a falcor-route for it. The new thing here is the $atom
 
 
 
