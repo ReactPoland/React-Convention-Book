@@ -1,8 +1,8 @@
-### Publishing App - full-stack improvements
+### Publishing App - full-stack Falcor improvements 
 
-Mastering React and Node with FalcorJS as a glue for effective data fetching
+Currently, our app has ability to add/edit/delete articles, but only on front-end with help of Redux's reducers etc. We need to add some full-stack mechanism to make this able to CRUD the database. We will also need to add some security features on back-end so non-authenticated users won't be able to CRUD the MongoDB's collections.
 
-Let's discuss about React, Node and Falcor more in details.
+Let's hold-on with coding for a moment. Before we will start developing full-stack Falcor's mechanism, let's discuss about our React, Node and Falcor's setup more in details.
 
 It's important to understand why we have choosen Falcor in our technical stack. In general, we in our custom software development's company (you can find more at www.MobileWebPro.pl) use Falcor as it has many great advantages for our clients in terms of productivity of developing full-stack Mobile/Web applications. Some of them:
 
@@ -20,7 +20,7 @@ I will keep these 3 points above short and sweet. Later in that chapter you will
 Currently, we have done kind of full-stack starter kit with React+Redux+Falcor+Node+Express+MongoDB. It's not perfect, yet. We will try to make it better in that chapter
 
 
-#### The problem that Falcor wants to solve
+#### The problem that Falcor aims to solve
 
 Before single-page-application's world, there weren't problems with fetching data on client, as whole data ALWAYS was fetched on server and then also the server was rending the HTML's markup to the client. Each time, someone has clicked on an URL's link (href), then our browser was requesting totally new HTML's markup from the server.
 
@@ -240,12 +240,6 @@ In our new version we assume that ***routes*** variable is a function with the *
 Let's improve the routes itself so we won't return an array anymore, but a function that return an array (so we will end-up with more flexibility).
 
 
-
-
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
 The next step is to improve the server/routes.js in order to make a function that recives the currentSession's object which will keep all the information about a request. We need to change this below in the routes.js:
 ```
 let PublishingAppRoutes = [
@@ -271,6 +265,16 @@ todo
 ```
 
 
+
+
+
+
+***** TO-IMPROVE BELOW:
+***** TO-IMPROVE BELOW:
+***** TO-IMPROVE BELOW:
+***** TO-IMPROVE BELOW:
+
+CH4 has some code for add/update/delete
 
 
 
