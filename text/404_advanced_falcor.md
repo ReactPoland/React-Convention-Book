@@ -202,7 +202,7 @@ const model = new falcor.Model({
 export default model;
 ```
 
-What we have done above? The ***extends*** keyword from EcmaScript6 show an example of where the simplicity of the class syntax shines. Extending the ***FalcorDataSource*** means that ***PublishingAppDataSource***  inhertis everything that the ***FalcorDataSource*** has plus a method custom method ***onBeforeRequest***. The ***onBeforeRequest*** is checking mutating the config before a our xhr instance is created - this helps us to modify the ***the XMLHttpRequest with token && username && role*** in case if our app's user has logged in the meantime, so we can send that information to the back-end.
+What we have done above? The ***extends*** keyword from EcmaScript6 shows an example of where the simplicity of the class syntax shines. Extending the ***FalcorDataSource*** means that ***PublishingAppDataSource***  inhertis everything that the ***FalcorDataSource*** has plus make the ***onBeforeRequest***'s method with our custom behaviour (***mutates the config.headers***). The ***onBeforeRequest*** is checking the mutated by us config before a our xhr instance is created - this helps us to modify the ***the XMLHttpRequest with token && username && role*** in case if our app's user has logged in the meantime, so we can send that information to the back-end.
 
 After you will implement the above's code in the falcorMode.js and a user will be logged those variables will be added to each request:
 
