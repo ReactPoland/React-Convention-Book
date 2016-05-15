@@ -213,82 +213,13 @@ Beside the token, username and role we have made a small cleanup as following: w
 
 
 
+#### Improving the server.js & routes.js
 
-
------------ na dole skonczyc 
------------ na dole skonczyc 
------------ na dole skonczyc 
------------ na dole skonczyc 
-<!-- #### Improving the server.js & routes.js
-
-
-
-import routes               from './falcorRoutes/routes';
-
-app.use('/model.json', falcor.dataSourceRoute(function(req, res) {
-  return new Router(
-      []
-        .concat(routes( req, res ))
-    );
-}));
-
-
-
-
-------------- -->
-
-
-export default ( req, res ) => {
-  // const users = db.map( db => db.collection( 'users' ) );
-  let { authorization, role, username, restaurantid } = req.headers;
-  let userDetailsToken = username+role+restaurantid;
-  console.info("***************");
-  console.info("***************");
-  console.info("authorization", authorization);
-  console.info("role", role);
-  console.info("username", username);
-  console.info("----->>>> restaurantid", restaurantid);
-  let authSign = jwt.sign(userDetailsToken, jwtSecret);
-  console.info("SIGNED", authSign);
-  console.info("***************");
-  console.info("***************");
-  console.info("IS TRUE?", authSign === authorization);
-  console.info("***************");
-  console.info("***************");
-
-  let isAuthorized = authSign === authorization;
-  let sessionObject = { isAuthorized, role, username, restaurantid };
-
-  let routes = [
-      ...staffRoutes,
-      ...emailRoutes,
-      ...profileRoutes,
-    ]
-      .concat(newsFeedCallRoutes( sessionObject ))
-      .concat(newsFeedRoutes( sessionObject ))
-      .concat(managerLogRoutes( sessionObject ))
-      .concat(managerLogCallRoutes( sessionObject ))
-      .concat(restaurantsRoutes( sessionObject ))
-      .concat(emailTemplatesRoutes( sessionObject ))
-      .concat(loginRoutes( sessionObject ))
-      .concat(itemsRoutes( sessionObject ))
-      .concat(itemsCallRoutes( sessionObject ))
-      .concat(sectionsRoutes( sessionObject ))
-      .concat(sectionsCallRoutes( sessionObject ))
-      .concat(menusRoutes( sessionObject ))
-      .concat(menusCallRoutes( sessionObject ));
-
-
-
-----------
-
-
-
-
+In general, currently we exports array of objects from the ***server/routes.js*** file. We need to improve it, so we will return a function which will modify our array of objects so we will be able to have possesion over which routes is returned to which user and in case if a user has not a valid token or not enough privilages, we will return an error. This will improve secrutity of our whole app.
 
 In the server/server.js file, change this old code:
 ```
-// this shall be already in your
+// this shall be already in your codebase
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
   return new FalcorRouter(routes);
 }));
@@ -299,18 +230,24 @@ app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
   return new FalcorRouter(
       []
-        .concat(routes( req, res ))
+        .concat(routes(req, res))
     );
 }));
 ```
 
+In our new version we assume that ***routes*** variable is a function with the ***req, res*** vars. 
+
+Let's improve the routes itself so we won't return an array anymore, but a function that return an array (so we will end-up with more flexibility).
 
 
 
 
+***** TO-IMPROVE BELOW:
+***** TO-IMPROVE BELOW:
+***** TO-IMPROVE BELOW:
+***** TO-IMPROVE BELOW:
 The next step is to improve the server/routes.js in order to make a function that recives the currentSession's object which will keep all the information about a request. We need to change this below in the routes.js:
 ```
-
 let PublishingAppRoutes = [
     ...sessionRoutes,
   {

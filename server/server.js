@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
   return new FalcorRouter(
       []
-        .concat(routes( req, res ))
+        .concat(routes(req, res))
     );
 }));
 
