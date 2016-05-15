@@ -42,7 +42,10 @@ app.use(bodyParser.json({extended: false}));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
-  return new FalcorRouter(routes);
+  return new FalcorRouter(
+      []
+        .concat(routes( req, res ))
+    );
 }));
 
 app.use('/static', express.static('dist'));
