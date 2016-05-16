@@ -74,22 +74,9 @@ export default ( req, res ) => {
             let articleResObj = articleObject.toObject();
             let currentIdString = String(articleResObj['_id']);
 
-
-            // articleResObj.articleContentJSON.entityMap = 'test';
-
             if(typeof articleResObj.articleContentJSON !== 'undefined') {
               articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
             }
-
-
-            console.info('-----');
-            console.info('-----');
-            console.info('-----');
-            console.info(JSON.stringify(articleResObj.articleContentJSON));
-            console.info('-----');
-            console.info('-----');
-            console.info('-----');
-            
 
             results.push({
               path: ['articlesById', currentIdString],
