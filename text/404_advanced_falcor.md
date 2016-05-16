@@ -433,6 +433,39 @@ IMPORTANT: the '***articlesById***' is a new route that is not created, YET (we 
 In general, you can keep a reference (as in UNIX a symbolic link) in many places to one object in the database - in our case it's an article with certain _id in the articles' collection.
 
 
+When the $refs come handy? Imagine that in our Publishing App's model we will add a Recently Visited's articles feature and we will give ability to like an article (like on facebook).
+
+
+... based on those two new features our new model will be looking as following (this is just example, don't code it):
+```
+// this is just explanatory example code:
+let cache = {
+  articles: [
+    {
+        id: 987654,
+        articleTitle: "Lorem ipsum - article one",
+        articleContent: "Here goes the content of the article"
+        numberOfLikes: 0
+    },
+    {
+        id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here.",
+        numberOfLikes: 0
+    }
+  ],
+  recentlyVisitedArticles: [
+    {
+        id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here.",
+        numberOfLikes: 0
+    }
+  ]
+};
+```
+
+
 
 
 
