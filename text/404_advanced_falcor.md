@@ -352,19 +352,22 @@ At this stage, it's important to understand how the Falcor's sentinels are worki
 
 Regarding to the documentation: "A Reference is a JSON object with a “$type” key that has a value of “ref” and a “value” key that has a Path array as its value".
 
-and an example of a $ref:
+In Falcor "a Reference is like a symbolic link in the UNIX file system" - as the documentation states and this comparision is very good. 
+
+... and an example of a $ref:
 ```
-{ $type: "ref", value: ["articlesById", 'STRING_ARTCILE_ID_HERE'] }
+{ $type: "ref", value: ['articlesById', 'STRING_ARTCILE_ID_HERE'] }
 ```
 
-***IMPORTANT:*** if you use $ref([articlesById,'STRING_ARTCILE_ID_HERE']) it's equals to the above's example. The $ref is a function which changes the array's detail into that $type and value's notation object.
+***IMPORTANT:*** if you use $ref(['articlesById','STRING_ARTCILE_ID_HERE']) it's equals to the above's example. The $ref is a function which changes the array's detail into that $type and value's notation object.
 
-You can find both approaches to use $refs, but in our project we will stick to the ***$ref([articlesById,'STRING_ARTCILE_ID_HERE'])***'s convention.
+You can find both approaches to use $refs, but in our project we will stick to the ***$ref(['articlesById','STRING_ARTCILE_ID_HERE'])***'s convention.
 
 Just to make it clear this is how to import a $ref's sentinel in our codebase:
 ```
 import jsonGraph from 'falcor-json-graph';
 let $ref = jsonGraph.ref;
+// now you can use $ref([x, y]) function
 ```
 
 ... so after you import that ***falcor-json-graph*** then you can use the $ref's sentinel. I shall have installed the falcor-json-graph already as the installation has been described in the previous chapter, if not then please use this (just in case):
@@ -373,7 +376,7 @@ npm i --save falcor-json-graph@1.1.7
 ```
 
 
-BUT, what does the "articlesById" mean? And what does mean the 'STRING_ARTCILE_ID_HERE' in the above example? Let's give me an example from our project.
+BUT, what does the 'articlesById' mean? And what does mean the 'STRING_ARTCILE_ID_HERE' in the above example? Let's give me an example from our project.
 
 #### $ref sentinel's example explained
 
@@ -395,7 +398,7 @@ Let's assume that we have two articles in our MongoDB:
 ]
 ```
 
-so based on our array's example, the $refs will be looking as following:
+... so based on our array's example with mocked articles (ids 987654 & 123456), the $refs will be looking as following:
 ```
 [
   $ref([ articlesById,'987654' ]),
@@ -403,7 +406,7 @@ so based on our array's example, the $refs will be looking as following:
 ]
 ```
 
-or after more detailed answer:
+or even more detailed answer is:
 ```
 [
   { $type: "ref", value: ["articlesById", '987654'] },
@@ -411,9 +414,23 @@ or after more detailed answer:
 ]
 ```
 
-IMPORTANT: the articlesById is a new route that is not created, YET (we will do it in a moment).
+IMPORTANT: the '***articlesById***' is a new route that is not created, YET (we will do it in a moment).
 
-... but why we need those $refs in our articles?
+... but why do we need those $refs in our articles?
+
+
+In general, you can keep a reference (as in UNIX a symbolic link) in many places to one object in the database - in our case it's an article with certain _id in the articles' collection.
+
+
+
+
+
+
+
+
+
+==========
+==========
 
 and our current route on backend (falcor-router) looks as following:
 ```
