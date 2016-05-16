@@ -1,4 +1,4 @@
-### Publishing App - full-stack Falcor improvements 
+### Publishing App - Falcor's sentinels and other more advanced concepts
 
 Currently, our app has ability to add/edit/delete articles, but only on front-end with help of Redux's reducers etc. We need to add some full-stack mechanism to make this able to CRUD the database. We will also need to add some security features on back-end so non-authenticated users won't be able to CRUD the MongoDB's collections.
 
@@ -267,7 +267,7 @@ import jsonGraph from 'falcor-json-graph';
 import jwt from 'jsonwebtoken';
 import jwtSecret from './configSecret';
 
-let $atom = jsonGraph.atom;
+let $atom = jsonGraph.atom; // this will be explained later in that chapter
 let Article = configMongoose.Article;
 ```
 
@@ -304,7 +304,7 @@ export default ( req, res ) => {
 }
 ```
 
-First of all, we receive the req (request's details) and res (object that represents the HTTP response) variables into that arrow functions.  Based on the information provided by ***req*** we get the headers' details (***let { token, role, username } = req.headers;***). Next we have the ***userDetailsToHash*** and then we check what shall be the correct authToken with ***let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret)***. Later we check if the user is authorized with ***let isAuthorized = authSign === token***. Then we create a sessionObject which will be re-used accross all falcor's routes later (***let sessionObject = {isAuthorized, role, username};***).
+First of all, we receive the req (request's details) and res (object that represents the HTTP response) variables into that arrow functions.  Based on the information provided by ***req*** we get the headers' details (***let { token, role, username } = req.headers;***). Next we have the ***userDetailsToHash*** and then we check what shall be the correct authToken with ***let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret)***. Later we check if the user is authorized with "***let isAuthorized = authSign === token***". Then we create a sessionObject which will be re-used accross all falcor's routes later (***let sessionObject = {isAuthorized, role, username};***).
 
 Currently, we have there a one route (***articles.length***) which was described in chapter 2 (so it's nothing new so far).
 
@@ -339,6 +339,127 @@ We need to re-add (under articles.lenght) second route called ***articles[{integ
 ```
 
 This is the route that fetches the artciles from databases and returns a falcor-route for it - it's exactly the same as introduced before, the only different is that now it's part of the function (***export default ( req, res ) => { ... }***).
+
+
+### Falcor's Sentinels implementation
+
+What are the sentinels? They are "New Primitive Value Types". The same way as you have types in a regular JSON as String, Number, Object etc. , but more specific for Virtual-JSON in Falcor (examples are $ref, $atom, $error's sentines).
+
+At this stage, it's important to understand how the Falcor's sentinels are working. There different types of sentinels in Falcor are:
+
+
+#### $ref's sentinel
+
+Regarding to the documentation: "A Reference is a JSON object with a “$type” key that has a value of “ref” and a “value” key that has a Path array as its value".
+
+and an example of a $ref:
+```
+{ $type: "ref", value: ["articlesById", 'STRING_ARTCILE_ID_HERE'] }
+```
+
+***IMPORTANT:*** if you use $ref([articlesById,'STRING_ARTCILE_ID_HERE']) it's equals to the above's example. The $ref is a function which changes the array's detail into that $type and value's notation object.
+
+You can find both approaches to use $refs, but in our project we will stick to the ***$ref([articlesById,'STRING_ARTCILE_ID_HERE'])***'s convention.
+
+Just to make it clear this is how to import a $ref's sentinel in our codebase:
+```
+import jsonGraph from 'falcor-json-graph';
+let $ref = jsonGraph.ref;
+```
+
+... so after you import that ***falcor-json-graph*** then you can use the $ref's sentinel. I shall have installed the falcor-json-graph already as the installation has been described in the previous chapter, if not then please use this (just in case):
+```
+npm i --save falcor-json-graph@1.1.7
+```
+
+
+BUT, what does the "articlesById" mean? And what does mean the 'STRING_ARTCILE_ID_HERE' in the above example? Let's give me an example from our project.
+
+#### $ref sentinel's example explained
+
+Let's assume that we have two articles in our MongoDB:
+```
+// this is just explanation example, don't write this below
+// we assume below that _id comes from MongoDB
+[
+  {
+    _id: "987654",
+    articleTitle: "Lorem ipsum - article one",
+    articleContent: "Here goes the content of the article"
+  },
+  {
+    _id: "123456",
+    articleTitle: "Lorem ipsum - article two",
+    articleContent: "Sky is the limit, the content goes here."
+  }
+]
+```
+
+so based on our array's example, the $refs will be looking as following:
+```
+[
+  $ref([ articlesById,'987654' ]),
+  $ref([ articlesById,'123456' ])
+]
+```
+
+or after more detailed answer:
+```
+[
+  { $type: "ref", value: ["articlesById", '987654'] },
+  { $type: "ref", value: ["articlesById", '987654'] }
+]
+```
+
+IMPORTANT: the articlesById is a new route that is not created, YET (we will do it in a moment).
+
+... but why we need those $refs in our articles?
+
+and our current route on backend (falcor-router) looks as following:
+```
+// this is already in your codebase in the server/routes.js file
+  {
+    route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return Article.find({}, function(err, articlesDocs) {
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let singleArticleObject = articlesArrayFromDB[index].toObject();
+
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: singleArticleObject
+          };
+
+          results.push(falcorSingleArticleResult);
+        });
+        return results;
+      })
+    }
+  }
+```
+
+
+
+1) "atom"
+
+2) 
+
+3) "error"
+
+
+
+
+Each of these types is a JSON Graph object with a “$type” key that differentiates it from regular JSON objects, and describes the type of its “value” key. These three JSON Graph primitive types are always retrieved and replaced in their entirety just like a primitive JSON value. None of the JSON Graph values can be mutated using any of the available abstract JSON Graph operations.
+
+
+
+#### $ref's sentinel
+
 
 
 
