@@ -35,27 +35,97 @@ export default ( req, res ) => {
     }
   }, 
   {
-    route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
+    route: 'articles[{integers}]',
     get: (pathSet) => {
       let articlesIndex = pathSet[1];
 
-      return Article.find({}, function(err, articlesDocs) {
+      return Article.find({}, '_id', function(err, articlesDocs) {
         return articlesDocs;
       }).then ((articlesArrayFromDB) => {
         let results = [];
         articlesIndex.forEach((index) => {
-          let singleArticleObject = articlesArrayFromDB[index].toObject();
+          let currentMongoID = String(articlesArrayFromDB[index]['_id']);
+          let articleRef = $ref(['articlesById', currentMongoID]);
 
-          singleArticleObject.articleContent = $atom(singleArticleObject.articleContent);
           let falcorSingleArticleResult = {
             path: ['articles', index],
-            value: singleArticleObject
+            value: articleRef
           };
 
           results.push(falcorSingleArticleResult);
         });
         return results;
       })
+    }
+  },
+  {
+    route: 'articlesById[{keys}]["id","articleTitle","articleContent","articleContentJSON"]',
+    get: function(pathSet) {
+      let articlesIDs = pathSet[1];
+      return Article.find({
+            '_id': { $in: articlesIDs}
+        }, function(err, articlesDocs) {
+          return articlesDocs;
+        }).then ((articlesArrayFromDB) => {
+          let results = [];
+
+          articlesArrayFromDB.map((articleObject) => {
+            let articleResObj = articleObject.toObject();
+            let currentIdString = String(articleResObj['_id']);
+
+            if(typeof articleResObj.articleContentJSON !== 'undefined') {
+              articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+            }
+
+            results.push({
+              path: ['articlesById', currentIdString],
+              value: articleResObj
+            });
+          });
+          return results;
+        });
+    }
+  },
+  {
+    route: 'articles.add',
+    call: (callPath, args) => {
+      let newArticleObj = args[0];
+      var article = new Article(newArticleObj);
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+        else {
+          return data;
+        }
+      }).then ((data) => {
+        return Article.count({}, function(err, count) {
+        }).then((count) => {
+          return { count, data };
+        });
+      }).then ((res) => {
+        let newArticleDetail = res.data.toObject();
+        let newArticleID = String(newArticleDetail["_id"]);
+        let NewArticleRef = $ref(['articlesById', newArticleID]);
+        
+        let results = [
+          {
+            path: ['articles', res.count-1],
+            value: NewArticleRef
+          },
+          {
+            path: ['articles', 'newArticleID'],
+            value: newArticleID
+          },
+          {
+            path: ['articles', 'length'],
+            value: res.count
+          }
+        ];
+        return results;
+      });
     }
   }
   ];
