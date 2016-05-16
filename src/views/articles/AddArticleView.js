@@ -39,14 +39,28 @@ class AddArticleView extends React.Component {
     this.setState({contentJSON, htmlContent});
   }
 
-  _articleSubmit() {
+  async _articleSubmit() {
     let newArticle = {
       articleTitle: this.state.title,
       articleContent: this.state.htmlContent,
       articleContentJSON: this.state.contentJSON
     }
 
-    let newArticleID = "MOCKEDRandomid"+Math.floor(Math.random() * 10000);
+    console.debug('this.state.contentJSON');
+    console.debug(this.state.contentJSON);
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+      then((result) => {
+        return falcorModel.getValue(
+            ['articles', 'newArticleID']
+          ).then((articleID) => {
+            return articleID;
+          });
+      });
 
     newArticle['_id'] = newArticleID;
     this.props.articleActions.pushNewArticle(newArticle);

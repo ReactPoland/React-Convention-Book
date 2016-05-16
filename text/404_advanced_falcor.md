@@ -1,4 +1,7 @@
-### Publishing App - Falcor's sentinels and other more advanced concepts
+### Publishing App - Falcor's related concepts more in-depth
+
+### TODO:
+##### - explain what is JSON envelop somewhere in the begining
 
 Currently, our app has ability to add/edit/delete articles, but only on front-end with help of Redux's reducers etc. We need to add some full-stack mechanism to make this able to CRUD the database. We will also need to add some security features on back-end so non-authenticated users won't be able to CRUD the MongoDB's collections.
 
@@ -250,8 +253,10 @@ let PublishingAppRoutes = [
         }
       })
   }
-}, 
-// ...... here is more code between
+},
+// 
+// ...... here is more code between, it has been truncated
+//
 export default PublishingAppRoutes; 
 ```
 PLEASE NOTE: above is just a part of the routes.js file, but for sake of brevity there is a comment ***...... here is more code between*** which strips code between.
@@ -278,7 +283,7 @@ export default ( req, res ) => {
   let { token, role, username } = req.headers;
   let userDetailsToHash = username+role;
   let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret);
-  let isAuthorized = authSign === token;
+  let isAuthorized = authSignToken === token;
   let sessionObject = {isAuthorized, role, username};
 
   console.info(`The ${username} is authorized === `, isAuthorized);
@@ -341,9 +346,12 @@ We need to re-add (under articles.lenght) second route called ***articles[{integ
 This is the route that fetches the artciles from databases and returns a falcor-route for it - it's exactly the same as introduced before, the only different is that now it's part of the function (***export default ( req, res ) => { ... }***).
 
 
+Before we will start implement add/edit/delete on the backend with falcor-router, we need to introduce ourselves to the concept of sentinels as it will be very important for wellbeing of our full-stack application which will be explained in a moment why.
+
+
 ### Falcor's Sentinels implementation
 
-What are the sentinels? They are "New Primitive Value Types". The same way as you have types in a regular JSON as String, Number, Object etc. , but more specific for Virtual-JSON in Falcor (examples are $ref, $atom, $error's sentines).
+What are the sentinels? They are "New Primitive Value Types". The same way as you have types in a regular JSON as String, Number, Object etc. , but more specific for Virtual-JSON in Falcor (examples are $ref, $atom, $error's sentinels).
 
 At this stage, it's important to understand how the Falcor's sentinels are working. There different types of sentinels in Falcor are:
 
@@ -361,22 +369,24 @@ In Falcor "a Reference is like a symbolic link in the UNIX file system" - as the
 
 ***IMPORTANT:*** if you use $ref(['articlesById','STRING_ARTCILE_ID_HERE']) it's equals to the above's example. The $ref is a function which changes the array's detail into that $type and value's notation object.
 
-You can find both approaches to use $refs, but in our project we will stick to the ***$ref(['articlesById','STRING_ARTCILE_ID_HERE'])***'s convention.
+You can find both approaches in order to deploy/use the $refs in any Falcor's related projects, but in our project we will stick to the ***$ref(['articlesById','STRING_ARTCILE_ID_HERE'])***'s convention.
 
 Just to make it clear this is how to import a $ref's sentinel in our codebase:
 ```
+// wait, this is just an example, don't code this below:
 import jsonGraph from 'falcor-json-graph';
 let $ref = jsonGraph.ref;
 // now you can use $ref([x, y]) function
 ```
 
-... so after you import that ***falcor-json-graph*** then you can use the $ref's sentinel. I shall have installed the falcor-json-graph already as the installation has been described in the previous chapter, if not then please use this (just in case):
+... so after you import that ***falcor-json-graph*** then you can use the $ref's sentinel. You shall already have installed the falcor-json-graph's lib as the installation has been described in the previous chapter, if not then please use this (just in case):
+
 ```
 npm i --save falcor-json-graph@1.1.7
 ```
 
 
-BUT, what does the 'articlesById' mean? And what does mean the 'STRING_ARTCILE_ID_HERE' in the above example? Let's give me an example from our project.
+BUT, what does the 'articlesById' mean in that whole $ref's gig? And what does mean the 'STRING_ARTCILE_ID_HERE' in the above example? Let's give me an example from our project that may make it more clear for you.
 
 #### $ref sentinel's example explained
 
@@ -400,6 +410,7 @@ Let's assume that we have two articles in our MongoDB:
 
 ... so based on our array's example with mocked articles (ids 987654 & 123456), the $refs will be looking as following:
 ```
+// JSON envelope is an array of two $refs
 [
   $ref([ articlesById,'987654' ]),
   $ref([ articlesById,'123456' ])
@@ -408,6 +419,7 @@ Let's assume that we have two articles in our MongoDB:
 
 or even more detailed answer is:
 ```
+// JSON envelope is an array of two $refs (other notation than above, but the same end effect)
 [
   { $type: "ref", value: ["articlesById", '987654'] },
   { $type: "ref", value: ["articlesById", '987654'] }
@@ -422,11 +434,147 @@ IMPORTANT: the '***articlesById***' is a new route that is not created, YET (we 
 In general, you can keep a reference (as in UNIX a symbolic link) in many places to one object in the database - in our case it's an article with certain _id in the articles' collection.
 
 
+When the $refs come handy? Imagine that in our Publishing App's model we will add a Recently Visited's articles feature and we will give ability to like an article (like on facebook).
+
+
+... based on those two new features our new model will be looking as following (this is just example, don't code it):
+```
+// this is just explanatory example code:
+let cache = {
+  articles: [
+    {
+        id: 987654,
+        articleTitle: "Lorem ipsum - article one",
+        articleContent: "Here goes the content of the article"
+        numberOfLikes: 0
+    },
+    {
+        id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here.",
+        numberOfLikes: 0
+    }
+  ],
+  recentlyVisitedArticles: [
+    {
+        id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here.",
+        numberOfLikes: 0
+    }
+  ]
+};
+```
+
+... so based on the our example's model above, if someone will like an article with id=123456 then we will need to update the model in two places - that's exactly where the $ref is coming handly.
+
+
+#### Improving our articles' numberOfLikes with $ref's sentinel
+
+Let's improve our example to the new one:
+```
+let cache = {
+  articlesById: {
+    987654: {
+        _id: 987654,
+        articleTitle: "Lorem ipsum - article one",
+        articleContent: "Here goes the content of the article"
+        numberOfLikes: 0
+    },
+    123456: {
+        _id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here.",
+        numberOfLikes: 0
+    }
+  },
+  articles: [
+    { $type: "ref", value: ["articlesById", '987654'] },
+    { $type: "ref", value: ["articlesById", '123456'] }
+  ],
+  recentlyVisitedArticles: [
+    { $type: "ref", value: ["articlesById", '123456'] }
+  ]
+};
+```
+
+In our new improved $ref's version example, you can find the notation where you need to say to falcor what is the id of the article you want to have in articles or recentlyVisitedArticles. The falcor's following on his own the $ref's by knowing the route name (the ***articlesById***'s route in this case) and and id of the object we are looking for (in our example 123456 or 987654). We will use it in practice in a moment.
+
+
+Please understand that above this is simplifed version how it works, but the best analogy to use in order to understand the $refs are the UNIX's symbolic links.
+
+
+#### Practical use of $ref in our project
+
+
+OK, there was a lot of theory, let's start the coding time! 
 
 
 
 
 
+
+
+
+==========
+==========
+
+and our current route on backend (falcor-router) looks as following:
+```
+// this is already in your codebase in the server/routes.js file
+  {
+    route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return Article.find({}, function(err, articlesDocs) {
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let singleArticleObject = articlesArrayFromDB[index].toObject();
+
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: singleArticleObject
+          };
+
+          results.push(falcorSingleArticleResult);
+        });
+        return results;
+      })
+    }
+  }
+```
+
+
+
+1) "atom"
+
+2) 
+
+3) "error"
+
+
+
+
+Each of these types is a JSON Graph object with a “$type” key that differentiates it from regular JSON objects, and describes the type of its “value” key. These three JSON Graph primitive types are always retrieved and replaced in their entirety just like a primitive JSON value. None of the JSON Graph values can be mutated using any of the available abstract JSON Graph operations.
+
+
+
+#### $ref's sentinel
+
+
+
+
+
+NEXT STEPS:
+NEXT STEPS:
+NEXT STEPS:
+
+2) securing the backend so we check the authorization before running add/edit/delete on backend ((((CH4 has some code for add/update/delete))))
+
+3) we need to give ability to catch errors on backend and give a notification to user on front-end that something didn't work correctly
 
 
 ==========
@@ -500,7 +648,8 @@ NEXT STEPS:
 CH4 has some code for add/update/delete
 
 
-
+### TODO:
+##### - explain what is JSON envelop somewhere in the begining
 
 
 

@@ -10,7 +10,8 @@ mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
 
 var articleSchema = {
   articleTitle:String,
-  articleContent:String
+  articleContent:String,
+  articleContentJSON:Object
 }
 
 var Article = mongoose.model('Article', articleSchema, 'articles');
