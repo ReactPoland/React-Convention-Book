@@ -668,12 +668,141 @@ Uncaught MaxRetryExceededError: The allowed number of retries have been exceeded
 This error will be shown on the client-side while falcor will try to fetch that deeper object without being wrapped by an $atom beforehand on the backend.
 
 
+#### Improving the articles[{integers}] route
+
+We need now to return a $ref to articlesById instead of a whole articles' details, so we need to change this old code below:
+```
+// this already shall be in your codebase:
+  {
+    route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return Article.find({}, function(err, articlesDocs) {
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let singleArticleObject = articlesArrayFromDB[index].toObject();
+
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: singleArticleObject
+          };
+
+          results.push(falcorSingleArticleResult);
+        });
+        return results;
+      })
+    }
+  }
+```
+
+... and that above, we improve to a new one as following:
+```
+  {
+    route: 'articles[{integers}]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return Article.find({}, '_id', function(err, articlesDocs) {
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let currentMongoID = String(articlesArrayFromDB[index]['_id']);
+          let articleRef = $ref(['articlesById', currentMongoID]);
+
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: articleRef
+          };
+
+          results.push(falcorSingleArticleResult);
+        });
+        return results;
+      })
+    }
+  },
+```
+
+What has been changed? Currently, our route ***'articles[{integers}]'*** doesn't return directly the data for ***["_id","articleTitle","articleContent"]*** so we had to delete in order to get falcor know about this fact (the articlesById is returning detailed information now). Later we create a new $ref's sentinel with the following:
+```
+// this is already in your codebase:
+let currentMongoID = String(articlesArrayFromDB[index]['_id']);
+let articleRef = $ref(['articlesById', currentMongoID]);
+```
+
+As you see by doing the above, we are informing (with $ref) falcor-router that if front-end will request any more information about article[{integers}] then the falcor-router shall follow the ***articlesById***'s route in order to retrieve that data from database.
+
+... later you can find out that this old path's value:
+```
+// old version
+let singleArticleObject = articlesArrayFromDB[index].toObject();
+
+let falcorSingleArticleResult = {
+  path: ['articles', index],
+  value: singleArticleObject
+};
+```
+
+has been replaced by the value to the articleRef:
+```
+// new improved version
+let falcorSingleArticleResult = {
+  path: ['articles', index],
+  value: articleRef
+};
+```
+
+As you can spot the difference, in the old version we were returning exactly the all information about an article, now we return only the $ref - as I re-call this makes falcor-router automaticlly follow for more inforation to the artcilesById which was already described.
 
 
+The only thing we need to do is to add into the router a new articles.add routes:
+```
+  {
+    route: 'articles.add',
+    call: (callPath, args) => {
+      let newArticleObj = args[0];
+      var article = new Article(newArticleObj);
 
-
-
-
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+        else {
+          return data;
+        }
+      }).then ((data) => {
+        return Article.count({}, function(err, count) {
+        }).then((count) => {
+          return { count, data };
+        });
+      }).then ((res) => {
+        let newArticleDetail = res.data.toObject();
+        let newArticleID = String(newArticleDetail["_id"]);
+        let NewArticleRef = $ref(['articlesById', newArticleID]);
+        
+        let results = [
+          {
+            path: ['articles', res.count-1],
+            value: NewArticleRef
+          },
+          {
+            path: ['articles', 'newArticleID'],
+            value: newArticleID
+          },
+          {
+            path: ['articles', 'length'],
+            value: res.count
+          }
+        ];
+        return results;
+      });
+    }
+  }
+```
 
 
 
