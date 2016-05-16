@@ -465,6 +465,48 @@ let cache = {
 };
 ```
 
+... so based on the our example's model above, if someone will like an article with id=123456 then we will need to update the model in two places - that's exactly where the $ref is coming handly.
+
+
+#### Improving our articles' numberOfLikes with $ref's sentinel
+
+Let's improve our example to the new one:
+```
+let cache = {
+  articlesById: {
+    987654: {
+        _id: 987654,
+        articleTitle: "Lorem ipsum - article one",
+        articleContent: "Here goes the content of the article"
+        numberOfLikes: 0
+    },
+    123456: {
+        _id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here.",
+        numberOfLikes: 0
+    }
+  },
+  articles: [
+    { $type: "ref", value: ["articlesById", '987654'] },
+    { $type: "ref", value: ["articlesById", '123456'] }
+  ],
+  recentlyVisitedArticles: [
+    { $type: "ref", value: ["articlesById", '123456'] }
+  ]
+};
+```
+
+In our new improved $ref's version, you can find the notation where you need to say to falcor what is the id of the article you want to have in articles or recentlyVisitedArticles's and the Falcor's following on his own the $ref's by knowing the route name (the ***articlesById***'s route in this case) and and id of the object we are looking for (in our example 123456 or 987654).
+
+
+Please understand that above this is simplifed version how it works, but the best analogy to use in order to understand the $refs are the UNIX's symbolic links.
+
+
+#### Practical use of $ref in our project
+
+
+OK, there was a lot of theory, let's start the coding time! 
 
 
 
