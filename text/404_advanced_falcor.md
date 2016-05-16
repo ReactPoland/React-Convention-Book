@@ -572,6 +572,107 @@ As you can find above we import new ***var Schema = mongoose.Schema***. And late
 
 #### The server/routes.js improvements
 
+In the server/routes.js's file, we need to start using the $ref's sentinel. Your import in that file should looks as following:
+```
+import configMongoose from './configMongoose';
+import sessionRoutes from './routesSession';
+import jsonGraph from 'falcor-json-graph';
+import jwt from 'jsonwebtoken';
+import jwtSecret from './configSecret';
+
+let $ref = jsonGraph.ref;
+let $atom = jsonGraph.atom;
+let Article = configMongoose.Article;
+```
+
+Above the only thing new is that we import ***import jsonGraph from 'falcor-json-graph';*** and then we do ***let $ref = jsonGraph.ref;***.
+
+After the have the $ref is available in our routes.js' scope, then we will prepare a new route ***articlesById[{keys}]["_id","articleTitle","articleContent","articleContentJSON"]*** as following:
+```
+  {
+    route: 'articlesById[{keys}]["_id","articleTitle","articleContent","articleContentJSON"]',
+    get: function(pathSet) {
+      let articlesIDs = pathSet[1];
+      return Article.find({
+            '_id': { $in: articlesIDs}
+        }, function(err, articlesDocs) {
+          return articlesDocs;
+        }).then ((articlesArrayFromDB) => {
+          let results = [];
+
+          articlesArrayFromDB.map((articleObject) => {
+            let articleResObj = articleObject.toObject();
+            let currentIdString = String(articleResObj['_id']);
+
+            if(typeof articleResObj.articleContentJSON !== 'undefined') {
+              articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+            }
+
+            results.push({
+              path: ['articlesById', currentIdString],
+              value: articleResObj
+            });
+          });
+          return results;
+        });
+    }
+  },
+```
+
+The articlesById[{keys}] route is defined and the keys are the IDs of request url that we need to return in the request as you can see with ***let articlesIDs = pathSet[1];***. After that you see:
+```
+// this is already in your codebase:
+return Article.find({
+            '_id': { $in: articlesIDs}
+        }, function(err, articlesDocs) {
+```
+As you can see in the ***'_id': { $in: articlesIDs}*** there we pass an array of articlesIDs - based on those ids, we will receive an array of certain articles (the SQL's WHERE equivalent). Next step is that we iterate here over received articles.:
+```
+// this already is in your codebase:
+articlesArrayFromDB.map((articleObject) => {
+```
+... and then push the object into the results array:
+```
+// this already is in your codebase:
+let articleResObj = articleObject.toObject();
+let currentIdString = String(articleResObj['_id']);
+
+if(typeof articleResObj.articleContentJSON !== 'undefined') {
+  articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+}
+
+results.push({
+  path: ['articlesById', currentIdString],
+  value: articleResObj
+});
+```
+Nothing new too much above. The only new thing is that statement:
+```
+if(typeof articleResObj.articleContentJSON !== 'undefined') {
+  articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+}
+```
+.. and specifically we are using here explicitly the $atom's sentinel from falcor with ***$atom(articleResObj.articleContentJSON);***.
+
+#### EXPLAINED: JSON Graph Atoms
+The $atom is a metadata attached to the values, which has to be handled differently by the model. You can very simply return a value of a Number of a String. It's more tricky for falcor to return an Object. Why?
+
+The falcor is diffing with heavy usage of javascript's objects and arrays, and when we tell that an object/array is wrapped by an $atom (as ***$atom(articleResObj.articleContentJSON) in our example***) then the falcor knows that he shouldn't go deeper into that array/object - it's made that way by design for performance reasons.
+
+What performance reasons? If you will return an object which is very deep and for example your will return an array of 10000 very deep objects, when without wrapping that array of 10000 very deep objects, it may take very, very long time to build and diff the model. Generally, for performance reasons any objects and arrays that you want to return via falcor-router to the front-end have to be wrapped by an $atom before doing so, otherwise you will get an error like below (if you won't wrap by $atom this object):
+
+```
+Uncaught MaxRetryExceededError: The allowed number of retries have been exceeded.
+```
+
+This error will be shown on the client-side while falcor will try to fetch that deeper object without being wrapped by an $atom beforehand on the backend.
+
+
+
+
+
+
+
 
 
 
