@@ -254,8 +254,10 @@ let PublishingAppRoutes = [
         }
       })
   }
-}, 
-// ...... here is more code between
+},
+// 
+// ...... here is more code between, it has been truncated
+//
 export default PublishingAppRoutes; 
 ```
 PLEASE NOTE: above is just a part of the routes.js file, but for sake of brevity there is a comment ***...... here is more code between*** which strips code between.
@@ -497,7 +499,7 @@ let cache = {
 };
 ```
 
-In our new improved $ref's version, you can find the notation where you need to say to falcor what is the id of the article you want to have in articles or recentlyVisitedArticles's and the Falcor's following on his own the $ref's by knowing the route name (the ***articlesById***'s route in this case) and and id of the object we are looking for (in our example 123456 or 987654).
+In our new improved $ref's version example, you can find the notation where you need to say to falcor what is the id of the article you want to have in articles or recentlyVisitedArticles. The falcor's following on his own the $ref's by knowing the route name (the ***articlesById***'s route in this case) and and id of the object we are looking for (in our example 123456 or 987654). We will use it in practice in a moment.
 
 
 Please understand that above this is simplifed version how it works, but the best analogy to use in order to understand the $refs are the UNIX's symbolic links.
