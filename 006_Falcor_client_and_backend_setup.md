@@ -372,7 +372,7 @@ import falcorExpress from 'falcor-express';
 
 2) and then between the two:
 - ***app.use(bodyParser.json({extended: false}));***
-- and ***app.use(bodyParser.json({extended: false}));***
+- and ***app.use(express.static('dist'));***
 
 add a new code for managing Falcor's on the backend:
 ```
@@ -406,6 +406,53 @@ app.use(express.static('dist'));
 ```
 
 The above code is almost the same as the one in the src/falcorModel.js file. The only difference will be that now the Falcor will fetch data from backend's mocked object called cache in ***server.js***.
+
+
+And the last thing that we need to change is the src/falcorModel.js and we need to replace this below:
+```
+// this below already shall be in your codebase
+const falcor = require('falcor');
+const FalcorDataSource = require('falcor-http-datasource');
+
+let cache = {
+  articles: [
+    {
+        id: 987654,
+        articleTitle: "Lorem ipsum - article one",
+        articleContent: "Here goes the content of the article"
+    },
+    {
+        id: 123456,
+        articleTitle: "Lorem ipsum - article two from backend",
+        articleContent: "Sky is the limit, the content goes here."
+    }
+  ]
+};
+
+const model = new falcor.Model({
+  "cache": cache
+});
+
+export default model;
+```
+
+... and thise above has to be replaced to new http data source that will come from model.json:
+```
+const falcor = require('falcor');
+const FalcorDataSource = require('falcor-http-datasource');
+const $ref = falcor.Model.ref;
+const $atom = falcor.Model.atom;
+
+
+const model = new falcor.Model({
+  source: new FalcorDataSource('/model.json')
+});
+
+export default model;
+```
+
+As you can see we point above that our DataSource is not in the browser's cache (as previously), but from the new source with ***source: new FalcorDataSource('/model.json')***.
+
 
 If you will run your app with:
 ```
