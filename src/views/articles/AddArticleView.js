@@ -46,6 +46,9 @@ class AddArticleView extends React.Component {
       articleContentJSON: this.state.contentJSON
     }
 
+    console.debug('this.state.contentJSON');
+    console.debug(this.state.contentJSON);
+
     let newArticleID = await falcorModel
       .call(
             'articles.add',

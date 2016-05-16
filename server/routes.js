@@ -4,6 +4,7 @@ import jsonGraph from 'falcor-json-graph';
 import jwt from 'jsonwebtoken';
 import jwtSecret from './configSecret';
 
+let $ref = jsonGraph.ref;
 let $atom = jsonGraph.atom;
 let Article = configMongoose.Article;
 
@@ -14,7 +15,7 @@ export default ( req, res ) => {
   let { token, role, username } = req.headers;
   let userDetailsToHash = username+role;
   let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret);
-  let isAuthorized = authSign === token;
+  let isAuthorized = authSignToken === token;
   let sessionObject = {isAuthorized, role, username};
 
   console.info(`The ${username} is authorized === `, isAuthorized);
@@ -59,7 +60,7 @@ export default ( req, res ) => {
     }
   },
   {
-    route: 'articlesById[{keys}]["id","articleTitle","articleContent","articleContentJSON"]',
+    route: 'articlesById[{keys}]["_id","articleTitle","articleContent","articleContentJSON"]',
     get: function(pathSet) {
       let articlesIDs = pathSet[1];
       return Article.find({
@@ -73,9 +74,22 @@ export default ( req, res ) => {
             let articleResObj = articleObject.toObject();
             let currentIdString = String(articleResObj['_id']);
 
+
+            // articleResObj.articleContentJSON.entityMap = 'test';
+
             if(typeof articleResObj.articleContentJSON !== 'undefined') {
               articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
             }
+
+
+            console.info('-----');
+            console.info('-----');
+            console.info('-----');
+            console.info(JSON.stringify(articleResObj.articleContentJSON));
+            console.info('-----');
+            console.info('-----');
+            console.info('-----');
+            
 
             results.push({
               path: ['articlesById', currentIdString],

@@ -284,7 +284,7 @@ export default ( req, res ) => {
   let { token, role, username } = req.headers;
   let userDetailsToHash = username+role;
   let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret);
-  let isAuthorized = authSign === token;
+  let isAuthorized = authSignToken === token;
   let sessionObject = {isAuthorized, role, username};
 
   console.info(`The ${username} is authorized === `, isAuthorized);
