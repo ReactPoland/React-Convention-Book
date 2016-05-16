@@ -1,4 +1,8 @@
-### Publishing App - Falcor's sentinels and other more advanced concepts
+### Publishing App - Falcor's related concepts more in-depth
+
+### TODO:
+##### - explain what is JSON envelop somewhere in the begining
+
 
 Currently, our app has ability to add/edit/delete articles, but only on front-end with help of Redux's reducers etc. We need to add some full-stack mechanism to make this able to CRUD the database. We will also need to add some security features on back-end so non-authenticated users won't be able to CRUD the MongoDB's collections.
 
@@ -341,9 +345,12 @@ We need to re-add (under articles.lenght) second route called ***articles[{integ
 This is the route that fetches the artciles from databases and returns a falcor-route for it - it's exactly the same as introduced before, the only different is that now it's part of the function (***export default ( req, res ) => { ... }***).
 
 
+Before we will start implement add/edit/delete on the backend with falcor-router, we need to introduce ourselves to the concept of sentinels as it will be very important for wellbeing of our full-stack application which will be explained in a moment why.
+
+
 ### Falcor's Sentinels implementation
 
-What are the sentinels? They are "New Primitive Value Types". The same way as you have types in a regular JSON as String, Number, Object etc. , but more specific for Virtual-JSON in Falcor (examples are $ref, $atom, $error's sentines).
+What are the sentinels? They are "New Primitive Value Types". The same way as you have types in a regular JSON as String, Number, Object etc. , but more specific for Virtual-JSON in Falcor (examples are $ref, $atom, $error's sentinels).
 
 At this stage, it's important to understand how the Falcor's sentinels are working. There different types of sentinels in Falcor are:
 
@@ -361,22 +368,24 @@ In Falcor "a Reference is like a symbolic link in the UNIX file system" - as the
 
 ***IMPORTANT:*** if you use $ref(['articlesById','STRING_ARTCILE_ID_HERE']) it's equals to the above's example. The $ref is a function which changes the array's detail into that $type and value's notation object.
 
-You can find both approaches to use $refs, but in our project we will stick to the ***$ref(['articlesById','STRING_ARTCILE_ID_HERE'])***'s convention.
+You can find both approaches in order to deploy/use the $refs in any Falcor's related projects, but in our project we will stick to the ***$ref(['articlesById','STRING_ARTCILE_ID_HERE'])***'s convention.
 
 Just to make it clear this is how to import a $ref's sentinel in our codebase:
 ```
+// wait, this is just an example, don't code this below:
 import jsonGraph from 'falcor-json-graph';
 let $ref = jsonGraph.ref;
 // now you can use $ref([x, y]) function
 ```
 
-... so after you import that ***falcor-json-graph*** then you can use the $ref's sentinel. I shall have installed the falcor-json-graph already as the installation has been described in the previous chapter, if not then please use this (just in case):
+... so after you import that ***falcor-json-graph*** then you can use the $ref's sentinel. You shall already have installed the falcor-json-graph's lib as the installation has been described in the previous chapter, if not then please use this (just in case):
+
 ```
 npm i --save falcor-json-graph@1.1.7
 ```
 
 
-BUT, what does the 'articlesById' mean? And what does mean the 'STRING_ARTCILE_ID_HERE' in the above example? Let's give me an example from our project.
+BUT, what does the 'articlesById' mean in that whole $ref's gig? And what does mean the 'STRING_ARTCILE_ID_HERE' in the above example? Let's give me an example from our project that may make it more clear for you.
 
 #### $ref sentinel's example explained
 
@@ -400,6 +409,7 @@ Let's assume that we have two articles in our MongoDB:
 
 ... so based on our array's example with mocked articles (ids 987654 & 123456), the $refs will be looking as following:
 ```
+// JSON envelope is an array of two $refs
 [
   $ref([ articlesById,'987654' ]),
   $ref([ articlesById,'123456' ])
@@ -408,6 +418,7 @@ Let's assume that we have two articles in our MongoDB:
 
 or even more detailed answer is:
 ```
+// JSON envelope is an array of two $refs (other notation than above, but the same end effect)
 [
   { $type: "ref", value: ["articlesById", '987654'] },
   { $type: "ref", value: ["articlesById", '987654'] }
@@ -500,7 +511,8 @@ NEXT STEPS:
 CH4 has some code for add/update/delete
 
 
-
+### TODO:
+##### - explain what is JSON envelop somewhere in the begining
 
 
 
