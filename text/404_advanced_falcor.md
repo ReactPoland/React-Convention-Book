@@ -505,12 +505,72 @@ Please understand that above this is simplifed version how it works, but the bes
 
 
 #### Practical use of $ref in our project
+OK, there was a lot of theory, let's start the coding time!  We will improve our mongoose's model. 
+
+Then add the $ref's sentinels described before into the ***server/routes.js***'s file.
+
+```
+// example of ref, don't write it yet:
+let articleRef = $ref(['articlesById', currentMongoID]);
+```
+
+We will also add two falcor-routes ***articlesById*** and ***articles.add***. On the front-end we will make some improvements to ***src/layouts/PublishingApp.js*** and ***src/views/articles/AddArticleView.js***.
+
+Let's start the fun.
 
 
-OK, there was a lot of theory, let's start the coding time! 
+#### Mongoose config improvements
+
+First thing we will improve is the Mongoose model at ***server/configMongoose.js***:
+```
+import mongoose from 'mongoose';
+
+const conf = {
+  hostname: process.env.MONGO_HOSTNAME || 'localhost',
+  port: process.env.MONGO_PORT || 27017,
+  env: process.env.MONGO_ENV || 'local',
+};
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
+
+var articleSchema = {
+  articleTitle:String,
+  articleContent:String
+}
+```
+
+to the new improved version as following:
+```
+import mongoose from 'mongoose';
+var Schema = mongoose.Schema;
+
+const conf = {
+  hostname: process.env.MONGO_HOSTNAME || 'localhost',
+  port: process.env.MONGO_PORT || 27017,
+  env: process.env.MONGO_ENV || 'local',
+};
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
+
+var articleSchema = new Schema({
+    articleTitle:String,
+    articleContent:String,
+    articleContentJSON: Object
+  }, 
+  { 
+    minimize: false 
+  }
+);
+```
+
+As you can find above we import new ***var Schema = mongoose.Schema***. And later we improve our articleSchema with:
+
+1) articleContentJSON: Object - this is required, because state of the draft-js will be kept in a JSON's object
+
+2) second thing is providing options with ***{ minimize: false }***. This is required, because from default the Mongoose get rid off of all empty objects like { emptyObject: {}, nonEmptyObject: { test: true } } then if this minimize=false isn't set up then we would get incomplete objectes in our database, as there are some draft-js objects which are required but by default are empty (spcifically the ***entityMap*** property of a draft-js object).
 
 
-
+#### The server/routes.js improvements
 
 
 
@@ -563,6 +623,12 @@ Each of these types is a JSON Graph object with a “$type” key that different
 
 
 #### $ref's sentinel
+
+
+
+
+
+
 
 
 
