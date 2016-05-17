@@ -69,7 +69,7 @@ class EditArticleView extends React.Component {
     this.setState({contentJSON, htmlContent});
   }
 
-  _articleEditSubmit() {
+  async _articleEditSubmit() {
     let currentArticleID = this.state.editedArticleID;
     let editedArticle = {
       _id: currentArticleID,
@@ -77,6 +77,15 @@ class EditArticleView extends React.Component {
       articleContent: this.state.htmlContent,
       articleContentJSON: this.state.contentJSON
     }
+
+    let editResults = await falcorModel
+      .call(
+            ['articles', 'update'],
+            [editedArticle]
+          ).
+      then((result) => {
+        return result;
+      });
 
     this.props.articleActions.editArticle(editedArticle);
     this.setState({ articleEditSuccess: true });
