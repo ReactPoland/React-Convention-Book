@@ -134,7 +134,7 @@ export default ( req, res ) => {
   call: async (callPath, args) => 
     {
       let updatedArticle = args[0];
-      let articleID = updatedArticle._id;
+      let articleID = String(updatedArticle._id);
       let article = new Article(updatedArticle);
       article.isNew = false;
 
@@ -147,11 +147,12 @@ export default ( req, res ) => {
         console.info(4);
         console.info(JSON.stringify(res));
         console.info(5);
+        console.info('articleID', articleID)
         let results = [
-          // {
-          //   path: ["articlesById", articleID],
-          //   invalidate: true
-          // }
+          {
+            path: ["articlesById", articleID],
+            value: updatedArticle
+          }
         ];
         return results;
       });
