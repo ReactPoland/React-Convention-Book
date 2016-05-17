@@ -819,29 +819,68 @@ The only thing left that we need to do is to add into the router a new articles.
           return { count, data };
         });
       }).then ((res) => {
-        let newArticleDetail = res.data.toObject();
-        let newArticleID = String(newArticleDetail["_id"]);
-        let NewArticleRef = $ref(['articlesById', newArticleID]);
-        
-        let results = [
-          {
-            path: ['articles', res.count-1],
-            value: NewArticleRef
-          },
-          {
-            path: ['articles', 'newArticleID'],
-            value: newArticleID
-          },
-          {
-            path: ['articles', 'length'],
-            value: res.count
-          }
-        ];
+        //
+        // we will add more stuff here in a moment, below
+        //
         return results;
       });
     }
   }
 ```
+
+As you can find above, we receive from front-end a new article's details with ***let newArticleObj = args[0];*** and later we create a new Article's model with ***var article = new Article(newArticleObj);***. After that, we article variable has method '.save' that is made in the first query below.
+
+
+We do two queries that returns a Promise from Mongoose. First query:
+```
+return article.save(function (err, data) {
+```
+
+This .save method is simply helps us insert the document into the database. After we have saved the article, we need to count how many there are in our database, so we do a second query:
+```
+return Article.count({}, function(err, count) {
+```
+
+After we have saved the article and counted it, we return that information ***return { count, data };***. The last thing is to return the new article ID and the count number from backend to frontend with the falcor-router help so we replace this comment:
+```
+//
+// we will add more stuff here in a moment, below
+//
+```
+
+... with a new code that helps us make things happen:
+```
+  let newArticleDetail = res.data.toObject();
+  let newArticleID = String(newArticleDetail["_id"]);
+  let NewArticleRef = $ref(['articlesById', newArticleID]);
+  let results = [
+    {
+      path: ['articles', res.count-1],
+      value: NewArticleRef
+    },
+    {
+      path: ['articles', 'newArticleID'],
+      value: newArticleID
+    },
+    {
+      path: ['articles', 'length'],
+      value: res.count
+    }
+  ];
+
+  return results;
+```
+As you can see above we get the ***newArticleDetail*** details here. Next we take the new id with ***newArticleID*** and make sure that it's a string. After all that we define a new $ref with ***let NewArticleRef = $ref(['articlesById', newArticleID]);***.
+
+In the results' variable you can find three new pathes:
+
+1) path: ['articles', res.count-1] - that paths builds up the model, so we can have all the information in the falcor's model after we receive the respond on the client-side
+
+2) path: ['articles', 'newArticleID'] - this helps us quickly to fetch the new ID on front-end
+
+3) path: ['articles', 'length'] - and this of course, updates the length of our articles' collection, so the front-end's falcor model can have the up-to-date information after we have added a new article.
+
+That's all in order to make a back-end routes for adding an article. Let's now start working on the front-end so we will be able to push all our new articles into database.
 
 
 
