@@ -147,10 +147,13 @@ export default ( req, res ) => {
         console.info(4);
         console.info(JSON.stringify(res));
         console.info(5);
-        return {
-          path: ["articlesById", articleID],
-          invalidate: true
-        };
+        let results = [
+          // {
+          //   path: ["articlesById", articleID],
+          //   invalidate: true
+          // }
+        ];
+        return results;
       });
     }
   },
