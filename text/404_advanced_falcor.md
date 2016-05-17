@@ -255,7 +255,7 @@ let PublishingAppRoutes = [
   }
 },
 // 
-// ...... here is more code between, it has been truncated
+// ...... here is more code between, it has been truncated in order to save space
 //
 export default PublishingAppRoutes; 
 ```
@@ -422,7 +422,7 @@ or even more detailed answer is:
 // JSON envelope is an array of two $refs (other notation than above, but the same end effect)
 [
   { $type: "ref", value: ["articlesById", '987654'] },
-  { $type: "ref", value: ["articlesById", '987654'] }
+  { $type: "ref", value: ["articlesById", '123456'] }
 ]
 ```
 
@@ -521,8 +521,9 @@ Let's start the fun.
 
 #### Mongoose config improvements
 
-First thing we will improve is the Mongoose model at ***server/configMongoose.js***:
+First thing we will do is to improve the Mongoose model at ***server/configMongoose.js***:
 ```
+// this is old codebase, you already shall have it:
 import mongoose from 'mongoose';
 
 const conf = {
@@ -539,7 +540,7 @@ var articleSchema = {
 }
 ```
 
-to the new improved version as following:
+... to the new improved version as following:
 ```
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
@@ -565,9 +566,9 @@ var articleSchema = new Schema({
 
 As you can find above we import new ***var Schema = mongoose.Schema***. And later we improve our articleSchema with:
 
-1) articleContentJSON: Object - this is required, because state of the draft-js will be kept in a JSON's object
+1) 'articleContentJSON: Object' - this is required, because state of the draft-js will be kept in a JSON's object. This will be useful if a user will create an article, save it to the database and later would like to edit the article, then we are using this articleContentJSON in order to restore the content state of the draft-js' editor.
 
-2) second thing is providing options with ***{ minimize: false }***. This is required, because from default the Mongoose get rid off of all empty objects like { emptyObject: {}, nonEmptyObject: { test: true } } then if this minimize=false isn't set up then we would get incomplete objectes in our database, as there are some draft-js objects which are required but by default are empty (spcifically the ***entityMap*** property of a draft-js object).
+2) second thing is providing options with ***{ minimize: false }***. This is required, because from default the Mongoose get rid off of all empty objects like { emptyObject: {}, nonEmptyObject: { test: true } } then if this minimize=false isn't set up then we would get incomplete objects in our database (this is very important step to have this flag here). There are some draft-js objects which are required, but by default are empty (spcifically the ***entityMap*** property of a draft-js object).
 
 
 #### The server/routes.js improvements
@@ -576,18 +577,18 @@ In the server/routes.js's file, we need to start using the $ref's sentinel. Your
 ```
 import configMongoose from './configMongoose';
 import sessionRoutes from './routesSession';
-import jsonGraph from 'falcor-json-graph';
+import jsonGraph from 'falcor-json-graph'; // this is new
 import jwt from 'jsonwebtoken';
 import jwtSecret from './configSecret';
 
-let $ref = jsonGraph.ref;
-let $atom = jsonGraph.atom;
+let $ref = jsonGraph.ref; // this is new
+let $atom = jsonGraph.atom; // this is new
 let Article = configMongoose.Article;
 ```
 
-Above the only thing new is that we import ***import jsonGraph from 'falcor-json-graph';*** and then we do ***let $ref = jsonGraph.ref;***.
+Above the only thing new is that we import ***import jsonGraph from 'falcor-json-graph';*** and then we add ***let $ref = jsonGraph.ref;*** and ***$atom = jsonGraph.atom***.
 
-After the have the $ref is available in our routes.js' scope, then we will prepare a new route ***articlesById[{keys}]["_id","articleTitle","articleContent","articleContentJSON"]*** as following:
+We have added the $ref in our routes.js' scope. Then we need to prepare a new route ***articlesById[{keys}]["_id","articleTitle","articleContent","articleContentJSON"]*** as following:
 ```
   {
     route: 'articlesById[{keys}]["_id","articleTitle","articleContent","articleContentJSON"]',
@@ -619,18 +620,42 @@ After the have the $ref is available in our routes.js' scope, then we will prepa
   },
 ```
 
-The articlesById[{keys}] route is defined and the keys are the IDs of request url that we need to return in the request as you can see with ***let articlesIDs = pathSet[1];***. After that you see:
+The articlesById[{keys}] route is defined and the keys are the IDs of request url that we need to return in the request as you can see with ***let articlesIDs = pathSet[1];***. 
+
+To be more specific regarding the pathSet, based on this example:
+```
+// just an example below:
+[
+  { $type: 'ref', value: ['articlesById', '123456'] },
+  { $type: 'ref', value: ['articlesById', '987654'] }
+]
+```
+
+in this case, the falcor-router will follow to the ***articlesById*** and in the pathSet you will get this (below you can see exact value of the pathSet).
+```
+["articlesById" ['123456', '987654']]
+```
+
+... and of course value of the articlesIDs from  ***let articlesIDs = pathSet[1];*** you can find below:
+```
+['123456', '987654']
+```
+
+So as you can find later, we use this  ***articlesIDs*** next:
 ```
 // this is already in your codebase:
 return Article.find({
             '_id': { $in: articlesIDs}
         }, function(err, articlesDocs) {
 ```
-As you can see in the ***'_id': { $in: articlesIDs}*** there we pass an array of articlesIDs - based on those ids, we will receive an array of certain articles (the SQL's WHERE equivalent). Next step is that we iterate here over received articles.:
+
+As you can see in the ***'_id': { $in: articlesIDs}*** we are passing an array of articlesIDs - based on those ids, we will receive an array of certain articles found by ids (the SQL's WHERE equivalent). Next step is that we iterate here over received articles:
+
 ```
 // this already is in your codebase:
 articlesArrayFromDB.map((articleObject) => {
 ```
+
 ... and then push the object into the results array:
 ```
 // this already is in your codebase:
@@ -646,8 +671,10 @@ results.push({
   value: articleResObj
 });
 ```
-Nothing new too much above. The only new thing is that statement:
+
+Almost nothing new above. The only new thing is that statement:
 ```
+// this already is in your codebase:
 if(typeof articleResObj.articleContentJSON !== 'undefined') {
   articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
 }
@@ -655,11 +682,11 @@ if(typeof articleResObj.articleContentJSON !== 'undefined') {
 .. and specifically we are using here explicitly the $atom's sentinel from falcor with ***$atom(articleResObj.articleContentJSON);***.
 
 #### EXPLAINED: JSON Graph Atoms
-The $atom is a metadata attached to the values, which has to be handled differently by the model. You can very simply return a value of a Number of a String. It's more tricky for falcor to return an Object. Why?
+The $atom is a metadata attached to the values, which has to be handled differently by the model. You can very simply return a value of a Number of a String with falcor. It's more tricky for falcor to return an Object. Why?
 
 The falcor is diffing with heavy usage of javascript's objects and arrays, and when we tell that an object/array is wrapped by an $atom (as ***$atom(articleResObj.articleContentJSON) in our example***) then the falcor knows that he shouldn't go deeper into that array/object - it's made that way by design for performance reasons.
 
-What performance reasons? If you will return an object which is very deep and for example your will return an array of 10000 very deep objects, when without wrapping that array of 10000 very deep objects, it may take very, very long time to build and diff the model. Generally, for performance reasons any objects and arrays that you want to return via falcor-router to the front-end have to be wrapped by an $atom before doing so, otherwise you will get an error like below (if you won't wrap by $atom this object):
+What performance reasons? For example if you will return an array of 10000 very deep objects and without wrapping that array of 10000 very deep objects, it may take very, very long time to build and diff the model. Generally, for performance reasons any objects and arrays that you want to return via falcor-router to the front-end have to be wrapped by an $atom before doing so, otherwise you will get an error like below (if you won't wrap by $atom this object):
 
 ```
 Uncaught MaxRetryExceededError: The allowed number of retries have been exceeded.
@@ -726,7 +753,10 @@ We need now to return a $ref to articlesById instead of a whole articles' detail
   },
 ```
 
-What has been changed? Currently, our route ***'articles[{integers}]'*** doesn't return directly the data for ***["_id","articleTitle","articleContent"]*** so we had to delete in order to get falcor know about this fact (the articlesById is returning detailed information now). Later we create a new $ref's sentinel with the following:
+What has been changed? Look at ***route: 'articles[{integers}]["_id","articleTitle","articleContent"]' in the old codebase***: currently, our route ***'articles[{integers}]'*** doesn't return (in new version) directly the data for ***["_id","articleTitle","articleContent"]*** so we had to delete in order to get falcor know about this fact (the articlesById is returning detailed information now). 
+
+
+Next thing that has been changed is that we create a new $ref's sentinel with the following:
 ```
 // this is already in your codebase:
 let currentMongoID = String(articlesArrayFromDB[index]['_id']);
@@ -734,6 +764,7 @@ let articleRef = $ref(['articlesById', currentMongoID]);
 ```
 
 As you see by doing the above, we are informing (with $ref) falcor-router that if front-end will request any more information about article[{integers}] then the falcor-router shall follow the ***articlesById***'s route in order to retrieve that data from database.
+
 
 ... later you can find out that this old path's value:
 ```
@@ -749,16 +780,24 @@ let falcorSingleArticleResult = {
 has been replaced by the value to the articleRef:
 ```
 // new improved version
+let articleRef = $ref(['articlesById', currentMongoID]);
+
 let falcorSingleArticleResult = {
   path: ['articles', index],
   value: articleRef
 };
 ```
 
-As you can spot the difference, in the old version we were returning exactly the all information about an article, now we return only the $ref - as I re-call this makes falcor-router automaticlly follow for more inforation to the artcilesById which was already described.
+As you can spot the difference, in the old version we were returning exactly the all information about an article (variable singleArticleObject), but in the new version we return only the $ref (articleRef).
 
 
-The only thing we need to do is to add into the router a new articles.add routes:
+Re-call: $refs makes falcor-router automaticlly follow on the back-end so if there are any refs in the first route, the falcor resolves all the $refs until he will get all pending data, after that falcor is returning the data in one request which saves a lot of latency (instead of doing several http requests, everything followed with $refs is fetched in a one browser<->backend call.
+
+
+
+#### New route in the server/routes.js: articles.add
+
+The only thing left that we need to do is to add into the router a new articles.add routes:
 ```
   {
     route: 'articles.add',
