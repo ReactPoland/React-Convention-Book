@@ -977,6 +977,12 @@ this.setState({ newArticleID: newArticleID});
 ... this above simply push updated newArticle with a real ID from MongoDB via the articleActions into the article's reducer. We also setState with the newArticleID so you can see that the new article has been created correctly with a real mongo's id.
 
 
+NEXT STEPS:
+1) CO update & delete routes (backend and frontend)
+2) BO describe
+3) CO secure endpoints with $error handling
+4) BO describe
+
 
 ***** TO-IMPROVE BELOW:
 ***** TO-IMPROVE BELOW:
