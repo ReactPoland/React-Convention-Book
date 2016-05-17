@@ -884,6 +884,98 @@ That's all in order to make a back-end routes for adding an article. Let's now s
 
 
 
+#### Front-end changes in order to add article
+
+In the file ***src/layouts/PublishingApp.js*** improve the old:
+```
+get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent']]).
+```
+to a improved version with the articleContentJSON:
+```
+get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON']]). 
+```
+
+Next step is to improve our _submitArticle function in the ***src/views/articles/AddArticleView.js***:
+```
+// this is old function to replace:
+  _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    let newArticleID = "MOCKEDRandomid"+Math.floor(Math.random() * 10000);
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID});
+  }
+```
+
+... and replace this above to improved version:
+```
+  async _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+      then((result) => {
+        return falcorModel.getValue(
+            ['articles', 'newArticleID']
+          ).then((articleID) => {
+            return articleID;
+          });
+      });
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID});
+  }
+```
+
+As you can find it above, we have added async keyword before the function name (async _articleSubmit()). The new thing is that request:
+```
+// this already is in your codebase:
+let newArticleID = await falcorModel
+  .call(
+        'articles.add',
+        [newArticle]
+      ).
+  then((result) => {
+    return falcorModel.getValue(
+        ['articles', 'newArticleID']
+      ).then((articleID) => {
+        return articleID;
+      });
+  });
+```
+
+Above we await for falcorModel.call. In the .call arguments we adds newArticle. Then after the promise is resolved we check what is the newArticleID with:
+```
+// this already is in your codebase:
+return falcorModel.getValue(
+        ['articles', 'newArticleID']
+      ).then((articleID) => {
+        return articleID;
+      });
+```
+
+... later we simply use exactly the same stuff as in old version:
+```
+newArticle['_id'] = newArticleID;
+this.props.articleActions.pushNewArticle(newArticle);
+this.setState({ newArticleID: newArticleID});
+```
+... this above simply push updated newArticle with a real ID from MongoDB via the articleActions into the article's reducer. We also setState with the newArticleID so you can see that the new article has been created correctly with a real mongo's id.
+
 
 
 ***** TO-IMPROVE BELOW:
