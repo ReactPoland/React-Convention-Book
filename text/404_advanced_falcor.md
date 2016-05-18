@@ -977,6 +977,72 @@ this.setState({ newArticleID: newArticleID});
 ... this above simply push updated newArticle with a real ID from MongoDB via the articleActions into the article's reducer. We also setState with the newArticleID so you can see that the new article has been created correctly with a real mongo's id.
 
 
+#### Important note about routes returns
+
+You should be aware that in the every route we shall return an object or an array of objects - and both approaches are fine even with one route to return so for example:
+```
+// this already is in your codebase (just an example)
+    {
+    route: 'articles.length',
+      get: () => {
+        return Article.count({}, function(err, count) {
+          return count;
+        }).then ((articlesCountInDB) => {
+          return {
+            path: ['articles', 'length'],
+            value: articlesCountInDB
+          }
+        })
+    }
+  }, 
+```
+... that above can also return an array with one object as following:
+```
+      get: () => {
+        return Article.count({}, function(err, count) {
+          return count;
+        }).then ((articlesCountInDB) => {
+          return [
+            {
+              path: ['articles', 'length'],
+              value: articlesCountInDB
+            }
+          ]
+        })
+    }
+```
+As you can see that even with one articles.length, we are returning an array (instead of a signle object), and this will also works. 
+
+
+
+... and for the same reason as described above this is why in the articlesById we have pushed into array multiple routes:
+```
+// this is already in your codebase
+let results = [];
+
+articlesArrayFromDB.map((articleObject) => {
+  let articleResObj = articleObject.toObject();
+  let currentIdString = String(articleResObj['_id']);
+
+  if(typeof articleResObj.articleContentJSON !== 'undefined') {
+    articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+  }
+  // pushing multile routes
+  results.push({
+    path: ['articlesById', currentIdString],
+    value: articleResObj
+  });
+});
+return results; // returning array of routes' objects
+```
+
+That's one thing that may be worth mentioning in that advanceds' falcor chapter.
+
+#### Full-stack: edit and delete an article
+
+
+
+
 NEXT STEPS:
 1) CO update & delete routes (backend and frontend)
 2) BO describe

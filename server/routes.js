@@ -144,17 +144,10 @@ export default ( req, res ) => {
           return err;
         }
       }).then ((res) => {
-        console.info(4);
-        console.info(JSON.stringify(res));
-        console.info(5);
-        console.info('articleID', articleID)
-        let results = [
-          {
-            path: ["articlesById", articleID],
-            value: updatedArticle
-          }
-        ];
-        return results;
+        return {
+          path: ["articlesById", articleID],
+          value: updatedArticle
+        };
       });
     }
   },
