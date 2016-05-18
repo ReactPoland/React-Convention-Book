@@ -3,7 +3,6 @@
 ### TODO:
 ##### - explain what is JSON envelop somewhere in the begining
 
-
 Currently, our app has ability to add/edit/delete articles, but only on front-end with help of Redux's reducers etc. We need to add some full-stack mechanism to make this able to CRUD the database. We will also need to add some security features on back-end so non-authenticated users won't be able to CRUD the MongoDB's collections.
 
 Let's hold-on with coding for a moment. Before we will start developing full-stack Falcor's mechanism, let's discuss about our React, Node and Falcor's setup more in details.
@@ -256,7 +255,7 @@ let PublishingAppRoutes = [
   }
 },
 // 
-// ...... here is more code between, it has been truncated
+// ...... here is more code between, it has been truncated in order to save space
 //
 export default PublishingAppRoutes; 
 ```
@@ -284,7 +283,7 @@ export default ( req, res ) => {
   let { token, role, username } = req.headers;
   let userDetailsToHash = username+role;
   let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret);
-  let isAuthorized = authSign === token;
+  let isAuthorized = authSignToken === token;
   let sessionObject = {isAuthorized, role, username};
 
   console.info(`The ${username} is authorized === `, isAuthorized);
@@ -423,7 +422,7 @@ or even more detailed answer is:
 // JSON envelope is an array of two $refs (other notation than above, but the same end effect)
 [
   { $type: "ref", value: ["articlesById", '987654'] },
-  { $type: "ref", value: ["articlesById", '987654'] }
+  { $type: "ref", value: ["articlesById", '123456'] }
 ]
 ```
 
@@ -506,23 +505,201 @@ Please understand that above this is simplifed version how it works, but the bes
 
 
 #### Practical use of $ref in our project
+OK, there was a lot of theory, let's start the coding time!  We will improve our mongoose's model. 
 
+Then add the $ref's sentinels described before into the ***server/routes.js***'s file.
 
-OK, there was a lot of theory, let's start the coding time! 
-
-
-
-
-
-
-
-
-==========
-==========
-
-and our current route on backend (falcor-router) looks as following:
 ```
-// this is already in your codebase in the server/routes.js file
+// example of ref, don't write it yet:
+let articleRef = $ref(['articlesById', currentMongoID]);
+```
+
+We will also add two falcor-routes ***articlesById*** and ***articles.add***. On the front-end we will make some improvements to ***src/layouts/PublishingApp.js*** and ***src/views/articles/AddArticleView.js***.
+
+Let's start the fun.
+
+
+#### Mongoose config improvements
+
+First thing we will do is to improve the Mongoose model at ***server/configMongoose.js***:
+```
+// this is old codebase, you already shall have it:
+import mongoose from 'mongoose';
+
+const conf = {
+  hostname: process.env.MONGO_HOSTNAME || 'localhost',
+  port: process.env.MONGO_PORT || 27017,
+  env: process.env.MONGO_ENV || 'local',
+};
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
+
+var articleSchema = {
+  articleTitle:String,
+  articleContent:String
+}
+```
+
+... to the new improved version as following:
+```
+import mongoose from 'mongoose';
+var Schema = mongoose.Schema;
+
+const conf = {
+  hostname: process.env.MONGO_HOSTNAME || 'localhost',
+  port: process.env.MONGO_PORT || 27017,
+  env: process.env.MONGO_ENV || 'local',
+};
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
+
+var articleSchema = new Schema({
+    articleTitle:String,
+    articleContent:String,
+    articleContentJSON: Object
+  }, 
+  { 
+    minimize: false 
+  }
+);
+```
+
+As you can find above we import new ***var Schema = mongoose.Schema***. And later we improve our articleSchema with:
+
+1) 'articleContentJSON: Object' - this is required, because state of the draft-js will be kept in a JSON's object. This will be useful if a user will create an article, save it to the database and later would like to edit the article, then we are using this articleContentJSON in order to restore the content state of the draft-js' editor.
+
+2) second thing is providing options with ***{ minimize: false }***. This is required, because from default the Mongoose get rid off of all empty objects like { emptyObject: {}, nonEmptyObject: { test: true } } then if this minimize=false isn't set up then we would get incomplete objects in our database (this is very important step to have this flag here). There are some draft-js objects which are required, but by default are empty (spcifically the ***entityMap*** property of a draft-js object).
+
+
+#### The server/routes.js improvements
+
+In the server/routes.js's file, we need to start using the $ref's sentinel. Your import in that file should looks as following:
+```
+import configMongoose from './configMongoose';
+import sessionRoutes from './routesSession';
+import jsonGraph from 'falcor-json-graph'; // this is new
+import jwt from 'jsonwebtoken';
+import jwtSecret from './configSecret';
+
+let $ref = jsonGraph.ref; // this is new
+let $atom = jsonGraph.atom; // this is new
+let Article = configMongoose.Article;
+```
+
+Above the only thing new is that we import ***import jsonGraph from 'falcor-json-graph';*** and then we add ***let $ref = jsonGraph.ref;*** and ***$atom = jsonGraph.atom***.
+
+We have added the $ref in our routes.js' scope. Then we need to prepare a new route ***articlesById[{keys}]["_id","articleTitle","articleContent","articleContentJSON"]*** as following:
+```
+  {
+    route: 'articlesById[{keys}]["_id","articleTitle","articleContent","articleContentJSON"]',
+    get: function(pathSet) {
+      let articlesIDs = pathSet[1];
+      return Article.find({
+            '_id': { $in: articlesIDs}
+        }, function(err, articlesDocs) {
+          return articlesDocs;
+        }).then ((articlesArrayFromDB) => {
+          let results = [];
+
+          articlesArrayFromDB.map((articleObject) => {
+            let articleResObj = articleObject.toObject();
+            let currentIdString = String(articleResObj['_id']);
+
+            if(typeof articleResObj.articleContentJSON !== 'undefined') {
+              articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+            }
+
+            results.push({
+              path: ['articlesById', currentIdString],
+              value: articleResObj
+            });
+          });
+          return results;
+        });
+    }
+  },
+```
+
+The articlesById[{keys}] route is defined and the keys are the IDs of request url that we need to return in the request as you can see with ***let articlesIDs = pathSet[1];***. 
+
+To be more specific regarding the pathSet, based on this example:
+```
+// just an example below:
+[
+  { $type: 'ref', value: ['articlesById', '123456'] },
+  { $type: 'ref', value: ['articlesById', '987654'] }
+]
+```
+
+in this case, the falcor-router will follow to the ***articlesById*** and in the pathSet you will get this (below you can see exact value of the pathSet).
+```
+["articlesById" ['123456', '987654']]
+```
+
+... and of course value of the articlesIDs from  ***let articlesIDs = pathSet[1];*** you can find below:
+```
+['123456', '987654']
+```
+
+So as you can find later, we use this  ***articlesIDs*** next:
+```
+// this is already in your codebase:
+return Article.find({
+            '_id': { $in: articlesIDs}
+        }, function(err, articlesDocs) {
+```
+
+As you can see in the ***'_id': { $in: articlesIDs}*** we are passing an array of articlesIDs - based on those ids, we will receive an array of certain articles found by ids (the SQL's WHERE equivalent). Next step is that we iterate here over received articles:
+
+```
+// this already is in your codebase:
+articlesArrayFromDB.map((articleObject) => {
+```
+
+... and then push the object into the results array:
+```
+// this already is in your codebase:
+let articleResObj = articleObject.toObject();
+let currentIdString = String(articleResObj['_id']);
+
+if(typeof articleResObj.articleContentJSON !== 'undefined') {
+  articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+}
+
+results.push({
+  path: ['articlesById', currentIdString],
+  value: articleResObj
+});
+```
+
+Almost nothing new above. The only new thing is that statement:
+```
+// this already is in your codebase:
+if(typeof articleResObj.articleContentJSON !== 'undefined') {
+  articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+}
+```
+.. and specifically we are using here explicitly the $atom's sentinel from falcor with ***$atom(articleResObj.articleContentJSON);***.
+
+#### EXPLAINED: JSON Graph Atoms
+The $atom is a metadata attached to the values, which has to be handled differently by the model. You can very simply return a value of a Number of a String with falcor. It's more tricky for falcor to return an Object. Why?
+
+The falcor is diffing with heavy usage of javascript's objects and arrays, and when we tell that an object/array is wrapped by an $atom (as ***$atom(articleResObj.articleContentJSON) in our example***) then the falcor knows that he shouldn't go deeper into that array/object - it's made that way by design for performance reasons.
+
+What performance reasons? For example if you will return an array of 10000 very deep objects and without wrapping that array of 10000 very deep objects, it may take very, very long time to build and diff the model. Generally, for performance reasons any objects and arrays that you want to return via falcor-router to the front-end have to be wrapped by an $atom before doing so, otherwise you will get an error like below (if you won't wrap by $atom this object):
+
+```
+Uncaught MaxRetryExceededError: The allowed number of retries have been exceeded.
+```
+
+This error will be shown on the client-side while falcor will try to fetch that deeper object without being wrapped by an $atom beforehand on the backend.
+
+
+#### Improving the articles[{integers}] route
+
+We need now to return a $ref to articlesById instead of a whole articles' details, so we need to change this old code below:
+```
+// this already shall be in your codebase:
   {
     route: 'articles[{integers}]["_id","articleTitle","articleContent"]',
     get: (pathSet) => {
@@ -548,36 +725,329 @@ and our current route on backend (falcor-router) looks as following:
   }
 ```
 
+... and that above, we improve to a new one as following:
+```
+  {
+    route: 'articles[{integers}]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return Article.find({}, '_id', function(err, articlesDocs) {
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let currentMongoID = String(articlesArrayFromDB[index]['_id']);
+          let articleRef = $ref(['articlesById', currentMongoID]);
+
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: articleRef
+          };
+
+          results.push(falcorSingleArticleResult);
+        });
+        return results;
+      })
+    }
+  },
+```
+
+What has been changed? Look at ***route: 'articles[{integers}]["_id","articleTitle","articleContent"]' in the old codebase***: currently, our route ***'articles[{integers}]'*** doesn't return (in new version) directly the data for ***["_id","articleTitle","articleContent"]*** so we had to delete in order to get falcor know about this fact (the articlesById is returning detailed information now). 
 
 
-1) "atom"
+Next thing that has been changed is that we create a new $ref's sentinel with the following:
+```
+// this is already in your codebase:
+let currentMongoID = String(articlesArrayFromDB[index]['_id']);
+let articleRef = $ref(['articlesById', currentMongoID]);
+```
 
-2) 
-
-3) "error"
-
-
-
-
-Each of these types is a JSON Graph object with a “$type” key that differentiates it from regular JSON objects, and describes the type of its “value” key. These three JSON Graph primitive types are always retrieved and replaced in their entirety just like a primitive JSON value. None of the JSON Graph values can be mutated using any of the available abstract JSON Graph operations.
+As you see by doing the above, we are informing (with $ref) falcor-router that if front-end will request any more information about article[{integers}] then the falcor-router shall follow the ***articlesById***'s route in order to retrieve that data from database.
 
 
+... later you can find out that this old path's value:
+```
+// old version
+let singleArticleObject = articlesArrayFromDB[index].toObject();
 
-#### $ref's sentinel
+let falcorSingleArticleResult = {
+  path: ['articles', index],
+  value: singleArticleObject
+};
+```
 
+has been replaced by the value to the articleRef:
+```
+// new improved version
+let articleRef = $ref(['articlesById', currentMongoID]);
+
+let falcorSingleArticleResult = {
+  path: ['articles', index],
+  value: articleRef
+};
+```
+
+As you can spot the difference, in the old version we were returning exactly the all information about an article (variable singleArticleObject), but in the new version we return only the $ref (articleRef).
+
+
+Re-call: $refs makes falcor-router automaticlly follow on the back-end so if there are any refs in the first route, the falcor resolves all the $refs until he will get all pending data, after that falcor is returning the data in one request which saves a lot of latency (instead of doing several http requests, everything followed with $refs is fetched in a one browser<->backend call.
+
+
+
+#### New route in the server/routes.js: articles.add
+
+The only thing left that we need to do is to add into the router a new articles.add routes:
+```
+  {
+    route: 'articles.add',
+    call: (callPath, args) => {
+      let newArticleObj = args[0];
+      var article = new Article(newArticleObj);
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+        else {
+          return data;
+        }
+      }).then ((data) => {
+        return Article.count({}, function(err, count) {
+        }).then((count) => {
+          return { count, data };
+        });
+      }).then ((res) => {
+        //
+        // we will add more stuff here in a moment, below
+        //
+        return results;
+      });
+    }
+  }
+```
+
+As you can find above, we receive from front-end a new article's details with ***let newArticleObj = args[0];*** and later we create a new Article's model with ***var article = new Article(newArticleObj);***. After that, we article variable has method '.save' that is made in the first query below.
+
+
+We do two queries that returns a Promise from Mongoose. First query:
+```
+return article.save(function (err, data) {
+```
+
+This .save method is simply helps us insert the document into the database. After we have saved the article, we need to count how many there are in our database, so we do a second query:
+```
+return Article.count({}, function(err, count) {
+```
+
+After we have saved the article and counted it, we return that information ***return { count, data };***. The last thing is to return the new article ID and the count number from backend to frontend with the falcor-router help so we replace this comment:
+```
+//
+// we will add more stuff here in a moment, below
+//
+```
+
+... with a new code that helps us make things happen:
+```
+  let newArticleDetail = res.data.toObject();
+  let newArticleID = String(newArticleDetail["_id"]);
+  let NewArticleRef = $ref(['articlesById', newArticleID]);
+  let results = [
+    {
+      path: ['articles', res.count-1],
+      value: NewArticleRef
+    },
+    {
+      path: ['articles', 'newArticleID'],
+      value: newArticleID
+    },
+    {
+      path: ['articles', 'length'],
+      value: res.count
+    }
+  ];
+
+  return results;
+```
+As you can see above we get the ***newArticleDetail*** details here. Next we take the new id with ***newArticleID*** and make sure that it's a string. After all that we define a new $ref with ***let NewArticleRef = $ref(['articlesById', newArticleID]);***.
+
+In the results' variable you can find three new pathes:
+
+1) path: ['articles', res.count-1] - that paths builds up the model, so we can have all the information in the falcor's model after we receive the respond on the client-side
+
+2) path: ['articles', 'newArticleID'] - this helps us quickly to fetch the new ID on front-end
+
+3) path: ['articles', 'length'] - and this of course, updates the length of our articles' collection, so the front-end's falcor model can have the up-to-date information after we have added a new article.
+
+That's all in order to make a back-end routes for adding an article. Let's now start working on the front-end so we will be able to push all our new articles into database.
+
+
+
+#### Front-end changes in order to add article
+
+In the file ***src/layouts/PublishingApp.js*** improve the old:
+```
+get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent']]).
+```
+to a improved version with the articleContentJSON:
+```
+get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON']]). 
+```
+
+Next step is to improve our _submitArticle function in the ***src/views/articles/AddArticleView.js***:
+```
+// this is old function to replace:
+  _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    let newArticleID = "MOCKEDRandomid"+Math.floor(Math.random() * 10000);
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID});
+  }
+```
+
+... and replace this above to improved version:
+```
+  async _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+      then((result) => {
+        return falcorModel.getValue(
+            ['articles', 'newArticleID']
+          ).then((articleID) => {
+            return articleID;
+          });
+      });
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID});
+  }
+```
+
+As you can find it above, we have added async keyword before the function name (async _articleSubmit()). The new thing is that request:
+```
+// this already is in your codebase:
+let newArticleID = await falcorModel
+  .call(
+        'articles.add',
+        [newArticle]
+      ).
+  then((result) => {
+    return falcorModel.getValue(
+        ['articles', 'newArticleID']
+      ).then((articleID) => {
+        return articleID;
+      });
+  });
+```
+
+Above we await for falcorModel.call. In the .call arguments we adds newArticle. Then after the promise is resolved we check what is the newArticleID with:
+```
+// this already is in your codebase:
+return falcorModel.getValue(
+        ['articles', 'newArticleID']
+      ).then((articleID) => {
+        return articleID;
+      });
+```
+
+... later we simply use exactly the same stuff as in old version:
+```
+newArticle['_id'] = newArticleID;
+this.props.articleActions.pushNewArticle(newArticle);
+this.setState({ newArticleID: newArticleID});
+```
+... this above simply push updated newArticle with a real ID from MongoDB via the articleActions into the article's reducer. We also setState with the newArticleID so you can see that the new article has been created correctly with a real mongo's id.
+
+
+#### Important note about routes returns
+
+You should be aware that in the every route we shall return an object or an array of objects - and both approaches are fine even with one route to return so for example:
+```
+// this already is in your codebase (just an example)
+    {
+    route: 'articles.length',
+      get: () => {
+        return Article.count({}, function(err, count) {
+          return count;
+        }).then ((articlesCountInDB) => {
+          return {
+            path: ['articles', 'length'],
+            value: articlesCountInDB
+          }
+        })
+    }
+  }, 
+```
+... that above can also return an array with one object as following:
+```
+      get: () => {
+        return Article.count({}, function(err, count) {
+          return count;
+        }).then ((articlesCountInDB) => {
+          return [
+            {
+              path: ['articles', 'length'],
+              value: articlesCountInDB
+            }
+          ]
+        })
+    }
+```
+As you can see that even with one articles.length, we are returning an array (instead of a signle object), and this will also works. 
+
+
+
+... and for the same reason as described above this is why in the articlesById we have pushed into array multiple routes:
+```
+// this is already in your codebase
+let results = [];
+
+articlesArrayFromDB.map((articleObject) => {
+  let articleResObj = articleObject.toObject();
+  let currentIdString = String(articleResObj['_id']);
+
+  if(typeof articleResObj.articleContentJSON !== 'undefined') {
+    articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+  }
+  // pushing multile routes
+  results.push({
+    path: ['articlesById', currentIdString],
+    value: articleResObj
+  });
+});
+return results; // returning array of routes' objects
+```
+
+That's one thing that may be worth mentioning in that falcor's chapter.
+
+#### Full-stack: edit and delete an article
 
 
 
 
 NEXT STEPS:
-NEXT STEPS:
-NEXT STEPS:
-
-2) securing the backend so we check the authorization before running add/edit/delete on backend ((((CH4 has some code for add/update/delete))))
-
-3) we need to give ability to catch errors on backend and give a notification to user on front-end that something didn't work correctly
-
-
+1) CO update & delete routes (backend and frontend)
+2) BO describe
+3) CO secure endpoints with $error handling
+4) BO describe
 
 
 ***** TO-IMPROVE BELOW:
