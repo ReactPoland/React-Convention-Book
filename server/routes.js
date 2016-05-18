@@ -128,6 +128,54 @@ export default ( req, res ) => {
         return results;
       });
     }
+  },
+  {
+  route: 'articles.update',
+  call: async (callPath, args) => 
+    {
+      let updatedArticle = args[0];
+      let articleID = String(updatedArticle._id);
+      let article = new Article(updatedArticle);
+      article.isNew = false;
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then ((res) => {
+        return [
+          {
+            path: ["articlesById", articleID],
+            value: updatedArticle
+          },
+          {
+            path: ["articlesById", articleID],
+            invalidate: true
+          }
+        ];
+      });
+    }
+  },
+  {
+  route: 'articles.delete',
+  call: (callPath, args) => 
+    {
+      let toDeleteArticleId = args[0];
+      return Article.find({ _id: toDeleteArticleId }).remove((err) => {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then((res) => {
+        return [
+          {
+            path: ["articlesById", toDeleteArticleId],
+            invalidate: true
+          }
+        ]
+      });
+    }
   }
   ];
 

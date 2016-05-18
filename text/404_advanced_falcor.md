@@ -977,6 +977,248 @@ this.setState({ newArticleID: newArticleID});
 ... this above simply push updated newArticle with a real ID from MongoDB via the articleActions into the article's reducer. We also setState with the newArticleID so you can see that the new article has been created correctly with a real mongo's id.
 
 
+#### Important note about routes returns
+
+You should be aware that in the every route we shall return an object or an array of objects - and both approaches are fine even with one route to return so for example:
+```
+// this already is in your codebase (just an example)
+    {
+    route: 'articles.length',
+      get: () => {
+        return Article.count({}, function(err, count) {
+          return count;
+        }).then ((articlesCountInDB) => {
+          return {
+            path: ['articles', 'length'],
+            value: articlesCountInDB
+          }
+        })
+    }
+  }, 
+```
+... that above can also return an array with one object as following:
+```
+      get: () => {
+        return Article.count({}, function(err, count) {
+          return count;
+        }).then ((articlesCountInDB) => {
+          return [
+            {
+              path: ['articles', 'length'],
+              value: articlesCountInDB
+            }
+          ]
+        })
+    }
+```
+As you can see that even with one articles.length, we are returning an array (instead of a signle object), and this will also works. 
+
+
+
+... and for the same reason as described above this is why in the articlesById we have pushed into array multiple routes:
+```
+// this is already in your codebase
+let results = [];
+
+articlesArrayFromDB.map((articleObject) => {
+  let articleResObj = articleObject.toObject();
+  let currentIdString = String(articleResObj['_id']);
+
+  if(typeof articleResObj.articleContentJSON !== 'undefined') {
+    articleResObj.articleContentJSON = $atom(articleResObj.articleContentJSON);
+  }
+  // pushing multile routes
+  results.push({
+    path: ['articlesById', currentIdString],
+    value: articleResObj
+  });
+});
+return results; // returning array of routes' objects
+```
+
+That's one thing that may be worth mentioning in that falcor's chapter.
+
+#### Full-stack: edit and delete an article
+
+Let's create a route in the server/routes.js file for updating an exsiting document (edit's feature):
+```
+  {
+  route: 'articles.update',
+  call: async (callPath, args) => 
+    {
+      let updatedArticle = args[0];
+      let articleID = String(updatedArticle._id);
+      let article = new Article(updatedArticle);
+      article.isNew = false;
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then ((res) => {
+        return [
+          {
+            path: ["articlesById", articleID],
+            value: updatedArticle
+          },
+          {
+            path: ["articlesById", articleID],
+            invalidate: true
+          }
+        ];
+      });
+    }
+  },
+```
+
+... as you can see above we still use ***article.save*** approach similar to the articles.add route. The important thing to note, that Mongoose requires the isNew flag to be false (article.isNew = false;) - if you won't give this flag, then you will get an error similar to this:
+```
+{"error":{"name":"MongoError","code":11000,"err":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: staging.articles.$_id _ dup key: { : ObjectId('1515b34ed65022ec234b5c5f') }"}}
+```
+
+Rest of the code is quite simple, we do save on the article's model and then return the updated model via falcor-router with:
+```
+// this is already in your code base:
+return [
+  {
+    path: ["articlesById", articleID],
+    value: updatedArticle
+  },
+  {
+    path: ["articlesById", articleID],
+    invalidate: true
+  }
+];
+```
+The new thing is the invalidate flag. As it states in the documentation "invalidate method synchronously removes several Paths or PathSets from a Model cache". In other words, you need to know the falcor's model on front-end that something has been changed in the ["articlesById", articleID]'s path so you will have synced data on both backend and frontend.
+
+
+#### Delete an article
+
+In order to implement delete's feature we need to create a new route:
+```
+  {
+  route: 'articles.delete',
+  call: (callPath, args) => 
+    {
+      let toDeleteArticleId = args[0];
+      return Article.find({ _id: toDeleteArticleId }).remove((err) => {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then((res) => {
+        return [
+          {
+            path: ["articlesById", toDeleteArticleId],
+            invalidate: true
+          }
+        ]
+      });
+    }
+  }
+```
+
+This also uses invalidate, but this time this the only thing that we return here as the document has been deleted, so the only thing we need to do is to inform the browser's cache that the old article has been invalidated and there is none to replace it as in the update's example.
+
+#### Front-end: edit and delete
+
+We are fine with the backend as we have implemented the update and delete's routes. In the file ***src/views/articles/EditArticleView.js*** you need to replace:
+```
+// this is old already in your codebase:
+  _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    this.props.articleActions.editArticle(editedArticle);
+    this.setState({ articleEditSuccess: true });
+  }
+```
+
+... to new updated async _articleEditSubmit's function:
+```
+  async _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    let editResults = await falcorModel
+      .call(
+            ['articles', 'update'],
+            [editedArticle]
+          ).
+      then((result) => {
+        return result;
+      });
+
+    this.props.articleActions.editArticle(editedArticle);
+    this.setState({ articleEditSuccess: true });
+  }
+```
+
+.. as you can find above, the most important thing is that we implemented the .call function in the _articleEditSubmit's function that sends details of an edited object with the editedArticle's variable.
+
+
+In the same file, change also the _handleDeletion from old:
+```
+// old version
+  _handleDeletion() {
+    let articleID = this.state.editedArticleID;
+    this.props.articleActions.deleteArticle(articleID);
+
+    this.setState({
+      openDelete: false
+    });
+    this.props.history.pushState(null, '/dashboard');
+  }
+```
+
+.. to the new improved version:
+
+```
+  async _handleDeletion() {
+    let articleID = this.state.editedArticleID;
+
+    let deletetionResults = await falcorModel
+      .call(
+            ['articles', 'delete'],
+            [articleID]
+          ).
+      then((result) => {
+        return result;
+      });
+
+    this.props.articleActions.deleteArticle(articleID);
+    this.setState({
+      openDelete: false
+    });
+    this.props.history.pushState(null, '/dashboard');
+  }
+```
+
+Similar thing with the deletion, the only difference is that we send with .call only the articleID of a deleted article.
+
+
+#### Securing the CRUD routes
+
+
+
+NEXT STEPS:
+1) CO update & delete routes (backend and frontend)
+2) BO describe
+3) CO secure endpoints with $error handling
+4) BO describe
+
 
 ***** TO-IMPROVE BELOW:
 ***** TO-IMPROVE BELOW:

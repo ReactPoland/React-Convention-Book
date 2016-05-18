@@ -358,7 +358,7 @@ Because we are starting full-stack development part, we need to add "npm start" 
 Next important thing is to install new dependencies that are required for Falcor's on the backend:
 
 ```
-npm i --save falcor-express@0.1.2 falcor-router@0.3.0
+npm i --save falcor-express@0.1.2 falcor-router@0.2.12
 ```
 
 When you finnaly have installed new dependencies and configured the basic scripts for running the backend and frontend on the same port, then edit the ***server/server.js*** as following:
