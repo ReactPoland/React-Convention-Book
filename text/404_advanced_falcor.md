@@ -1094,9 +1094,122 @@ return [
 The new thing is the invalidate flag. As it states in the documentation "invalidate method synchronously removes several Paths or PathSets from a Model cache". In other words, you need to know the falcor's model on front-end that something has been changed in the ["articlesById", articleID]'s path so you will have synced data on both backend and frontend.
 
 
+#### Delete an article
+
+In order to implement delete's feature we need to create a new route:
+```
+  {
+  route: 'articles.delete',
+  call: (callPath, args) => 
+    {
+      let toDeleteArticleId = args[0];
+      return Article.find({ _id: toDeleteArticleId }).remove((err) => {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then((res) => {
+        return [
+          {
+            path: ["articlesById", toDeleteArticleId],
+            invalidate: true
+          }
+        ]
+      });
+    }
+  }
+```
+
+This also uses invalidate, but this time this the only thing that we return here as the document has been deleted, so the only thing we need to do is to inform the browser's cache that the old article has been invalidated and there is none to replace it as in the update's example.
+
+#### Front-end: edit and delete
+
+We are fine with the backend as we have implemented the update and delete's routes. In the file ***src/views/articles/EditArticleView.js*** you need to replace:
+```
+// this is old already in your codebase:
+  _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    this.props.articleActions.editArticle(editedArticle);
+    this.setState({ articleEditSuccess: true });
+  }
+```
+
+... to new updated async _articleEditSubmit's function:
+```
+  async _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    let editResults = await falcorModel
+      .call(
+            ['articles', 'update'],
+            [editedArticle]
+          ).
+      then((result) => {
+        return result;
+      });
+
+    this.props.articleActions.editArticle(editedArticle);
+    this.setState({ articleEditSuccess: true });
+  }
+```
+
+.. as you can find above, the most important thing is that we implemented the .call function in the _articleEditSubmit's function that sends details of an edited object with the editedArticle's variable.
 
 
+In the same file, change also the _handleDeletion from old:
+```
+// old version
+  _handleDeletion() {
+    let articleID = this.state.editedArticleID;
+    this.props.articleActions.deleteArticle(articleID);
 
+    this.setState({
+      openDelete: false
+    });
+    this.props.history.pushState(null, '/dashboard');
+  }
+```
+
+.. to the new improved version:
+
+```
+  async _handleDeletion() {
+    let articleID = this.state.editedArticleID;
+
+    let deletetionResults = await falcorModel
+      .call(
+            ['articles', 'delete'],
+            [articleID]
+          ).
+      then((result) => {
+        return result;
+      });
+
+    this.props.articleActions.deleteArticle(articleID);
+    this.setState({
+      openDelete: false
+    });
+    this.props.history.pushState(null, '/dashboard');
+  }
+```
+
+Similar thing with the deletion, the only difference is that we send with .call only the articleID of a deleted article.
+
+
+#### Securing the CRUD routes
 
 
 
