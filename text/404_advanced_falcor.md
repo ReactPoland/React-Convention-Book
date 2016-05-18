@@ -1040,6 +1040,63 @@ That's one thing that may be worth mentioning in that falcor's chapter.
 
 #### Full-stack: edit and delete an article
 
+Let's create a route in the server/routes.js file for updating an exsiting document (edit's feature):
+```
+  {
+  route: 'articles.update',
+  call: async (callPath, args) => 
+    {
+      let updatedArticle = args[0];
+      let articleID = String(updatedArticle._id);
+      let article = new Article(updatedArticle);
+      article.isNew = false;
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then ((res) => {
+        return [
+          {
+            path: ["articlesById", articleID],
+            value: updatedArticle
+          },
+          {
+            path: ["articlesById", articleID],
+            invalidate: true
+          }
+        ];
+      });
+    }
+  },
+```
+
+... as you can see above we still use ***article.save*** approach similar to the articles.add route. The important thing to note, that Mongoose requires the isNew flag to be false (article.isNew = false;) - if you won't give this flag, then you will get an error similar to this:
+```
+{"error":{"name":"MongoError","code":11000,"err":"insertDocument :: caused by :: 11000 E11000 duplicate key error index: staging.articles.$_id _ dup key: { : ObjectId('1515b34ed65022ec234b5c5f') }"}}
+```
+
+Rest of the code is quite simple, we do save on the article's model and then return the updated model via falcor-router with:
+```
+// this is already in your code base:
+return [
+  {
+    path: ["articlesById", articleID],
+    value: updatedArticle
+  },
+  {
+    path: ["articlesById", articleID],
+    invalidate: true
+  }
+];
+```
+The new thing is the invalidate flag. As it states in the documentation "invalidate method synchronously removes several Paths or PathSets from a Model cache". In other words, you need to know the falcor's model on front-end that something has been changed in the ["articlesById", articleID]'s path so you will have synced data on both backend and frontend.
+
+
+
+
+
 
 
 

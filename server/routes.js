@@ -144,10 +144,16 @@ export default ( req, res ) => {
           return err;
         }
       }).then ((res) => {
-        return {
-          path: ["articlesById", articleID],
-          value: updatedArticle
-        };
+        return [
+          {
+            path: ["articlesById", articleID],
+            value: updatedArticle
+          },
+          {
+            path: ["articlesById", articleID],
+            invalidate: true
+          }
+        ];
       });
     }
   },
