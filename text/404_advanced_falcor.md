@@ -1036,7 +1036,7 @@ articlesArrayFromDB.map((articleObject) => {
 return results; // returning array of routes' objects
 ```
 
-That's one thing that may be worth mentioning in that advanceds' falcor chapter.
+That's one thing that may be worth mentioning in that falcor's chapter.
 
 #### Full-stack: edit and delete an article
 
