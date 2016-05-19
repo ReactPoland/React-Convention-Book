@@ -6,6 +6,7 @@ import jwtSecret from './configSecret';
 
 let $ref = jsonGraph.ref;
 let $atom = jsonGraph.atom;
+let $error = jsonGraph.error;
 let Article = configMongoose.Article;
 
 
@@ -39,6 +40,12 @@ export default ( req, res ) => {
     route: 'articles[{integers}]',
     get: (pathSet) => {
       let articlesIndex = pathSet[1];
+
+      return {
+        path: ['error'],
+        value: $error('auth error')
+      }
+
 
       return Article.find({}, '_id', function(err, articlesDocs) {
         return articlesDocs;
