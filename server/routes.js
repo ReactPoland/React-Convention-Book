@@ -42,10 +42,9 @@ export default ( req, res ) => {
       let articlesIndex = pathSet[1];
 
       return {
-        path: ['articles', 'error'],
+        path: ['articles'],
         value: $error('auth error')
       }
-
 
       return Article.find({}, '_id', function(err, articlesDocs) {
         return articlesDocs;
