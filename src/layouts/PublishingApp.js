@@ -38,6 +38,9 @@ class PublishingApp extends React.Component {
       get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON']]). 
       then(function(articlesResponse) {  
         return articlesResponse.json.articles;
+      }).catch(e => {
+        console.debug(e);
+        return [];
       });
 
     console.debug('articles');

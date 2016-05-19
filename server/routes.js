@@ -42,7 +42,7 @@ export default ( req, res ) => {
       let articlesIndex = pathSet[1];
 
       return {
-        path: ['error'],
+        path: ['articles', 'error'],
         value: $error('auth error')
       }
 

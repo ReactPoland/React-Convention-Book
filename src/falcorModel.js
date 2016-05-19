@@ -17,8 +17,9 @@ class PublishingAppDataSource extends FalcorDataSource {
 
 const model = new falcor.Model({
   source: new PublishingAppDataSource('/model.json'),   
-  errorSelector: function(error){
-      error.$expires = -1000 * 60 * 2;
+  errorSelector: function(error, path) {
+    console.debug('errorSelector', path, error);
+    error.$expires = -1000 * 60 * 2;
   } 
   // source: https://netflix.github.io/falcor/documentation/model.html#the-errorselector-value
 });
