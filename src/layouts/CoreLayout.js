@@ -25,6 +25,13 @@ const mapDispatchToProps = (dispatch) => ({
   articleActions: bindActionCreators(articleActions, dispatch)
 });
 
+
+const errorCall =  (errText) => {
+  alert('WORKS??? error: '+JSON.stringify(errText));
+}
+
+export { errorCall as errorFunc };
+
 class CoreLayout extends React.Component {
   static propTypes = {
     children : React.PropTypes.element
@@ -33,12 +40,21 @@ class CoreLayout extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      errorValue: null
+    }
+
   }
 
   componentWillMount() {
     if(typeof window !== 'undefined' && !this.props.article.get) {
       this.props.articleActions.articlesList(this.props.article);
     }
+  }
+
+  handleErrors(errorValue) {
+    alert('handleErrors'+JSON.stringify(errorValue));
+    this.setState({errorValue});
   }
 
   render () {
