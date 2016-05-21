@@ -26,11 +26,11 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-const errorCall =  (errText) => {
+let errorFuncUtil =  (errText) => {
   alert('WORKS??? error: '+JSON.stringify(errText));
 }
 
-export { errorCall as errorFunc };
+export { errorFuncUtil as errorFunc };
 
 class CoreLayout extends React.Component {
   static propTypes = {
@@ -44,6 +44,12 @@ class CoreLayout extends React.Component {
       errorValue: null
     }
 
+    if(typeof window !== 'undefined') {
+      console.info(11111);
+      errorFuncUtil = this.handleErrors.bind(this);
+      console.info(22222);
+    }
+
   }
 
   componentWillMount() {
@@ -53,11 +59,18 @@ class CoreLayout extends React.Component {
   }
 
   handleErrors(errorValue) {
+    console.info(3);
     alert('handleErrors'+JSON.stringify(errorValue));
+    console.info(4);
     this.setState({errorValue});
+    console.info(5);
   }
 
   render () {
+    console.info(6);
+    console.info(this.state.errorValue);
+    console.info(7);
+
     const buttonStyle = {
       margin: 5
     };

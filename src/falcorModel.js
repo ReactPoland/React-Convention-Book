@@ -18,9 +18,9 @@ class PublishingAppDataSource extends FalcorDataSource {
 
 const model = new falcor.Model({
   source: new PublishingAppDataSource('/model.json'),   
-  errorSelector: function(error, path) {
+  errorSelector: function(path, error) {
     console.debug('errorSelector', path, error);
-    errorFunc(error);
+    errorFunc(JSON.stringify(error.value));
     error.$expires = -1000 * 60 * 2;
     return error;
   } 
