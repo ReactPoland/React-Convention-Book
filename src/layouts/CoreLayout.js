@@ -10,6 +10,7 @@ const muiTheme = getMuiTheme({ userAgent: 'all' });
 
 import RaisedButton from 'material-ui/lib/raised-button';
 import AppBar from 'material-ui/lib/app-bar';
+import Snackbar from 'material-ui/lib/snackbar';
 
 import ActionHome from 'material-ui/lib/svg-icons/action/home';
 
@@ -26,8 +27,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-let errorFuncUtil =  (errText) => {
-  alert('WORKS??? error: '+JSON.stringify(errText));
+let errorFuncUtil =  (errMsg, errPath) => {
 }
 
 export { errorFuncUtil as errorFunc };
@@ -45,9 +45,7 @@ class CoreLayout extends React.Component {
     }
 
     if(typeof window !== 'undefined') {
-      console.info(11111);
       errorFuncUtil = this.handleErrors.bind(this);
-      console.info(22222);
     }
 
   }
@@ -58,18 +56,19 @@ class CoreLayout extends React.Component {
     }
   }
 
-  handleErrors(errorValue) {
-    console.info(3);
-    alert('handleErrors'+JSON.stringify(errorValue));
-    console.info(4);
+  handleErrors(errMsg, errPath) {
+    let errorValue = `Error: ${errMsg} (path ${JSON.stringify(errPath)})`
     this.setState({errorValue});
-    console.info(5);
   }
 
   render () {
-    console.info(6);
-    console.info(this.state.errorValue);
-    console.info(7);
+    let errorSnackbar = null;
+    if(this.state.errorValue) {
+      errorSnackbar = <Snackbar
+        open={true}
+        message={this.state.errorValue}
+        autoHideDuration={8000} />;
+    }
 
     const buttonStyle = {
       margin: 5
@@ -101,6 +100,7 @@ class CoreLayout extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
+          {errorSnackbar}
           <AppBar
             title='Publishing App'
             iconElementLeft={homePageButtonJSX}
