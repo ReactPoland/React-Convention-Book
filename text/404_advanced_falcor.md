@@ -1211,11 +1211,17 @@ Similar thing with the deletion, the only difference is that we send with .call 
 
 #### Securing the CRUD routes
 
+We need to implement a way to secure the all add/edit/delete routes and also make an universal DRY (don't repeat yourself) way to inform the user of errors that occured on the backend. Example errors that may occure on front-end and we need to inform the user with an error message in our React's client-side app:
+1) auth error - your are not authorized to perform the action
+2) timeout error - let's imagine that you use an external API's service, we need to inform the user of any potential errors
+3) data doesn't exsits - there may be a case that a user will call for an id of an article that doesn't exsits in our DB, let's inform him
+
+In general, our goal for now is to make one universal way of moving all potential errors' messages on backend to the client-side so we will improve general experience with our application.
+
+
 
 
 NEXT STEPS:
-1) CO update & delete routes (backend and frontend)
-2) BO describe
 3) CO secure endpoints with $error handling
 4) BO describe
 
