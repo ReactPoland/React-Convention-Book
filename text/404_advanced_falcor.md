@@ -1286,6 +1286,95 @@ handleFalcorErrors(errMsg, errPath) {
 
 The handleFalcorErrors function is setting the new state of our error. We will compose our error for user with a errMsg (we create this on backend as you will learn in a moment) and the errPath (option, but this is the falcor-route path where the error has occured).
 
+OK - we have everything in place, the only thing with the CoreLayout function that is missing is the improved render. 
+
+The new render of the CoreLayout:
+```
+  render () {
+    let errorSnackbarJSX = null;
+    if(this.state.errorValue) {
+      errorSnackbarJSX = <Snackbar
+        open={true}
+        message={this.state.errorValue}
+        autoHideDuration={8000} />;
+    }
+
+    const buttonStyle = {
+      margin: 5
+    };
+    const homeIconStyle = {
+      margin: 5,
+      paddingTop: 5
+    };
+    
+    let menuLinksJSX;
+    let userIsLoggedIn = typeof localStorage !== 'undefined' && localStorage.token && this.props.routes[1].name !== 'logout';
+    
+    if(userIsLoggedIn) {
+      menuLinksJSX = (<span>
+          <Link to='/dashboard'><RaisedButton label="Dashboard" style={buttonStyle}  /></Link> 
+          <Link to='/logout'><RaisedButton label="Logout" style={buttonStyle}  /></Link> 
+        </span>);
+    } else {
+      menuLinksJSX = (<span>
+          <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
+          <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
+        </span>);
+    }
+
+    let homePageButtonJSX = (<Link to='/'>
+        <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
+      </Link>);
+
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          {errorSnackbarJSX}
+          <AppBar
+            title='Publishing App'
+            iconElementLeft={homePageButtonJSX}
+            iconElementRight={menuLinksJSX} />
+            <br/>
+            {this.props.children}
+        </div>
+      </MuiThemeProvider>
+    );
+  }
+```
+
+As you can find above, the new parts are related to the Material-UI snackbar component so this:
+```
+let errorSnackbarJSX = null;
+if(this.state.errorValue) {
+  errorSnackbarJSX = <Snackbar
+    open={true}
+    message={this.state.errorValue}
+    autoHideDuration={8000} />;
+}
+```
+the code's snippet above is preparing our erroSnackbar's JSX
+and this:
+```
+<MuiThemeProvider muiTheme={muiTheme}>
+  <div>
+    {errorSnackbarJSX}
+    <AppBar
+      title='Publishing App'
+      iconElementLeft={homePageButtonJSX}
+      iconElementRight={menuLinksJSX} />
+      <br/>
+      {this.props.children}
+  </div>
+</MuiThemeProvider>
+```
+
+There is one important thing above, you need to put the errorSnackbarJSX under the div's tag. Why? The MuiThemeProvider's children ALWAYS has to be a single node, if you will put it differently, then there will be an error related the MuiThemeProvider's component. Please make sure the {errorSnackbarJSX} is placed exactly the same as in our's book example.
+
+
+You have everything in place related to the CoreLayout's improvements.
+
+#### Tweaks: FalcorModel.js on front-end 
+
 
 
 

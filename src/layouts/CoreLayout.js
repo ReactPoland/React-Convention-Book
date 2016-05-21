@@ -62,9 +62,9 @@ class CoreLayout extends React.Component {
   }
 
   render () {
-    let errorSnackbar = null;
+    let errorSnackbarJSX = null;
     if(this.state.errorValue) {
-      errorSnackbar = <Snackbar
+      errorSnackbarJSX = <Snackbar
         open={true}
         message={this.state.errorValue}
         autoHideDuration={8000} />;
@@ -100,7 +100,7 @@ class CoreLayout extends React.Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          {errorSnackbar}
+          {errorSnackbarJSX}
           <AppBar
             title='Publishing App'
             iconElementLeft={homePageButtonJSX}
