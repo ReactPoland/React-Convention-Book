@@ -1219,6 +1219,25 @@ We need to implement a way to secure the all add/edit/delete routes and also mak
 In general, our goal for now is to make one universal way of moving all potential errors' messages on backend to the client-side so we will improve general experience with our application.
 
 
+#### $error sentinel basics
+
+There is an $error sentinel (variable type related to Falcor) which is generally an approach of returning errors. 
+
+Generally, as you already should know Falcor is batching requests so that means that in one request you can get:
+
+Example below what you can fetch in one go:
+1) One dataset - complete ready to retrive
+2) Second dataset - second dataset, may contains an error.
+
+We don't want to influence fetching process of one dataset, when there is an error in the second's dataset (you need to remember, that those two datasets from our example is fetched in one request).
+
+TODO MORE from documentation regarding $error
+
+
+#### DRY errors management on the client side
+
+
+
 
 
 NEXT STEPS:
