@@ -1236,7 +1236,71 @@ TODO MORE from documentation regarding $error
 
 #### DRY errors management on the client side
 
+Let's start with improvements the CoreLayout (src/layouts/CoreLayout.js). Under the AppBar import a new snackbar component from:
+```
+import AppBar from 'material-ui/lib/app-bar';
+import Snackbar from 'material-ui/lib/snackbar';
+```
 
+... then under the imports outside the CoreLayout create a new function and export it:
+```
+let errorFuncUtil =  (errMsg, errPath) => {
+}
+ 
+export { errorFuncUtil as errorFunc };
+```
+
+... then improve the CoreLayout constructor so we will use the exported function called errorFuncUtil as a callback in base if there will be any error provided by the falcor's $error sentinel:
+
+```
+// old constructor
+constructor(props) {
+  super(props);
+}
+```
+and the new one:
+```
+constructor(props) {
+  super(props);
+  this.state = {
+    errorValue: null
+  }
+
+  if(typeof window !== 'undefined') {
+    errorFuncUtil = this.handleFalcorErrors.bind(this);
+  }
+}
+```
+
+As you can find above, we have introduced a new errorValue's state (default state is null). Then on front-end only (because of if(typeof window !== 'undefined')) we are assign the this.handleErrors.bind(this) into our errorFuncUtil.
+
+As you will find in a moment, this is that way because the exported errorFuncUtil will be imported in our falcorModel.js where we will use a best DRY possible way to inform our CoreLayout about any error occured on backend with falcor. The great thing about this, that we will implement it just once, but it will be very universal way for informing our client's side app users of any errors (and it will also save us our efforts of development in future as any error will be handled by the approach that we are implementing now).
+
+We need add a new function to our CoreLayout called handleFalcorErrors:
+```
+handleFalcorErrors(errMsg, errPath) {
+  let errorValue = `Error: ${errMsg} (path ${JSON.stringify(errPath)})
+  this.setState({errorValue});
+}
+```
+
+The handleFalcorErrors function is setting the new state of our error. We will compose our error for user with a errMsg (we create this on backend as you will learn in a moment) and the errPath (option, but this is the falcor-route path where the error has occured).
+
+
+
+
+
+////
+////
+////
+We need to improve the ***src/falcorModel.js***'s file. Let's start with imports:
+```
+import falcor from 'falcor';
+import FalcorDataSource from 'falcor-http-datasource';
+import { errorFunc } from './layouts/CoreLayout';
+```
+
+As you can see we are importing the errorFunc exported from the CoreLayout's component.
 
 
 

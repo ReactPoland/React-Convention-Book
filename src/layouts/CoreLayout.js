@@ -45,7 +45,7 @@ class CoreLayout extends React.Component {
     }
 
     if(typeof window !== 'undefined') {
-      errorFuncUtil = this.handleErrors.bind(this);
+      errorFuncUtil = this.handleFalcorErrors.bind(this);
     }
 
   }
@@ -56,7 +56,7 @@ class CoreLayout extends React.Component {
     }
   }
 
-  handleErrors(errMsg, errPath) {
+  handleFalcorErrors(errMsg, errPath) {
     let errorValue = `Error: ${errMsg} (path ${JSON.stringify(errPath)})`
     this.setState({errorValue});
   }
