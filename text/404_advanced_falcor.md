@@ -1237,7 +1237,7 @@ Example below what you can fetch in one go:
 
 We don't want to influence fetching process of one dataset, when there is an error in the second's dataset (you need to remember, that those two datasets from our example is fetched in one request).
 
-TODO MORE from documentation regarding $error
+## TODO MORE from documentation regarding $error
 
 
 #### DRY errors management on the client side
