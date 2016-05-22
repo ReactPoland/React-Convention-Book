@@ -1375,6 +1375,159 @@ You have everything in place related to the CoreLayout's improvements.
 
 #### Tweaks: FalcorModel.js on front-end 
 
+In the ***src/falcorModel.js***'s file improve the below's code:
+```
+// already in your codebase, old code:
+import falcor from 'falcor';
+import FalcorDataSource from 'falcor-http-datasource';
+
+class PublishingAppDataSource extends FalcorDataSource {
+  onBeforeRequest ( config ) {
+    const token = localStorage.token;
+    const username = localStorage.username;
+    const role = localStorage.role;
+
+    if (token && username && role) {
+      config.headers['token'] = token;
+      config.headers['username'] = username;
+      config.headers['role'] = role;
+    }
+  }
+}
+
+const model = new falcor.Model({
+  source: new PublishingAppDataSource('/model.json')
+});
+
+export default model;
+```
+
+... and this above codes from falcorModel.js has to be improved by adding a new option into the falcor.Model:
+
+```
+import falcor from 'falcor';
+import FalcorDataSource from 'falcor-http-datasource';
+import { errorFunc } from './layouts/CoreLayout';
+
+class PublishingAppDataSource extends FalcorDataSource {
+  onBeforeRequest ( config ) {
+    const token = localStorage.token;
+    const username = localStorage.username;
+    const role = localStorage.role;
+
+    if (token && username && role) {
+      config.headers['token'] = token;
+      config.headers['username'] = username;
+      config.headers['role'] = role;
+    }
+  }
+}
+
+let falcorOptions = {
+  source: new PublishingAppDataSource('/model.json'),   
+  errorSelector: function(path, error) {
+    errorFunc(error.value, path);
+    error.$expires = -1000 * 60 * 2;
+    return error;
+  } 
+};
+
+const model = new falcor.Model(falcorOptions);
+
+export default model;
+```
+
+First thing that we added is an import of errorFunc on top of that file:
+```
+import { errorFunc } from './layouts/CoreLayout';
+```
+
+Besides the errorFunc, we have introduced the falcorOptions' variable. The source stays the same as in the previous version. We have added the errorSelector, which is ran everytime when a client-side is calling the backend, and the falcor-router on the backend returns an $error sentinel. 
+
+More details on the error selector you can find at: https://netflix.github.io/falcor/documentation/model.html#the-errorselector-value
+
+### Back-end implementations of the $error's sentinel
+
+We will do it in steps:
+
+1) an error example, just to test our client-side code 
+
+2) after we are sure that the error handling is working correctly, we will secure the endpoints properly
+
+
+
+
+#### Testing our $error related code
+
+Let's start with imports in the ***server/routes.js***'s file:
+```
+import configMongoose from './configMongoose';
+import sessionRoutes from './routesSession';
+import jsonGraph from 'falcor-json-graph';
+import jwt from 'jsonwebtoken';
+import jwtSecret from './configSecret';
+
+let $ref = jsonGraph.ref;
+let $atom = jsonGraph.atom;
+let $error = jsonGraph.error;
+let Article = configMongoose.Article;
+```
+
+... above the only new thing is that you need to import the $error's sentinel from the falcor-json-graph.
+
+Test it with the articles' route:
+```
+  {
+    route: 'articles[{integers}]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return {
+        path: ['articles'],
+        value: $error('auth error')
+      }
+
+      return Article.find({}, '_id', function(err, articlesDocs) {
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let currentMongoID = String(articlesArrayFromDB[index]['_id']);
+          let articleRef = $ref(['articlesById', currentMongoID]);
+
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: articleRef
+          };
+
+          results.push(falcorSingleArticleResult);
+        });
+        return results;
+      })
+    }
+  },
+```
+
+As you can find above, this is only a test. We will improve this code in a moment, but let's test if the text in the ***$error('auth error')*** will be shown to the user.
+
+After you run mongoDB:
+```
+$ mongod 
+```
+
+and run the server in another terminal:
+```
+$ npm start
+```
+
+.. so after you run those both in the browser on the http://localhost:3000 you shall see for 8 seconds the error:
+
+![$error sentinel demo](http://test.przeorski.pl/book/403_snackbar_error.png)
+
+... as you see there is a white text on black background in the bottom of the window:
+
+![error text only](http://test.przeorski.pl/book/404_error_text_only.png)
+
 
 
 
