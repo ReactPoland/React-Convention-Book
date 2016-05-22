@@ -1,8 +1,5 @@
 ### Publishing App - Falcor's related concepts more in-depth
 
-### TODO:
-##### - explain what is JSON envelop somewhere in the begining
-
 Currently, our app has ability to add/edit/delete articles, but only on front-end with help of Redux's reducers etc. We need to add some full-stack mechanism to make this able to CRUD the database. We will also need to add some security features on back-end so non-authenticated users won't be able to CRUD the MongoDB's collections.
 
 Let's hold-on with coding for a moment. Before we will start developing full-stack Falcor's mechanism, let's discuss about our React, Node and Falcor's setup more in details.
@@ -149,8 +146,17 @@ Currently our app has ability to add/edit/delete a route, the problem with our c
 
 The solution of securing the falcor-routes requires some changes in our current implementation, so on each request before doing the opration we will check if we have got from the client a correct token, and if the user who is making the call has ability to edit (in our case it means that if anyone has a role as an editor and is authenticated correctly with his username and password, then he can add/edit/delete an article).
 
+#### What is JSON Graph and a JSON envelop in Falcor
 
+As the falcor's documentation state: "JSON Graph is a convention for modeling graph information as a JSON object. Applications that use Falcor represent all their domain data as a single JSON Graph object".
 
+In general, JSON Graph's in falcor is a valid JSON with some new features. To be more exact, JSON Graph introduces new types of data besides string, number or boolean. The new data types in Falcor is called a sentinel. We will try to explain them later in that chapter.
+
+Generally, the second thing that is important to understand in falcor are the JSON envelops. The great thing is that it works out of the box, so you don't have to worry too much about it... but if you want to know what iti is the short and sweet answer is: the JSON envelops helps sending JSON's model via http's protocol. It's a way between transfering the data from front-end to backend (with .call, .set, .get methods). The same, before backend (after processing a request's detail) before sending the improved model's details to the client-side, the falcor put it into an "envelope" so it can be easily transfered via network. 
+
+The good analogy (but not perfect) for the JSON envelop is that, you put a written list into envelop because you don't want to send some valuable information over from point A to point B - the network doesn't care what you send in that envelop. The most important thing is that the sender and the receiver knows the context of the application model.
+
+You can find more information about the JSON's graph and envelop at: http://netflix.github.io/falcor/documentation/jsongraph.html
 
 ### Improving our falcor code on front-end
 
@@ -1520,7 +1526,7 @@ and run the server in another terminal:
 $ npm start
 ```
 
-.. so after you run those both in the browser on the http://localhost:3000 you shall see for 8 seconds the error:
+.. so after you run those both in the browser on the http://localhost:3000 then you shall see for 8 seconds the error:
 
 ![$error sentinel demo](http://test.przeorski.pl/book/403_snackbar_error.png)
 
@@ -1528,40 +1534,224 @@ $ npm start
 
 ![error text only](http://test.przeorski.pl/book/404_error_text_only.png)
 
+If you run the app, and on the main page you see the error message as on the screenshot, then it tells you that you are good!
+
+#### Wrapping up the routes' security
 
 
-
-
-////
-////
-////
-We need to improve the ***src/falcorModel.js***'s file. Let's start with imports:
+We already implemented some logic in the server/routes.js that checks if a user is authorized with:
 ```
-import falcor from 'falcor';
-import FalcorDataSource from 'falcor-http-datasource';
-import { errorFunc } from './layouts/CoreLayout';
+// this already is in your codebase:
+export default ( req, res ) => {
+  let { token, role, username } = req.headers;
+  let userDetailsToHash = username+role;
+  let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret);
+  let isAuthorized = authSignToken === token;
+  let sessionObject = {isAuthorized, role, username};
+
+  console.info(`The ${username} is authorized === `, isAuthorized);
 ```
 
-As you can see we are importing the errorFunc exported from the CoreLayout's component.
+Above you can find that we can make a logic as following in the beginning of each roles that require authorization and an editor role:
+```
+// this is example of falcor-router $errors, don't write it:
+if(isAuthorized === false) {
+  return {
+    path: ['HERE_GOES_THE_REAL_FALCOR_PATH'],
+    value: $error('auth error')
+  }
+} elseif(role !== 'editor') {
+  return {
+    path: ['HERE_GOES_THE_REAL_FALCOR_PATH'],
+    value: $error('you must be an editor in order to perform this action')
+  }
+}
+```
 
+As you see above, this is only an example (don't write it, yet we will implement it in a moment) with a path ***['HERE_GOES_THE_REAL_FALCOR_PATH']***.
 
+1) first we check if a user is authorized at all with the ***isAuthorized === false***, if not he will see an error (universal error's mechanism that we have implemented a moment ago):
+![error text only](http://test.przeorski.pl/book/404_error_text_only.png)
 
-NEXT STEPS:
-3) CO secure endpoints with $error handling
-4) BO describe
+2) In future we may have more roles in our publishing app, so in case if someone isn't an editor then he will see in the error:
+![second error text only](http://test.przeorski.pl/book/405_second_error_text_only.png)
 
+#### What routes to secure
 
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
+The routes (server/routes.js) which require authorization in our applications:
 
-CH4 has some code for add/update/delete
+1) articles add:
+```
+route: 'articles.add',
+```
 
+The old code:
+```
+// this is already in your codebase, old code:
+  {
+    route: 'articles.add',
+    call: (callPath, args) => {
+      let newArticleObj = args[0];
+      var article = new Article(newArticleObj);
 
-### TODO:
-##### - explain what is JSON envelop somewhere in the begining
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+        else {
+          return data;
+        }
+      }).then ((data) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
 
-403_snackbar_error
+The new code with the auth checks:
+```
+  {
+    route: 'articles.add',
+    call: (callPath, args) => {
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
+      let newArticleObj = args[0];
+      var article = new Article(newArticleObj);
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+        else {
+          return data;
+        }
+      }).then ((data) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+As you can find above, we have added two checks with ***isAuthorized === false*** and ***role !== 'editor'***. Almost the same will be in the below's routes (just the path changes a little).
+
+2) articles update:
+```
+route: 'articles.update',
+```
+
+The old code:
+```
+// this is already in your codebase, old code:
+  {
+  route: 'articles.update',
+  call: async (callPath, args) => 
+    {
+      let updatedArticle = args[0];
+      let articleID = String(updatedArticle._id);
+      let article = new Article(updatedArticle);
+      article.isNew = false;
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then ((res) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+The new code with the auth checks:
+```
+  {
+  route: 'articles.update',
+  call: async (callPath, args) => 
+    {
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
+      let updatedArticle = args[0];
+      let articleID = String(updatedArticle._id);
+      let article = new Article(updatedArticle);
+      article.isNew = false;
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then ((res) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+3) articles delete:
+```
+route: 'articles.delete',
+```
+
+The old code:
+```
+// this is already in your codebase, old code:
+
+  {
+  route: 'articles.delete',
+  call: (callPath, args) => 
+    {
+      let toDeleteArticleId = args[0];
+      return Article.find({ _id: toDeleteArticleId }).remove((err) => {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then((res) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+The new code with the auth checks:
+```
+  {
+  route: 'articles.delete',
+  call: (callPath, args) => 
+    {
+
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
+      let toDeleteArticleId = args[0];
+      return Article.find({ _id: toDeleteArticleId }).remove((err) => {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then((res) => {
+// code has been striped out from here for the sake of brevity, nothing below changes
+```
+
+#### A summary of $error returns on the backend
+
+As you see the returns are almost the same, we can make a helper function for that so there will be less code, but you need to remember that you need to put the path similar to one that you request when returning an error. For example, if you are on the articles.update, then you need return an error in the articles' path (or if you are on XYZ.update, then the error goes to the XYZ's path).
 
 
