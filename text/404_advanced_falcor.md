@@ -1750,7 +1750,7 @@ The new code with the auth checks:
 // code has been striped out from here for the sake of brevity, nothing below changes
 ```
 
-#### A summary of $error returns on the backend
+#### A summary of the $error returns on the backend
 
 As you see the returns are almost the same, we can make a helper function for that so there will be less code, but you need to remember that you need to put the path similar to one that you request when returning an error. For example, if you are on the articles.update, then you need return an error in the articles' path (or if you are on XYZ.update, then the error goes to the XYZ's path).
 
