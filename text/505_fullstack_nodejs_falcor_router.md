@@ -14,7 +14,7 @@ Currently we have an app that works, but is missing some key features as for exa
 4) [in-progress] article's excerpts - as you can see above, we need to make a mechanism that cuts the articles' text when a user is on the main page
 
 5) [in-progress] articles' on the dashboard currently have html in the content, we need to improve it (screenshot below):
-![articles html strip on dashboard](http://test.przeorski.pl/book/502_articles_dashboard_strip_html.png)
+![articles html strip on dashboard](http://test.przeorski.pl/book/502_articles_dashboard_html_to_strip.png)
 
 6) [in-progress] articles' slug and sub-page - we need to create slugs mechanism, so a user can visit an article with a user's friendly links as for example:
 ```
