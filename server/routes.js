@@ -6,6 +6,7 @@ import jwtSecret from './configSecret';
 
 let $ref = jsonGraph.ref;
 let $atom = jsonGraph.atom;
+let $error = jsonGraph.error;
 let Article = configMongoose.Article;
 
 
@@ -90,6 +91,19 @@ export default ( req, res ) => {
   {
     route: 'articles.add',
     call: (callPath, args) => {
+
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
       let newArticleObj = args[0];
       var article = new Article(newArticleObj);
 
@@ -133,6 +147,19 @@ export default ( req, res ) => {
   route: 'articles.update',
   call: async (callPath, args) => 
     {
+
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
       let updatedArticle = args[0];
       let articleID = String(updatedArticle._id);
       let article = new Article(updatedArticle);
@@ -161,6 +188,20 @@ export default ( req, res ) => {
   route: 'articles.delete',
   call: (callPath, args) => 
     {
+
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
+
       let toDeleteArticleId = args[0];
       return Article.find({ _id: toDeleteArticleId }).remove((err) => {
         if (err) {

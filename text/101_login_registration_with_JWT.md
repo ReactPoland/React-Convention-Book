@@ -732,11 +732,9 @@ In the above's code we are importing the rootReducer that we've created recently
 At the end, we export a store which is composed of many different's reducers (currently routing and article's reducer that you can find in ***reducer/index.js***) and is able to handle the server rendering initial's state.
 
 
-#### Last tweaks in layouts/PublishingApp.js before running the app
+#### Tweaks in layouts/PublishingApp.js
 
-The last thing that changed in our app is that we have out-of-date code in PublishingApp.
-
-Why outdated? Because we have introduced rootReducer and combineReducers so if you will check your code in render of PublishingApp here:
+We have out-of-date code in PublishingApp. Why outdated? Because we have introduced rootReducer and combineReducers so if you will check your code in render of PublishingApp here:
 ```
     let articlesJSX = [];
     for(let articleKey in this.props) {
@@ -766,9 +764,63 @@ Why outdated? Because we have introduced rootReducer and combineReducers so if y
 
 Do you see the difference? The old ***for(let articleKey in this.props)*** has changed into ***for(let articleKey in this.props.article)*** and ***this.props[articleKey]*** has changed to ***this.props.article[articleKey]***. Why? I will recall again: now every new reducer will be available in our app via it's name created in ***routes/index.js***. We have named our reducer article, so we now had to add this into ***this.props.article*** to make this stuff works together.
 
+#### Last changes in src/app.js before running the app
+
+Last thing is to improve the src/app.js so it will use the Root's container. We need to change the old:
+
+```
+// old codebase, to improve:
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import article from './reducers/article'
+import PublishingApp from './layouts/PublishingApp'
+
+let store = createStore(article)
+
+render(
+    <Provider store={store}>
+        <PublishingApp store={store} />
+    </Provider>,
+    document.getElementById('publishingAppRoot')
+);
+```
+
+... the above's code we need to change to the below's one:
+
+```
+import React                  from 'react';
+import ReactDOM               from 'react-dom';
+import createBrowserHistory   from 'history/lib/createBrowserHistory';
+import { syncReduxAndRouter } from 'redux-simple-router';
+import Root                   from './containers/Root';
+import configureStore         from './store/configureStore';
+
+const target  = document.getElementById('publishingAppRoot');
+const history = createBrowserHistory();
+
+export const store = configureStore(window.__INITIAL_STATE__);
+
+syncReduxAndRouter(history, store);
+
+const node = (
+  <Root
+    history={history}
+    store={store}
+  />
+);
+
+ReactDOM.render(node, target);
+```
+
+We start using the Root's instead of the Provider directly, and we need to send the store and history's props below to the Root component. The ***export const store = configureStore(window.__INITIAL_STATE__)***'s part is here for the server's side rendering which we will add in one of the next chapters. We also use the history's library to manage browser's history with the JavaScript.
+
+
 #### Screenshots of our running app:
 
 Currently when you do ***npm start*** then you will see as following two routes:
+
 
 #### Home Page:
 

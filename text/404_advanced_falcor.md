@@ -1,8 +1,5 @@
 ### Publishing App - Falcor's related concepts more in-depth
 
-### TODO:
-##### - explain what is JSON envelop somewhere in the begining
-
 Currently, our app has ability to add/edit/delete articles, but only on front-end with help of Redux's reducers etc. We need to add some full-stack mechanism to make this able to CRUD the database. We will also need to add some security features on back-end so non-authenticated users won't be able to CRUD the MongoDB's collections.
 
 Let's hold-on with coding for a moment. Before we will start developing full-stack Falcor's mechanism, let's discuss about our React, Node and Falcor's setup more in details.
@@ -149,8 +146,17 @@ Currently our app has ability to add/edit/delete a route, the problem with our c
 
 The solution of securing the falcor-routes requires some changes in our current implementation, so on each request before doing the opration we will check if we have got from the client a correct token, and if the user who is making the call has ability to edit (in our case it means that if anyone has a role as an editor and is authenticated correctly with his username and password, then he can add/edit/delete an article).
 
+#### What is JSON Graph and a JSON envelop in Falcor
 
+As the falcor's documentation state: "JSON Graph is a convention for modeling graph information as a JSON object. Applications that use Falcor represent all their domain data as a single JSON Graph object".
 
+In general, JSON Graph's in falcor is a valid JSON with some new features. To be more exact, JSON Graph introduces new types of data besides string, number or boolean. The new data types in Falcor is called a sentinel. We will try to explain them later in that chapter.
+
+Generally, the second thing that is important to understand in falcor are the JSON envelops. The great thing is that it works out of the box, so you don't have to worry too much about it... but if you want to know what iti is the short and sweet answer is: the JSON envelops helps sending JSON's model via http's protocol. It's a way between transfering the data from front-end to backend (with .call, .set, .get methods). The same, before backend (after processing a request's detail) before sending the improved model's details to the client-side, the falcor put it into an "envelope" so it can be easily transfered via network. 
+
+The good analogy (but not perfect) for the JSON envelop is that, you put a written list into envelop because you don't want to send some valuable information over from point A to point B - the network doesn't care what you send in that envelop. The most important thing is that the sender and the receiver knows the context of the application model.
+
+You can find more information about the JSON's graph and envelop at: http://netflix.github.io/falcor/documentation/jsongraph.html
 
 ### Improving our falcor code on front-end
 
@@ -1211,26 +1217,541 @@ Similar thing with the deletion, the only difference is that we send with .call 
 
 #### Securing the CRUD routes
 
+We need to implement a way to secure the all add/edit/delete routes and also make an universal DRY (don't repeat yourself) way to inform the user of errors that occured on the backend. Example errors that may occure on front-end and we need to inform the user with an error message in our React's client-side app:
+1) auth error - your are not authorized to perform the action
+2) timeout error - let's imagine that you use an external API's service, we need to inform the user of any potential errors
+3) data doesn't exsits - there may be a case that a user will call for an id of an article that doesn't exsits in our DB, let's inform him
+
+In general, our goal for now is to make one universal way of moving all potential errors' messages on backend to the client-side so we will improve general experience with our application.
 
 
-NEXT STEPS:
-1) CO update & delete routes (backend and frontend)
-2) BO describe
-3) CO secure endpoints with $error handling
-4) BO describe
+#### $error sentinel basics
+
+There is an $error sentinel (variable type related to Falcor) which is generally an approach of returning errors. 
+
+Generally, as you already should know Falcor is batching requests so that means that in one request you can get:
+
+Example below what you can fetch in one go:
+1) One dataset - complete ready to retrive
+2) Second dataset - second dataset, may contains an error.
+
+We don't want to influence fetching process of one dataset, when there is an error in the second's dataset (you need to remember, that those two datasets from our example is fetched in one request).
+
+## TODO MORE from documentation regarding $error
 
 
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
-***** TO-IMPROVE BELOW:
+#### DRY errors management on the client side
 
-CH4 has some code for add/update/delete
+Let's start with improvements the CoreLayout (src/layouts/CoreLayout.js). Under the AppBar import a new snackbar component from:
+```
+import AppBar from 'material-ui/lib/app-bar';
+import Snackbar from 'material-ui/lib/snackbar';
+```
+
+... then under the imports outside the CoreLayout create a new function and export it:
+```
+let errorFuncUtil =  (errMsg, errPath) => {
+}
+ 
+export { errorFuncUtil as errorFunc };
+```
+
+... then improve the CoreLayout constructor so we will use the exported function called errorFuncUtil as a callback in base if there will be any error provided by the falcor's $error sentinel:
+
+```
+// old constructor
+constructor(props) {
+  super(props);
+}
+```
+and the new one:
+```
+constructor(props) {
+  super(props);
+  this.state = {
+    errorValue: null
+  }
+
+  if(typeof window !== 'undefined') {
+    errorFuncUtil = this.handleFalcorErrors.bind(this);
+  }
+}
+```
+
+As you can find above, we have introduced a new errorValue's state (default state is null). Then on front-end only (because of if(typeof window !== 'undefined')) we are assign the this.handleErrors.bind(this) into our errorFuncUtil.
+
+As you will find in a moment, this is that way because the exported errorFuncUtil will be imported in our falcorModel.js where we will use a best DRY possible way to inform our CoreLayout about any error occured on backend with falcor. The great thing about this, that we will implement it just once, but it will be very universal way for informing our client's side app users of any errors (and it will also save us our efforts of development in future as any error will be handled by the approach that we are implementing now).
+
+We need add a new function to our CoreLayout called handleFalcorErrors:
+```
+handleFalcorErrors(errMsg, errPath) {
+  let errorValue = `Error: ${errMsg} (path ${JSON.stringify(errPath)})
+  this.setState({errorValue});
+}
+```
+
+The handleFalcorErrors function is setting the new state of our error. We will compose our error for user with a errMsg (we create this on backend as you will learn in a moment) and the errPath (option, but this is the falcor-route path where the error has occured).
+
+OK - we have everything in place, the only thing with the CoreLayout function that is missing is the improved render. 
+
+The new render of the CoreLayout:
+```
+  render () {
+    let errorSnackbarJSX = null;
+    if(this.state.errorValue) {
+      errorSnackbarJSX = <Snackbar
+        open={true}
+        message={this.state.errorValue}
+        autoHideDuration={8000} />;
+    }
+
+    const buttonStyle = {
+      margin: 5
+    };
+    const homeIconStyle = {
+      margin: 5,
+      paddingTop: 5
+    };
+    
+    let menuLinksJSX;
+    let userIsLoggedIn = typeof localStorage !== 'undefined' && localStorage.token && this.props.routes[1].name !== 'logout';
+    
+    if(userIsLoggedIn) {
+      menuLinksJSX = (<span>
+          <Link to='/dashboard'><RaisedButton label="Dashboard" style={buttonStyle}  /></Link> 
+          <Link to='/logout'><RaisedButton label="Logout" style={buttonStyle}  /></Link> 
+        </span>);
+    } else {
+      menuLinksJSX = (<span>
+          <Link to='/register'><RaisedButton label="Register" style={buttonStyle}  /></Link> 
+          <Link to='/login'><RaisedButton label="Login" style={buttonStyle}  /></Link> 
+        </span>);
+    }
+
+    let homePageButtonJSX = (<Link to='/'>
+        <RaisedButton label={<ActionHome />} style={homeIconStyle}  />
+      </Link>);
+
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          {errorSnackbarJSX}
+          <AppBar
+            title='Publishing App'
+            iconElementLeft={homePageButtonJSX}
+            iconElementRight={menuLinksJSX} />
+            <br/>
+            {this.props.children}
+        </div>
+      </MuiThemeProvider>
+    );
+  }
+```
+
+As you can find above, the new parts are related to the Material-UI snackbar component so this:
+```
+let errorSnackbarJSX = null;
+if(this.state.errorValue) {
+  errorSnackbarJSX = <Snackbar
+    open={true}
+    message={this.state.errorValue}
+    autoHideDuration={8000} />;
+}
+```
+the code's snippet above is preparing our erroSnackbar's JSX
+and this:
+```
+<MuiThemeProvider muiTheme={muiTheme}>
+  <div>
+    {errorSnackbarJSX}
+    <AppBar
+      title='Publishing App'
+      iconElementLeft={homePageButtonJSX}
+      iconElementRight={menuLinksJSX} />
+      <br/>
+      {this.props.children}
+  </div>
+</MuiThemeProvider>
+```
+
+There is one important thing above, you need to put the errorSnackbarJSX under the div's tag. Why? The MuiThemeProvider's children ALWAYS has to be a single node, if you will put it differently, then there will be an error related the MuiThemeProvider's component. Please make sure the {errorSnackbarJSX} is placed exactly the same as in our's book example.
 
 
-### TODO:
-##### - explain what is JSON envelop somewhere in the begining
+You have everything in place related to the CoreLayout's improvements.
+
+#### Tweaks: FalcorModel.js on front-end 
+
+In the ***src/falcorModel.js***'s file improve the below's code:
+```
+// already in your codebase, old code:
+import falcor from 'falcor';
+import FalcorDataSource from 'falcor-http-datasource';
+
+class PublishingAppDataSource extends FalcorDataSource {
+  onBeforeRequest ( config ) {
+    const token = localStorage.token;
+    const username = localStorage.username;
+    const role = localStorage.role;
+
+    if (token && username && role) {
+      config.headers['token'] = token;
+      config.headers['username'] = username;
+      config.headers['role'] = role;
+    }
+  }
+}
+
+const model = new falcor.Model({
+  source: new PublishingAppDataSource('/model.json')
+});
+
+export default model;
+```
+
+... and this above codes from falcorModel.js has to be improved by adding a new option into the falcor.Model:
+
+```
+import falcor from 'falcor';
+import FalcorDataSource from 'falcor-http-datasource';
+import { errorFunc } from './layouts/CoreLayout';
+
+class PublishingAppDataSource extends FalcorDataSource {
+  onBeforeRequest ( config ) {
+    const token = localStorage.token;
+    const username = localStorage.username;
+    const role = localStorage.role;
+
+    if (token && username && role) {
+      config.headers['token'] = token;
+      config.headers['username'] = username;
+      config.headers['role'] = role;
+    }
+  }
+}
+
+let falcorOptions = {
+  source: new PublishingAppDataSource('/model.json'),   
+  errorSelector: function(path, error) {
+    errorFunc(error.value, path);
+    error.$expires = -1000 * 60 * 2;
+    return error;
+  } 
+};
+
+const model = new falcor.Model(falcorOptions);
+
+export default model;
+```
+
+First thing that we added is an import of errorFunc on top of that file:
+```
+import { errorFunc } from './layouts/CoreLayout';
+```
+
+Besides the errorFunc, we have introduced the falcorOptions' variable. The source stays the same as in the previous version. We have added the errorSelector, which is ran everytime when a client-side is calling the backend, and the falcor-router on the backend returns an $error sentinel. 
+
+More details on the error selector you can find at: https://netflix.github.io/falcor/documentation/model.html#the-errorselector-value
+
+### Back-end implementations of the $error's sentinel
+
+We will do it in steps:
+
+1) an error example, just to test our client-side code 
+
+2) after we are sure that the error handling is working correctly, we will secure the endpoints properly
 
 
+
+
+#### Testing our $error related code
+
+Let's start with imports in the ***server/routes.js***'s file:
+```
+import configMongoose from './configMongoose';
+import sessionRoutes from './routesSession';
+import jsonGraph from 'falcor-json-graph';
+import jwt from 'jsonwebtoken';
+import jwtSecret from './configSecret';
+
+let $ref = jsonGraph.ref;
+let $atom = jsonGraph.atom;
+let $error = jsonGraph.error;
+let Article = configMongoose.Article;
+```
+
+... above the only new thing is that you need to import the $error's sentinel from the falcor-json-graph.
+
+Test it with the articles' route:
+```
+  {
+    route: 'articles[{integers}]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return {
+        path: ['articles'],
+        value: $error('auth error')
+      }
+
+      return Article.find({}, '_id', function(err, articlesDocs) {
+        return articlesDocs;
+      }).then ((articlesArrayFromDB) => {
+        let results = [];
+        articlesIndex.forEach((index) => {
+          let currentMongoID = String(articlesArrayFromDB[index]['_id']);
+          let articleRef = $ref(['articlesById', currentMongoID]);
+
+          let falcorSingleArticleResult = {
+            path: ['articles', index],
+            value: articleRef
+          };
+
+          results.push(falcorSingleArticleResult);
+        });
+        return results;
+      })
+    }
+  },
+```
+
+As you can find above, this is only a test. We will improve this code in a moment, but let's test if the text in the ***$error('auth error')*** will be shown to the user.
+
+After you run mongoDB:
+```
+$ mongod 
+```
+
+and run the server in another terminal:
+```
+$ npm start
+```
+
+.. so after you run those both in the browser on the http://localhost:3000 then you shall see for 8 seconds the error:
+
+![$error sentinel demo](http://test.przeorski.pl/book/403_snackbar_error.png)
+
+... as you see there is a white text on black background in the bottom of the window:
+
+![error text only](http://test.przeorski.pl/book/404_error_text_only.png)
+
+If you run the app, and on the main page you see the error message as on the screenshot, then it tells you that you are good!
+
+#### Wrapping up the routes' security
+
+
+We already implemented some logic in the server/routes.js that checks if a user is authorized with:
+```
+// this already is in your codebase:
+export default ( req, res ) => {
+  let { token, role, username } = req.headers;
+  let userDetailsToHash = username+role;
+  let authSignToken = jwt.sign(userDetailsToHash, jwtSecret.secret);
+  let isAuthorized = authSignToken === token;
+  let sessionObject = {isAuthorized, role, username};
+
+  console.info(`The ${username} is authorized === `, isAuthorized);
+```
+
+Above you can find that we can make a logic as following in the beginning of each roles that require authorization and an editor role:
+```
+// this is example of falcor-router $errors, don't write it:
+if(isAuthorized === false) {
+  return {
+    path: ['HERE_GOES_THE_REAL_FALCOR_PATH'],
+    value: $error('auth error')
+  }
+} elseif(role !== 'editor') {
+  return {
+    path: ['HERE_GOES_THE_REAL_FALCOR_PATH'],
+    value: $error('you must be an editor in order to perform this action')
+  }
+}
+```
+
+As you see above, this is only an example (don't write it, yet we will implement it in a moment) with a path ***['HERE_GOES_THE_REAL_FALCOR_PATH']***.
+
+1) first we check if a user is authorized at all with the ***isAuthorized === false***, if not he will see an error (universal error's mechanism that we have implemented a moment ago):
+![error text only](http://test.przeorski.pl/book/404_error_text_only.png)
+
+2) In future we may have more roles in our publishing app, so in case if someone isn't an editor then he will see in the error:
+![second error text only](http://test.przeorski.pl/book/405_second_error_text_only.png)
+
+#### What routes to secure
+
+The routes (server/routes.js) which require authorization in our applications:
+
+1) articles add:
+```
+route: 'articles.add',
+```
+
+The old code:
+```
+// this is already in your codebase, old code:
+  {
+    route: 'articles.add',
+    call: (callPath, args) => {
+      let newArticleObj = args[0];
+      var article = new Article(newArticleObj);
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+        else {
+          return data;
+        }
+      }).then ((data) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+The new code with the auth checks:
+```
+  {
+    route: 'articles.add',
+    call: (callPath, args) => {
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
+      let newArticleObj = args[0];
+      var article = new Article(newArticleObj);
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+        else {
+          return data;
+        }
+      }).then ((data) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+As you can find above, we have added two checks with ***isAuthorized === false*** and ***role !== 'editor'***. Almost the same will be in the below's routes (just the path changes a little).
+
+2) articles update:
+```
+route: 'articles.update',
+```
+
+The old code:
+```
+// this is already in your codebase, old code:
+  {
+  route: 'articles.update',
+  call: async (callPath, args) => 
+    {
+      let updatedArticle = args[0];
+      let articleID = String(updatedArticle._id);
+      let article = new Article(updatedArticle);
+      article.isNew = false;
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then ((res) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+The new code with the auth checks:
+```
+  {
+  route: 'articles.update',
+  call: async (callPath, args) => 
+    {
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
+      let updatedArticle = args[0];
+      let articleID = String(updatedArticle._id);
+      let article = new Article(updatedArticle);
+      article.isNew = false;
+
+      return article.save(function (err, data) {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then ((res) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+3) articles delete:
+```
+route: 'articles.delete',
+```
+
+The old code:
+```
+// this is already in your codebase, old code:
+
+  {
+  route: 'articles.delete',
+  call: (callPath, args) => 
+    {
+      let toDeleteArticleId = args[0];
+      return Article.find({ _id: toDeleteArticleId }).remove((err) => {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then((res) => {
+// code has been striped out from here for the sake of brevity, nothing changes below
+```
+
+The new code with the auth checks:
+```
+  {
+  route: 'articles.delete',
+  call: (callPath, args) => 
+    {
+
+      if(sessionObject.isAuthorized === false) {
+        return {
+          path: ['articles'],
+          value: $error('auth error')
+        }
+      } else if(sessionObject.role !== 'editor') {
+        return {
+          path: ['articles'],
+          value: $error('you must be an editor in order to perform this action')
+        }
+      }
+
+      let toDeleteArticleId = args[0];
+      return Article.find({ _id: toDeleteArticleId }).remove((err) => {
+        if (err) {
+          console.info("ERROR", err);
+          return err;
+        }
+      }).then((res) => {
+// code has been striped out from here for the sake of brevity, nothing below changes
+```
+
+#### A summary of the $error returns on the backend
+
+As you see the returns are almost the same, we can make a helper function for that so there will be less code, but you need to remember that you need to put the path similar to one that you request when returning an error. For example, if you are on the articles.update, then you need return an error in the articles' path (or if you are on XYZ.update, then the error goes to the XYZ's path).
 
 
