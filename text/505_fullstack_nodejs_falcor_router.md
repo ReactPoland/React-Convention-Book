@@ -58,6 +58,18 @@ In general, node.js shouldn't be used for any bigger assets hosting as we use it
 
 
 
+1) stworzyć bucket na S3
+
+2) CO zainstalowac react pickera u nas
+
+3) CO zmienic konfiguracje
+
+4) develop config 
+
+5) czy dziala na glownej?
+
+6) commit kodu
+
 
 NodeJS/ExpressJS with falcor Express - moving the
 Falcor's model from the client-sideto backend side, using
