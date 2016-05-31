@@ -1,3 +1,7 @@
+import configAws from './configAws.js';
+
+// AWS.config.update(configAws);
+// AWS.config.region = configAws.region;
 import http from 'http';
 import express from 'express';
 import cors from 'cors';
@@ -18,15 +22,11 @@ import * as hist  from 'history';
 import rootReducer from '../src/reducers';
 import reactRoutes from '../src/routes';
 import fetchServerSide from './fetchServerSide';
+import env from 'node-env-file';
+import s3router from 'react-s3-uploader/s3router';
 
-import AWS from 'aws-sdk';
-import configAws from './configAws.js';
-
-
-
-AWS.config.update(configAws);
-AWS.config.region = configAws.region;
-
+// Load any undefined ENV variables form a specified file. 
+env(__dirname + '/.env');
 
 var app = express();
 app.server = http.createServer(app);
@@ -39,19 +39,13 @@ app.use(bodyParser.json({extended: false}));
 app.use(bodyParser.urlencoded({extended: false}));
 
 
-app.use('/s3', require('react-s3-uploader/s3router')({
+app.use('/s3', s3router({
     bucket: 'files-restaurant-reason',
     region: 'us-west-2', //optional
     // signatureVersion: 'v4', //optional (use for some amazon regions: frankfurt and others)
     headers: {'Access-Control-Allow-Origin': '*'}, // optional
     ACL: 'public-read' // this is default
 }));
-
-
-// TO WYSWIETLIC:
-app.get('/hello', function(req, res){
-  res.send('hello world222');
-});
 
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {

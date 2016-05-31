@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import articleActions from '../actions/article.js';
 import ArticleCard from '../components/ArticleCard';
+import ReactS3Uploader from 'react-s3-uploader';
+
 
 const mapStateToProps = (state) => ({
 	...state
@@ -19,6 +21,10 @@ const mapDispatchToProps = (dispatch) => ({
 class PublishingApp extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      uploadDetails: null,
+      clickedLoader: null
+    };
   }
   
   componentWillMount() {
@@ -72,6 +78,22 @@ class PublishingApp extends React.Component {
 
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h3>{JSON.stringify(this.state.uploadDetails)}</h3>
+        <ReactS3Uploader
+          signingUrl="/s3/sign"
+          accept="image/*"
+            onProgress={(val1, val2, val3) => {
+              console.debug('ON PROGRESS');
+              this.setState({ clickedLoader: true });
+            }} 
+            onError={(val1, val2) => {
+              alert('onError'+val1, ' val2'+JSON.stringify(val2));
+            }}
+            onFinish={(uploadDetails, val2) => {
+              this.setState({ uploadDetails:  uploadDetails});
+              this.setState({ clickedLoader: false });
+            }} />
+
           {articlesJSX}
       </div>
     );
