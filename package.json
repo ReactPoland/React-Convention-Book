@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ReactConvention/React-Convention-Book#readme",
   "dependencies": {
+    "aws-sdk": "^2.3.16",
     "babel": "^6.5.2",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.5.2",

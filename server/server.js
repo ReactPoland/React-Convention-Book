@@ -19,6 +19,15 @@ import rootReducer from '../src/reducers';
 import reactRoutes from '../src/routes';
 import fetchServerSide from './fetchServerSide';
 
+import AWS from 'aws-sdk';
+import configAws from './configAws.js';
+
+
+
+AWS.config.update(configAws);
+AWS.config.region = configAws.region;
+
+
 var app = express();
 app.server = http.createServer(app);
 
