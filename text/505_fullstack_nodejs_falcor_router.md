@@ -94,6 +94,21 @@ After the click you shall see a form, then fill it with at least one user as on 
 IMPORTANT: please copy the keys (Access Key ID and Secret Access Key), you will learn later in the book where to put them in the code in order to use the S3's services. Of course, the one from the screenshot aren't active - they are only examples, you need to have your own.
 
 
+#### Setup S3 permissions for the user 
+
+The last thing is to add the AmazonS3FullAccess's permissions with the following steps:
+
+1) Go to the Permissions tab:
+
+![permissions tab aws](http://test.przeorski.pl/book/513b_permissions_tab.png.png)
+
+2) Click on the "Attach Policy" and choose AmazonS3FullAccess
+
+3) After attaching then it shall be listed the same way as on the example below:
+
+![aws attach policy](http://test.przeorski.pl/book/514b_attach_policy.png)
+
+
 publishingapp
 Access Key ID:
 AKIAI3Y54WVG5JM4VUHA
@@ -103,7 +118,7 @@ k3JxxCbByqy+qTXojf7xRiJ0oRI6w3ZEmENE1I0l
 
 #### Creating a new bucket for the image's files
 
-OK you are done with the keys, then we need to prepare our's S3 bucket. 
+You are done with the keys and you have granted the S3's policy for the keys, then we need to prepare our's bucket that will keep the images. 
 
 1) First of all you need to to the AWS' console main page that looks like below (https://console.aws.amazon.com/console/home)
 
@@ -149,25 +164,46 @@ When you are on that view as from the screenshot above, then the url in the brow
 https://console.aws.amazon.com/s3/home?region=eu-central-1&bucket=publishing-app&prefix=
 ```
 
-!!!! NEXT STEPS:
 
-a) CORS setup
+8) The last thing is to make sure that the CORS for the publishing-app's bucket are correct. Click on the properties tab on that view and you will get a detailed view of them as on the example below:
 
-b) 403 error solve!
+![properties aws bucket](http://test.przeorski.pl/book/520_properties_tab.png)
+
+then click on the "Add CORS" button:
+
+![properties aws bucket](http://test.przeorski.pl/book/521_add_cors_button.png)
+
+and after that past this into the text area:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+    <CORSRule>
+        <AllowedOrigin>*</AllowedOrigin>
+        <AllowedMethod>GET</AllowedMethod>
+        <AllowedMethod>POST</AllowedMethod>
+        <AllowedMethod>PUT</AllowedMethod>
+        <MaxAgeSeconds>3000</MaxAgeSeconds>
+        <AllowedHeader>*</AllowedHeader>
+    </CORSRule>
+</CORSConfiguration>
+```
+
+.. so it will be looking as on the example:
+![properties aws bucket](http://test.przeorski.pl/book/522_cors_example.png)
 
 
-TODO:
-
-1) CORS
-
-2) 
+... and click the save button. After all that steps we are done, so we can start with coding the images upload's feature.
 
 
+#### Start coding upload image feature
+
+,,, programujemy tutaj :-)
 
 
 0) [DONE] BO CO opisać jak wygenerować kody
 
-1) [in-progress] BO CO stworzyć bucket na S3
+1) [DONE] BO CO stworzyć bucket na S3
 
 2) [DONE] CO zainstalowac react pickera u nas
 
