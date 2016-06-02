@@ -123,13 +123,13 @@ You are done with the keys and you have granted the S3's policy for the keys, th
 1) First of all you need to to the AWS' console main page that looks like below (https://console.aws.amazon.com/console/home)
 
 
-![dashboard aws](http://test.przeorski.pl/book/513_dashboard_home.png.png)
+![dashboard aws](http://test.przeorski.pl/book/513_dashboard_home.png)
 
 
 
 2) You shall see there something like "AWS ServicesSHOW ALL SERVICES" (or alternatively find it from the services' list the similar way as IAM)
 
-![aws services list](http://test.przeorski.pl/book/514_aws_services_list.png.png)
+![aws services list](http://test.przeorski.pl/book/514_aws_services_list.png)
 
 
 
