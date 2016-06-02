@@ -57,7 +57,7 @@ In general, node.js shouldn't be used for any bigger assets hosting as we use it
 
 #### Generating keys (access key id and secret key)
 
-Before we will start adding a new S3 bucket, we need to generate keys.
+Before we will start adding a new S3 bucket, we need to generate keys of your AWS account (accessKeyId and secretAccessKey).
 
 An example set of details that we will need to keep in our node.js' app is as following:
 ```
@@ -69,7 +69,7 @@ const awsConfig = {
 };
 ```
 
-What is a bucket in Amazon S3? Bucket is kind of name space for files that you how in Amazon S3. You can have several buckets associated with different projects etc. As you can see, our next steps will be:
+What is a bucket in the Amazon S3? Bucket is kind of name space for files that you how in Amazon S3. You can have several buckets associated with different projects etc. As you can see, our next steps will be:
 
 1) Create the accessKeyId and secretAccessKey associated to your account
 
@@ -78,6 +78,31 @@ What is a bucket in Amazon S3? Bucket is kind of name space for files that you h
 3) Define a region where you want to keep the files physically (if your project has a target specified for a location then it will speed up the images load and general it will limit the latency as an image will be hosted closer to a client/user of our publishing's application).
 
 
+
+#### Identity and Access Management
+
+Let's prepare our new accessKeyId and secretAccessKey. You need to visit the "Identity and Access Management" (IAM) page in your Amazon's console. You can find it from the services' list:
+
+![aws services list](http://test.przeorski.pl/book/507_aws_services_list.png)
+
+The IAM page looks as following (under the https://console.aws.amazon.com/iam/home?#home):
+
+![IAM aws](http://test.przeorski.pl/book/508_aws_IAM.png)
+
+
+Then click on the IAM Resources/users' link:
+![IAM aws](http://test.przeorski.pl/book/509_click_on_users.png)
+
+On the next page you will see a button (please click it):
+![create new user button](http://test.przeorski.pl/book/510_click_create_new_users.png)
+
+After the click you shall see a form, then fill it with at least one user as on the screenshot:
+![new user form](http://test.przeorski.pl/book/511_new_user_form.png)
+
+... then after clicking the "Create" button, copy the keys to a safe place (we will use them in a moment):
+![aws copy keys](http://test.przeorski.pl/book/512_copy_keys.png)
+
+IMPORTANT: please copy the files, you will learn later in the book where to put them in the code in order to use the S3's services.
 
 
 
