@@ -40,8 +40,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 
 app.use('/s3', s3router({
-    bucket: 'files-restaurant-reason',
-    region: 'us-west-2', //optional
+    bucket: 'publishing-app',
+    region: 'eu-central-1', //optional
     // signatureVersion: 'v4', //optional (use for some amazon regions: frankfurt and others)
     headers: {'Access-Control-Allow-Origin': '*'}, // optional
     ACL: 'public-read' // this is default

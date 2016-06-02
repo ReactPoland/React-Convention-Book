@@ -34,27 +34,6 @@ We will use it in our application, as using this tool gives us a lot of scalibil
 
 In general, node.js shouldn't be used for any bigger assets hosting as we use it now. Don't even think of implementing an upload images' mechanism (not recommended at all) to the node.js server - we will employ the Amazon's services for that.
 
-
-#### First Steps - preparation of an Amazon AWS S3's account
-
-1) Go to the https://aws.amazon.com/
-
-![aws main page](http://test.przeorski.pl/book/503_aws_main_page.png)
-
-2) Create an account / sign-in to a new account
-
-![aws signup signin page](http://test.przeorski.pl/book/504_aws_signup_signin.png)
-
-3) Then after you have an account, go to the main dashboard https://console.aws.amazon.com/console/home ... you shall see something like "AWS ServicesSHOW ALL SERVICES"
-
-![aws services list](http://test.przeorski.pl/book/505_aws_services_list.png)
-
-4) Click on the "S3 - Scalable Storage in the Cloud" (as on the image above)
-
-5) After that you shall see similar view (I have 6 buckets, you shall have 0 buckets when you have a new account)
-
-![aws bucket view list](http://test.przeorski.pl/book/506_aws_bucket_view.png)
-
 #### Generating keys (access key id and secret key)
 
 Before we will start adding a new S3 bucket, we need to generate keys of your AWS account (accessKeyId and secretAccessKey).
@@ -77,9 +56,19 @@ What is a bucket in the Amazon S3? Bucket is kind of name space for files that y
 
 3) Define a region where you want to keep the files physically (if your project has a target specified for a location then it will speed up the images load and general it will limit the latency as an image will be hosted closer to a client/user of our publishing's application).
 
+#### AWS Account creation
 
+1) Go to the https://aws.amazon.com/
 
-#### Identity and Access Management
+![aws main page](http://test.przeorski.pl/book/503_aws_main_page.png)
+
+2) Create an account / sign-in to a new account
+
+![aws signup signin page](http://test.przeorski.pl/book/504_aws_signup_signin.png)
+
+Then the next step is to create the IAM that is described in details further.
+
+#### Identity and Access Management (IAM)
 
 Let's prepare our new accessKeyId and secretAccessKey. You need to visit the "Identity and Access Management" (IAM) page in your Amazon's console. You can find it from the services' list:
 
@@ -102,15 +91,81 @@ After the click you shall see a form, then fill it with at least one user as on 
 ... then after clicking the "Create" button, copy the keys to a safe place (we will use them in a moment):
 ![aws copy keys](http://test.przeorski.pl/book/512_copy_keys.png)
 
-IMPORTANT: please copy the files, you will learn later in the book where to put them in the code in order to use the S3's services.
+IMPORTANT: please copy the keys (Access Key ID and Secret Access Key), you will learn later in the book where to put them in the code in order to use the S3's services. Of course, the one from the screenshot aren't active - they are only examples, you need to have your own.
+
+
+publishingapp
+Access Key ID:
+AKIAI3Y54WVG5JM4VUHA
+Secret Access Key:
+k3JxxCbByqy+qTXojf7xRiJ0oRI6w3ZEmENE1I0l
+
+
+#### Creating a new bucket for the image's files
+
+OK you are done with the keys, then we need to prepare our's S3 bucket. 
+
+1) First of all you need to to the AWS' console main page that looks like below (https://console.aws.amazon.com/console/home)
+
+
+![dashboard aws](http://test.przeorski.pl/book/513_dashboard_home.png.png)
+
+
+
+2) You shall see there something like "AWS ServicesSHOW ALL SERVICES" (or alternatively find it from the services' list the similar way as IAM)
+
+![aws services list](http://test.przeorski.pl/book/514_aws_services_list.png.png)
+
+
+
+2) Click on the "S3 - Scalable Storage in the Cloud" (as on the above's image)
+
+3) After that you shall see similar view (I have 6 buckets, you shall have 0 buckets when you have a new account)
+
+![aws bucket view list](http://test.przeorski.pl/book/515_aws_bucket_view.png)
+
+In that buckets we will keep the static images of our articles (you will learn how exactly in next pages of the book).
+
+4) Create a bucket by clicking the button:
+
+![button create bucket](http://test.przeorski.pl/book/516_create_bucket_click.png)
+
+
+5) Choose "publishing-app" name (or different that works for you):
+
+![name bucket and create](http://test.przeorski.pl/book/517_name_and_create_bucket.png)
+
+6) After the bucket has been created, then click on it from the buckets' list:
+
+![choose bucket from list](http://test.przeorski.pl/book/518_choose_new_bucket_from_list.png)
+
+7) The empty bucket with a name of "publishing-app" shall be looking as following:
+
+![choose bucket from list](http://test.przeorski.pl/book/519_empty_bucket_list.png)
+
+When you are on that view as from the screenshot above, then the url in the browser tell's you exactly the region and bucket (so you can use it later when doing the config on backend):
+```
+// just example link to the bucket
+https://console.aws.amazon.com/s3/home?region=eu-central-1&bucket=publishing-app&prefix=
+```
+
+!!!! NEXT STEPS:
+
+a) CORS setup
+
+b) 403 error solve!
+
+
+TODO:
+
+1) CORS
+
+2) 
 
 
 
 
-
-
-
-0) [in-progress] BO CO opisać jak wygenerować kody
+0) [DONE] BO CO opisać jak wygenerować kody
 
 1) [in-progress] BO CO stworzyć bucket na S3
 
