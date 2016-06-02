@@ -35,7 +35,7 @@ We will use it in our application, as using this tool gives us a lot of scalibil
 In general, node.js shouldn't be used for any bigger assets hosting as we use it now. Don't even think of implementing an upload images' mechanism (not recommended at all) to the node.js server - we will employ the Amazon's services for that.
 
 
-#### Steps - setup and configure Amazon AWS S3
+#### First Steps - preparation of an Amazon AWS S3's account
 
 1) Go to the https://aws.amazon.com/
 
@@ -55,21 +55,57 @@ In general, node.js shouldn't be used for any bigger assets hosting as we use it
 
 ![aws bucket view list](http://test.przeorski.pl/book/506_aws_bucket_view.png)
 
+#### Generating keys (access key id and secret key)
+
+Before we will start adding a new S3 bucket, we need to generate keys.
+
+An example set of details that we will need to keep in our node.js' app is as following:
+```
+const awsConfig = {
+  accessKeyId: 'EXAMPLE_LB7XH_KEY_BGTCA',
+  secretAccessKey: 'ExAMpLe+KEY+FYliI9J1nvky5g2bInN26TCU+FiY',
+  region: 'us-west-2',
+  bucketKey: 'your-bucket-name-'
+};
+```
+
+What is a bucket in Amazon S3? Bucket is kind of name space for files that you how in Amazon S3. You can have several buckets associated with different projects etc. As you can see, our next steps will be:
+
+1) Create the accessKeyId and secretAccessKey associated to your account
+
+2) Define your bucketKey (kind of a name space for the pictures for our articles)
+
+3) Define a region where you want to keep the files physically (if your project has a target specified for a location then it will speed up the images load and general it will limit the latency as an image will be hosted closer to a client/user of our publishing's application).
 
 
 
-1) stworzyć bucket na S3
 
-2) CO zainstalowac react pickera u nas
 
-3) CO zmienic konfiguracje
 
-4) develop config 
 
-5) czy dziala na glownej?
 
-6) commit kodu
 
+0) [in-progress] BO CO opisać jak wygenerować kody
+
+1) [in-progress] BO CO stworzyć bucket na S3
+
+2) [DONE] CO zainstalowac react pickera u nas
+
+3) [DONE] CO zmienic konfiguracje
+
+4) [DONE] CO .env
+
+5) [DONE] czy dziala na glownej?
+
+6) [DONE] commit kodu
+
+7) [in-progres] CO dodać picker do article add view
+
+8) [in-progres] CO dodać do bazy (dodawac url z amazone)
+
+9) [in-progres] CO wyswietlac w artykule nowo stworzonym
+
+10) zaczac opisywac to w ksiazce!
 
 NodeJS/ExpressJS with falcor Express - moving the
 Falcor's model from the client-sideto backend side, using
