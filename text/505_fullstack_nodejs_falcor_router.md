@@ -215,7 +215,7 @@ and after that past this into the text area:
 
 6) [DONE] commit kodu
 
-7) [in-progres] CO dodać picker do article add view
+7) [DONE] CO dodać picker do article add view
 
 8) [in-progres] CO dodać do bazy (dodawac url z amazone)
 

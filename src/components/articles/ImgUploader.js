@@ -23,7 +23,7 @@ class ImgUploader extends React.Component {
       uploadDetails: null,
       uploadProgress: null,
       uploadError: null,
-      articlePicUrl: null
+      articlePicUrl: props.articlePicUrl
     };
   }
 

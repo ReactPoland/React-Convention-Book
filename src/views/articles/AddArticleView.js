@@ -33,10 +33,7 @@ class AddArticleView extends React.Component {
       contentJSON: {},
       htmlContent: '',
       newArticleID: null,
-      uploadDetails: null,
-      uploadProgress: null,
-      uploadError: null,
-      articlePicUrl: null
+      articlePicUrl: '/static/placeholder.png'
     };
   }
 
@@ -49,7 +46,8 @@ class AddArticleView extends React.Component {
     let newArticle = {
       articleTitle: this.state.title,
       articleContent: this.state.htmlContent,
-      articleContentJSON: this.state.contentJSON
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
     }
 
     console.debug('this.state.contentJSON');
@@ -70,7 +68,7 @@ class AddArticleView extends React.Component {
 
     newArticle['_id'] = newArticleID;
     this.props.articleActions.pushNewArticle(newArticle);
-    this.setState({ newArticleID: newArticleID});
+    this.setState({ newArticleID: newArticleID });
   }
 
   updateImgUrl(articlePicUrl) {
@@ -95,23 +93,6 @@ class AddArticleView extends React.Component {
       );
     }
 
-    let imgUploadProgressJSX = <h4>Add a photo (article's cover)</h4>;
-    let uploadProgress = this.state.uploadProgress;
-    if(uploadProgress) {
-      imgUploadProgressJSX = (
-          <div>
-            {uploadProgress.uploadStatusText} ({uploadProgress.progressInPercent}%)
-          </div>
-        );
-    } else if(this.state.articlePicUrl) {
-      let articlePicStyles = {
-        maxWidth: 200, 
-        maxHeight: 200, 
-        margin: 'auto'
-      };
-      imgUploadProgressJSX = <img src={this.state.articlePicUrl} style={articlePicStyles} />;
-    }
-
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Add Article</h1>
@@ -121,7 +102,7 @@ class AddArticleView extends React.Component {
           onChangeTextJSON={this._onDraftJSChange} />
 
         <div style={{margin: '10px 10px 10px 10px'}}> 
-          <ImgUploader updateImgUrl={this.updateImgUrl} />
+          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
         </div>
 
         <RaisedButton
