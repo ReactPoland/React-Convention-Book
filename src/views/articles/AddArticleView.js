@@ -10,7 +10,7 @@ import articleActions from '../../actions/article.js';
 import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
-
+import ReactS3Uploader from 'react-s3-uploader';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -30,7 +30,11 @@ class AddArticleView extends React.Component {
       title: 'test',
       contentJSON: {},
       htmlContent: '',
-      newArticleID: null
+      newArticleID: null,
+      uploadDetails: null,
+      clickedLoader: null,
+      uploadProgress: null,
+      uploadError: null
     };
   }
 
@@ -90,12 +94,40 @@ class AddArticleView extends React.Component {
           name="addarticle"
           title="Create an article"
           onChangeTextJSON={this._onDraftJSChange} />
-          <RaisedButton
-            onClick={this._articleSubmit}
-            secondary={true}
-            type="submit"
-            style={{margin: '10px auto', display: 'block', width: 150}}
-            label={'Submit Article'} />
+
+        <h3>{JSON.stringify(this.state.uploadDetails)}</h3>
+        <h3>{JSON.stringify(this.state.uploadProgress)}</h3>
+        <ReactS3Uploader
+          signingUrl="/s3/sign"
+          accept="image/*"
+            onProgress={(progressInPercent, uploadStatusText) => {
+              this.setState({ 
+                uploadProgress: { progressInPercent, uploadStatusText }, 
+                clickedLoader: true,
+                uploadError: null
+              });
+            }} 
+            onError={(errorDetails) => {
+              this.setState({ 
+                clickedLoader: false, 
+                uploadProgress: null,
+                uploadError: errorDetails
+              });
+            }}
+            onFinish={(uploadDetails, val2) => {
+                this.setState({ 
+                  clickedLoader: false, 
+                  uploadProgress: null,
+                  uploadDetails:  uploadDetails
+                });
+            }} />
+
+        <RaisedButton
+          onClick={this._articleSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Article'} />
       </div>
     );
   }

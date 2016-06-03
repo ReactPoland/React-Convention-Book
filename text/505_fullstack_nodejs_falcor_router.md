@@ -127,7 +127,7 @@ You are done with the keys and you have granted the S3's policy for the keys, th
 
 
 
-2) You shall see there something like "AWS ServicesSHOW ALL SERVICES" (or alternatively find it from the services' list the similar way as IAM)
+2) You shall see there something like "AWS Services SHOW ALL SERVICES" (or alternatively find it from the services' list the similar way as IAM)
 
 ![aws services list](http://test.przeorski.pl/book/514_aws_services_list.png)
 
