@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import articleActions from '../../actions/article.js';
 import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
+import ImgUploader from '../../components/articles/ImgUploader';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
 import ReactS3Uploader from 'react-s3-uploader';
@@ -25,6 +26,7 @@ class AddArticleView extends React.Component {
     super(props);
     this._onDraftJSChange = this._onDraftJSChange.bind(this);
     this._articleSubmit = this._articleSubmit.bind(this);
+    this.updateImgUrl = this.updateImgUrl.bind(this);
 
     this.state = {
       title: 'test',
@@ -32,9 +34,9 @@ class AddArticleView extends React.Component {
       htmlContent: '',
       newArticleID: null,
       uploadDetails: null,
-      clickedLoader: null,
       uploadProgress: null,
-      uploadError: null
+      uploadError: null,
+      articlePicUrl: null
     };
   }
 
@@ -71,6 +73,12 @@ class AddArticleView extends React.Component {
     this.setState({ newArticleID: newArticleID});
   }
 
+  updateImgUrl(articlePicUrl) {
+    this.setState({ 
+      articlePicUrl: articlePicUrl
+    });
+  }
+
   render () {
     if(this.state.newArticleID) {
       return (
@@ -87,6 +95,23 @@ class AddArticleView extends React.Component {
       );
     }
 
+    let imgUploadProgressJSX = <h4>Add a photo (article's cover)</h4>;
+    let uploadProgress = this.state.uploadProgress;
+    if(uploadProgress) {
+      imgUploadProgressJSX = (
+          <div>
+            {uploadProgress.uploadStatusText} ({uploadProgress.progressInPercent}%)
+          </div>
+        );
+    } else if(this.state.articlePicUrl) {
+      let articlePicStyles = {
+        maxWidth: 200, 
+        maxHeight: 200, 
+        margin: 'auto'
+      };
+      imgUploadProgressJSX = <img src={this.state.articlePicUrl} style={articlePicStyles} />;
+    }
+
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Add Article</h1>
@@ -95,32 +120,9 @@ class AddArticleView extends React.Component {
           title="Create an article"
           onChangeTextJSON={this._onDraftJSChange} />
 
-        <h3>{JSON.stringify(this.state.uploadDetails)}</h3>
-        <h3>{JSON.stringify(this.state.uploadProgress)}</h3>
-        <ReactS3Uploader
-          signingUrl="/s3/sign"
-          accept="image/*"
-            onProgress={(progressInPercent, uploadStatusText) => {
-              this.setState({ 
-                uploadProgress: { progressInPercent, uploadStatusText }, 
-                clickedLoader: true,
-                uploadError: null
-              });
-            }} 
-            onError={(errorDetails) => {
-              this.setState({ 
-                clickedLoader: false, 
-                uploadProgress: null,
-                uploadError: errorDetails
-              });
-            }}
-            onFinish={(uploadDetails, val2) => {
-                this.setState({ 
-                  clickedLoader: false, 
-                  uploadProgress: null,
-                  uploadDetails:  uploadDetails
-                });
-            }} />
+        <div style={{margin: '10px 10px 10px 10px'}}> 
+          <ImgUploader updateImgUrl={this.updateImgUrl} />
+        </div>
 
         <RaisedButton
           onClick={this._articleSubmit}
