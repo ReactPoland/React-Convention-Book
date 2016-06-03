@@ -935,8 +935,8 @@ export class LoginForm extends React.Component {
       <Formsy.Form onSubmit={this.props.onSubmit}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Log in</h3>
-          <DefaultInput onChange={(event) => {}} name='username' title='Username (admin)' required />
-          <DefaultInput onChange={(event) => {}} type='password' name='password' title='Password (123456)' required />
+          <DefaultInput onChange={(event) => {}} name='username' title='Username (default in the book is admin)' required />
+          <DefaultInput onChange={(event) => {}} type='password' name='password' title='Password (default in the book is 123456)' required />
           <div style={{marginTop: 24}}>
             <RaisedButton
               secondary={true}
@@ -951,6 +951,29 @@ export class LoginForm extends React.Component {
 }
 ```
 Above we have our LoginForm's component that is using the DefaultInput's component. It's simple React.js' form that after submit is calling the ***this.props.onSubmit*** - this onSubmit function will be definied in ***src/views/LoginView.js***'s smart component in a moment. I won't talk too much about attached styles on that component because it's up to you how you will style it - you will see a screenshot of aplied styles of our app in a moment.
+
+IMPORTANT: if you followed exactly the book's instruction while working on the user's collection, then the default password and username shall be the same as in the title's of DefaultInput's component ("default in the book is admin" and "default in the book is 123456"). 
+
+#### Clarification on the hash and passwords in our pubUsers' collection
+
+We have created hashed password in our pubUsers' collection:
+```
+[
+  {
+    "username" : "admin",
+    "password" : "c5a0df4e293953d6048e78bd9849ec0ddce811f0b29f72564714e474615a7852",
+    "firstName" : "Kamil",
+    "lastName" : "Przeorski",
+    "email" : "kamil@mobilewebpro.pl",
+    "role" : "admin",
+    "verified" : false,
+    "imageUrl" : "http://lorempixel.com/100/100/people/"
+  }
+]
+```
+
+You need to understand how this works, it secures the plain password in order to keep it safe from hackers (in case when a hacker will compromise the database).
+
 
 
 #### Improving the src/views/LoginView.js
@@ -1037,6 +1060,7 @@ Great! Now we are done! Below you can find what you shall see after running ***n
 
 As you can see in the browser's console - we can see the submited credential's object (***credentials Object {username: "admin", password: "123456"}***) and also a token that has been fetched from the backend (***tokenRes eyJhbGciOiJIUzI1NiJ9.YWRtaW5hZG1pbg.NKmrphxbqNcL_jFLBdTWGM6Y_Q78xks5E2TxBZRyjDA***) - all that tells us that we are on a good track in order to implement the login's mechanism in our publishing application.
 
+IMPORTANT: if you get an INVALID's login error then please make sure that you have used the 123456 password while creating the hash. Otherwise, please type in your custom password that is valid in your case.
 
 
 ### Making DashboardView's component
