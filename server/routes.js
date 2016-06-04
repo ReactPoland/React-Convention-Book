@@ -92,7 +92,6 @@ export default ( req, res ) => {
     route: 'articles.add',
     call: (callPath, args) => {
 
-      console.info(1);
       if(sessionObject.isAuthorized === false) {
         return {
           path: ['articles'],
@@ -104,12 +103,9 @@ export default ( req, res ) => {
           value: $error('you must be an editor in order to perform this action')
         }
       }
-      console.info(2);
 
       let newArticleObj = args[0];
-      console.info(JSON.stringify(newArticleObj));
       var article = new Article(newArticleObj);
-      console.info(3);
 
       return article.save(function (err, data) {
         if (err) {

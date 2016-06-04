@@ -11,7 +11,6 @@ import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import ImgUploader from '../../components/articles/ImgUploader';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
-import ReactS3Uploader from 'react-s3-uploader';
 
 const mapStateToProps = (state) => ({
 	...state

@@ -1,7 +1,3 @@
-import configAws from './configAws.js';
-
-// AWS.config.update(configAws);
-// AWS.config.region = configAws.region;
 import http from 'http';
 import express from 'express';
 import cors from 'cors';
