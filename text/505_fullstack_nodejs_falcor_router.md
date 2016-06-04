@@ -196,7 +196,53 @@ and after that past this into the text area:
 ... and click the save button. After all that steps we are done, so we can start with coding the images upload's feature.
 
 
-#### Start coding upload image feature
+#### Start coding upload image feature on the AddArticleView
+
+Before you will be able to continue to code, you need to have all required information about your access details to your S3's bucket (that you've created on the previous pages):
+
+1) AWS_ACCESS_KEY_ID - that was created in the beggining of previous sub-chapter
+
+2) AWS_SECRET_ACCESS_KEY - the same as the AWS access key
+
+3) AWS_BUCKET_NAME - that is the name of your bucket (in our book we called it publishing-app)
+
+4) AWS_REGION_NAME - in our example we will use "eu-central-1"
+
+IMPORTANT: the easiest way to find AWS_BUCKET_NAME and AWS_REGION_NAME is to look on the URL while you are on that view (described in previous sub-chapter):
+
+![properties aws bucket](http://test.przeorski.pl/book/523_empty_bucket_list.png)
+
+Please check the browser's URL on that view, it is:
+```
+https://console.aws.amazon.com/s3/home?region=eu-central-1#&bucket=publishing-app&prefix=
+```
+
+... so the region and bucket's name is clearly in that url (I want to make it pure clear as your region and bucket name can be different, depending on where you live).
+
+
+IMPORTANT: also please make sure that your CORS are setup correctly and your permissions/attach policy is done exactly as described above. Otherwise you can have problems with everything described below.
+
+#### Enviroment variables in node.js
+
+We will pass all those 4 params (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME, AWS_REGION_NAME) via node's enviroment variables.
+
+What are enviroments' variables?
+
+NEXT STEPS:
+
+1) setup node .env and ode-env-file
+2) install:
+"aws-sdk": "^2.3.16",
+"react-s3-uploader": "^3.0.3",
+
+3) then server/configMongoose.js imrpvoe
+
+4) then server/server.js
+
+5) then src/components/articles/ImgUploader.js
+
+6) then src/views/articles/AddArticleView.js
+
 
 ,,, programujemy tutaj :-)
 
@@ -217,9 +263,9 @@ and after that past this into the text area:
 
 7) [DONE] CO dodać picker do article add view
 
-8) [in-progres] CO dodać do bazy (dodawac url z amazone)
+8) [DONE] CO dodać do bazy (dodawac url z amazone)
 
-9) [in-progres] CO wyswietlac w artykule nowo stworzonym
+9) [DONE] CO wyswietlac w artykule nowo stworzonym
 
 10) zaczac opisywac to w ksiazce!
 
