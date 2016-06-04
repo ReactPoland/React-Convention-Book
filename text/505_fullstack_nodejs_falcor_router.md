@@ -255,7 +255,7 @@ $ [[you are in the server/ directory of your project]]
 $ touch .env
 ```
 
-... you have created a server/.env file, next step is to put a content into it:
+... you have created a server/.env file, next step is to put a content into it (from this file the node-env-file's will read the enviroment variables when our app will be running):
 ```
 AWS_ACCESS_KEY_ID=_*_*_*_*_ACCESS_KEY_HERE_*_*_*_*_
 AWS_SECRET_ACCESS_KEY=_*_*_*_*_SECRET_KEY_HERE_*_*_*_*_
@@ -274,16 +274,44 @@ npm i --save react-s3-uploader@3.0.3
 The react-s3-uploader's component works quite well for our use case and it abstracts quite well all the aws-sdk's features for us. The main point here is that we need to have configured the .env's file well (with correct variables) and the react-s3-uploader will do the job on the backend and frontend for us (as you will see below).
 
 
+#### Improving our's article mongoose schema
+
+We need to improve the schema, so we will have a place in our articles' collection for keeping the url of an image. Edit the old artcile's schema:
+
+```
+// this is old codebase to improve:
+var articleSchema = new Schema({
+    articleTitle: String,
+    articleContent: String,
+    articleContentJSON: Object
+  }, 
+  { 
+    minimize: false 
+  }
+);
+```
+
+to the new improved one:
+```
+var articleSchema = new Schema({
+    articleTitle: String,
+    articleContent: String,
+    articleContentJSON: Object,
+    articlePicUrl: { type: String, default: '/static/placeholder.png' }
+  }, 
+  { 
+    minimize: false 
+  }
+);
+```
+
+... as you can find out, we have introduced the articlePicUrl with a default value of ***/static/placeholder.png***. Now we will be able to save an article with a pic's url variable in the article's object (FYI: if you wouldn't update this model, then mongoose wouldn't let you save that value).
+
+
+
 
 
 NEXT STEPS:
-
-1) setup node .env and ode-env-file
-2) install:
-"aws-sdk": "^2.3.16",
-"react-s3-uploader": "^3.0.3",
-
-3) then server/configMongoose.js imrpvoe
 
 4) then server/server.js
 
