@@ -200,7 +200,8 @@ and after that past this into the text area:
 
 Before you will be able to continue to code, you need to have all required information about your access details to your S3's bucket (that you've created on the previous pages):
 
-1) AWS_ACCESS_KEY_ID - that was created in the beggining of previous sub-chapter
+1) AWS_ACCESS_KEY_ID - this comes from the previous sub-chapter where we were creating a user while being on that view:
+![aws copy keys](http://test.przeorski.pl/book/524_aws_IAM.png)
 
 2) AWS_SECRET_ACCESS_KEY - the same as the AWS access key
 
@@ -226,7 +227,54 @@ IMPORTANT: also please make sure that your CORS are setup correctly and your per
 
 We will pass all those 4 params (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME, AWS_REGION_NAME) via node's enviroment variables.
 
-What are enviroments' variables?
+First let's install a node's library that will create enviroments' variables from a file so we will be able to use them within our localhost:
+```
+npm i node-env-file@0.1.8
+```
+
+What are the enviroments' variables? In general, we will use them to pass the variables of some sensitive data to the app - we are talking here specifically about:
+
+a) AWS' secret keys
+
+b) MongoDB's login/password
+
+c) information regarding current enviroment setup (if it is a development or production)
+
+You can read those enviroment variables via accessing it like on the below examples:
+```
+// this is how we will access the variables in the server.js for example:
+env.process.AWS_ACCESS_KEY_ID
+env.process.AWS_SECRET_ACCESS_KEY
+env.process.AWS_BUCKET_NAME
+env.process.AWS_REGION_NAME
+```
+
+... in our local's development enviroment, we will keep those information in the server's directory, so please do as following in your terminal/cmd:
+```
+$ [[you are in the server/ directory of your project]]
+$ touch .env
+```
+
+... you have created a server/.env file, next step is to put a content into it:
+```
+AWS_ACCESS_KEY_ID=_*_*_*_*_ACCESS_KEY_HERE_*_*_*_*_
+AWS_SECRET_ACCESS_KEY=_*_*_*_*_SECRET_KEY_HERE_*_*_*_*_
+AWS_BUCKET_NAME=publishing-app
+AWS_REGION_NAME=eu-central-1
+```
+
+Above may you find out the structure of a node's enviroment file, each new line comes with a key and value. You need to paste there your keys that you have created while reading this chapter. Replace those values with your own: _*_*_*_*_ACCESS_KEY_HERE_*_*_*_*_ and _*_*_*_*_SECRET_KEY_HERE_*_*_*_*_.
+
+
+After you have created the server/.env's file, then let's start with installing required dependency that will abstract whole gig with the image uploading, use npm for that when being in the project's directory:
+```
+npm i --save react-s3-uploader@3.0.3
+```
+
+The react-s3-uploader's component works quite well for our use case and it abstracts quite well all the aws-sdk's features for us. The main point here is that we need to have configured the .env's file well (with correct variables) and the react-s3-uploader will do the job on the backend and frontend for us (as you will see below).
+
+
+
 
 NEXT STEPS:
 
