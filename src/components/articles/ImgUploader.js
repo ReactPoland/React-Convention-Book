@@ -72,4 +72,8 @@ class ImgUploader extends React.Component {
   }
 }
 
+ImgUploader.propTypes = { 
+  updateImgUrl: React.PropTypes.func.isRequired 
+};
+
 export default ImgUploader;

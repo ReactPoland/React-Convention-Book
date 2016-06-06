@@ -381,10 +381,100 @@ Based on that backend's configuration (enviroment variables and setting the s3ro
 
 #### Creating the ImgUploader's component on the front-end
 
+We will create a dump component called ImgUploader. This component will use the react-s3-uploader's library which is doing the job of abstracting the upload to the amazon S3 as for example on a callback you receive information:
+
+1) onProgress - you can find with that callback the progress in percent so a user can see the status of an upload
+
+2) onError - this callback is fired, when an error occurs
+
+3) onFinish - this callback sending us back of a file's location that has been uploaded to the S3
+
+You will learn more in details in a moment, let's create a file first:
+
+```
+$ [[you are in the src/components/articles directory of your project]]
+$ ImgUploader.js
+```
+
+.. so you have created the src/components/articles/ImgUploader.js file, next step is to prepare the imports so on top of the ImgUploader's file do the following:
+```
+"use strict";
+
+import React from 'react';
+import ReactS3Uploader from 'react-s3-uploader';
+import { Paper } from 'material-ui';
 
 
+class ImgUploader extends React.Component {
+  constructor(props) {
+    super(props);
+    this.uploadFinished = this.uploadFinished.bind(this);
+
+    this.state = {
+      uploadDetails: null,
+      uploadProgress: null,
+      uploadError: null,
+      articlePicUrl: props.articlePicUrl
+    };
+  }
+
+  uploadFinished(uploadDetails) {
+    // here will be more code in a moment
+  }
+
+  render () {
+    return <div>S3 Image uploader placeholder</div>;
+  }
+}
+
+ImgUploader.propTypes = { 
+  updateImgUrl: React.PropTypes.func.isRequired 
+};
+
+export default ImgUploader;
+```
+
+As you can find above, we have initiated the ImgUploader's component with a div that returns a temporary placeholder in the render's function.
+
+We have also preared the propTypes with a required property called as updateImgUrl - this will be a callback function which will send a final uploaded image's location (that has to be saved in the database, we will use this updateImgUrl's props in a moment).
+
+In the state of that ImgUploader's component we have:
+```
+// this is already in your codebase:
+this.state = {
+  uploadDetails: null,
+  uploadProgress: null,
+  uploadError: null,
+  articlePicUrl: props.articlePicUrl
+};
+```
+
+In these's variables we will keep all the state of our component depending on a current status and props.articlePicUrl will send the url's details up to the AddArticleView's component (we will do it later in that chapter, after finishing the ImgUploader's component).
 
 
+#### Wrapping up the ImgUploader's component
+
+Next step is to improve the uploadFinished's function in our ImgUploader so please replace the old empty function:
+```
+  uploadFinished(uploadDetails) {
+    // here will be more code in a moment
+  }
+```
+
+... with the following:
+```
+  uploadFinished(uploadDetails) {
+    let articlePicUrl = '/s3/img/'+uploadDetails.filename;
+    this.setState({ 
+      uploadProgress: null,
+      uploadDetails:  uploadDetails,
+      articlePicUrl: articlePicUrl
+    });
+    this.props.updateImgUrl(articlePicUrl);
+  }
+```
+
+... as you can see, the uploadDetails.filename's variable comes from the ReactS3Uploader's component which we have improted on top of the ImgUploader's file. After the success of upload we set up the uploadProgress back to null, set the details of our upload and send back the details via the callback by using this.props.updateImgUrl(articlePicUrl).
 
 
 NEXT STEPS:
