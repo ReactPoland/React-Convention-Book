@@ -316,8 +316,6 @@ import s3router from 'react-s3-uploader/s3router';
 ```
 and then underneath the imports add the enviroments' variables load function:
 ```
-
-```
 env(__dirname + '/.env');
 ```
 
