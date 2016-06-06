@@ -467,10 +467,114 @@ Next step is to improve the uploadFinished's function in our ImgUploader so plea
 
 ... as you can see, the uploadDetails.filename's variable comes from the ReactS3Uploader's component which we have improted on top of the ImgUploader's file. After the success of upload we set up the uploadProgress back to null, set the details of our upload and send back the details via the callback by using this.props.updateImgUrl(articlePicUrl).
 
+The next step is to improve our render's function in the ImgUploader:
+```
+  render () {
+    let imgUploadProgressJSX = <h4>Add a photo (article's cover)</h4>;
+    let uploadProgress = this.state.uploadProgress;
+    if(uploadProgress) {
+      imgUploadProgressJSX = (
+          <div>
+            {uploadProgress.uploadStatusText} ({uploadProgress.progressInPercent}%)
+          </div>
+        );
+    } else if(this.state.articlePicUrl) {
+      let articlePicStyles = {
+        maxWidth: 200, 
+        maxHeight: 200, 
+        margin: 'auto'
+      };
+      imgUploadProgressJSX = <img src={this.state.articlePicUrl} style={articlePicStyles} />;
+    }
+
+    return <div>S3 Image uploader placeholder</div>;
+  }
+```
+The above's render is incomplete, but let's describe what we have added so far: the code is simply all about getting information about uploadProgress via this.state (first if statement above). The second else if(this.state.articlePicUrl) is all about rendering the image after upload is complete. OK, but from where we will get that information, here is the rest:
+```
+    let uploaderJSX = (
+        <ReactS3Uploader
+        signingUrl="/s3/sign"
+        accept="image/*"
+          onProgress={(progressInPercent, uploadStatusText) => {
+            this.setState({ 
+              uploadProgress: { progressInPercent, uploadStatusText }, 
+              uploadError: null
+            });
+          }} 
+          onError={(errorDetails) => {
+            this.setState({ 
+              uploadProgress: null,
+              uploadError: errorDetails
+            });
+          }}
+          onFinish={(uploadDetails) => {
+            this.uploadFinished(uploadDetails);
+          }} />
+      );
+```
+
+The uploaderJSX's variable is exactly our react-s3-uploader's library. As you can find above, on progress we set the state regarding uploadProgress: { progressInPercent, uploadStatusText } and we setup the uploadError: null (in case if in previous action, the user of our app had an error message). On error we are set state, so we can tell it to the user. On finish, we run the uploadFinished function which was described in details above...
+
+Complete render function of the ImgUploader shall be looking as following:
+```
+  render () {
+    let imgUploadProgressJSX = <h4>Add a photo (article's cover)</h4>;
+    let uploadProgress = this.state.uploadProgress;
+    if(uploadProgress) {
+      imgUploadProgressJSX = (
+          <div>
+            {uploadProgress.uploadStatusText} ({uploadProgress.progressInPercent}%)
+          </div>
+        );
+    } else if(this.state.articlePicUrl) {
+      let articlePicStyles = {
+        maxWidth: 200, 
+        maxHeight: 200, 
+        margin: 'auto'
+      };
+      imgUploadProgressJSX = <img src={this.state.articlePicUrl} style={articlePicStyles} />;
+    }
+    
+    let uploaderJSX = (
+        <ReactS3Uploader
+        signingUrl="/s3/sign"
+        accept="image/*"
+          onProgress={(progressInPercent, uploadStatusText) => {
+            this.setState({ 
+              uploadProgress: { progressInPercent, uploadStatusText }, 
+              uploadError: null
+            });
+          }} 
+          onError={(errorDetails) => {
+            this.setState({ 
+              uploadProgress: null,
+              uploadError: errorDetails
+            });
+          }}
+          onFinish={(uploadDetails) => {
+            this.uploadFinished(uploadDetails);
+          }} />
+      );
+
+    return (
+      <Paper zDepth={1} style={{padding: 32, margin: 'auto', width: 300}}>
+        {imgUploadProgressJSX}
+        {uploaderJSX}
+      </Paper>
+    );
+  }
+```
+
+As you can see above, there is whole render of the ImgUploader. We use inline styled Paper's component (from material-ui) so the whole thing will be looking better for an end article's user/editor.
+
+
+#### Last tweaks of PublishingApp, AddArticleView, ArticleCard & DashboardView
+
+
+
 
 NEXT STEPS:
-
-4) then server/server.js
 
 5) then src/components/articles/ImgUploader.js
 
