@@ -2,7 +2,6 @@ import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import falcor from 'falcor';
 import falcorExpress from 'falcor-express';
 import FalcorRouter from 'falcor-router';
@@ -36,13 +35,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 
 app.use('/s3', s3router({
-    bucket: 'publishing-app',
-    region: 'eu-central-1', //optional
-    signatureVersion: 'v4', //optional (use for some amazon regions: frankfurt and others)
-    headers: {'Access-Control-Allow-Origin': '*'}, // optional
-    ACL: 'public-read' // this is default
+  bucket: process.env.AWS_BUCKET_NAME,
+  region: process.env.AWS_REGION_NAME,
+  signatureVersion: 'v4',
+  headers: {'Access-Control-Allow-Origin': '*'}, 
+  ACL: 'public-read'
 }));
-
 
 app.use('/model.json', falcorExpress.dataSourceRoute(function(req, res) {
   return new FalcorRouter(

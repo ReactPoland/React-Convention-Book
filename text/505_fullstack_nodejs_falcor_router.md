@@ -305,8 +305,76 @@ var articleSchema = new Schema({
 );
 ```
 
-... as you can find out, we have introduced the articlePicUrl with a default value of ***/static/placeholder.png***. Now we will be able to save an article with a pic's url variable in the article's object (FYI: if you wouldn't update this model, then mongoose wouldn't let you save that value).
+... as you can find out, we have introduced the articlePicUrl with a default value of ***/static/placeholder.png***. Now we will be able to save an article with a pic's url variable in the article's object (FYI: if you would forgot to update the Mongoose's model, then it wouldn't let you save that value into the database).
 
+#### Adding routes for S3's upload
+
+We need to import two new libraries in the server/server.js file:
+```
+import env from 'node-env-file';
+import s3router from 'react-s3-uploader/s3router';
+```
+and then underneath the imports add the enviroments' variables load function:
+```
+
+```
+env(__dirname + '/.env');
+```
+
+... so we end up with something like:
+```
+// don't write it, this is how shall be looking your server/server.js file:
+import http from 'http';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import falcor from 'falcor';
+import falcorExpress from 'falcor-express';
+import FalcorRouter from 'falcor-router';
+import routes from './routes.js';
+
+import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import { renderToStaticMarkup } from 'react-dom/server'
+import ReactRouter from 'react-router';
+import { RoutingContext, match } from 'react-router';
+import * as hist  from 'history';
+import rootReducer from '../src/reducers';
+import reactRoutes from '../src/routes';
+import fetchServerSide from './fetchServerSide';
+import env from 'node-env-file';
+import s3router from 'react-s3-uploader/s3router';
+
+// Load any undefined ENV variables form a specified file. 
+env(__dirname + '/.env');
+
+var app = express();
+app.server = http.createServer(app);
+
+// CORS - 3rd party middleware
+app.use(cors());
+
+// This is required by falcor-express middleware to work correctly with falcor-browser
+app.use(bodyParser.json({extended: false}));
+app.use(bodyParser.urlencoded({extended: false}));
+```
+
+.. I'm putting all this above so you can make sure that your server/server.js file looks simillar. Just for the clarification the env(__dirname + '/.env'); is telling the location of the .env's file in our structure (as you can console.log that the __dirname's variable is a system location of a server's file - this must match with the real .env file's location so it can be found by the system).
+
+Next part is to add this to our server/server.js:
+
+```
+app.use('/s3', s3router({
+  bucket: process.env.AWS_BUCKET_NAME,
+  region: process.env.AWS_REGION_NAME,
+  signatureVersion: 'v4',
+  headers: {'Access-Control-Allow-Origin': '*'}, 
+  ACL: 'public-read'
+}));
+```
+
+IMPORTANT: please replace above's details to yours (bucket: 'publishing-app' and region: 'eu-central-1')
 
 
 
