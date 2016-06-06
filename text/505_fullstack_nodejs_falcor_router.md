@@ -194,7 +194,7 @@ and after that past this into the text area:
 Before you will be able to continue to code, you need to have all required information about your access details to your S3's bucket (that you've created on the previous pages):
 
 1) AWS_ACCESS_KEY_ID - this comes from the previous sub-chapter where we were creating a user while being on that view:
-![aws copy keys](http://test.przeorski.pl/book/524_aws_IAM.png)
+![aws copy keys](http://test.przeorski.pl/book/524_aws_IAM2.png)
 
 2) AWS_SECRET_ACCESS_KEY - the same as the AWS access key
 
@@ -204,7 +204,7 @@ Before you will be able to continue to code, you need to have all required infor
 
 IMPORTANT: the easiest way to find AWS_BUCKET_NAME and AWS_REGION_NAME is to look on the URL while you are on that view (described in previous sub-chapter):
 
-![properties aws bucket](http://test.przeorski.pl/book/523_empty_bucket_list.png)
+![properties aws bucket](http://test.przeorski.pl/book/523_empty_bucket_list2.png)
 
 Please check the browser's URL on that view, it is:
 ```
