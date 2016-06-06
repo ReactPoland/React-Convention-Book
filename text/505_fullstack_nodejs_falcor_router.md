@@ -100,7 +100,7 @@ The last thing is to add the AmazonS3FullAccess's permissions with the following
 
 1) Go to the Permissions tab:
 
-![permissions tab aws](http://test.przeorski.pl/book/513b_permissions_tab.png.png)
+![permissions tab aws](http://test.przeorski.pl/book/513b_policy_tab.png.png)
 
 2) Click on the "Attach Policy" and choose AmazonS3FullAccess
 
