@@ -569,9 +569,181 @@ Complete render function of the ImgUploader shall be looking as following:
 As you can see above, there is whole render of the ImgUploader. We use inline styled Paper's component (from material-ui) so the whole thing will be looking better for an end article's user/editor.
 
 
-#### Last tweaks of PublishingApp, AddArticleView, ArticleCard & DashboardView
+#### The AddArticleView's improvements
+
+We need to add the ImgUploader's component into the AddArticleView, first we need to import it in the src/views/articles/AddArticleView.js file as following:
+```
+import ImgUploader from '../../components/articles/ImgUploader';
+```
+
+Next in the constructor of the AddArticleView change this old code:
+```
+// this is old, don't write it:
+class AddArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleSubmit = this._articleSubmit.bind(this);
+
+    this.state = {
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      newArticleID: null
+    };
+  }
+```
+
+... into a little improved one as:
+
+```
+class AddArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleSubmit = this._articleSubmit.bind(this);
+    this.updateImgUrl = this.updateImgUrl.bind(this);
+
+    this.state = {
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      newArticleID: null,
+      articlePicUrl: '/static/placeholder.png'
+    };
+  }
+```
+
+As you can find, we have binded this to the updateImgUrl's function and added a new state's variable called articlePicUrl (from default, we will point to the /static/placeholder.png so in case that a user won't choose a cover then we will put a default one for him).
+
+then let's improve the functions of that component, so this old one:
+```
+// this is old codebase, just for your reference:
+  async _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    console.debug('this.state.contentJSON');
+    console.debug(this.state.contentJSON);
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+      then((result) => {
+        return falcorModel.getValue(
+            ['articles', 'newArticleID']
+          ).then((articleID) => {
+            return articleID;
+          });
+      });
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID});
+  }
+```
+
+... this above is to improve as following:
+```
+  async _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
+    }
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+      then((result) => {
+        return falcorModel.getValue(
+            ['articles', 'newArticleID']
+          ).then((articleID) => {
+            return articleID;
+          });
+      });
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID });
+  }
+
+  updateImgUrl(articlePicUrl) {
+    this.setState({ 
+      articlePicUrl: articlePicUrl
+    });
+  }
+```
+
+As you can find out we have added ***articlePicUrl: this.state.articlePicUrl*** to the ***newArticle***'s object. We also have introduced a new function called updateImgUrl which is simply a callback which sets a new state with the articlePicUrl's variable (in that this.state.articlePicUrl we keep the current's article's image url that is going to be saved into the database).
+
+The only thing to improve in that src/views/articles/AddArticleView.js is our current render (old one) is:
+```
+// your current old codebase to improve:
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+        <WYSWIGeditor
+          name="addarticle"
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+          <RaisedButton
+            onClick={this._articleSubmit}
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Article'} />
+      </div>
+    );
+  }
+```
+
+... we need it to improve so we will use the ImgUploader:
+
+```
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+        <WYSWIGeditor
+          name="addarticle"
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+
+        <div style={{margin: '10px 10px 10px 10px'}}> 
+          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+        </div>
+
+        <RaisedButton
+          onClick={this._articleSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Article'} />
+      </div>
+    );
+  }
+```
+
+Above you can find that we use the props for sending down the current articlePicUrl (will be handy later and we also tell the default placeholder.png's location) and the callback to update the img url called ***updateImgUrl***.
+
+After you will visit the http://localhost:3000/add-article route, then you shall see a new image picker that will be looking as this between the WYSWIG box and the "Submit Article"'s button (check the screenshot):
 
 
+![image uploader add article view](http://test.przeorski.pl/book/525_image_uploader_addarticleview.png)
+
+#### Remaining tweaks of PublishingApp, ArticleCard & DashboardView
+
+We are able to add an article, we need to unmock the images' urls in our views so we can see real url from the database (instead mocked in an img src props). Let start with 
+
+:-) to do
 
 
 NEXT STEPS:
@@ -579,36 +751,6 @@ NEXT STEPS:
 5) then src/components/articles/ImgUploader.js
 
 6) then src/views/articles/AddArticleView.js
-
-
-,,, programujemy tutaj :-)
-
-
-0) [DONE] BO CO opisać jak wygenerować kody
-
-1) [DONE] BO CO stworzyć bucket na S3
-
-2) [DONE] CO zainstalowac react pickera u nas
-
-3) [DONE] CO zmienic konfiguracje
-
-4) [DONE] CO .env
-
-5) [DONE] czy dziala na glownej?
-
-6) [DONE] commit kodu
-
-7) [DONE] CO dodać picker do article add view
-
-8) [DONE] CO dodać do bazy (dodawac url z amazone)
-
-9) [DONE] CO wyswietlac w artykule nowo stworzonym
-
-10) zaczac opisywac to w ksiazce!
-
-NodeJS/ExpressJS with falcor Express - moving the
-Falcor's model from the client-sideto backend side, using
-falcor-router
 
 
 
