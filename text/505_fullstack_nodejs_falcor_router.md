@@ -100,20 +100,13 @@ The last thing is to add the AmazonS3FullAccess's permissions with the following
 
 1) Go to the Permissions tab:
 
-![permissions tab aws](http://test.przeorski.pl/book/513b_policy_tab.png.png)
+![permissions tab aws](http://test.przeorski.pl/book/513b_policy_tab.png)
 
 2) Click on the "Attach Policy" and choose AmazonS3FullAccess
 
 3) After attaching then it shall be listed the same way as on the example below:
 
 ![aws attach policy](http://test.przeorski.pl/book/514b_attach_policy.png)
-
-
-publishingapp
-Access Key ID:
-AKIAI3Y54WVG5JM4VUHA
-Secret Access Key:
-k3JxxCbByqy+qTXojf7xRiJ0oRI6w3ZEmENE1I0l
 
 
 #### Creating a new bucket for the image's files
