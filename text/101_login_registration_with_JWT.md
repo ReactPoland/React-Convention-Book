@@ -1535,6 +1535,49 @@ let newUserId = await falcorModel.getValue(['register', 'newUserId']);
 2) If the user has registered correctly, then we have their new id and we are asking user to login with history's push state (***this.props.history.pushState(null, '/login');***).
 
 
+#### Creating a RegisterView's route
+
+In the ***src/routes/index.js update the file and add a new route:
+```
+import React                        from 'react';
+import { Route, IndexRoute }        from 'react-router';
+
+/* wrappers */
+import CoreLayout                   from '../layouts/CoreLayout';
+
+/* home view */
+import PublishingApp                    from '../layouts/PublishingApp';
+
+/* auth views */
+import LoginView                    from '../views/LoginView';
+import RegisterView                    from '../views/LoginView';
+
+export default (
+  <Route component={CoreLayout} path='/'>
+    <IndexRoute component={PublishingApp} name='home' />
+    <Route component={LoginView} path='login' name='login' />
+    <Route component={RegisterView} path='register' name='register' />
+  </Route>
+);
+```
+
+... and of course add the button to the layout with improving the render's function in the src/layouts/CoreLayout.js:
+```
+  render () {
+    return (
+      <div>
+        <span>Links: <Link to='/register'>Register</Link> | <Link to='/login'>Login</Link> | <Link to='/'>Home Page</Link></span>
+          <br/>
+          {this.props.children}
+      </div>
+    );
+  }
+```
+
+
+#### The final effect of our work
+
+
 At this point we shall be able to register with this form:
 
 ![registration form](http://test.przeorski.pl/book/107_registration_form.png)
