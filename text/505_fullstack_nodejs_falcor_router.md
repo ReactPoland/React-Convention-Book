@@ -739,6 +739,12 @@ After you will visit the http://localhost:3000/add-article route, then you shall
 
 ![image uploader add article view](http://test.przeorski.pl/book/525_image_uploader_addarticleview.png)
 
+Of course if you followed correctly all the instructions after clicking the "Choose file" you shall be able to upload a new image into the S3's bucket and the image in the thumbnail will be replaced as on this example:
+
+![after upload](http://test.przeorski.pl/book/526_uploaded_image_on_the_article.png)
+
+As you can see, we can upload an image - the next step is to unmock viewing them so we can see that our article has a dog on the cover (and the dog's image comes from our articles' collection in DB).
+
 #### Remaining tweaks of PublishingApp, ArticleCard & DashboardView
 
 We are able to add an article, we need to unmock the images' urls in our views so we can see real url from the database (instead mocked in an img src props). Let start with 
