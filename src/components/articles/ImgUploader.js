@@ -1,17 +1,8 @@
 "use strict";
 
 import React from 'react';
-import Falcor from 'falcor';
-import { Link } from 'react-router';
-import falcorModel from '../../falcorModel.js';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import articleActions from '../../actions/article.js';
-import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
-import { stateToHTML } from 'draft-js-export-html';
-import RaisedButton from 'material-ui/lib/raised-button';
 import ReactS3Uploader from 'react-s3-uploader';
-import { Paper, Divider } from 'material-ui';
+import { Paper } from 'material-ui';
 
 
 class ImgUploader extends React.Component {
@@ -58,7 +49,6 @@ class ImgUploader extends React.Component {
     return (
       <Paper zDepth={1} style={{padding: 32, margin: 'auto', width: 300}}>
         {imgUploadProgressJSX}
-        <Divider style={{margin: '10 10 10 10'}} />
         <ReactS3Uploader
           signingUrl="/s3/sign"
           accept="image/*"

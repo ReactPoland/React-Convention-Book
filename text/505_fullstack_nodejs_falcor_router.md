@@ -374,7 +374,15 @@ app.use('/s3', s3router({
 }));
 ```
 
-IMPORTANT: please replace above's details to yours (bucket: 'publishing-app' and region: 'eu-central-1')
+As you can find above, we have started using the enviroments' variable that we defined in the server/.env file. For me the process.env.AWS_BUCKET_NAME is equal to "publishing-app", but if you have defined it differently, then it will retrieve other value from the server/.env (thanks to the env's express middleware that we have defined a moment ago).
+
+
+Based on that backend's configuration (enviroment variables and setting the s3router's with help of the import s3router from 'react-s3-uploader/s3router') we shall be able to use the AWS s3's bucket. We need to prepare the front-end side which first will be implemented on the add an article's view.
+
+#### Creating the ImgUploader's component on the front-end
+
+
+
 
 
 
