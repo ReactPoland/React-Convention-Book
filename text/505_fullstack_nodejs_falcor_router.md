@@ -928,7 +928,7 @@ and of course the new code is improve slightly:
       </Paper>);
   }
 ```
-.. at the beggining of the render we do ***let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';*** and later we use that in our img's JSX (<img src={articlePicUrl} height="190" />).
+.. at the beggining of the render we do ***let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';*** and later we use that in our img's JSX (img src={articlePicUrl} height="190").
 
 After those two changes, you can see the article with a real cover as in our example:
 
