@@ -29,7 +29,7 @@ class ImgUploader extends React.Component {
   }
 
   render () {
-    let imgUploadProgressJSX = <h4>Add a photo (article's cover)</h4>;
+    let imgUploadProgressJSX = null;
     let uploadProgress = this.state.uploadProgress;
     if(uploadProgress) {
       imgUploadProgressJSX = (
@@ -69,6 +69,7 @@ class ImgUploader extends React.Component {
 
     return (
       <Paper zDepth={1} style={{padding: 32, margin: 'auto', width: 300}}>
+        <h4>Add a photo (article's cover)</h4>
         {imgUploadProgressJSX}
         {uploaderJSX}
       </Paper>

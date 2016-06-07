@@ -1750,6 +1750,35 @@ The new code with the auth checks:
 // code has been striped out from here for the sake of brevity, nothing below changes
 ```
 
+#### Last front-end improvements
+
+In the src/layouts/PublishingApp.js improve the _fetch function:
+```
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON']]). 
+      then((articlesResponse) => {  
+        return articlesResponse.json.articles;
+      }).catch(e => {
+        return 500;
+      });
+
+    if(articles === 500) {
+      return;
+    }
+
+    this.props.articleActions.articlesList(articles);
+  }
+```
+... we started to using catch because if you will try to fetch an endpoint which returns an error, then you must also manage it in the certain async function. This is general showcase as in our example we don't secure the articles' fetching routes at all (500 is an error identification code and this is just an example).
+
+
 #### A summary of the $error returns on the backend
 
 As you see the returns are almost the same, we can make a helper function for that so there will be less code, but you need to remember that you need to put the path similar to one that you request when returning an error. For example, if you are on the articles.update, then you need return an error in the articles' path (or if you are on XYZ.update, then the error goes to the XYZ's path).

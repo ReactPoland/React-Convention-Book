@@ -470,7 +470,7 @@ Next step is to improve the uploadFinished's function in our ImgUploader so plea
 The next step is to improve our render's function in the ImgUploader:
 ```
   render () {
-    let imgUploadProgressJSX = <h4>Add a photo (article's cover)</h4>;
+    let imgUploadProgressJSX;
     let uploadProgress = this.state.uploadProgress;
     if(uploadProgress) {
       imgUploadProgressJSX = (
@@ -519,7 +519,7 @@ The uploaderJSX's variable is exactly our react-s3-uploader's library. As you ca
 Complete render function of the ImgUploader shall be looking as following:
 ```
   render () {
-    let imgUploadProgressJSX = <h4>Add a photo (article's cover)</h4>;
+    let imgUploadProgressJSX;
     let uploadProgress = this.state.uploadProgress;
     if(uploadProgress) {
       imgUploadProgressJSX = (
