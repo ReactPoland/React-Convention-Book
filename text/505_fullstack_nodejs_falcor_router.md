@@ -749,15 +749,236 @@ As you can see, we can upload an image - the next step is to unmock viewing them
 
 We are able to add an article, we need to unmock the images' urls in our views so we can see real url from the database (instead mocked in an img src props). Let start with 
 
-:-) to do
 
+Let's start with the src/layouts/PublishingApp.js and improve the old _fetch function:
+```
+// old codebase to improve:
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
 
-NEXT STEPS:
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON']]). 
+      then((articlesResponse) => {  
+        return articlesResponse.json.articles;
+      }).catch(e => {
+        return 500;
+      });
 
-5) then src/components/articles/ImgUploader.js
+    if(articles === 500) {
+      return;
+    }
 
-6) then src/views/articles/AddArticleView.js
+    this.props.articleActions.articlesList(articles);
+  }
+```
 
+... and this above please improve to:
+```
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON', 'articlePicUrl']]). 
+      then((articlesResponse) => {  
+        return articlesResponse.json.articles;
+      }).catch(e => {
+        console.debug(e);
+        return 500;
+      });
+
+    if(articles === 500) {
+      return;
+    }
+
+    this.props.articleActions.articlesList(articles);
+  }
+```
+as you can find above, we have started to fetching the ***articlePicUrl*** via falcorModel.get's method. 
+
+Next step also in the PublishingApp's file is to improve the render function from so you need to improve this below:
+```
+// old code:
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let currentArticleJSX = (
+        <div key={articleKey}>
+          <ArticleCard 
+            title={articleDetails.articleTitle}
+            content={articleDetails.articleContent} />
+        </div>
+      );
+```
+
+and you need to add a new property which will pass down the pic url:
+```
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let currentArticleJSX = (
+        <div key={articleKey}>
+          <ArticleCard 
+            title={articleDetails.articleTitle}
+            content={articleDetails.articleContent} 
+            articlePicUrl={articleDetails.articlePicUrl} />
+        </div>
+      );
+```
+
+.. as you can find above, we are passing down the fetched articlePicUrl down to the ArticleCard's component.
+
+#### Improving the ArticleCard's component 
+
+After we pass down the articlePicUrl's variable via props, we need to improve this below (src/components/ArticleCard.js):
+
+```
+// old code to improve:
+  render() {
+    let title = this.props.title || 'no title provided';
+    let content = this.props.content || 'no content provided';
+
+    let paperStyle = {
+      padding: 10, 
+      width: '100%', 
+      height: 300
+    };
+
+    let leftDivStyle = {
+      width: '30%', 
+      float: 'left'
+    }
+    
+    let rightDivStyle = {
+      width: '60%', 
+      float: 'left', 
+      padding: '10px 10px 10px 10px'
+    }
+
+    return (
+      <Paper style={paperStyle}>
+        <CardHeader
+          title={this.props.title}
+          subtitle="Subtitle"
+          avatar="/static/avatar.png"
+        />
+
+        <div style={leftDivStyle}>
+          <Card >
+            <CardMedia
+              overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
+              <img src="/static/placeholder.png" height="190" />
+            </CardMedia>
+          </Card>
+        </div>
+        <div style={rightDivStyle}>
+          <div dangerouslySetInnerHTML={{__html: content}} />
+        </div>
+      </Paper>);
+  }
+```
+
+and of course the new code is improve slightly:
+
+```
+  render() {
+    let title = this.props.title || 'no title provided';
+    let content = this.props.content || 'no content provided';
+    let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';
+
+    let paperStyle = {
+      padding: 10, 
+      width: '100%', 
+      height: 300
+    };
+
+    let leftDivStyle = {
+      width: '30%', 
+      float: 'left'
+    }
+    
+    let rightDivStyle = {
+      width: '60%', 
+      float: 'left', 
+      padding: '10px 10px 10px 10px'
+    }
+
+    return (
+      <Paper style={paperStyle}>
+        <CardHeader
+          title={this.props.title}
+          subtitle="Subtitle"
+          avatar="/static/avatar.png"
+        />
+
+        <div style={leftDivStyle}>
+          <Card >
+            <CardMedia
+              overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
+              <img src={articlePicUrl} height="190" />
+            </CardMedia>
+          </Card>
+        </div>
+        <div style={rightDivStyle}>
+          <div dangerouslySetInnerHTML={{__html: content}} />
+        </div>
+      </Paper>);
+  }
+```
+.. at the beggining of the render we do ***let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';*** and later we use that in our img's JSX (<img src={articlePicUrl} height="190" />).
+
+After those two changes, you can see the article with a real cover as in our example:
+
+![article example](http://test.przeorski.pl/book/527_article_with_a_dog_img_cover.png)
+
+#### Improving the DashboardView's component
+
+Let's improve the dashboard with the cover so at the location src/views/DashboardView.js change this below:
+```
+// old code:
+  render () {
+    let articlesJSX = [];
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let currentArticleJSX = (
+        <Link to={`/edit-article/${articleDetails['_id']}`}>
+          <ListItem
+            key={articleKey}
+            leftAvatar={<img src="/static/placeholder.png"  width="50" height="50" />}
+            primaryText={articleDetails.articleTitle}
+            secondaryText={articleDetails.articleContent}
+          />
+        </Link>
+      );
+
+      articlesJSX.push(currentArticleJSX);
+    });
+```
+
+... with the slighly improved:
+```
+  render () {
+    let articlesJSX = [];
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let articlePicUrl = articleDetails.articlePicUrl || '/static/placeholder.png';
+      let currentArticleJSX = (
+        <Link to={`/edit-article/${articleDetails['_id']}`}>
+          <ListItem
+            key={articleKey}
+            leftAvatar={<img src={articlePicUrl} width="50" height="50" />}
+            primaryText={articleDetails.articleTitle}
+            secondaryText={articleDetails.articleContent}
+          />
+        </Link>
+      );
+
+      articlesJSX.push(currentArticleJSX);
+    });
+```
+
+.. as you can find above, we have replaced the mocked placeholder with a real cover's photo so on our articles' dashboard (that is available after login) we will find real images in the thumbnails.
 
 
 
