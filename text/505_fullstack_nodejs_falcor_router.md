@@ -985,7 +985,7 @@ Let's improve the dashboard with the cover so at the location src/views/Dashboar
 TO-DO edit an article's cover photo
 
 
-### Remaining things to do in our publishing app
+### Remaining things within our publishing app
 
 In general, the things that we will finish further in this chapter are following:
 
@@ -999,10 +999,28 @@ In general, the things that we will finish further in this chapter are following
 
 
 
+NEXT STEPS
+
+1) skodzić edycje covera
+
+2) opisac w książce ^^^
+
+3) skodzić ability to add / edit title and subtitle
+
+4) skodzić excerpts
+
+5) skodzic dashboard hotfix
+
+6) opisać od 3 do 5 punkty
+
+7) skodzić slugs and article's subpage
+
 
 MISSING PARTS:
 - refactoring (5 pages)
 - unit testing 
+- edycja zdjęcia profilowego
+- author ID w artykule
 
 
 
