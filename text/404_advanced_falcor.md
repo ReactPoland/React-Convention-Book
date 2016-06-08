@@ -1536,6 +1536,40 @@ $ npm start
 
 If you run the app, and on the main page you see the error message as on the screenshot, then it tells you that you are good!
 
+
+#### After a test delete the code from articles' route
+
+That above was only a test, if you whole fullstack setup is correct and is working. Don't forget to clearup the articles[{integers}] so the old:
+```
+// this is old:
+```
+  {
+    route: 'articles[{integers}]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return {
+        path: ['articles'],
+        value: $error('auth error')
+      }
+
+      return Article.find({}, '_id', function(err, articlesDocs) {
+      // here below is some striped code
+```
+
+... is replaced to the proper one as following:
+```
+  {
+    route: 'articles[{integers}]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return Article.find({}, '_id', function(err, articlesDocs) {
+      // here below is some striped code
+```
+
+... as you can see, we have removed the test error's return above so it will work properly again.
+
 #### Wrapping up the routes' security
 
 
