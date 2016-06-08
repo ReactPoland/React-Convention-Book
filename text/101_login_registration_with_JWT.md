@@ -732,11 +732,9 @@ In the above's code we are importing the rootReducer that we've created recently
 At the end, we export a store which is composed of many different's reducers (currently routing and article's reducer that you can find in ***reducer/index.js***) and is able to handle the server rendering initial's state.
 
 
-#### Last tweaks in layouts/PublishingApp.js before running the app
+#### Tweaks in layouts/PublishingApp.js
 
-The last thing that changed in our app is that we have out-of-date code in PublishingApp.
-
-Why outdated? Because we have introduced rootReducer and combineReducers so if you will check your code in render of PublishingApp here:
+We have out-of-date code in PublishingApp. Why outdated? Because we have introduced rootReducer and combineReducers so if you will check your code in render of PublishingApp here:
 ```
     let articlesJSX = [];
     for(let articleKey in this.props) {
@@ -766,9 +764,63 @@ Why outdated? Because we have introduced rootReducer and combineReducers so if y
 
 Do you see the difference? The old ***for(let articleKey in this.props)*** has changed into ***for(let articleKey in this.props.article)*** and ***this.props[articleKey]*** has changed to ***this.props.article[articleKey]***. Why? I will recall again: now every new reducer will be available in our app via it's name created in ***routes/index.js***. We have named our reducer article, so we now had to add this into ***this.props.article*** to make this stuff works together.
 
+#### Last changes in src/app.js before running the app
+
+Last thing is to improve the src/app.js so it will use the Root's container. We need to change the old:
+
+```
+// old codebase, to improve:
+import React from 'react'
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import article from './reducers/article'
+import PublishingApp from './layouts/PublishingApp'
+
+let store = createStore(article)
+
+render(
+    <Provider store={store}>
+        <PublishingApp store={store} />
+    </Provider>,
+    document.getElementById('publishingAppRoot')
+);
+```
+
+... the above's code we need to change to the below's one:
+
+```
+import React                  from 'react';
+import ReactDOM               from 'react-dom';
+import createBrowserHistory   from 'history/lib/createBrowserHistory';
+import { syncReduxAndRouter } from 'redux-simple-router';
+import Root                   from './containers/Root';
+import configureStore         from './store/configureStore';
+
+const target  = document.getElementById('publishingAppRoot');
+const history = createBrowserHistory();
+
+export const store = configureStore(window.__INITIAL_STATE__);
+
+syncReduxAndRouter(history, store);
+
+const node = (
+  <Root
+    history={history}
+    store={store}
+  />
+);
+
+ReactDOM.render(node, target);
+```
+
+We start using the Root's instead of the Provider directly, and we need to send the store and history's props below to the Root component. The ***export const store = configureStore(window.__INITIAL_STATE__)***'s part is here for the server's side rendering which we will add in one of the next chapters. We also use the history's library to manage browser's history with the JavaScript.
+
+
 #### Screenshots of our running app:
 
 Currently when you do ***npm start*** then you will see as following two routes:
+
 
 #### Home Page:
 
@@ -883,8 +935,8 @@ export class LoginForm extends React.Component {
       <Formsy.Form onSubmit={this.props.onSubmit}>
         <Paper zDepth={1} style={{padding: 32}}>
           <h3>Log in</h3>
-          <DefaultInput onChange={(event) => {}} name='username' title='Username (admin)' required />
-          <DefaultInput onChange={(event) => {}} type='password' name='password' title='Password (123456)' required />
+          <DefaultInput onChange={(event) => {}} name='username' title='Username (default in the book is admin)' required />
+          <DefaultInput onChange={(event) => {}} type='password' name='password' title='Password (default in the book is 123456)' required />
           <div style={{marginTop: 24}}>
             <RaisedButton
               secondary={true}
@@ -899,6 +951,29 @@ export class LoginForm extends React.Component {
 }
 ```
 Above we have our LoginForm's component that is using the DefaultInput's component. It's simple React.js' form that after submit is calling the ***this.props.onSubmit*** - this onSubmit function will be definied in ***src/views/LoginView.js***'s smart component in a moment. I won't talk too much about attached styles on that component because it's up to you how you will style it - you will see a screenshot of aplied styles of our app in a moment.
+
+IMPORTANT: if you followed exactly the book's instruction while working on the user's collection, then the default password and username shall be the same as in the title's of DefaultInput's component ("default in the book is admin" and "default in the book is 123456"). 
+
+#### Clarification on the hash and passwords in our pubUsers' collection
+
+We have created hashed password in our pubUsers' collection:
+```
+[
+  {
+    "username" : "admin",
+    "password" : "c5a0df4e293953d6048e78bd9849ec0ddce811f0b29f72564714e474615a7852",
+    "firstName" : "Kamil",
+    "lastName" : "Przeorski",
+    "email" : "kamil@mobilewebpro.pl",
+    "role" : "admin",
+    "verified" : false,
+    "imageUrl" : "http://lorempixel.com/100/100/people/"
+  }
+]
+```
+
+You need to understand how this works, it secures the plain password in order to keep it safe from hackers (in case when a hacker will compromise the database).
+
 
 
 #### Improving the src/views/LoginView.js
@@ -985,6 +1060,7 @@ Great! Now we are done! Below you can find what you shall see after running ***n
 
 As you can see in the browser's console - we can see the submited credential's object (***credentials Object {username: "admin", password: "123456"}***) and also a token that has been fetched from the backend (***tokenRes eyJhbGciOiJIUzI1NiJ9.YWRtaW5hZG1pbg.NKmrphxbqNcL_jFLBdTWGM6Y_Q78xks5E2TxBZRyjDA***) - all that tells us that we are on a good track in order to implement the login's mechanism in our publishing application.
 
+IMPORTANT: if you get an INVALID's login error then please make sure that you have used the 123456 password while creating the hash. Otherwise, please type in your custom password that is valid in your case.
 
 
 ### Making DashboardView's component
@@ -1457,6 +1533,49 @@ let newUserId = await falcorModel.getValue(['register', 'newUserId']);
 1) For INVALID we are fetching and setting error message into the component's state (***this.setState({error: errorRes})***).
 
 2) If the user has registered correctly, then we have their new id and we are asking user to login with history's push state (***this.props.history.pushState(null, '/login');***).
+
+
+#### Creating a RegisterView's route
+
+In the ***src/routes/index.js update the file and add a new route:
+```
+import React                        from 'react';
+import { Route, IndexRoute }        from 'react-router';
+
+/* wrappers */
+import CoreLayout                   from '../layouts/CoreLayout';
+
+/* home view */
+import PublishingApp                    from '../layouts/PublishingApp';
+
+/* auth views */
+import LoginView                    from '../views/LoginView';
+import RegisterView                    from '../views/LoginView';
+
+export default (
+  <Route component={CoreLayout} path='/'>
+    <IndexRoute component={PublishingApp} name='home' />
+    <Route component={LoginView} path='login' name='login' />
+    <Route component={RegisterView} path='register' name='register' />
+  </Route>
+);
+```
+
+... and of course add the button to the layout with improving the render's function in the src/layouts/CoreLayout.js:
+```
+  render () {
+    return (
+      <div>
+        <span>Links: <Link to='/register'>Register</Link> | <Link to='/login'>Login</Link> | <Link to='/'>Home Page</Link></span>
+          <br/>
+          {this.props.children}
+      </div>
+    );
+  }
+```
+
+
+#### The final effect of our work
 
 
 At this point we shall be able to register with this form:

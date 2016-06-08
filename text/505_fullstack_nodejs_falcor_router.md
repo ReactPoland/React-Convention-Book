@@ -1,0 +1,1225 @@
+#### Wrapping up of our Publishing App and Refactoring
+
+Currently we have an app that works, but is missing some key features as for example:
+
+1) [DONE] AWS S3 - ability to upload a photo for a new article
+
+2) [DONE] AWS S3 - ability to upload an editor's avatar (that is shown next to the article)
+
+3) [in-progress] we are missing a way to set up a title, subtitle and "overlay subtitle" (add/edit's article):
+
+![article example](http://test.przeorski.pl/book/501_article_example.png)
+
+4) [in-progress] article's excerpts - as you can see above, we need to make a mechanism that cuts the articles' text when a user is on the main page
+
+5) [in-progress] articles' on the dashboard currently have html in the content, we need to improve it (screenshot below):
+![articles html strip on dashboard](http://test.przeorski.pl/book/502_articles_dashboard_html_to_strip.png)
+
+6) [in-progress] articles' slug and sub-page - we need to create slugs mechanism, so a user can visit an article with a user's friendly links as for example:
+```
+http://localhost:3000/article-content-slug-is-always-unique
+```
+
+We need to finish these remaining stuff (from 1 to 6 points above). After we will be done with those improvements, then we will do some refactoring.
+
+
+#### AWS S3 - an introduction
+
+Amazon AWS S3 is a simple storage service for static assets like images on the Amazon's servers. It helps you to host safe, secure and highly scalable objects (as images) storage in the cloud.
+
+This approach of keeping static assets is quite convenient and easy - this is why we will use it through our book.
+
+We will use it in our application, as using this tool gives us a lot of scalibility features, that wouldn't be so easy to access when hosting images' assets on our own node.js server.
+
+In general, node.js shouldn't be used for any bigger assets hosting as we use it now. Don't even think of implementing an upload images' mechanism (not recommended at all) to the node.js server - we will employ the Amazon's services for that.
+
+#### Generating keys (access key id and secret key)
+
+Before we will start adding a new S3 bucket, we need to generate keys of your AWS account (accessKeyId and secretAccessKey).
+
+An example set of details that we will need to keep in our node.js' app is as following:
+```
+const awsConfig = {
+  accessKeyId: 'EXAMPLE_LB7XH_KEY_BGTCA',
+  secretAccessKey: 'ExAMpLe+KEY+FYliI9J1nvky5g2bInN26TCU+FiY',
+  region: 'us-west-2',
+  bucketKey: 'your-bucket-name-'
+};
+```
+
+What is a bucket in the Amazon S3? Bucket is kind of name space for files that you how in Amazon S3. You can have several buckets associated with different projects etc. As you can see, our next steps will be:
+
+1) Create the accessKeyId and secretAccessKey associated to your account
+
+2) Define your bucketKey (kind of a name space for the pictures for our articles)
+
+3) Define a region where you want to keep the files physically (if your project has a target specified for a location then it will speed up the images load and general it will limit the latency as an image will be hosted closer to a client/user of our publishing's application).
+
+#### AWS Account creation
+
+1) Go to the https://aws.amazon.com/
+
+![aws main page](http://test.przeorski.pl/book/503_aws_main_page.png)
+
+2) Create an account / sign-in to a new account
+
+![aws signup signin page](http://test.przeorski.pl/book/504_aws_signup_signin.png)
+
+Then the next step is to create the IAM that is described in details further.
+
+#### Identity and Access Management (IAM)
+
+Let's prepare our new accessKeyId and secretAccessKey. You need to visit the "Identity and Access Management" (IAM) page in your Amazon's console. You can find it from the services' list:
+
+![aws services list](http://test.przeorski.pl/book/507_aws_services_list.png)
+
+The IAM page looks as following (under the https://console.aws.amazon.com/iam/home?#home):
+
+![IAM aws](http://test.przeorski.pl/book/508_aws_IAM.png)
+
+
+Then click on the IAM Resources/users' link:
+![IAM aws](http://test.przeorski.pl/book/509_click_on_users.png)
+
+On the next page you will see a button (please click it):
+![create new user button](http://test.przeorski.pl/book/510_click_create_new_users.png)
+
+After the click you shall see a form, then fill it with at least one user as on the screenshot:
+![new user form](http://test.przeorski.pl/book/511_new_user_form.png)
+
+... then after clicking the "Create" button, copy the keys to a safe place (we will use them in a moment):
+![aws copy keys](http://test.przeorski.pl/book/512_copy_keys.png)
+
+IMPORTANT: please copy the keys (Access Key ID and Secret Access Key), you will learn later in the book where to put them in the code in order to use the S3's services. Of course, the one from the screenshot aren't active - they are only examples, you need to have your own.
+
+
+#### Setup S3 permissions for the user 
+
+The last thing is to add the AmazonS3FullAccess's permissions with the following steps:
+
+1) Go to the Permissions tab:
+
+![permissions tab aws](http://test.przeorski.pl/book/513b_policy_tab.png)
+
+2) Click on the "Attach Policy" and choose AmazonS3FullAccess
+
+3) After attaching then it shall be listed the same way as on the example below:
+
+![aws attach policy](http://test.przeorski.pl/book/514b_attach_policy.png)
+
+
+#### Creating a new bucket for the image's files
+
+You are done with the keys and you have granted the S3's policy for the keys, then we need to prepare our's bucket that will keep the images. 
+
+1) First of all you need to to the AWS' console main page that looks like below (https://console.aws.amazon.com/console/home)
+
+
+![dashboard aws](http://test.przeorski.pl/book/513_dashboard_home.png)
+
+
+
+2) You shall see there something like "AWS Services SHOW ALL SERVICES" (or alternatively find it from the services' list the similar way as IAM)
+
+![aws services list](http://test.przeorski.pl/book/514_aws_services_list.png)
+
+
+
+2) Click on the "S3 - Scalable Storage in the Cloud" (as on the above's image)
+
+3) After that you shall see similar view (I have 6 buckets, you shall have 0 buckets when you have a new account)
+
+![aws bucket view list](http://test.przeorski.pl/book/515_aws_bucket_view.png)
+
+In that buckets we will keep the static images of our articles (you will learn how exactly in next pages of the book).
+
+4) Create a bucket by clicking the button:
+
+![button create bucket](http://test.przeorski.pl/book/516_create_bucket_click.png)
+
+
+5) Choose "publishing-app" name (or different that works for you):
+
+![name bucket and create](http://test.przeorski.pl/book/517_name_and_create_bucket.png)
+
+6) After the bucket has been created, then click on it from the buckets' list:
+
+![choose bucket from list](http://test.przeorski.pl/book/518_choose_new_bucket_from_list.png)
+
+7) The empty bucket with a name of "publishing-app" shall be looking as following:
+
+![choose bucket from list](http://test.przeorski.pl/book/519_empty_bucket_list.png)
+
+When you are on that view as from the screenshot above, then the url in the browser tell's you exactly the region and bucket (so you can use it later when doing the config on backend):
+```
+// just example link to the bucket
+https://console.aws.amazon.com/s3/home?region=eu-central-1&bucket=publishing-app&prefix=
+```
+
+
+8) The last thing is to make sure that the CORS for the publishing-app's bucket are correct. Click on the properties tab on that view and you will get a detailed view of them as on the example below:
+
+![properties aws bucket](http://test.przeorski.pl/book/520_properties_tab.png)
+
+then click on the "Add CORS" button:
+
+![properties aws bucket](http://test.przeorski.pl/book/521_add_cors_button.png)
+
+and after that past this into the text area:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+    <CORSRule>
+        <AllowedOrigin>*</AllowedOrigin>
+        <AllowedMethod>GET</AllowedMethod>
+        <AllowedMethod>POST</AllowedMethod>
+        <AllowedMethod>PUT</AllowedMethod>
+        <MaxAgeSeconds>3000</MaxAgeSeconds>
+        <AllowedHeader>*</AllowedHeader>
+    </CORSRule>
+</CORSConfiguration>
+```
+
+.. so it will be looking as on the example:
+![properties aws bucket](http://test.przeorski.pl/book/522_cors_example.png)
+
+
+... and click the save button. After all that steps we are done, so we can start with coding the images upload's feature.
+
+
+#### Start coding upload image feature on the AddArticleView
+
+Before you will be able to continue to code, you need to have all required information about your access details to your S3's bucket (that you've created on the previous pages):
+
+1) AWS_ACCESS_KEY_ID - this comes from the previous sub-chapter where we were creating a user while being on that view:
+![aws copy keys](http://test.przeorski.pl/book/524_aws_IAM2.png)
+
+2) AWS_SECRET_ACCESS_KEY - the same as the AWS access key
+
+3) AWS_BUCKET_NAME - that is the name of your bucket (in our book we called it publishing-app)
+
+4) AWS_REGION_NAME - in our example we will use "eu-central-1"
+
+IMPORTANT: the easiest way to find AWS_BUCKET_NAME and AWS_REGION_NAME is to look on the URL while you are on that view (described in previous sub-chapter):
+
+![properties aws bucket](http://test.przeorski.pl/book/523_empty_bucket_list2.png)
+
+Please check the browser's URL on that view, it is:
+```
+https://console.aws.amazon.com/s3/home?region=eu-central-1#&bucket=publishing-app&prefix=
+```
+
+... so the region and bucket's name is clearly in that url (I want to make it pure clear as your region and bucket name can be different, depending on where you live).
+
+
+IMPORTANT: also please make sure that your CORS are setup correctly and your permissions/attach policy is done exactly as described above. Otherwise you can have problems with everything described below.
+
+#### Enviroment variables in node.js
+
+We will pass all those 4 params (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME, AWS_REGION_NAME) via node's enviroment variables.
+
+First let's install a node's library that will create enviroments' variables from a file so we will be able to use them within our localhost:
+```
+npm i node-env-file@0.1.8
+```
+
+What are the enviroments' variables? In general, we will use them to pass the variables of some sensitive data to the app - we are talking here specifically about:
+
+a) AWS' secret keys
+
+b) MongoDB's login/password
+
+c) information regarding current enviroment setup (if it is a development or production)
+
+You can read those enviroment variables via accessing it like on the below examples:
+```
+// this is how we will access the variables in the server.js for example:
+env.process.AWS_ACCESS_KEY_ID
+env.process.AWS_SECRET_ACCESS_KEY
+env.process.AWS_BUCKET_NAME
+env.process.AWS_REGION_NAME
+```
+
+... in our local's development enviroment, we will keep those information in the server's directory, so please do as following in your terminal/cmd:
+```
+$ [[you are in the server/ directory of your project]]
+$ touch .env
+```
+
+... you have created a server/.env file, next step is to put a content into it (from this file the node-env-file's will read the enviroment variables when our app will be running):
+```
+AWS_ACCESS_KEY_ID=_*_*_*_*_ACCESS_KEY_HERE_*_*_*_*_
+AWS_SECRET_ACCESS_KEY=_*_*_*_*_SECRET_KEY_HERE_*_*_*_*_
+AWS_BUCKET_NAME=publishing-app
+AWS_REGION_NAME=eu-central-1
+```
+
+Above may you find out the structure of a node's enviroment file, each new line comes with a key and value. You need to paste there your keys that you have created while reading this chapter. Replace those values with your own: _*_*_*_*_ACCESS_KEY_HERE_*_*_*_*_ and _*_*_*_*_SECRET_KEY_HERE_*_*_*_*_.
+
+
+After you have created the server/.env's file, then let's start with installing required dependency that will abstract whole gig with the image uploading, use npm for that when being in the project's directory:
+```
+npm i --save react-s3-uploader@3.0.3
+```
+
+The react-s3-uploader's component works quite well for our use case and it abstracts quite well all the aws-sdk's features for us. The main point here is that we need to have configured the .env's file well (with correct variables) and the react-s3-uploader will do the job on the backend and frontend for us (as you will see below).
+
+
+#### Improving our's article mongoose schema
+
+We need to improve the schema, so we will have a place in our articles' collection for keeping the url of an image. Edit the old artcile's schema:
+
+```
+// this is old codebase to improve:
+var articleSchema = new Schema({
+    articleTitle: String,
+    articleContent: String,
+    articleContentJSON: Object
+  }, 
+  { 
+    minimize: false 
+  }
+);
+```
+
+to the new improved one:
+```
+var articleSchema = new Schema({
+    articleTitle: String,
+    articleContent: String,
+    articleContentJSON: Object,
+    articlePicUrl: { type: String, default: '/static/placeholder.png' }
+  }, 
+  { 
+    minimize: false 
+  }
+);
+```
+
+... as you can find out, we have introduced the articlePicUrl with a default value of ***/static/placeholder.png***. Now we will be able to save an article with a pic's url variable in the article's object (FYI: if you would forgot to update the Mongoose's model, then it wouldn't let you save that value into the database).
+
+#### Adding routes for S3's upload
+
+We need to import two new libraries in the server/server.js file:
+```
+import env from 'node-env-file';
+import s3router from 'react-s3-uploader/s3router';
+```
+and then underneath the imports add the enviroments' variables load function:
+```
+env(__dirname + '/.env');
+```
+
+... so we end up with something like:
+```
+// don't write it, this is how shall be looking your server/server.js file:
+import http from 'http';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import falcor from 'falcor';
+import falcorExpress from 'falcor-express';
+import FalcorRouter from 'falcor-router';
+import routes from './routes.js';
+
+import React from 'react'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import { renderToStaticMarkup } from 'react-dom/server'
+import ReactRouter from 'react-router';
+import { RoutingContext, match } from 'react-router';
+import * as hist  from 'history';
+import rootReducer from '../src/reducers';
+import reactRoutes from '../src/routes';
+import fetchServerSide from './fetchServerSide';
+import env from 'node-env-file';
+import s3router from 'react-s3-uploader/s3router';
+
+// Load any undefined ENV variables form a specified file. 
+env(__dirname + '/.env');
+
+var app = express();
+app.server = http.createServer(app);
+
+// CORS - 3rd party middleware
+app.use(cors());
+
+// This is required by falcor-express middleware to work correctly with falcor-browser
+app.use(bodyParser.json({extended: false}));
+app.use(bodyParser.urlencoded({extended: false}));
+```
+
+.. I'm putting all this above so you can make sure that your server/server.js file looks simillar. Just for the clarification the env(__dirname + '/.env'); is telling the location of the .env's file in our structure (as you can console.log that the __dirname's variable is a system location of a server's file - this must match with the real .env file's location so it can be found by the system).
+
+Next part is to add this to our server/server.js:
+
+```
+app.use('/s3', s3router({
+  bucket: process.env.AWS_BUCKET_NAME,
+  region: process.env.AWS_REGION_NAME,
+  signatureVersion: 'v4',
+  headers: {'Access-Control-Allow-Origin': '*'}, 
+  ACL: 'public-read'
+}));
+```
+
+As you can find above, we have started using the enviroments' variable that we defined in the server/.env file. For me the process.env.AWS_BUCKET_NAME is equal to "publishing-app", but if you have defined it differently, then it will retrieve other value from the server/.env (thanks to the env's express middleware that we have defined a moment ago).
+
+
+Based on that backend's configuration (enviroment variables and setting the s3router's with help of the import s3router from 'react-s3-uploader/s3router') we shall be able to use the AWS s3's bucket. We need to prepare the front-end side which first will be implemented on the add an article's view.
+
+#### Creating the ImgUploader's component on the front-end
+
+We will create a dump component called ImgUploader. This component will use the react-s3-uploader's library which is doing the job of abstracting the upload to the amazon S3 as for example on a callback you receive information:
+
+1) onProgress - you can find with that callback the progress in percent so a user can see the status of an upload
+
+2) onError - this callback is fired, when an error occurs
+
+3) onFinish - this callback sending us back of a file's location that has been uploaded to the S3
+
+You will learn more in details in a moment, let's create a file first:
+
+```
+$ [[you are in the src/components/articles directory of your project]]
+$ ImgUploader.js
+```
+
+.. so you have created the src/components/articles/ImgUploader.js file, next step is to prepare the imports so on top of the ImgUploader's file do the following:
+```
+"use strict";
+
+import React from 'react';
+import ReactS3Uploader from 'react-s3-uploader';
+import { Paper } from 'material-ui';
+
+
+class ImgUploader extends React.Component {
+  constructor(props) {
+    super(props);
+    this.uploadFinished = this.uploadFinished.bind(this);
+
+    this.state = {
+      uploadDetails: null,
+      uploadProgress: null,
+      uploadError: null,
+      articlePicUrl: props.articlePicUrl
+    };
+  }
+
+  uploadFinished(uploadDetails) {
+    // here will be more code in a moment
+  }
+
+  render () {
+    return <div>S3 Image uploader placeholder</div>;
+  }
+}
+
+ImgUploader.propTypes = { 
+  updateImgUrl: React.PropTypes.func.isRequired 
+};
+
+export default ImgUploader;
+```
+
+As you can find above, we have initiated the ImgUploader's component with a div that returns a temporary placeholder in the render's function.
+
+We have also preared the propTypes with a required property called as updateImgUrl - this will be a callback function which will send a final uploaded image's location (that has to be saved in the database, we will use this updateImgUrl's props in a moment).
+
+In the state of that ImgUploader's component we have:
+```
+// this is already in your codebase:
+this.state = {
+  uploadDetails: null,
+  uploadProgress: null,
+  uploadError: null,
+  articlePicUrl: props.articlePicUrl
+};
+```
+
+In these's variables we will keep all the state of our component depending on a current status and props.articlePicUrl will send the url's details up to the AddArticleView's component (we will do it later in that chapter, after finishing the ImgUploader's component).
+
+
+#### Wrapping up the ImgUploader's component
+
+Next step is to improve the uploadFinished's function in our ImgUploader so please replace the old empty function:
+```
+  uploadFinished(uploadDetails) {
+    // here will be more code in a moment
+  }
+```
+
+... with the following:
+```
+  uploadFinished(uploadDetails) {
+    let articlePicUrl = '/s3/img/'+uploadDetails.filename;
+    this.setState({ 
+      uploadProgress: null,
+      uploadDetails:  uploadDetails,
+      articlePicUrl: articlePicUrl
+    });
+    this.props.updateImgUrl(articlePicUrl);
+  }
+```
+
+... as you can see, the uploadDetails.filename's variable comes from the ReactS3Uploader's component which we have improted on top of the ImgUploader's file. After the success of upload we set up the uploadProgress back to null, set the details of our upload and send back the details via the callback by using this.props.updateImgUrl(articlePicUrl).
+
+The next step is to improve our render's function in the ImgUploader:
+```
+  render () {
+    let imgUploadProgressJSX;
+    let uploadProgress = this.state.uploadProgress;
+    if(uploadProgress) {
+      imgUploadProgressJSX = (
+          <div>
+            {uploadProgress.uploadStatusText} ({uploadProgress.progressInPercent}%)
+          </div>
+        );
+    } else if(this.state.articlePicUrl) {
+      let articlePicStyles = {
+        maxWidth: 200, 
+        maxHeight: 200, 
+        margin: 'auto'
+      };
+      imgUploadProgressJSX = <img src={this.state.articlePicUrl} style={articlePicStyles} />;
+    }
+
+    return <div>S3 Image uploader placeholder</div>;
+  }
+```
+The above's render is incomplete, but let's describe what we have added so far: the code is simply all about getting information about uploadProgress via this.state (first if statement above). The second else if(this.state.articlePicUrl) is all about rendering the image after upload is complete. OK, but from where we will get that information, here is the rest:
+```
+    let uploaderJSX = (
+        <ReactS3Uploader
+        signingUrl="/s3/sign"
+        accept="image/*"
+          onProgress={(progressInPercent, uploadStatusText) => {
+            this.setState({ 
+              uploadProgress: { progressInPercent, uploadStatusText }, 
+              uploadError: null
+            });
+          }} 
+          onError={(errorDetails) => {
+            this.setState({ 
+              uploadProgress: null,
+              uploadError: errorDetails
+            });
+          }}
+          onFinish={(uploadDetails) => {
+            this.uploadFinished(uploadDetails);
+          }} />
+      );
+```
+
+The uploaderJSX's variable is exactly our react-s3-uploader's library. As you can find above, on progress we set the state regarding uploadProgress: { progressInPercent, uploadStatusText } and we setup the uploadError: null (in case if in previous action, the user of our app had an error message). On error we are set state, so we can tell it to the user. On finish, we run the uploadFinished function which was described in details above...
+
+Complete render function of the ImgUploader shall be looking as following:
+```
+  render () {
+    let imgUploadProgressJSX;
+    let uploadProgress = this.state.uploadProgress;
+    if(uploadProgress) {
+      imgUploadProgressJSX = (
+          <div>
+            {uploadProgress.uploadStatusText} ({uploadProgress.progressInPercent}%)
+          </div>
+        );
+    } else if(this.state.articlePicUrl) {
+      let articlePicStyles = {
+        maxWidth: 200, 
+        maxHeight: 200, 
+        margin: 'auto'
+      };
+      imgUploadProgressJSX = <img src={this.state.articlePicUrl} style={articlePicStyles} />;
+    }
+    
+    let uploaderJSX = (
+        <ReactS3Uploader
+        signingUrl="/s3/sign"
+        accept="image/*"
+          onProgress={(progressInPercent, uploadStatusText) => {
+            this.setState({ 
+              uploadProgress: { progressInPercent, uploadStatusText }, 
+              uploadError: null
+            });
+          }} 
+          onError={(errorDetails) => {
+            this.setState({ 
+              uploadProgress: null,
+              uploadError: errorDetails
+            });
+          }}
+          onFinish={(uploadDetails) => {
+            this.uploadFinished(uploadDetails);
+          }} />
+      );
+
+    return (
+      <Paper zDepth={1} style={{padding: 32, margin: 'auto', width: 300}}>
+        {imgUploadProgressJSX}
+        {uploaderJSX}
+      </Paper>
+    );
+  }
+```
+
+As you can see above, there is whole render of the ImgUploader. We use inline styled Paper's component (from material-ui) so the whole thing will be looking better for an end article's user/editor.
+
+
+#### The AddArticleView's improvements
+
+We need to add the ImgUploader's component into the AddArticleView, first we need to import it in the src/views/articles/AddArticleView.js file as following:
+```
+import ImgUploader from '../../components/articles/ImgUploader';
+```
+
+Next in the constructor of the AddArticleView change this old code:
+```
+// this is old, don't write it:
+class AddArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleSubmit = this._articleSubmit.bind(this);
+
+    this.state = {
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      newArticleID: null
+    };
+  }
+```
+
+... into a little improved one as:
+
+```
+class AddArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleSubmit = this._articleSubmit.bind(this);
+    this.updateImgUrl = this.updateImgUrl.bind(this);
+
+    this.state = {
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      newArticleID: null,
+      articlePicUrl: '/static/placeholder.png'
+    };
+  }
+```
+
+As you can find, we have binded this to the updateImgUrl's function and added a new state's variable called articlePicUrl (from default, we will point to the /static/placeholder.png so in case that a user won't choose a cover then we will put a default one for him).
+
+then let's improve the functions of that component, so this old one:
+```
+// this is old codebase, just for your reference:
+  async _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    }
+
+    console.debug('this.state.contentJSON');
+    console.debug(this.state.contentJSON);
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+      then((result) => {
+        return falcorModel.getValue(
+            ['articles', 'newArticleID']
+          ).then((articleID) => {
+            return articleID;
+          });
+      });
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID});
+  }
+```
+
+... this above is to improve as following:
+```
+  async _articleSubmit() {
+    let newArticle = {
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
+    }
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+      then((result) => {
+        return falcorModel.getValue(
+            ['articles', 'newArticleID']
+          ).then((articleID) => {
+            return articleID;
+          });
+      });
+
+    newArticle['_id'] = newArticleID;
+    this.props.articleActions.pushNewArticle(newArticle);
+    this.setState({ newArticleID: newArticleID });
+  }
+
+  updateImgUrl(articlePicUrl) {
+    this.setState({ 
+      articlePicUrl: articlePicUrl
+    });
+  }
+```
+
+As you can find out we have added ***articlePicUrl: this.state.articlePicUrl*** to the ***newArticle***'s object. We also have introduced a new function called updateImgUrl which is simply a callback which sets a new state with the articlePicUrl's variable (in that this.state.articlePicUrl we keep the current's article's image url that is going to be saved into the database).
+
+The only thing to improve in that src/views/articles/AddArticleView.js is our current render (old one) is:
+```
+// your current old codebase to improve:
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+        <WYSWIGeditor
+          name="addarticle"
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+          <RaisedButton
+            onClick={this._articleSubmit}
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Article'} />
+      </div>
+    );
+  }
+```
+
+... we need it to improve so we will use the ImgUploader:
+
+```
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+        <WYSWIGeditor
+          name="addarticle"
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+
+        <div style={{margin: '10px 10px 10px 10px'}}> 
+          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+        </div>
+
+        <RaisedButton
+          onClick={this._articleSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Article'} />
+      </div>
+    );
+  }
+```
+
+Above you can find that we use the props for sending down the current articlePicUrl (will be handy later and we also tell the default placeholder.png's location) and the callback to update the img url called ***updateImgUrl***.
+
+After you will visit the http://localhost:3000/add-article route, then you shall see a new image picker that will be looking as this between the WYSWIG box and the "Submit Article"'s button (check the screenshot):
+
+
+![image uploader add article view](http://test.przeorski.pl/book/525_image_uploader_addarticleview.png)
+
+Of course if you followed correctly all the instructions after clicking the "Choose file" you shall be able to upload a new image into the S3's bucket and the image in the thumbnail will be replaced as on this example:
+
+![after upload](http://test.przeorski.pl/book/526_uploaded_image_on_the_article.png)
+
+As you can see, we can upload an image - the next step is to unmock viewing them so we can see that our article has a dog on the cover (and the dog's image comes from our articles' collection in DB).
+
+#### Remaining tweaks of PublishingApp, ArticleCard & DashboardView
+
+We are able to add an article, we need to unmock the images' urls in our views so we can see real url from the database (instead mocked in an img src props). Let start with 
+
+
+Let's start with the src/layouts/PublishingApp.js and improve the old _fetch function:
+```
+// old codebase to improve:
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON']]). 
+      then((articlesResponse) => {  
+        return articlesResponse.json.articles;
+      }).catch(e => {
+        return 500;
+      });
+
+    if(articles === 500) {
+      return;
+    }
+
+    this.props.articleActions.articlesList(articles);
+  }
+```
+
+... and this above please improve to:
+```
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON', 'articlePicUrl']]). 
+      then((articlesResponse) => {  
+        return articlesResponse.json.articles;
+      }).catch(e => {
+        console.debug(e);
+        return 500;
+      });
+
+    if(articles === 500) {
+      return;
+    }
+
+    this.props.articleActions.articlesList(articles);
+  }
+```
+as you can find above, we have started to fetching the ***articlePicUrl*** via falcorModel.get's method. 
+
+Next step also in the PublishingApp's file is to improve the render function from so you need to improve this below:
+```
+// old code:
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let currentArticleJSX = (
+        <div key={articleKey}>
+          <ArticleCard 
+            title={articleDetails.articleTitle}
+            content={articleDetails.articleContent} />
+        </div>
+      );
+```
+
+and you need to add a new property which will pass down the pic url:
+```
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let currentArticleJSX = (
+        <div key={articleKey}>
+          <ArticleCard 
+            title={articleDetails.articleTitle}
+            content={articleDetails.articleContent} 
+            articlePicUrl={articleDetails.articlePicUrl} />
+        </div>
+      );
+```
+
+.. as you can find above, we are passing down the fetched articlePicUrl down to the ArticleCard's component.
+
+#### Improving the ArticleCard's component 
+
+After we pass down the articlePicUrl's variable via props, we need to improve this below (src/components/ArticleCard.js):
+
+```
+// old code to improve:
+  render() {
+    let title = this.props.title || 'no title provided';
+    let content = this.props.content || 'no content provided';
+
+    let paperStyle = {
+      padding: 10, 
+      width: '100%', 
+      height: 300
+    };
+
+    let leftDivStyle = {
+      width: '30%', 
+      float: 'left'
+    }
+    
+    let rightDivStyle = {
+      width: '60%', 
+      float: 'left', 
+      padding: '10px 10px 10px 10px'
+    }
+
+    return (
+      <Paper style={paperStyle}>
+        <CardHeader
+          title={this.props.title}
+          subtitle="Subtitle"
+          avatar="/static/avatar.png"
+        />
+
+        <div style={leftDivStyle}>
+          <Card >
+            <CardMedia
+              overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
+              <img src="/static/placeholder.png" height="190" />
+            </CardMedia>
+          </Card>
+        </div>
+        <div style={rightDivStyle}>
+          <div dangerouslySetInnerHTML={{__html: content}} />
+        </div>
+      </Paper>);
+  }
+```
+
+and of course the new code is improve slightly:
+
+```
+  render() {
+    let title = this.props.title || 'no title provided';
+    let content = this.props.content || 'no content provided';
+    let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';
+
+    let paperStyle = {
+      padding: 10, 
+      width: '100%', 
+      height: 300
+    };
+
+    let leftDivStyle = {
+      width: '30%', 
+      float: 'left'
+    }
+    
+    let rightDivStyle = {
+      width: '60%', 
+      float: 'left', 
+      padding: '10px 10px 10px 10px'
+    }
+
+    return (
+      <Paper style={paperStyle}>
+        <CardHeader
+          title={this.props.title}
+          subtitle="Subtitle"
+          avatar="/static/avatar.png"
+        />
+
+        <div style={leftDivStyle}>
+          <Card >
+            <CardMedia
+              overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
+              <img src={articlePicUrl} height="190" />
+            </CardMedia>
+          </Card>
+        </div>
+        <div style={rightDivStyle}>
+          <div dangerouslySetInnerHTML={{__html: content}} />
+        </div>
+      </Paper>);
+  }
+```
+.. at the beggining of the render we do ***let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';*** and later we use that in our img's JSX (img src={articlePicUrl} height="190").
+
+After those two changes, you can see the article with a real cover as in our example:
+
+![article example](http://test.przeorski.pl/book/527_article_with_a_dog_img_cover.png)
+
+#### Improving the DashboardView's component
+
+Let's improve the dashboard with the cover so at the location src/views/DashboardView.js change this below:
+```
+// old code:
+  render () {
+    let articlesJSX = [];
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let currentArticleJSX = (
+        <Link to={`/edit-article/${articleDetails['_id']}`}>
+          <ListItem
+            key={articleKey}
+            leftAvatar={<img src="/static/placeholder.png"  width="50" height="50" />}
+            primaryText={articleDetails.articleTitle}
+            secondaryText={articleDetails.articleContent}
+          />
+        </Link>
+      );
+
+      articlesJSX.push(currentArticleJSX);
+    });
+    // below is rest of the render's function
+```
+
+... with the slighly improved:
+```
+  render () {
+    let articlesJSX = [];
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let articlePicUrl = articleDetails.articlePicUrl || '/static/placeholder.png';
+      let currentArticleJSX = (
+        <Link to={`/edit-article/${articleDetails['_id']}`}>
+          <ListItem
+            key={articleKey}
+            leftAvatar={<img src={articlePicUrl} width="50" height="50" />}
+            primaryText={articleDetails.articleTitle}
+            secondaryText={articleDetails.articleContent}
+          />
+        </Link>
+      );
+
+      articlesJSX.push(currentArticleJSX);
+    });
+    // below is rest of the render's function
+```
+
+.. as you can find above, we have replaced the mocked placeholder with a real cover's photo so on our articles' dashboard (that is available after login) we will find real images in the thumbnails.
+
+#### Edit an article's cover photo
+
+Regarding articles' photo we need to make some improvements in the src/views/articles/EditArticleView.js file as improting there the ImgUploader:
+
+```
+import ImgUploader from '../../components/articles/ImgUploader';
+```
+
+.. then after you have imported the ImgUploader please improve the constructor of the EditArticleView:
+```
+// old code to improve:
+class EditArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleEditSubmit = this._articleEditSubmit.bind(this);
+    this._fetchArticleData = this._fetchArticleData.bind(this);
+    this._handleDeleteTap = this._handleDeleteTap.bind(this);
+    this._handleDeletion = this._handleDeletion.bind(this);
+    this._handleClosePopover = this._handleClosePopover.bind(this);
+
+    this.state = {
+      articleFetchError: null,
+      articleEditSuccess: null,
+      editedArticleID: null,
+      articleDetails: null,
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      openDelete: false,
+      deleteAnchorEl: null
+    };
+  }
+```
+
+... to new improved constructor as following:
+
+```
+class EditArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleEditSubmit = this._articleEditSubmit.bind(this);
+    this._fetchArticleData = this._fetchArticleData.bind(this);
+    this._handleDeleteTap = this._handleDeleteTap.bind(this);
+    this._handleDeletion = this._handleDeletion.bind(this);
+    this._handleClosePopover = this._handleClosePopover.bind(this);
+    this.updateImgUrl = this.updateImgUrl.bind(this);
+
+    this.state = {
+      articleFetchError: null,
+      articleEditSuccess: null,
+      editedArticleID: null,
+      articleDetails: null,
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      openDelete: false,
+      deleteAnchorEl: null,
+      articlePicUrl: '/static/placeholder.png'
+    };
+  }
+```
+
+As you can find above we have binded this to the new function updateImgUrl (that will be the ImgUploader's callback) and we create a new default state for the articlePicUrl.
+
+
+Next step is to improve the _fetchArticleData function from the old:
+```
+// this is old already in your codenbase:
+  _fetchArticleData() {
+    let articleID = this.props.params.articleID;
+    if(typeof window !== 'undefined' && articleID) {
+        let articleDetails = this.props.article.get(articleID);
+        if(articleDetails) {
+          this.setState({ 
+            editedArticleID: articleID, 
+            articleDetails: articleDetails
+          });
+        } else {
+          this.setState({
+            articleFetchError: true
+          })
+        }
+    }
+  }
+```
+
+... to the improved one:
+```
+  _fetchArticleData() {
+    let articleID = this.props.params.articleID;
+    if(typeof window !== 'undefined' && articleID) {
+        let articleDetails = this.props.article.get(articleID);
+        if(articleDetails) {
+          this.setState({ 
+            editedArticleID: articleID, 
+            articleDetails: articleDetails,
+            articlePicUrl: articleDetails.articlePicUrl,
+            contentJSON: articleDetails.articleContentJSON,
+            htmlContent: articleDetails.articleContent
+          });
+        } else {
+          this.setState({
+            articleFetchError: true
+          })
+        }
+    }
+  }
+```
+... above we have added on an initial fetch some new this.setState's variables as: articlePicUrl, contentJSON and htmlContent. The article fetch is here because we need to setup a cover in the ImgUploader of a current image that has to be potentially changed. The contentJSON and htmlContent is here because in case someone won't edit anything in the WYSWIG then we need to have a default values from database (otherwise the edit's button hit would save empty values into db and break the whole edit's experience).
+
+
+Further going, we need to improve the _articleEditSubmit's function from old:
+```
+// old code to improve:
+  async _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    // striped code for our convience
+```
+
+to the improved one:
+
+```
+  async _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
+    }
+    // striped code for our convience
+```
+
+... as a next step you need to add a new function in the EditArticleView's component:
+
+```
+  updateImgUrl(articlePicUrl) {
+    this.setState({ 
+      articlePicUrl: articlePicUrl
+    });
+  }
+```
+
+the last step in order to finish the edit's article cover is to improve the old render:
+```
+// old code to improve:
+    let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;
+
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Edit an exisitng article</h1>
+        <WYSWIGeditor
+          initialValue={initialWYSWIGValue}
+          name="editarticle"
+          title="Edit an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+
+        <RaisedButton
+          onClick={this._articleEditSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Edition'} />
+        <hr />
+```
+
+.. and that above we need to improve as following:
+```
+    let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;
+
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Edit an exisitng article</h1>
+        <WYSWIGeditor
+          initialValue={initialWYSWIGValue}
+          name="editarticle"
+          title="Edit an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+
+        <div style={{margin: '10px 10px 10px 10px'}}> 
+          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+        </div>
+
+        <RaisedButton
+          onClick={this._articleEditSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Edition'} />
+        <hr />
+```
+
+As you can see above, we have added the ImgUploader and styled it a bit exactly the same way as in the AddArticleView. Rest of the ImgUploader's does the job for us in order to give an ability to edit's article photo for our users.
+
+![article example](http://test.przeorski.pl/book/528_edit_article_image.png)
+
+Above you can find out how the edit's view shall be looking after all the recent improvements.
+
+### Remaining things within our publishing app
+
+In general, the things that we will finish further in this chapter are following:
+
+1) ability to add title and subtitle
+
+2) ability to prepare the exerpts of an article, so it's cut if it doesn't fit in the Material-UI Paper's component
+
+3) dashboard hotfix - strip html tags (check screenshot of that bug in the beggining of that chapter)
+
+4) a link to the article that has an unique slug in it (slug is prepared from the title, so someone who clicks the link can see "a teaser" of the  article's title)
+
+
+
+NEXT STEPS
+
+
+3) skodzić ability to add / edit title and subtitle
+
+4) skodzić excerpts
+
+5) skodzic dashboard hotfix
+
+6) opisać od 3 do 5 punkty
+
+7) skodzić slugs and article's subpage
+
+
+MISSING PARTS:
+- refactoring (5 pages)
+- unit testing 
+- edycja zdjęcia profilowego
+- author ID w artykule
+
+
+

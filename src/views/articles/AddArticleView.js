@@ -8,9 +8,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import articleActions from '../../actions/article.js';
 import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
+import ImgUploader from '../../components/articles/ImgUploader';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
-
+import DefaultInput from '../../components/DefaultInput';
+import Formsy from 'formsy-react';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -25,12 +27,14 @@ class AddArticleView extends React.Component {
     super(props);
     this._onDraftJSChange = this._onDraftJSChange.bind(this);
     this._articleSubmit = this._articleSubmit.bind(this);
+    this.updateImgUrl = this.updateImgUrl.bind(this);
 
     this.state = {
       title: 'test',
       contentJSON: {},
       htmlContent: '',
-      newArticleID: null
+      newArticleID: null,
+      articlePicUrl: '/static/placeholder.png'
     };
   }
 
@@ -39,15 +43,14 @@ class AddArticleView extends React.Component {
     this.setState({contentJSON, htmlContent});
   }
 
-  async _articleSubmit() {
+  async _articleSubmit(articleModel) {
     let newArticle = {
-      articleTitle: this.state.title,
+      articleTitle: articleModel.title,
+      articleSubTitle: articleModel.subTitle,
       articleContent: this.state.htmlContent,
-      articleContentJSON: this.state.contentJSON
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
     }
-
-    console.debug('this.state.contentJSON');
-    console.debug(this.state.contentJSON);
 
     let newArticleID = await falcorModel
       .call(
@@ -64,7 +67,13 @@ class AddArticleView extends React.Component {
 
     newArticle['_id'] = newArticleID;
     this.props.articleActions.pushNewArticle(newArticle);
-    this.setState({ newArticleID: newArticleID});
+    this.setState({ newArticleID: newArticleID });
+  }
+
+  updateImgUrl(articlePicUrl) {
+    this.setState({ 
+      articlePicUrl: articlePicUrl
+    });
   }
 
   render () {
@@ -86,16 +95,33 @@ class AddArticleView extends React.Component {
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Add Article</h1>
-        <WYSWIGeditor
-          name="addarticle"
-          title="Create an article"
-          onChangeTextJSON={this._onDraftJSChange} />
+
+        <Formsy.Form onSubmit={this._articleSubmit}>
+          <DefaultInput 
+            onChange={(event) => {}} 
+            name='title' 
+            title='Article Title (required)' required />
+
+          <DefaultInput 
+            onChange={(event) => {}} 
+            name='subTitle' 
+            title='Article Subtitle' />
+
+          <WYSWIGeditor
+            name="addarticle"
+            title="Create an article"
+            onChangeTextJSON={this._onDraftJSChange} />
+
+          <div style={{margin: '10px 10px 10px 10px'}}> 
+            <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+          </div>
+
           <RaisedButton
-            onClick={this._articleSubmit}
             secondary={true}
             type="submit"
             style={{margin: '10px auto', display: 'block', width: 150}}
             label={'Submit Article'} />
+        </Formsy.Form>
       </div>
     );
   }

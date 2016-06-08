@@ -1536,6 +1536,40 @@ $ npm start
 
 If you run the app, and on the main page you see the error message as on the screenshot, then it tells you that you are good!
 
+
+#### After a test delete the code from articles' route
+
+That above was only a test, if you whole fullstack setup is correct and is working. Don't forget to clearup the articles[{integers}] so the old:
+```
+// this is old:
+```
+  {
+    route: 'articles[{integers}]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return {
+        path: ['articles'],
+        value: $error('auth error')
+      }
+
+      return Article.find({}, '_id', function(err, articlesDocs) {
+      // here below is some striped code
+```
+
+... is replaced to the proper one as following:
+```
+  {
+    route: 'articles[{integers}]',
+    get: (pathSet) => {
+      let articlesIndex = pathSet[1];
+
+      return Article.find({}, '_id', function(err, articlesDocs) {
+      // here below is some striped code
+```
+
+... as you can see, we have removed the test error's return above so it will work properly again.
+
 #### Wrapping up the routes' security
 
 
@@ -1750,7 +1784,36 @@ The new code with the auth checks:
 // code has been striped out from here for the sake of brevity, nothing below changes
 ```
 
-#### A summary of $error returns on the backend
+#### Last front-end improvements
+
+In the src/layouts/PublishingApp.js improve the _fetch function:
+```
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON']]). 
+      then((articlesResponse) => {  
+        return articlesResponse.json.articles;
+      }).catch(e => {
+        return 500;
+      });
+
+    if(articles === 500) {
+      return;
+    }
+
+    this.props.articleActions.articlesList(articles);
+  }
+```
+... we started to using catch because if you will try to fetch an endpoint which returns an error, then you must also manage it in the certain async function. This is general showcase as in our example we don't secure the articles' fetching routes at all (500 is an error identification code and this is just an example).
+
+
+#### A summary of the $error returns on the backend
 
 As you see the returns are almost the same, we can make a helper function for that so there will be less code, but you need to remember that you need to put the path similar to one that you request when returning an error. For example, if you are on the articles.update, then you need return an error in the articles' path (or if you are on XYZ.update, then the error goes to the XYZ's path).
 

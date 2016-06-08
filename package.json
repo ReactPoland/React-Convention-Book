@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/ReactConvention/React-Convention-Book#readme",
   "dependencies": {
+    "aws-sdk": "^2.3.16",
     "babel": "^6.5.2",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.5.2",
@@ -38,10 +39,12 @@
     "jsonwebtoken": "^5.7.0",
     "material-ui": "0.15.0-alpha.1",
     "mongoose": "^4.4.5",
+    "node-env-file": "^0.1.8",
     "react": "^0.14.7",
     "react-dom": "0.14.7",
     "react-redux": "^4.4.0",
     "react-router": "1.0.0",
+    "react-s3-uploader": "^3.0.3",
     "redux": "^3.3.1",
     "redux-simple-router": "0.0.10",
     "redux-thunk": "^1.0.0"
