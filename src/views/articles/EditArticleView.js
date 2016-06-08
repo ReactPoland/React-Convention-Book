@@ -11,6 +11,7 @@ import WYSWIGeditor from '../../components/articles/WYSWIGeditor';
 import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Popover from 'material-ui/lib/popover/popover';
+import ImgUploader from '../../components/articles/ImgUploader';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -29,6 +30,7 @@ class EditArticleView extends React.Component {
     this._handleDeleteTap = this._handleDeleteTap.bind(this);
     this._handleDeletion = this._handleDeletion.bind(this);
     this._handleClosePopover = this._handleClosePopover.bind(this);
+    this.updateImgUrl = this.updateImgUrl.bind(this);
 
     this.state = {
       articleFetchError: null,
@@ -39,7 +41,8 @@ class EditArticleView extends React.Component {
       contentJSON: {},
       htmlContent: '',
       openDelete: false,
-      deleteAnchorEl: null
+      deleteAnchorEl: null,
+      articlePicUrl: '/static/placeholder.png'
     };
   }
 
@@ -54,7 +57,10 @@ class EditArticleView extends React.Component {
         if(articleDetails) {
           this.setState({ 
             editedArticleID: articleID, 
-            articleDetails: articleDetails
+            articleDetails: articleDetails,
+            articlePicUrl: articleDetails.articlePicUrl,
+            contentJSON: articleDetails.articleContentJSON,
+            htmlContent: articleDetails.articleContent
           });
         } else {
           this.setState({
@@ -75,8 +81,14 @@ class EditArticleView extends React.Component {
       _id: currentArticleID,
       articleTitle: this.state.title,
       articleContent: this.state.htmlContent,
-      articleContentJSON: this.state.contentJSON
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
     }
+
+    console.debug('editedArticle');
+    console.debug(editedArticle);
+    console.debug('editedArticle');
+
     console.debug(1);
     let editResults = await falcorModel
       .call(
@@ -123,6 +135,12 @@ class EditArticleView extends React.Component {
     });
   }
 
+  updateImgUrl(articlePicUrl) {
+    this.setState({ 
+      articlePicUrl: articlePicUrl
+    });
+  }
+
   render () {
     if(this.state.articleFetchError) {
       return <h1>Article not found (invalid article's ID {this.props.params.articleID})</h1>;
@@ -153,30 +171,35 @@ class EditArticleView extends React.Component {
           name="editarticle"
           title="Edit an article"
           onChangeTextJSON={this._onDraftJSChange} />
-          <RaisedButton
-            onClick={this._articleEditSubmit}
-            secondary={true}
-            type="submit"
-            style={{margin: '10px auto', display: 'block', width: 150}}
-            label={'Submit Edition'} />
+
+        <div style={{margin: '10px 10px 10px 10px'}}> 
+          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+        </div>
+
+        <RaisedButton
+          onClick={this._articleEditSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Edition'} />
         <hr />
         <h1>Delete permamently this article</h1>
-          <RaisedButton
-            onClick={this._handleDeleteTap}
-            label="Delete" />
-          <Popover
-            open={this.state.openDelete}
-            anchorEl={this.state.deleteAnchorEl}
-            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={this._handleClosePopover}>
-            <div style={{padding: 20}}>
-              <RaisedButton 
-                onClick={this._handleDeletion} 
-                primary={true} 
-                label="Permament delete, click here"/>
-            </div>
-          </Popover>
+        <RaisedButton
+          onClick={this._handleDeleteTap}
+          label="Delete" />
+        <Popover
+          open={this.state.openDelete}
+          anchorEl={this.state.deleteAnchorEl}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this._handleClosePopover}>
+          <div style={{padding: 20}}>
+            <RaisedButton 
+              onClick={this._handleDeletion} 
+              primary={true} 
+              label="Permament delete, click here"/>
+          </div>
+        </Popover>
       </div>
     );
   }
