@@ -37,7 +37,7 @@ class PublishingApp extends React.Component {
       });
 
     let articles = await falcorModel.
-      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON', 'articlePicUrl']]). 
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id', 'articleTitle', 'articleSubTitle','articleContent', 'articleContentJSON', 'articlePicUrl']]). 
       then((articlesResponse) => {  
         return articlesResponse.json.articles;
       }).catch(e => {
@@ -49,10 +49,6 @@ class PublishingApp extends React.Component {
       return;
     }
 
-    console.debug('articles');
-    console.debug(JSON.stringify(articles));
-    console.debug(typeof articles[0].articleContentJSON.entityMap);
-
     this.props.articleActions.articlesList(articles);
   }
 
@@ -60,7 +56,7 @@ class PublishingApp extends React.Component {
     let articlesJSX = [];
 
     this.props.article.forEach((articleDetails, articleKey) => {
-      let currentSubTitle = typeof articleDetails.articleSubTitle === 'undefined' ? articleDetails.articleSubTitle : '';
+      let currentSubTitle = typeof articleDetails.articleSubTitle !== 'undefined' ? articleDetails.articleSubTitle : '';
       let currentArticleJSX = (
         <div key={articleKey}>
           <ArticleCard 

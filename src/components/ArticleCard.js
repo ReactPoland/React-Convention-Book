@@ -48,7 +48,7 @@ class ArticleCard extends React.Component {
         <div style={leftDivStyle}>
           <Card >
             <CardMedia
-              overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
+              overlay={<CardTitle title={title} subtitle={subTitle} />}>
               <img src={articlePicUrl} height="190" />
             </CardMedia>
           </Card>
