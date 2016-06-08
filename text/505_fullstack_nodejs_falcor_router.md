@@ -1,11 +1,10 @@
 #### Wrapping up of our Publishing App and Refactoring
 
-
 Currently we have an app that works, but is missing some key features as for example:
 
-1) [in-progress] AWS S3 - ability to upload a photo for a new article
+1) [DONE] AWS S3 - ability to upload a photo for a new article
 
-2) [in-progress] AWS S3 - ability to upload an editor's avatar (that is shown next to the article)
+2) [DONE] AWS S3 - ability to upload an editor's avatar (that is shown next to the article)
 
 3) [in-progress] we are missing a way to set up a title, subtitle and "overlay subtitle" (add/edit's article):
 
@@ -955,6 +954,7 @@ Let's improve the dashboard with the cover so at the location src/views/Dashboar
 
       articlesJSX.push(currentArticleJSX);
     });
+    // below is rest of the render's function
 ```
 
 ... with the slighly improved:
@@ -976,13 +976,33 @@ Let's improve the dashboard with the cover so at the location src/views/Dashboar
 
       articlesJSX.push(currentArticleJSX);
     });
+    // below is rest of the render's function
 ```
 
 .. as you can find above, we have replaced the mocked placeholder with a real cover's photo so on our articles' dashboard (that is available after login) we will find real images in the thumbnails.
 
 
+TO-DO edit an article's cover photo
+
+
+### Remaining things to do in our publishing app
+
+In general, the things that we will finish further in this chapter are following:
+
+1) ability to add title and subtitle
+
+2) ability to prepare the exerpts of an article, so it's cut if it doesn't fit in the Material-UI Paper's component
+
+3) dashboard hotfix - strip html tags (check screenshot of that bug in the beggining of that chapter)
+
+4) a link to the article that has an unique slug in it (slug is prepared from the title, so someone who clicks the link can see "a teaser" of the  article's title)
+
+
+
 
 MISSING PARTS:
-- article link sub page (5 pages)
 - refactoring (5 pages)
 - unit testing 
+
+
+
