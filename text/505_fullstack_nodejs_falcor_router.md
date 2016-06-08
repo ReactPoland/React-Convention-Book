@@ -981,9 +981,211 @@ Let's improve the dashboard with the cover so at the location src/views/Dashboar
 
 .. as you can find above, we have replaced the mocked placeholder with a real cover's photo so on our articles' dashboard (that is available after login) we will find real images in the thumbnails.
 
+#### Edit an article's cover photo
 
-TO-DO edit an article's cover photo
+Regarding articles' photo we need to make some improvements in the src/views/articles/EditArticleView.js file as improting there the ImgUploader:
 
+```
+import ImgUploader from '../../components/articles/ImgUploader';
+```
+
+.. then after you have imported the ImgUploader please improve the constructor of the EditArticleView:
+```
+// old code to improve:
+class EditArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleEditSubmit = this._articleEditSubmit.bind(this);
+    this._fetchArticleData = this._fetchArticleData.bind(this);
+    this._handleDeleteTap = this._handleDeleteTap.bind(this);
+    this._handleDeletion = this._handleDeletion.bind(this);
+    this._handleClosePopover = this._handleClosePopover.bind(this);
+
+    this.state = {
+      articleFetchError: null,
+      articleEditSuccess: null,
+      editedArticleID: null,
+      articleDetails: null,
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      openDelete: false,
+      deleteAnchorEl: null
+    };
+  }
+```
+
+... to new improved constructor as following:
+
+```
+class EditArticleView extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onDraftJSChange = this._onDraftJSChange.bind(this);
+    this._articleEditSubmit = this._articleEditSubmit.bind(this);
+    this._fetchArticleData = this._fetchArticleData.bind(this);
+    this._handleDeleteTap = this._handleDeleteTap.bind(this);
+    this._handleDeletion = this._handleDeletion.bind(this);
+    this._handleClosePopover = this._handleClosePopover.bind(this);
+    this.updateImgUrl = this.updateImgUrl.bind(this);
+
+    this.state = {
+      articleFetchError: null,
+      articleEditSuccess: null,
+      editedArticleID: null,
+      articleDetails: null,
+      title: 'test',
+      contentJSON: {},
+      htmlContent: '',
+      openDelete: false,
+      deleteAnchorEl: null,
+      articlePicUrl: '/static/placeholder.png'
+    };
+  }
+```
+
+As you can find above we have binded this to the new function updateImgUrl (that will be the ImgUploader's callback) and we create a new default state for the articlePicUrl.
+
+
+Next step is to improve the _fetchArticleData function from the old:
+```
+// this is old already in your codenbase:
+  _fetchArticleData() {
+    let articleID = this.props.params.articleID;
+    if(typeof window !== 'undefined' && articleID) {
+        let articleDetails = this.props.article.get(articleID);
+        if(articleDetails) {
+          this.setState({ 
+            editedArticleID: articleID, 
+            articleDetails: articleDetails
+          });
+        } else {
+          this.setState({
+            articleFetchError: true
+          })
+        }
+    }
+  }
+```
+
+... to the improved one:
+```
+  _fetchArticleData() {
+    let articleID = this.props.params.articleID;
+    if(typeof window !== 'undefined' && articleID) {
+        let articleDetails = this.props.article.get(articleID);
+        if(articleDetails) {
+          this.setState({ 
+            editedArticleID: articleID, 
+            articleDetails: articleDetails,
+            articlePicUrl: articleDetails.articlePicUrl,
+            contentJSON: articleDetails.articleContentJSON,
+            htmlContent: articleDetails.articleContent
+          });
+        } else {
+          this.setState({
+            articleFetchError: true
+          })
+        }
+    }
+  }
+```
+... above we have added on an initial fetch some new this.setState's variables as: articlePicUrl, contentJSON and htmlContent. The article fetch is here because we need to setup a cover in the ImgUploader of a current image that has to be potentially changed. The contentJSON and htmlContent is here because in case someone won't edit anything in the WYSWIG then we need to have a default values from database (otherwise the edit's button hit would save empty values into db and break the whole edit's experience).
+
+
+Further going, we need to improve the _articleEditSubmit's function from old:
+```
+// old code to improve:
+  async _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON
+    // striped code for our convience
+```
+
+to the improved one:
+
+```
+  async _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
+    }
+    // striped code for our convience
+```
+
+... as a next step you need to add a new function in the EditArticleView's component:
+
+```
+  updateImgUrl(articlePicUrl) {
+    this.setState({ 
+      articlePicUrl: articlePicUrl
+    });
+  }
+```
+
+the last step in order to finish the edit's article cover is to improve the old render:
+```
+// old code to improve:
+    let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;
+
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Edit an exisitng article</h1>
+        <WYSWIGeditor
+          initialValue={initialWYSWIGValue}
+          name="editarticle"
+          title="Edit an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+
+        <RaisedButton
+          onClick={this._articleEditSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Edition'} />
+        <hr />
+```
+
+.. and that above we need to improve as following:
+```
+    let initialWYSWIGValue = this.state.articleDetails.articleContentJSON;
+
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Edit an exisitng article</h1>
+        <WYSWIGeditor
+          initialValue={initialWYSWIGValue}
+          name="editarticle"
+          title="Edit an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+
+        <div style={{margin: '10px 10px 10px 10px'}}> 
+          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+        </div>
+
+        <RaisedButton
+          onClick={this._articleEditSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Edition'} />
+        <hr />
+```
+
+As you can see above, we have added the ImgUploader and styled it a bit exactly the same way as in the AddArticleView. Rest of the ImgUploader's does the job for us in order to give an ability to edit's article photo for our users.
+
+![article example](http://test.przeorski.pl/book/528_edit_article_image.png)
+
+Above you can find out how the edit's view shall be looking after all the recent improvements.
 
 ### Remaining things within our publishing app
 
@@ -1001,7 +1203,6 @@ In general, the things that we will finish further in this chapter are following
 
 NEXT STEPS
 
-1) skodzić edycje covera
 
 2) opisac w książce ^^^
 
