@@ -1204,8 +1204,6 @@ In general, the things that we will finish further in this chapter are following
 NEXT STEPS
 
 
-2) opisac w książce ^^^
-
 3) skodzić ability to add / edit title and subtitle
 
 4) skodzić excerpts

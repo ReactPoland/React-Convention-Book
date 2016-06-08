@@ -11,6 +11,7 @@ mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
 
 var articleSchema = new Schema({
     articleTitle: String,
+    articleSubTitle: String,
     articleContent: String,
     articleContentJSON: Object,
     articlePicUrl: { type: String, default: '/static/placeholder.png' }

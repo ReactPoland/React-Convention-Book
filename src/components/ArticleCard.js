@@ -16,6 +16,7 @@ class ArticleCard extends React.Component {
 
   render() {
     let title = this.props.title || 'no title provided';
+    let subTitle = this.props.subTitle || '';
     let content = this.props.content || 'no content provided';
     let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';
 
@@ -40,7 +41,7 @@ class ArticleCard extends React.Component {
       <Paper style={paperStyle}>
         <CardHeader
           title={this.props.title}
-          subtitle="Subtitle"
+          subtitle={subTitle}
           avatar="/static/avatar.png"
         />
 

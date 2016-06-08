@@ -57,14 +57,15 @@ class PublishingApp extends React.Component {
   }
 
   render () {
-
     let articlesJSX = [];
 
     this.props.article.forEach((articleDetails, articleKey) => {
+      let currentSubTitle = typeof articleDetails.articleSubTitle === 'undefined' ? articleDetails.articleSubTitle : '';
       let currentArticleJSX = (
         <div key={articleKey}>
           <ArticleCard 
             title={articleDetails.articleTitle}
+            subTitle={currentSubTitle}
             content={articleDetails.articleContent} 
             articlePicUrl={articleDetails.articlePicUrl} />
         </div>
