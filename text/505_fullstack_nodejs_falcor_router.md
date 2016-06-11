@@ -1239,20 +1239,131 @@ var articleSchema = new Schema({
 
 As you can find we have added a lot required properties in our model, it will affect the ability to save incomplete objects, so in general our model will be more consistent through the whole life of our publishing app.
 
-We have also added a new property in our model called ***articleSubTitle*** which we will start using below.
+We have also added a new property in our model called ***articleSubTitle*** which we will be usefull later in this chapter.
+
+#### AddArticleView's improvements
+
+In general, we will add two DefaultInput's components (title and subtitle) and the whole form will be using formsy-react, so in the src/views/articles/AddArticleView.js add new imports:
+
+```
+import DefaultInput from '../../components/DefaultInput';
+import Formsy from 'formsy-react';
+```
+
+Next step is to improve the ***async _articleSubmit*** so change the old code:
+```
+// old code to improve:
+  async _articleSubmit() {
+    let newArticle = {
+      articleTitle: articleModel.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
+    }
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+          // rest code below is strped
+```
+
+.. and this code above improve as following:
+```
+  async _articleSubmit(articleModel) {
+    let newArticle = {
+      articleTitle: articleModel.title,
+      articleSubTitle: articleModel.subTitle,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
+    }
+
+    let newArticleID = await falcorModel
+      .call(
+            'articles.add',
+            [newArticle]
+          ).
+```
+
+As you can find above we have added articleModel in the _articleSubmit's arguments, this will come from formsy-react the same way as we implemented it in the LoginView or RegisterView. We have also added the articleSubTitle's property to the newArticle's object.
 
 
+The old render's function return looks as following:
+```
+// old code below:
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+        <WYSWIGeditor
+          name="addarticle"
+          title="Create an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+
+        <div style={{margin: '10px 10px 10px 10px'}}> 
+          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+        </div>
+
+        <RaisedButton
+          onClick={this._articleSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Article'} />
+      </div>
+    );
+```
+
+.. it has to be improved as below:
+```
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Add Article</h1>
+
+        <Formsy.Form onSubmit={this._articleSubmit}>
+          <DefaultInput 
+            onChange={(event) => {}} 
+            name='title' 
+            title='Article Title (required)' required />
+
+          <DefaultInput 
+            onChange={(event) => {}} 
+            name='subTitle' 
+            title='Article Subtitle' />
+
+          <WYSWIGeditor
+            name="addarticle"
+            title="Create an article"
+            onChangeTextJSON={this._onDraftJSChange} />
+
+          <div style={{margin: '10px 10px 10px 10px'}}> 
+            <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+          </div>
+
+          <RaisedButton
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Article'} />
+        </Formsy.Form>
+      </div>
+    );
+```
+
+On the above's code-snippet we have added Formsy.Form the same way as on the LoginView so I won't describe it in details - the most important thing to notice is  that onSubmit we call the ***this._articleSubmit***'s function. We also have added two DefaultInput's components (title and subtitle) - the data from those two inputs will be used in the ***async _articleSubmit(articleModel)*** (as you already shall known based on previous implementations in that book).
 
 
+Based on the changes in the Mongoose's config and in the AddArticleView's component - now you shall be able to add a title and subtitle to a new article as on the screenshot below:
+
+![article add title and subtitle](http://test.przeorski.pl/book/529_article_add_title_subtitle.png)
 
 
-
-
-
-1) [done] server/configMongoose.js
-2) 
-
-
+0) [done] server/configMongoose.js
+1) src/views/articles/AddArticleView.js
+2) src/views/articles/EditArticleView.js
+3) src/components/ArticleCard.js
+4) src/layouts/PublishingApp.js
 
 NEXT STEPS
 
