@@ -1200,11 +1200,66 @@ In general, the things that we will finish further in this chapter are following
 4) a link to the article that has an unique slug in it (slug is prepared from the title, so someone who clicks the link can see "a teaser" of the  article's title)
 
 
+#### Adding ability of add/edit a title and subtitle of an article
+
+In general, we shall improve the article's model in the server/configMongoose.js file, so the old code:
+```
+// old codebase:
+var articleSchema = new Schema({
+    articleTitle: String,
+    articleContent: String,
+    articleContentJSON: Object,
+    articlePicUrl: { type: String, default: '/static/placeholder.png' }
+  }, 
+  { 
+    minimize: false 
+  }
+);
+```
+
+.. replace with improved one as following:
+```
+var defaultDraftJSobject = {
+    "blocks" : [],
+    "entityMap" : {}
+}
+
+var articleSchema = new Schema({
+    articleTitle: { type: String, required: true, default: 'default article title' },
+    articleSubTitle: { type: String, required: true, default: '' },
+    articleContent: { type: String, required: true, default: '' },
+    articleContentJSON: { type: Object, required: true, default: defaultDraftJSobject },
+    articlePicUrl: { type: String, required: true, default: '/static/placeholder.png' }
+  }, 
+  { 
+    minimize: false 
+  }
+);
+```
+
+As you can find we have added a lot required properties in our model, it will affect the ability to save incomplete objects, so in general our model will be more consistent through the whole life of our publishing app.
+
+We have also added a new property in our model called ***articleSubTitle*** which we will start using below.
+
+
+
+
+
+
+
+
+
+1) [done] server/configMongoose.js
+2) 
+
+
 
 NEXT STEPS
 
 
-3) skodzić ability to add / edit title and subtitle
+3a) [DONE] skodzić ability to add / edit title and subtitle
+
+3b) [in-progress] opis w książce
 
 4) skodzić excerpts
 
