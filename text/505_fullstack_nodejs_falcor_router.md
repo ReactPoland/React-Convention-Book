@@ -1589,10 +1589,47 @@ The last thing is to make the PublishingApp's fetching also the subtitle which h
 
 ... as you can find above, we have started to falcorModel.get with the articleSubTitle's property.
 
+After all those changes on the main page you can find an edited article with title, subtitle, a cover photo and the content (created by our WYSWIG):
+
+![article example](http://test.przeorski.pl/book/531_edited_article_with_subtitle.png)
 
 #### Dashboard hotfix (strip html)
 
+The last step in this chapter is to hotfix the dashboard, so in the file:
 
+```
+// old code:
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let articlePicUrl = articleDetails.articlePicUrl || '/static/placeholder.png';
+      let currentArticleJSX = (
+        <Link to={`/edit-article/${articleDetails['_id']}`}>
+          <ListItem
+            key={articleKey}
+            leftAvatar={<img src={articlePicUrl} width="50" height="50" />}
+            primaryText={articleDetails.articleTitle}
+            secondaryText={articleDetails.articleContent}
+          />
+        </Link>
+      );
+```
 
+... improve to the new one:
+```
+    this.props.article.forEach((articleDetails, articleKey) => {
+      let articlePicUrl = articleDetails.articlePicUrl || '/static/placeholder.png';
+      let articleContentPlanText = articleDetails.articleContent.replace(/<\/?[^>]+(>|$)/g, "");
+      let currentArticleJSX = (
+        <Link to={`/edit-article/${articleDetails['_id']}`}>
+          <ListItem
+            key={articleKey}
+            leftAvatar={<img src={articlePicUrl} width="50" height="50" />}
+            primaryText={articleDetails.articleTitle}
+            secondaryText={articleContentPlanText}
+          />
+        </Link>
+      );
+```
+As you  can find, we simply strip the html tags from the HTML, so we will get better secondaryText without HTML's markup as on our example below:
 
+![dashboard hotfix](http://test.przeorski.pl/book/532_dashboard_hotfix.png)
 
