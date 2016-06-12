@@ -166,27 +166,13 @@ class EditArticleView extends React.Component {
         <h1>Edit an exisitng article</h1>
         <Formsy.Form onSubmit={this._articleEditSubmit}>
           <DefaultInput 
-            onChange={(event) => {
-              // let currentText = event.target.value;
-              // let newArticleDetails = this.state.articleDetails;
-              // newArticleDetails.articleTitle = currentText;
-              // this.setState({
-              //   newArticleDetails
-              // });
-            }}
+            onChange={(event) => {}}
             name='title' 
             value={this.state.articleDetails.articleTitle}
             title='Article Title (required)' required />
 
           <DefaultInput 
-            onChange={(event) => {
-              // let currentText = event.target.value;
-              // let newArticleDetails = this.state.articleDetails;
-              // newArticleDetails.articleSubTitle = currentText;
-              // this.setState({
-              //   newArticleDetails
-              // });
-            }}
+            onChange={(event) => {}}
             name='subTitle' 
             value={this.state.articleDetails.articleSubTitle}
             title='Article Subtitle' />

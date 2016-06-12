@@ -1358,10 +1358,260 @@ Based on the changes in the Mongoose's config and in the AddArticleView's compon
 
 ![article add title and subtitle](http://test.przeorski.pl/book/529_article_add_title_subtitle.png)
 
+We are missing ability to edit the title and subtitle, let's implement that below.
+
+#### Ability to edit an article title and subtitle
+
+Go to the src/views/articles/EditArticleView.js file and add new imports (similar way as on the add's view):
+```
+import DefaultInput from '../../components/DefaultInput';
+import Formsy from 'formsy-react';
+```
+
+... and then improve the old _articleEditSubmit's function from old one:
+```
+// old code:
+  async _articleEditSubmit() {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: this.state.title,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
+    }
+    // rest of the function has been striped below
+```
+
+... to following:
+```
+  async _articleEditSubmit(articleModel) {
+    let currentArticleID = this.state.editedArticleID;
+    let editedArticle = {
+      _id: currentArticleID,
+      articleTitle: articleModel.title,
+      articleSubTitle: articleModel.subTitle,
+      articleContent: this.state.htmlContent,
+      articleContentJSON: this.state.contentJSON,
+      articlePicUrl: this.state.articlePicUrl
+    }
+    // rest of the function has been striped below
+```
+
+As you can find above, we do the same thing as on the AddArticleView, so you shall be familiar with it. The last thing is to update the render so we will be able to input the title and subtitle that will be sent back as a callback to the _articleEditSubmit with data in the articleModel. The old return in the render's function is:
+
+```
+// old code:
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Edit an exisitng article</h1>
+        <WYSWIGeditor
+          initialValue={initialWYSWIGValue}
+          name="editarticle"
+          title="Edit an article"
+          onChangeTextJSON={this._onDraftJSChange} />
+        <div style={{margin: '10px 10px 10px 10px'}}> 
+          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+        </div>
+        <RaisedButton
+          onClick={this._articleEditSubmit}
+          secondary={true}
+          type="submit"
+          style={{margin: '10px auto', display: 'block', width: 150}}
+          label={'Submit Edition'} />
+        <hr />
+        {/* striped below */}
+```
+
+... and the new improved return in the render's function is as following:
+```
+    return (
+      <div style={{height: '100%', width: '75%', margin: 'auto'}}>
+        <h1>Edit an exisitng article</h1>
+        <Formsy.Form onSubmit={this._articleEditSubmit}>
+          <DefaultInput 
+            onChange={(event) => {}}
+            name='title' 
+            value={this.state.articleDetails.articleTitle}
+            title='Article Title (required)' required />
+
+          <DefaultInput 
+            onChange={(event) => {}}
+            name='subTitle' 
+            value={this.state.articleDetails.articleSubTitle}
+            title='Article Subtitle' />
+
+          <WYSWIGeditor
+            initialValue={initialWYSWIGValue}
+            name="editarticle"
+            title="Edit an article"
+            onChangeTextJSON={this._onDraftJSChange} />
+
+          <div style={{margin: '10px 10px 10px 10px'}}> 
+            <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+          </div>
+
+          <RaisedButton
+            onClick={this._articleEditSubmit}
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Edition'} />
+        </Formsy.Form>
+        {/* striped below */}
+```
+The same thing as in the AddArticleView, we are doing above. We are introducing the Formsy.Form which is calling back the article's title and subtitle when a user hits the submit button (Submit Edition).
+
+An example, how it shall looks after finish:
+![article edit title subtitle](http://test.przeorski.pl/book/530_article_edit_title_subtitle.png)
+
+#### ArticleCard and PublishingApp improvements
+
+Improve the render function in ArticleCard so it will show also the subtitle (currently it's mocked). The src/components/ArticleCard.js file old content is:
+```
+// old code:
+  render() {
+    let title = this.props.title || 'no title provided';
+    let content = this.props.content || 'no content provided';
+    let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';
+
+    let paperStyle = {
+      padding: 10, 
+      width: '100%', 
+      height: 300
+    };
+
+    let leftDivStyle = {
+      width: '30%', 
+      float: 'left'
+    }
+    
+    let rightDivStyle = {
+      width: '60%', 
+      float: 'left', 
+      padding: '10px 10px 10px 10px'
+    }
+
+    return (
+      <Paper style={paperStyle}>
+        <CardHeader
+          title={this.props.title}
+          subtitle="Subtitle"
+          avatar="/static/avatar.png"
+        />
+
+        <div style={leftDivStyle}>
+          <Card >
+            <CardMedia
+              overlay={<CardTitle title={title} subtitle="Overlay subtitle" />}>
+              <img src={articlePicUrl} height="190" />
+            </CardMedia>
+          </Card>
+        </div>
+        <div style={rightDivStyle}>
+          <div dangerouslySetInnerHTML={{__html: content}} />
+        </div>
+      </Paper>);
+  }
+```
+
+... replace this above with the improved one:
+```
+  render() {
+    let title = this.props.title || 'no title provided';
+    let subTitle = this.props.subTitle || '';
+    let content = this.props.content || 'no content provided';
+    let articlePicUrl = this.props.articlePicUrl || '/static/placeholder.png';
+
+    let paperStyle = {
+      padding: 10, 
+      width: '100%', 
+      height: 300
+    };
+
+    let leftDivStyle = {
+      width: '30%', 
+      float: 'left'
+    }
+    
+    let rightDivStyle = {
+      width: '60%', 
+      float: 'left', 
+      padding: '10px 10px 10px 10px'
+    }
+
+    return (
+      <Paper style={paperStyle}>
+        <CardHeader
+          title={this.props.title}
+          subtitle={subTitle}
+          avatar="/static/avatar.png"
+        />
+
+        <div style={leftDivStyle}>
+          <Card >
+            <CardMedia
+              overlay={<CardTitle title={title} subtitle={subTitle} />}>
+              <img src={articlePicUrl} height="190" />
+            </CardMedia>
+          </Card>
+        </div>
+        <div style={rightDivStyle}>
+          <div dangerouslySetInnerHTML={{__html: content}} />
+        </div>
+      </Paper>);
+  }
+```
+
+As you can find above, we have definied new subTitle's variable and then we have used it in the CardHeader and the CardMedia's components so now it will show the subtitle as well.
+
+
+The last thing is to make the PublishingApp's fetching also the subtitle which has been introduced in that chapter, so we need to improve the old:
+```
+// old code:
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id','articleTitle', 'articleContent', 'articleContentJSON', 'articlePicUrl']]). 
+      then((articlesResponse) => {  
+        return articlesResponse.json.articles;
+      }).catch(e => {
+        console.debug(e);
+        return 500;
+      });
+    // no changes below, striped
+```
+
+... and the improved one is:
+```
+  async _fetch() {
+    let articlesLength = await falcorModel.
+      getValue("articles.length").
+      then(function(length) {  
+        return length;
+      });
+
+    let articles = await falcorModel.
+      get(['articles', {from: 0, to: articlesLength-1}, ['_id', 'articleTitle', 'articleSubTitle','articleContent', 'articleContentJSON', 'articlePicUrl']]). 
+      then((articlesResponse) => {  
+        return articlesResponse.json.articles;
+      }).catch(e => {
+        console.debug(e);
+        return 500;
+      });
+```
+
+... as you can find above, we have started to falcorModel.get with the articleSubTitle's property.
+
 
 0) [done] server/configMongoose.js
-1) src/views/articles/AddArticleView.js
-2) src/views/articles/EditArticleView.js
+1) [done] src/views/articles/AddArticleView.js
+2) [in-progress] src/views/articles/EditArticleView.js
 3) src/components/ArticleCard.js
 4) src/layouts/PublishingApp.js
 
