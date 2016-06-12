@@ -1,24 +1,18 @@
-#### Wrapping up of our Publishing App and Refactoring
+#### Wrapping up of our Publishing App
 
 Currently we have an app that works, but is missing some key features as for example:
 
-1) [DONE] AWS S3 - ability to upload a photo for a new article
+1) AWS S3 - ability to upload a photo for a new article
 
-2) [DONE] AWS S3 - ability to upload an editor's avatar (that is shown next to the article)
+2) AWS S3 - ability to upload an editor's avatar (that is shown next to the article)
 
-3) [in-progress] we are missing a way to set up a title, subtitle and "overlay subtitle" (add/edit's article):
+3) We are missing a way to set up a title, subtitle and "overlay subtitle" (add/edit's article):
 
 ![article example](http://test.przeorski.pl/book/501_article_example.png)
 
-4) [in-progress] article's excerpts - as you can see above, we need to make a mechanism that cuts the articles' text when a user is on the main page
-
-5) [in-progress] articles' on the dashboard currently have html in the content, we need to improve it (screenshot below):
+4) Articles' on the dashboard currently have html in the content, we need to improve it (screenshot below):
 ![articles html strip on dashboard](http://test.przeorski.pl/book/502_articles_dashboard_html_to_strip.png)
 
-6) [in-progress] articles' slug and sub-page - we need to create slugs mechanism, so a user can visit an article with a user's friendly links as for example:
-```
-http://localhost:3000/article-content-slug-is-always-unique
-```
 
 We need to finish these remaining stuff (from 1 to 6 points above). After we will be done with those improvements, then we will do some refactoring.
 
@@ -1187,19 +1181,6 @@ As you can see above, we have added the ImgUploader and styled it a bit exactly 
 
 Above you can find out how the edit's view shall be looking after all the recent improvements.
 
-### Remaining things within our publishing app
-
-In general, the things that we will finish further in this chapter are following:
-
-1) ability to add title and subtitle
-
-2) ability to prepare the exerpts of an article, so it's cut if it doesn't fit in the Material-UI Paper's component
-
-3) dashboard hotfix - strip html tags (check screenshot of that bug in the beggining of that chapter)
-
-4) a link to the article that has an unique slug in it (slug is prepared from the title, so someone who clicks the link can see "a teaser" of the  article's title)
-
-
 #### Adding ability of add/edit a title and subtitle of an article
 
 In general, we shall improve the article's model in the server/configMongoose.js file, so the old code:
@@ -1607,35 +1588,4 @@ The last thing is to make the PublishingApp's fetching also the subtitle which h
 ```
 
 ... as you can find above, we have started to falcorModel.get with the articleSubTitle's property.
-
-
-0) [done] server/configMongoose.js
-1) [done] src/views/articles/AddArticleView.js
-2) [in-progress] src/views/articles/EditArticleView.js
-3) src/components/ArticleCard.js
-4) src/layouts/PublishingApp.js
-
-NEXT STEPS
-
-
-3a) [DONE] skodzić ability to add / edit title and subtitle
-
-3b) [in-progress] opis w książce
-
-4) skodzić excerpts
-
-5) skodzic dashboard hotfix
-
-6) opisać od 3 do 5 punkty
-
-7) skodzić slugs and article's subpage
-
-
-MISSING PARTS:
-- refactoring (5 pages)
-- unit testing 
-- edycja zdjęcia profilowego
-- author ID w artykule
-
-
 
