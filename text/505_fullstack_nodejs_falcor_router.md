@@ -1589,3 +1589,10 @@ The last thing is to make the PublishingApp's fetching also the subtitle which h
 
 ... as you can find above, we have started to falcorModel.get with the articleSubTitle's property.
 
+
+#### Dashboard hotfix (strip html)
+
+
+
+
+
