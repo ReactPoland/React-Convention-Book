@@ -1,0 +1,22 @@
+#### Mongoose, MongoDB and mLab - important aspects and preparation for the deployment
+
+We came to the point where we need to start planning deployment of our application. We have choosen MongoDB as our database. There are different approaches of using it for scaling - you can do everything on your own with your own servers (more time consuming and demanding version) or you can use services which are doing replications/scaling for you as Database-as-a-Service providers.
+
+We will use mLab in our case so we will spend less time configuring the low-level stuff on MongoDB and more building robust scalable application.
+
+Go to the www.mLab.com - they have free DB plans:
+
+![mLab homepage](http://test.przeorski.pl/book/601_mlab_homepage.png)
+
+In general, mLab provides several interesting features as:
+
+1) Tools for cloud automation - on-demand provisioning (preparing) on AWS, Azure, or Google. Replica Set (described in details later in that chapter), Sharded Cluster. It also provides seamless, zero-downtime scaling, high availability via auto-failover.
+
+2) Tools for backup and recovery - automatic backups can help in the later's project stage in case of an emergency
+
+3) Tools for monitoring & alerts - for example, there is "slow queries" tool that help you to find slow queries, which for example can be optimized by adding an index 
+
+4) Tolls for online's data browsing - you can browse the mongoDB's collection via browser
+
+http://docs.mlab.com/connecting/#replica-set-connections
+
