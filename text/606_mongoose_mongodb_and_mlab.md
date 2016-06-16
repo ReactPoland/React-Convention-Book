@@ -1,0 +1,51 @@
+#### Mongoose, MongoDB and mLab - important aspects and preparation for the deployment
+
+We came to the point where we need to start planning deployment of our application. We have choosen MongoDB as our database. There are different approaches of using it for scaling - you can do everything on your own with your own servers (more time consuming and demanding version) or you can use services which are doing replications/scaling for you as Database-as-a-Service providers.
+
+We will use mLab in our case so we will spend less time configuring the low-level stuff on MongoDB and more building robust scalable application.
+
+Go to the www.mLab.com - they have free DB plans:
+
+![mLab homepage](http://test.przeorski.pl/book/601_mlab_homepage.png)
+
+In general, mLab provides several interesting features as:
+
+1) Tools for cloud automation - on-demand provisioning (preparing) on AWS, Azure, or Google. Replica Set (described in details later in that chapter), Sharded Cluster. It also provides seamless, zero-downtime scaling, high availability via auto-failover.
+
+2) Tools for backup and recovery - automatic backups can help in the later's project stage in case of an emergency.
+
+3) Tools for monitoring & alerts - for example, there is "slow queries" tool that help you to find slow queries, which for example can be optimized by adding an index.
+
+4) Tools for online's data browsing - you can browse the MongoDB's collection via browser when you are logged into the mLab's administration panel.
+
+http://docs.mlab.com/connecting/#replica-set-connections
+
+#### Replica set connections and high availability
+
+In MongoDB, there is a feature that ensures high availability using automatic failover. In short failover is a feature that in case if a primary server (that has the most important copy of your database) fails, then a secondary member's database becomes the primary one in case if the orginal primary's server is unavailable.
+
+Secondary member's database is a server that keeps the so called "read only backup" of your database. 
+
+The primary and the secondary's database are very often replicating itself in order to be in sync all the time. The secondary server is mostly for the read's operation. 
+
+That whole "replica set"'s feature is quite complicated to implement from scratch (without mLab), but we will use the features provided by mLab in order to abstract this part so our whole process will be more automated.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
