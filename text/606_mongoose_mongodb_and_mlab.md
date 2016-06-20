@@ -40,21 +40,28 @@ You can find more documentation about how to play with that flip-flop's demo at 
 
 #### Free vs. paid plan in mLab
 
-In our book we will guide you via process of using mLab with a free plan. In mLab, the replicas set is available in the paid plans (starting at $15/month) - and of course you can use that flip-flop's demo to play with that very important feature of the MongoDB.
+In our book we will guide you via process of using mLab with a free plan. In mLab, the replicas set is available in the paid plans (starting at $15/month) - and of course you can use that flip-flop's demo to play for free with that very important feature of the MongoDB.
 
-#### Opening the mLab's account and starting a new node
+#### The new mLab's account and node
+
+1) Go to https://mlab.com/signup/
+
+![mLab signup](http://test.przeorski.pl/book/603_mlab_signup.png)
+
+2) Verify your email via clicking a confirm link in your inbox
+
+3) Click on the "Create new" button as on the screenshot:
+
+![mLab signup](http://test.przeorski.pl/book/604_create_new_on_dashboard.png)
 
 
+4) You are on the "Create new deployment" choose Single-node > Sanbox (FREE):
 
+![deployment page](http://test.przeorski.pl/book/605_deployment_mongodb_page.png)
 
+5) While your are still at https://mlab.com/create (Create new deployment) - choose the database name to "publishingapp" and click the "Create new MongoDB deployment" button:
 
-
-
-
-
-
-
-
+![create button mongodb](http://test.przeorski.pl/book/606_create_button.png)
 
 
 
