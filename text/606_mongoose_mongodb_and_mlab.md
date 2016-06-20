@@ -2,9 +2,9 @@
 
 We came to the point where we need to start planning deployment of our application. We have choosen MongoDB as our database. There are different approaches of using it for scaling - you can do everything on your own with your own servers (more time consuming and demanding version) or you can use services which are doing replications/scaling for you as Database-as-a-Service providers.
 
-We will use mLab in our case so we will spend less time configuring the low-level stuff on MongoDB and more building robust scalable application.
+We will use mLab in our case so we will spend less time configuring the low-level stuff on MongoDB and more building robust scalable application. 
 
-Go to the www.mLab.com - they have free DB plans:
+If we go to the www.mLab.com - they have free (that we will use in that chapter) and paid DB plans:
 
 ![mLab homepage](http://test.przeorski.pl/book/601_mlab_homepage.png)
 
@@ -18,8 +18,6 @@ In general, mLab provides several interesting features as:
 
 4) Tools for online's data browsing - you can browse the MongoDB's collection via browser when you are logged into the mLab's administration panel.
 
-http://docs.mlab.com/connecting/#replica-set-connections
-
 #### Replica set connections and high availability
 
 In MongoDB, there is a feature that ensures high availability using automatic failover. In short failover is a feature that in case if a primary server (that has the most important copy of your database) fails, then a secondary member's database becomes the primary one in case if the orginal primary's server is unavailable.
@@ -28,8 +26,23 @@ Secondary member's database is a server that keeps the so called "read only back
 
 The primary and the secondary's database are very often replicating itself in order to be in sync all the time. The secondary server is mostly for the read's operation. 
 
-That whole "replica set"'s feature is quite complicated to implement from scratch (without mLab), but we will use the features provided by mLab in order to abstract this part so our whole process will be more automated.
+That whole "replica set"'s feature is quite time consuming to implement from scratch (without mLab), but the mLab provides that feature in order to "abstract" this part so our whole process will be more automated.
 
+#### MongoDB fail-over
+
+mLab also provides a great tool for testing the fail-over scenarion in our app that is available at http://flip-flop.mlab.com:
+
+![mLab homepage](http://test.przeorski.pl/book/602_flip_flow_mlab.png)
+
+We can test there the how the automatic failover with MongoDB replica sets does work. As we can see on the screenshot above, there are three nodes: replicas “flip” and “flop”, plus an arbiter. In that's flip-flow's demo you can connect to the arbiter server's and the primary server step down and the cluster will failover to the other node. You can experiment with it - please try on your own and have fun!
+
+You can find more documentation about how to play with that flip-flop's demo at http://docs.mlab.com/connecting/#replica-set-connections
+
+#### Free vs. paid plan in mLab
+
+In our book we will guide you via process of using mLab with a free plan. In mLab, the replicas set is available in the paid plans (starting at $15/month) - and of course you can use that flip-flop's demo to play with that very important feature of the MongoDB.
+
+#### Opening the mLab's account and starting a new node
 
 
 
