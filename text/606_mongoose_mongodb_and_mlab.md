@@ -86,11 +86,52 @@ DB password: pwdmlab
 2) After that, we need to create the collections that are identical as in our local MongoDB so: 
 
 a) Collection -> Add collection -> articles
+
 b) Collection -> Add collection -> pubUsers
 
 
 After all those steps you shall be able to see something like this below:
 
 ![deployment success](http://test.przeorski.pl/book/609_users_articles_mlab_collections.png)
+
+At this stage, the last thing is to write down the mongo details from this below:
+
+![deployment success](http://test.przeorski.pl/book/610_mongo_mlab_details.png)
+
+#### A summary about enviroment variables
+
+All that information from mlab we need to keep alongside with the AWS S3 details - they will be useful in the next chapter when deploying our app on Amazon AWS EC2.
+
+At this point of book that are the details that we need to keep separately:
+```
+AWS_ACCESS_KEY_ID=<<access-key-obtained-in-previous-chapter>>
+AWS_SECRET_ACCESS_KEY=<<secret-key-obtained-in-previous-chapter>>
+AWS_BUCKET_NAME=publishing-app
+AWS_REGION_NAME=eu-central-1
+MONGO_USER=usermlab
+MONGO_PASS=pwdmlab
+MONGO_PORT=25762
+MONGO_ENV=publishingapp
+MONGO_HOSTNAME=ds025762.mlab.com
+```
+
+All the MONGO env variables, can be obtained from the mLab where you can find a link similar to this:
+```
+mongo ds025762.mlab.com:25762/publishingapp -u <dbuser> -p <dbpassword>
+```
+
+In the next chapter we will start using those enviroment variables on our production server on the AWS EC2's platform. Please keep all those detailes noted in easy accessible place in a safe place - we will use it soon.
+
+
+
+
+PLAN:
+
+- create amazon linux ubuntu instance
+
+
+
+
+
 
 
