@@ -63,9 +63,34 @@ In our book we will guide you via process of using mLab with a free plan. In mLa
 
 ![create button mongodb](http://test.przeorski.pl/book/606_create_button.png)
 
+After all that steps you shall be able to find the MongoDB's deployment on the dashboard (https://mlab.com/home) as on the example below:
+
+![deployment success](http://test.przeorski.pl/book/607_deployment_on_dashboard.png)
+
+#### Creating the database's user/password and other configurations
+
+Right now, we have ready database for our publishing application, but it's still empty. 
+
+There are steps that we need to take in order to use it:
+
+1) Create a user/password combination: we need to click on the database that has been just created and there is a tab called "users". After you click on it, there is a button "Add database user" then fill in the details into the form:
+
+![deployment success](http://test.przeorski.pl/book/608_db_user_password.png)
+
+Let's assume for this book that our details are:
+DB username: usermlab
+DB password: pwdmlab
+
+... so in places where we will use those details, I will user those two above.
+
+2) After that, we need to create the collections that are identical as in our local MongoDB so: 
+
+a) Collection -> Add collection -> articles
+b) Collection -> Add collection -> pubUsers
 
 
+After all those steps you shall be able to see something like this below:
 
-
+![deployment success](http://test.przeorski.pl/book/609_users_articles_mlab_collections.png)
 
 
