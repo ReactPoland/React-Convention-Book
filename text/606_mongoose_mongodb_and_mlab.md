@@ -96,7 +96,7 @@ After all those steps you shall be able to see something like this below:
 
 At this stage, the last thing is to write down the mongo details from this below:
 
-![deployment success](http://test.przeorski.pl/book/610_mongo_mlab_details.png)
+![deployment success](http://test.przeorski.pl/book/610_mongo_mlab_details2.png)
 
 #### A summary about enviroment variables
 
