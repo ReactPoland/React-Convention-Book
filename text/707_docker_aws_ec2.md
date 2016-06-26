@@ -17,6 +17,22 @@ General Docker's benefits are that it increases developers' productivity, helps 
 Installation of the Docker is quite easy. Please visit the official installation page at https://docs.docker.com/engine/installation/ because it will guide you best depending on your operating system. There are easy to follow installers for iOS and Windows and a lot of instructions for different Linux's distributions.
 
 
+After you have installed the Docker and your system, run the it (with use of Docker Quickstart Terminal for example) and then type in your terminal:
+
+```
+$ docker info
+```
+
+After you run that commend then you shall be able to see something similar to the below's screenshot:
+
+![docker info in terminal](http://test.przeorski.pl/book/701_docker_info.png)
+
+
+Your installation is successful - let's continue.
+
+#### Creating Docker's image
+
+
 
 
 
