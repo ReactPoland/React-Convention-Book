@@ -14,6 +14,9 @@ General Docker's benefits are that it increases developers' productivity, helps 
 
 #### Docker's installation
 
+Installation of the Docker is quite easy. Please visit the official installation page at https://docs.docker.com/engine/installation/ because it will guide you best depending on your operating system. There are easy to follow installers for iOS and Windows and a lot of instructions for different Linux's distributions.
+
+
 
 
 
