@@ -12,12 +12,16 @@ The good part is that the Docker's containers are hardware and platform independ
 General Docker's benefits are that it increases developers' productivity, helps them to ship more software faster, help to move the software from local development machines to production deployments on AWS etc. Docker's allow also versioning (similar to GIT) of your software which can be helpful when you need a quick rollback on the production's server etc.
 
 
-#### Docker's installation
+#### Docker's installation (with Docker Toolbox)
 
 Installation of the Docker is quite easy. Please visit the official installation page at https://docs.docker.com/engine/installation/ because it will guide you best depending on your operating system. There are easy to follow installers for iOS and Windows and a lot of instructions for different Linux's distributions.
 
+If you are using other than Linux machine, then you also need to install the Docker Toolbox's for Windows or OS X. This is quite simple with it's installers that are available at https://www.docker.com/products/docker-toolbox as on the example below:
 
-After you have installed the Docker and your system, run the it (with use of Docker Quickstart Terminal for example) and then type in your terminal:
+![docker toolbox](http://test.przeorski.pl/book/700_docker_toolbox.png)
+
+
+After you have installed the Docker (altogether with the toolbox on OS X and Windows) on your local machine, then run in terminal the following command:
 
 ```
 $ docker info
@@ -28,9 +32,66 @@ After you run that commend then you shall be able to see something similar to th
 ![docker info in terminal](http://test.przeorski.pl/book/701_docker_info.png)
 
 
-Your installation is successful - let's continue.
+If you can see something similar to the above, then your installation is successful - let's continue with the Docker.
+
+#### Hub Docker (hello world example)
+
+Before we will start creating the Publishing App's Docker container, let's start playing with an official Docker's hello world example that will make you aware how the Docker Hub is working.
+
+The Docker Hub is the same for Docker's containers as the GitHub for the Git's repositories. You can have public and private containers on Docker. The main page of the Docker Hub is as on the screenshot below:
+
+![docker hub](http://test.przeorski.pl/book/702_docker_hub.png)
+
+... and just to give you a feel, if you will visit the https://hub.docker.com/explore/ then you can see different containers that are ready for use as for example:
+
+![docker explore](http://test.przeorski.pl/book/703_docker_explore.png)
+
+
+Just for for our demo's exercise, we will use a container called "hello world" which is publicly available at:
+``` 
+https://hub.docker.com/r/library/hello-world/
+```
+
+In order to run this hello world's example run in your terminal:
+```
+$ docker run hello-world
+```
+
+After you run this, then you shall see something similar in your console as on the below's screenshot:
+![running hello world](http://test.przeorski.pl/book/704_running_hello_world.png)
+
+
+Explanation about what've just happened: the ***docker run*** command we use in order to start the container based on an image (in our example we have used hello world's container image). In that case we have:
+
+1) ran the command which said to Docker start the container named "hello-world" with no extra commands
+
+2) then after you hit the "enter", the Docker has downloaded the Docker Hub
+
+3) and then it's started the container in the VM's with use of the Docker Toolbox on other systems than Linux
+
+
+The hello-world image comes from the public registry called Docker Hub as mentioned before (which you can visit at https://hub.docker.com/r/library/hello-world/). 
+
+
+#### Dockerfile example
+
+Every image is composed of a dockerfile. An example dockerfile as for the hello-world example looks as following:
+```
+// source: https://github.com/docker-library/hello-world/blob/master/Dockerfile
+FROM scratch
+COPY hello /
+CMD ["/hello"]
+```
+
+The dockerfile is a set of instructions which says to the Docker how to build a container image - we will create our own in a moment.
+
 
 #### Creating Docker's image
+
+
+
+
+
 
 
 
