@@ -83,12 +83,27 @@ COPY hello /
 CMD ["/hello"]
 ```
 
-The dockerfile is a set of instructions which says to the Docker how to build a container image - we will create our own in a moment.
+The dockerfile is a set of instructions which says to the Docker how to build a container image - we will create our own in a moment. Analogy for a docker file, can be the bash language that you can use on any Linux/Unix machine - of course it's different but general idea of giving writing instructions in order to make the job is similar.
 
 
 #### Creating Docker's image
 
+Currently we are sure that our Docker setup is working correctly, let's start with setting the image.
 
+
+
+
+
+1dcae25ab9f1
+
+przeor@Kamils-MacBook-Pro docker $ docker-machine env
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.99.100:2376"
+export DOCKER_CERT_PATH="/Users/przeor/.docker/machine/machines/default"
+export DOCKER_MACHINE_NAME="default"
+# Run this command to configure your shell: 
+# eval $(docker-machine env)
+przeor@Kamils-MacBook-Pro docker $ 
 
 
 
