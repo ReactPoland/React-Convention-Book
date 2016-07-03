@@ -1,0 +1,4 @@
+docker run -d -p 80:3000 przeor/przeor
+
+
+http://www.ybrikman.com/writing/2015/11/11/running-docker-aws-ground-up/
