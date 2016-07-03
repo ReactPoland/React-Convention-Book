@@ -55,12 +55,6 @@ class PublishingApp extends React.Component {
   render () {
     let articlesJSX = [];
 
-    console.info(this.props.article);
-    console.info('console.info(this.props.article);');
-    console.info(typeof this.props.article);
-    console.info('111', this.props.article.get);
-    console.info('222', this.props.article.forEach);
-
     this.props.article.forEach((articleDetails, articleKey) => {
       let currentSubTitle = typeof articleDetails.articleSubTitle !== 'undefined' ? articleDetails.articleSubTitle : '';
       let currentArticleJSX = (
