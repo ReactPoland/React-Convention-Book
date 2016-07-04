@@ -1,0 +1,29 @@
+FROM centos:centos6
+​
+RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+RUN yum update -y
+RUN yum install -y curl git ruby rubygems tar wget gcc-c++
+
+yum install -y curl git tar wget
+
+RUN wget -q https://iojs.org/dist/v3.0.0/iojs-v3.0.0-linux-x64.tar.gz -O - | tar xzf - -C /opt/
+RUN mv /opt/iojs-v* /opt/node
+RUN ln -s /opt/node/bin/iojs /usr/bin/iojs
+RUN ln -s /opt/node/bin/node /usr/bin/node
+RUN ln -s /opt/node/bin/npm /usr/bin/npm
+RUN gem install sass
+RUN npm install uglify-to-browserify
+​
+COPY . /opt/analytics-web-app/
+​
+WORKDIR /opt/analytics-web-app
+​
+RUN npm install
+RUN npm run build
+​
+RUN gem uninstall -x sass
+RUN yum remove ruby rubygems gcc gcc-c++ -y
+RUN yum clean all
+​
+EXPOSE  3001
+CMD ["npm", "run", "start-prod"]

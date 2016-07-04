@@ -109,9 +109,15 @@ let renderFullPage = (html, initialState) =>
 
 app.use(handleServerSideRender);
 
-
-app.server.listen(process.env.PORT || 3000);
+console.log('works1');
+console.log('works1');
+console.log('works1');
+app.server.listen(process.env.PORT || 3001);
 console.log(`Started on port ${app.server.address().port}`);
+
+console.log('works1');
+console.log('works1');
+console.log('works1');
 
 export default app;
 
