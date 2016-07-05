@@ -7,7 +7,14 @@ const conf = {
   env: process.env.MONGO_ENV || 'local',
 };
 
-mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
+let dbUser
+if(process.env.MONGO_USER && process.env.MONGO_PASS) {
+  dbUser = {user: process.env.MONGO_USER, pass: process.env.MONGO_PASS}
+} else {
+  dbUser = undefined; // on local dev not required
+}
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`, dbUser);
 
 var defaultDraftJSobject = {
     "blocks" : [],

@@ -54,6 +54,7 @@
     "redux-thunk": "1.0.0"
   },
   "devDependencies": {
+    "babel": "6.5.2",
     "babel-core": "6.6.5",
     "babel-loader": "6.2.4",
     "babel-polyfill": "6.6.1",
