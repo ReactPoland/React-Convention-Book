@@ -1,5 +1,5 @@
 module.exports = {
-    entry: ['babel-polyfill', '/usr/src/app/src/App.js'],
+    entry: ['babel-polyfill', './src/app.js'],
     output: {
         path: './dist',
         filename: 'app.js',
@@ -9,6 +9,9 @@ module.exports = {
         inline: true,
         port: 3333,
         contentBase: './dist'
+    },
+    resolveLoader: {
+        root: path.join(__dirname, 'node_modules')
     },
     module: {
         loaders: [
