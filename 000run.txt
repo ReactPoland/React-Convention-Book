@@ -1,0 +1,30 @@
+docker run -d -p 80:3000 przeor/przeor
+
+
+http://www.ybrikman.com/writing/2015/11/11/running-docker-aws-ground-up/
+
+
+docker run -d -p 5000:5000 training/webapp:latest python app.py
+
+
+--------
+--------
+1) docker build -t przeor/d1 .
+
+
+2) docker run -i -t -p 3000:3000 przeor/w4
+
+3) docker run -p 3000:3000  przeor/w2 
+
+
+
+
+npm start
+
+3) docker run -d -p 3001:3001  przeor/test6 npm start
+
+ith IP 192.168.99.100
+
+
+(/opt/analytics-web-app/node_modules/babel-core/node_modules/babel-runtime/core-js/json/stringify.js:1:93)
+(/opt/analytics-web-app/node_modules/babel-core/node_modules/babel-runtime/core-js/json/stringify.js:1:93)

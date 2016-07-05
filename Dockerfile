@@ -16,5 +16,5 @@ WORKDIR /opt/analytics-web-app
 RUN npm install
 RUN yum clean all
 
-EXPOSE 3001
+EXPOSE 3000
 # CMD ["npm", "start"]
