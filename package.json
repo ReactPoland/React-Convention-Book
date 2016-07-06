@@ -12,6 +12,10 @@
     "type": "git",
     "url": "git+https://github.com/ReactConvention/React-Convention-Book.git"
   },
+  "engines": {
+      "node": "4.0.0",
+      "npm": "2.14.2"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
