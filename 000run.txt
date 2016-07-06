@@ -21,7 +21,7 @@ docker run -d -p 5000:5000 training/webapp:latest python app.py
 
 npm start
 
-3) docker run -d -p 3001:3001  przeor/test6 npm start
+3) docker run -d -p 3000:3000  przeor/1 npm start
 
 ith IP 192.168.99.100
 

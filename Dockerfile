@@ -9,12 +9,12 @@ RUN mv /opt/node-v* /opt/node
 RUN ln -s /opt/node/bin/node /usr/bin/node
 RUN ln -s /opt/node/bin/npm /usr/bin/npm
 
-COPY . /opt/analytics-web-app/
+COPY . /opt/publishing-app/
 
-WORKDIR /opt/analytics-web-app
+WORKDIR /opt/publishing-app
 
 RUN npm install
 RUN yum clean all
 
 EXPOSE 3000
-# CMD ["npm", "start"]
+CMD ["npm", "start"]
