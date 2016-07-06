@@ -16,5 +16,5 @@ WORKDIR /opt/publishing-app
 RUN npm install
 RUN yum clean all
 
-EXPOSE 3000
+EXPOSE 5000
 CMD ["npm", "start"]

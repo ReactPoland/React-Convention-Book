@@ -110,7 +110,7 @@ let renderFullPage = (html, initialState) =>
 app.use(handleServerSideRender);
 
 
-app.server.listen(process.env.PORT || 3000);
+app.server.listen(process.env.PORT || 5000);
 console.log(`Started on port ${app.server.address().port}`);
 
 export default app;
