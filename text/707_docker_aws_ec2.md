@@ -99,12 +99,105 @@ CMD ["/hello"]
 The dockerfile is a set of instructions which says to the Docker how to build a container image - we will create our own in a moment. Analogy for a docker file, can be the bash language that you can use on any Linux/Unix machine - of course it's different but general idea of giving writing instructions in order to make the job is similar.
 
 
-#### Creating Docker's image
+#### Modifications to our codebase in order to make it
 
-Currently we are sure that our Docker application's setup is working correctly, let's start with setting the image.
+Currently we are sure that our Docker application's setup is working correctly.
 
 First of all we need to make some modification to our current codebase as there are small tweaks to make it work properly.
 
+Make sure that the following files have the content as below:
+
+- The server/.env content has to be as following:
+
+```
+AWS_ACCESS_KEY_ID=<<___AWS_ACCESS_KEY_ID__>>
+AWS_SECRET_ACCESS_KEY=<<___AWS_SECRET_ACCESS_KEY__>>
+AWS_BUCKET_NAME=publishing-app
+AWS_REGION_NAME=eu-central-1
+MONGO_USER=<<___your_mlab_mongo_user__>>
+MONGO_PASS=<<___your_mlab_mongo_pass__>>
+MONGO_PORT=<<___your_mlab_mongo_port__>>
+MONGO_ENV=publishingapp
+MONGO_HOSTNAME=<<___your_mlab_mongo_hostname__>>
+```
+<InformationBox>
+For now we will load the enviroment variables from a file, but later we will load them from the AWS's panel. It's not really production secure to keep all that secret data on the server. We use it now for sake of brevity and later we delete it in favor of a more secure approach.
+</InformationBox>
+
+Regarding the mongo's enviroment variables, we had learn that in the previous chapter about setting the mlab (get to back to the chapter if you miss any of the details required at this point).
+
+- The server/index.js content has to be as following:
+
+```
+var env = require('node-env-file');
+// Load any undefined ENV variables form a specified file. 
+env(__dirname + '/.env');
+
+require("babel-core/register");
+require("babel-polyfill");
+require('./server');
+```
+
+Make sure that you are loading the env from file at the same beggining of the server/index.js - it will be required in order to load the mLab's mongo details from the enviroment variables (server/.env).
+
+
+- The server/configMongoose.js content has to be replaced from the old code:
+```
+// this is old code from configMongoose
+import mongoose from 'mongoose';
+var Schema = mongoose.Schema;
+
+const conf = {
+  hostname: process.env.MONGO_HOSTNAME || 'localhost',
+  port: process.env.MONGO_PORT || 27017,
+  env: process.env.MONGO_ENV || 'local',
+};
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
+```
+
+... and new version the same improved code has to be as below:
+```
+import mongoose from 'mongoose';
+var Schema = mongoose.Schema;
+
+const conf = {
+  hostname: process.env.MONGO_HOSTNAME || 'localhost',
+  port: process.env.MONGO_PORT || 27017,
+  env: process.env.MONGO_ENV || 'local',
+};
+
+let dbUser
+if(process.env.MONGO_USER && process.env.MONGO_PASS) {
+  dbUser = {user: process.env.MONGO_USER, pass: process.env.MONGO_PASS}
+} else {
+  dbUser = undefined; // on local dev not required
+}
+
+mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`, dbUser);
+```
+
+As you can find, we have added abilility to connect with a specific db's user. We need it because the localhost on which we were working didn't required any user, but when we are starting to use the mLab's MongoDB then specific our database's user is a must. Otherwise we won't be able to authenticate correctly.
+
+
+From this point, you don't need to run "mongod" process in the background of your system, because the app will connect with the mLab's MongoDB node which you created in the previous chapter.
+
+
+You can try to run the project with the command:
+```
+npm start
+```
+
+... then you shall be able to load the app:
+
+
+
+the important difference now is that all the operations are done on our remote's MongoDB (not on the local one).
+
+
+After the Publishing App uses the mLab's MongoDB - we are ready for preparing our Docker's image and then deploy it on several instances of AWS EC2 with use of AWS Load Balances and EC2 Container Service.
+
+#### Working on the Publishing App Docker's image
 
 
 
