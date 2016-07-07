@@ -143,7 +143,7 @@ Make sure that you are loading the env from file at the same beggining of the se
 
 - The server/configMongoose.js content has to be replaced from the old code:
 ```
-// this is old code from configMongoose
+// this is old code from our codebase:
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
@@ -156,7 +156,7 @@ const conf = {
 mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
 ```
 
-... and new version the same improved code has to be as below:
+... and new version of the same improved code has to be as below:
 ```
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
@@ -177,10 +177,10 @@ if(process.env.MONGO_USER && process.env.MONGO_PASS) {
 mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`, dbUser);
 ```
 
-As you can find, we have added abilility to connect with a specific db's user. We need it because the localhost on which we were working didn't required any user, but when we are starting to use the mLab's MongoDB then specific our database's user is a must. Otherwise we won't be able to authenticate correctly.
+As you can find, we have added abilility to connect with a specific DB's user. We need it because the localhost on which we were working didn't required any user, but when we are starting to use the mLab's MongoDB then specific our database's user is a must. Otherwise we won't be able to authenticate correctly.
 
 
-From this point, you don't need to run "mongod" process in the background of your system, because the app will connect with the mLab's MongoDB node which you created in the previous chapter.
+From this point, you don't need to run "mongod" process in the background of your system, because the app will connect with the mLab's MongoDB node which you created in the previous chapter. The mLab's MongoDB (free version) is running 24/7, but if you plan to use it for production's ready apps then you shall update it and start using the replica set feature as well (which was mentioned in the previous chapter).
 
 
 You can try to run the project with the command:
@@ -199,6 +199,22 @@ the important difference now is that all the CRUD operations (read/write via our
 After the Publishing App uses the mLab's MongoDB - we are ready for preparing our Docker's image and then deploy it on several instances of AWS EC2 with use of AWS Load Balances and EC2 Container Service.
 
 #### Working on the Publishing App Docker's image
+
+Before continuing you shall be able to run your project locally with use remote's mLab's MongoDB. It's required because we will start running our Publishing App in the Docker's container. Our app then will connect with a mongo's remotely. We won't run any MongoDB's process in any Docker container - this is why it's so important to use the mLab in any below's steps.
+
+
+Let's create the Dockerfile so do following in a terminal/command line:
+
+```
+[[your are in the project main directory]]
+$ touch Dockerfile
+```
+
+... after that it's the content of your new Dockerfile:
+
+```
+
+```
 
 
 
