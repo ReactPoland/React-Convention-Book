@@ -190,7 +190,7 @@ npm start
 
 ... then you shall be able to load the app:
 
-![mlab test works](http://test.przeorski.pl/book/705_mlab_loaded_data.png)
+![mlab test works](http://test.przeorski.pl/book/705_mlab_loaded_data2.png)
 
 
 the important difference now is that all the CRUD operations (read/write via our Publishing App) are done on our remote's MongoDB (not on the local one).
