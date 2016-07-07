@@ -1,7 +1,7 @@
 #### Docker and EC2
 
 
-We have done the all stuff related to the database-as-a-backend with mLab. It's time to prepare our Docker container.
+We have done the all stuff related to the database-as-a-backend with mLab. It's time to prepare our Docker container and deploy it on the EC2 altogether with use of load balancers.
 
 What is Docker? It's a very useful piece of software which is open source and helps you to pack, ship and run any app as a light (in comparision to a virtual machine for example) container. 
 
@@ -10,6 +10,19 @@ A container's goals  are similar to the Virtual Machines - the big difference is
 The good part is that the Docker's containers are hardware and platform independent so all worries about what you are working will run everywhere are disappearing.
 
 General Docker's benefits are that it increases developers' productivity, helps them to ship more software faster, help to move the software from local development machines to production deployments on AWS etc. Docker's allow also versioning (similar to GIT) of your software which can be helpful when you need a quick rollback on the production's server etc.
+
+
+In that chapter you will learn how to do following things:
+- install Docker app on your machine with Dockertoolbox on other than Linux machines
+- test if your Docker setup is correct
+- prepare the Publishing App in order to use a mLab's mongo for the database
+- create a new Docker's container for the publishing app
+- Basics things about Dockerfile
+- EC2
+- EC2 Container Services
+- AWS Load Balancers
+- IAM
+- 
 
 
 #### Docker's installation (with Docker Toolbox)
@@ -88,22 +101,12 @@ The dockerfile is a set of instructions which says to the Docker how to build a 
 
 #### Creating Docker's image
 
-Currently we are sure that our Docker setup is working correctly, let's start with setting the image.
+Currently we are sure that our Docker application's setup is working correctly, let's start with setting the image.
+
+First of all we need to make some modification to our current codebase as there are small tweaks to make it work properly.
 
 
 
-
-
-1dcae25ab9f1
-
-przeor@Kamils-MacBook-Pro docker $ docker-machine env
-export DOCKER_TLS_VERIFY="1"
-export DOCKER_HOST="tcp://192.168.99.100:2376"
-export DOCKER_CERT_PATH="/Users/przeor/.docker/machine/machines/default"
-export DOCKER_MACHINE_NAME="default"
-# Run this command to configure your shell: 
-# eval $(docker-machine env)
-przeor@Kamils-MacBook-Pro docker $ 
 
 
 
