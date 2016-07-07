@@ -190,9 +190,10 @@ npm start
 
 ... then you shall be able to load the app:
 
+![mlab test works](http://test.przeorski.pl/book/705_mlab_loaded_data.png)
 
 
-the important difference now is that all the operations are done on our remote's MongoDB (not on the local one).
+the important difference now is that all the CRUD operations (read/write via our Publishing App) are done on our remote's MongoDB (not on the local one).
 
 
 After the Publishing App uses the mLab's MongoDB - we are ready for preparing our Docker's image and then deploy it on several instances of AWS EC2 with use of AWS Load Balances and EC2 Container Service.
