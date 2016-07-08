@@ -283,18 +283,105 @@ docker login
 
 .. the login command will prompt you to insert your Docker's username and password. After you are authenticated correctly, you can run the build command:
 ```
-docker build -t przeor/pubapp .
+docker build -t przeor/pub-app-docker .
 ```
 
-That above command will build the container with use of Dockerfile commands.
+That above command will build the container with use of Dockerfile commands. This is what you shall see (step1, step2 etc.):
+
+![docker build container](http://test.przeorski.pl/book/706_build_docker_container.png)
+
+... and after a successfull build you shall see in your terminal/command line somethign similar to:
+```
+[[[striped from here for the sake of brevity]]]
+Step 12 : EXPOSE 3000
+ ---> Running in 08be0359cbd5
+ ---> ce0433b220a0
+Removing intermediate container 08be0359cbd5
+Step 13 : CMD npm start
+ ---> Running in 586df04c8c81
+ ---> 1970dde57fec
+Removing intermediate container 586df04c8c81
+Successfully built 1970dde57fec
+```
+
+As you can see above from the Docker's terminal about, we have built in a successful manner the container. Next step is to test it locally, then learn little bit more of Docker's basics and finally start working on our AWS deployment.
+
+### Running the Publishing App container locally
+
+In order to test if the cointainer has been built correctly, do the following steps - put in the bash/command line following:
+
+```
+$ docker-machine env
+```
+.. the above command shall give you the output similar to this:
+
+```
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.99.100:2376"
+export DOCKER_CERT_PATH="/Users/przeor/.docker/machine/machines/default"
+export DOCKER_MACHINE_NAME="default"
+# Run this command to configure your shell: 
+# eval $(docker-machine env)
+```
+
+We are looking for the DOCKER_HOST's ip - in our above case it's ***192.168.99.100***.
+
+This Docker's host ip will be used to check if our application is running correctly in the container. Keep it noted.
+
+Next step is to run our local container with the following command:
+
+```
+$ docker run -d -p 80:3000  przeor/pub-app-docker npm start
+```
+
+Regarding flags:
+a) -d flag equals detached so the process will run in the background. You can list all running docker's process with the following command:
+
+```
+docker ps
+```
+
+... and example output would be as below:
+
+![docker build container](http://test.przeorski.pl/book/709_example_docker_ps.png)
+
+b) -p flag is telling that the container's port 3000 bind to the port 80 on the docker ip host. So if we expose our node app on ports 3000 in the container, then it will be able on a standard port 80 on the ip (in the examples it will be 192.168.99.100:80 which obviously the port 80 is for all http requests).
+
+<InformationBox>
+More references about the docker run are available at https://docs.docker.com/engine/reference/run/
+</InformationBox>
+
+
+The above command run shall run the app as on the screenshot below:
+
+![docker build container](http://test.przeorski.pl/book/707_docker_works_locally.png)
+
+As you can see the ip address in the browser's url at is http://192.168.99.100 - it's our Docker host ip.
+
+
+### Debuging a container
+
+In case if the container doesn't work for you as on the screenshot above, then use the below commend to debug and find the reason:
+```
+docker run -i -t -p 80:3000 przeor/pub-app-docker
+```
+
+This above command with -i -t -p flag will show you the all logs in the terminal/command line as on the screenshot below (just an example in order to show you potential ability to debug a Docker's container locally):
+
+![docker build container](http://test.przeorski.pl/book/708_error_example_docker_debug_locally.png)
+
+### Pushing a Docker container to a remote repository
+
+If a container works for you locally then it's almost ready for the AWS deployment.
+
+
+
+### A summary of usefull Docker commands
+
 
 
 
 PLAN
-
-1) screenshot from build
-
-2) run this docker container as a test with screenshots
 
 3) if it works, then learn a reader about other commands as:
 ```
