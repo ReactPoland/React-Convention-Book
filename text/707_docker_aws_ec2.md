@@ -213,7 +213,7 @@ $ touch Dockerfile
 ... after that it's the content of your new Dockerfile:
 
 ```
-FROM centos:centos6
+FROM centos:centos7
 
 RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 RUN yum update -y
@@ -237,7 +237,9 @@ CMD ["npm", "start"]
 
 Let's explain step by step the Dockerfile that we are going to use in our Publishing App altogether with the Docker:
 
-1) 
+1) ***FROM centos:centos7*** - it is saying that we will use as a starting point Linux Centos 7 distribution from the https://hub.docker.com/r/_/centos/ Docker's public repository.
+
+You can use any other package as a starting point as for example Linux Ubuntu, but we are using Centos7 because it's more professional
 
 
 
