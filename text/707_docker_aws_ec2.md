@@ -239,7 +239,10 @@ Let's explain step by step the Dockerfile that we are going to use in our Publis
 
 1) ***FROM centos:centos7*** - it is saying that we will use as a starting point Linux Centos 7 distribution from the https://hub.docker.com/r/_/centos/ Docker's public repository.
 
-You can use any other package as a starting point as for example Linux Ubuntu, but we are using Centos7 because it's more professional
+You can use any other package as a starting point as for example Linux Ubuntu, but we are using Centos7 because it's more lightweight and generally very good for web apps deployment. You can find more at https://www.centos.org/
+
+
+2) 
 
 
 
