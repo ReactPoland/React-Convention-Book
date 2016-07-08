@@ -288,7 +288,7 @@ docker build -t przeor/pub-app-docker .
 
 That above command will build the container with use of Dockerfile commands. This is what you shall see (step1, step2 etc.):
 
-![docker build container](http://test.przeorski.pl/book/706_build_docker_container.png)
+![docker build container](http://test.przeorski.pl/book/706_build_docker_container2.png)
 
 ... and after a successfull build you shall see in your terminal/command line somethign similar to:
 ```
@@ -343,9 +343,13 @@ docker ps
 
 ... and example output would be as below:
 
-![docker build container](http://test.przeorski.pl/book/709_example_docker_ps.png)
+![docker build container](http://test.przeorski.pl/book/709_example_docker_ps2.png)
 
 b) -p flag is telling that the container's port 3000 bind to the port 80 on the docker ip host. So if we expose our node app on ports 3000 in the container, then it will be able on a standard port 80 on the ip (in the examples it will be 192.168.99.100:80 which obviously the port 80 is for all http requests).
+
+c) przeor/pub-app-docker - we tell the container's name that we want to run
+
+d) "npm start" - we also need to tell what command we want to run by the Docker's container right after the start (otherwise container would run and stop immediately if we wouldn't specify the "npm start" command)
 
 <InformationBox>
 More references about the docker run are available at https://docs.docker.com/engine/reference/run/
@@ -354,7 +358,7 @@ More references about the docker run are available at https://docs.docker.com/en
 
 The above command run shall run the app as on the screenshot below:
 
-![docker build container](http://test.przeorski.pl/book/707_docker_works_locally.png)
+![docker build container](http://test.przeorski.pl/book/707_docker_works_locally2.png)
 
 As you can see the ip address in the browser's url at is http://192.168.99.100 - it's our Docker host ip.
 
@@ -368,7 +372,7 @@ docker run -i -t -p 80:3000 przeor/pub-app-docker
 
 This above command with -i -t -p flag will show you the all logs in the terminal/command line as on the screenshot below (just an example in order to show you potential ability to debug a Docker's container locally):
 
-![docker build container](http://test.przeorski.pl/book/708_error_example_docker_debug_locally.png)
+![docker build container](http://test.przeorski.pl/book/708_error_example_docker_debug_locally2.png)
 
 ### Pushing a Docker container to a remote repository
 
