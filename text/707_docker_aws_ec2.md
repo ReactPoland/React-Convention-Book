@@ -290,6 +290,31 @@ That above command will build the container with use of Dockerfile commands.
 
 
 
+PLAN
+
+1) screenshot from build
+
+2) run this docker container as a test with screenshots
+
+3) if it works, then learn a reader about other commands as:
+```
+docker images
+docker ps
+docker stop YOUR_CONTAINER_ID
+docker rm YOUR_CONTAINER_ID
+```
+
+4) after learning big picture, as user to push the container to his container public
+
+5) check if container has been successfully pushed
+
+6) start the AWS setup from the scratch with use of:
+http://www.ybrikman.com/writing/2015/11/11/running-docker-aws-ground-up/
+
+
+
+
+
 
 
 
