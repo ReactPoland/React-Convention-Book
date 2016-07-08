@@ -363,7 +363,7 @@ The above command run shall run the app as on the screenshot below:
 As you can see the ip address in the browser's url at is http://192.168.99.100 - it's our Docker host ip.
 
 
-### Debuging a container
+### Debugging a container
 
 In case if the container doesn't work for you as on the screenshot above, then use the below commend to debug and find the reason:
 ```
