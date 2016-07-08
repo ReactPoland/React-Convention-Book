@@ -215,9 +215,8 @@ $ touch Dockerfile
 ```
 FROM centos:centos7
 
-RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 RUN yum update -y
-RUN yum install -y curl git tar wget
+RUN yum install -y tar wget
 RUN wget -q https://nodejs.org/dist/v4.0.0/node-v4.0.0-linux-x64.tar.gz -O - | tar xzf - -C /opt/
 
 RUN mv /opt/node-v* /opt/node
@@ -241,8 +240,41 @@ Let's explain step by step the Dockerfile that we are going to use in our Publis
 
 You can use any other package as a starting point as for example Linux Ubuntu, but we are using Centos7 because it's more lightweight and generally very good for web apps deployment. You can find more at https://www.centos.org/
 
+<InformationBox>
+Documentation of all commands are available at https://docs.docker.com/engine/reference/builder/
+</InformationBox>
 
-2) 
+2) ***RUN yum update -y*** - we are updating packages from the command line with yum. Standard thing for any Linux setup.
+
+
+3) ***RUN yum install -y tar wget*** - installing two packages as tar (for unpacking files) and wget (for downloading files)
+
+4) ***RUN wget -q https://nodejs.org/dist/v4.0.0/node-v4.0.0-linux-x64.tar.gz -O - | tar xzf - -C /opt/**** - this commend downloads the node4.0.0 to our Centos' container and then unpack it and put all the files into the /opt/ directory.
+
+5) ***RUN mv /opt/node-v* /opt/node*** - renaming the folder we have just download and unpacked (with node) to a simple "node" wihtout version naming.
+
+6) ***RUN ln -s /opt/node/bin/node /usr/bin/node*** - we are linking the /opt/node/bin/node location with a link /usr/bin/node so we are able to use simple "$ node" command in the terminal. Standard stuff for Linux's users.
+
+7) ***RUN ln -s /opt/node/bin/npm /usr/bin/npm*** - the same as with node, but with the npm. We are linking it in order to make the usage easier and linked to "$ npm" on our Linux Centos7.
+
+8) ***COPY . /opt/publishing-app/*** - this copy all the files in the "context" (the dot sign "." is location when you start the container build - we will do it in a moment) and it copies all the files into the /opt/publishing-app/ location in our container.
+
+In our case, we have created the Dockerfile in our Publishing App's directory so it will copy all the project files into the container to the given location at /opt/publishing-app/.
+
+9) ***WORKDIR /opt/publishing-app*** - after we have our Publishing App's files in our Docker's container then we need to choose to the working directory. It's similar as "$ cd /opt/publishing-app" on any unix/linux machine.
+
+10) ***RUN npm install*** - when we are in our working dir which is /opt/publishing-app then we run the standard ***npm install*** command
+
+11) ***RUN yum clean all*** - we clean the yum cache
+
+12) ***EXPOSE 3000*** - we define the port that is using our Publishing Application
+
+13) ***CMD ["npm", "start"]*** - then we specify how to run the application in our Docker's container
+
+
+#### Building the Publishing App container
+
+
 
 
 
