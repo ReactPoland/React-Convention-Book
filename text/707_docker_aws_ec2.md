@@ -274,10 +274,19 @@ In our case, we have created the Dockerfile in our Publishing App's directory so
 
 #### Building the Publishing App container
 
+Currently you shall be able to build the Docker's container.
 
+In the main directory of the project you need to run:
+```
+docker login
+```
 
+.. the login command will prompt you to insert your Docker's username and password. After you are authenticated correctly, you can run the build command:
+```
+docker build -t przeor/pubapp .
+```
 
-
+That above command will build the container with use of Dockerfile commands.
 
 
 
