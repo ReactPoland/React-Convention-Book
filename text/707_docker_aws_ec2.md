@@ -378,6 +378,15 @@ This above command with -i -t -p flag will show you the all logs in the terminal
 
 If a container works for you locally then it's almost ready for the AWS deployment.
 
+The last thing is to push the container to the remote repository hosted by the Docker Hub.
+
+```
+docker push przeor/pub-app-docker
+```
+
+.. and then you shall be able to find in your bash/command line something similar to:
+
+![docker build container](http://test.przeorski.pl/book/710_push_docker_container.png)
 
 
 ### A summary of usefull Docker commands
@@ -393,6 +402,7 @@ docker images
 docker ps
 docker stop YOUR_CONTAINER_ID
 docker rm YOUR_CONTAINER_ID
+docker tag przeor/pub-app-docker:latest przeor/pub-app-docker:0.1
 ```
 
 4) after learning big picture, as user to push the container to his container public
