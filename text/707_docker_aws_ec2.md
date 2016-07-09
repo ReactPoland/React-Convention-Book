@@ -286,6 +286,11 @@ docker login
 docker build -t przeor/pub-app-docker .
 ```
 
+<InformationBox>
+Of course your username and the container name combination has to be yours. Replace it with your details.
+</InformationBox>
+
+
 That above command will build the container with use of Dockerfile commands. This is what you shall see (step1, step2 etc.):
 
 ![docker build container](http://test.przeorski.pl/book/706_build_docker_container2.png)
@@ -388,26 +393,74 @@ docker push przeor/pub-app-docker
 
 ![docker build container](http://test.przeorski.pl/book/710_push_docker_container.png)
 
+.. and the link to the pushed repo shall be similar to the one below:
+
+![docker build container](http://test.przeorski.pl/book/711_push_docker_container_online.png)
+
+The above's screenshot has been made on the docker's pushed repository.
+
 
 ### A summary of usefull Docker commands
 
+Usefull Docker's commands:
 
-
-
-PLAN
-
-3) if it works, then learn a reader about other commands as:
+a) The following command will list all the images and docker rm can delete the repo from your local in case if you want to delete it:
 ```
 docker images
-docker ps
-docker stop YOUR_CONTAINER_ID
-docker rm YOUR_CONTAINER_ID
-docker tag przeor/pub-app-docker:latest przeor/pub-app-docker:0.1
+docker rm CONTAINER-ID
 ```
 
-4) after learning big picture, as user to push the container to his container public
+<InformationBox>
+You can use just first 3 letters/numbers from the CONTAINER-ID - you don't need to write down whole container's id. This is a convenience.
+</InformationBox>
 
-5) check if container has been successfully pushed
+b) Next is used for stopping a running docker's container:
+```
+docker ps
+docker stop CONTAINER-ID
+```
+
+c) You can use version's tag of your containers with the following approach:
+```
+docker tag przeor/pub-app-docker:latest przeor/pub-app-docker:0.1
+docker images
+```
+
+After you will do the dockers images, then you can notice that you have two containers - one with a tag latest and second 0.1. This is a way to track changes because if you will push the container the tag will be also listed on the Docker Hub.
+
+
+d) Check your container local ip:
+```
+$ docker-machine env
+```
+
+e) Build your container from the Dockerfile:
+```
+docker build -t przeor/pub-app-docker .
+```
+
+f) Run your container in the "detached" mode:
+```
+$ docker run -d -p 80:3000  przeor/pub-app-docker npm start
+```
+
+g) Run your container in order to debug without detaching it so you can find what is going on in the container's bash terminal:
+```
+docker run -i -t -p 80:3000 przeor/pub-app-docker
+```
+
+
+
+### AWS deployment
+
+
+
+
+
+
+
+
+
 
 6) start the AWS setup from the scratch with use of:
 http://www.ybrikman.com/writing/2015/11/11/running-docker-aws-ground-up/
