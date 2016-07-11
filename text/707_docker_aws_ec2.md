@@ -566,26 +566,36 @@ Our goal for now is to get to the security configuration page because we need to
 
 A security group consists of rules control network traffic for the EC2 instance (ala firewall options). 
 
-For the security give a new name as:
-```
-ssh-and-http-security-group
-```
+For the security give a new name as "ssh-and-http-security-group":
 
-721 - security options
+![EC2 security group options](http://test.przeorski.pl/book/721_security_group_options.png)
 
-722 - click review and launch
+As you can find above you need also click the "Add Rule" button and add new one called "http". This will allow our new EC2 instance to be available via port 80 for all the IPs.
 
-723 - review and click launch
+After you added the name and the HTTP port 80 to as the new rule, then you can click "Review and Launch" button:
 
-724_key_pair - key pair required
+![EC2 review and launch button](http://test.przeorski.pl/book/722_review_and_launch.png)
 
-725_create_new_key_pair - creating key pair "pubapp-ec2-key-pair"
+... then after you are happy with reviewing the instance click the blue button called "launch" on that view:
 
-726_click_view_launch_log - on that page click "View launch log"
+![EC2 review instance](http://test.przeorski.pl/book/723_review.png)
 
-727_launch_log - viewing launched EC2 instance
+After you will click the "launch" button, then you shall see a modal which will say "Select an exisitng key pair or create a new key pair":
 
+![EC2 key pair](http://test.przeorski.pl/book/724_key_pair.png)
 
+.. generally, you need to create a new key pair - give it a name "pubapp-ec2-key-pair" and then click the download button as on the screenshot below:
+![EC2 create new key pair](http://test.przeorski.pl/book/725_create_new_key_pair.png)
+
+After you have downloaded the "pubapp-ec2-key-pair" then you will be able to click the blue button "launch". Next you shall see the following:
+
+![EC2 launched](http://test.przeorski.pl/book/726_click_view_launch_log.png)
+
+From that screen you can go directly to the EC2 launch logs (click the "view launch log" link) so you will be able to find your instance listed as on the example below:
+
+![EC2 launch_log](http://test.przeorski.pl/book/727_launch_log.png)
+
+Great - your first EC2 has been launched successfully! We need to login to it and set up the Docker's container from there.
 
 
 
