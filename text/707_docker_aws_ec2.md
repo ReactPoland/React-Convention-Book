@@ -451,13 +451,38 @@ docker run -i -t -p 80:3000 przeor/pub-app-docker
 
 
 
-### AWS deployment
+### Introduction to Docker on AWS EC2
+
+Two chapters ago we have implemented Amazon AWS S3 for static images upload. You already shall have an AWS account so you are ready for next steps in order to make our deployment on AWS.
+
+In general, you can use the steps with free AWS triers, but we will use paid in this tutorial. Please read the AWS EC2's pricing before starting this sub-chapter of how to deploy Docker's conainer on the AWS.
+
+Amazon Web Services have also a great Docker's containers support with their services called EC2 Conainer Service (ECS). 
+
+If you bought that book probably you haven't been using the AWS so far - because of that reason, we will first deploy Docker manually on the EC2 in order to show you how the EC2 instances are working so you can get more knowledge from the book.
+
+Our main goal is to make the deployment of our Docker's containers automatically, but for now we will start with manual approach. If you already have used the EC2 you can skip next sub-chapter and go straightly to the EC2 Container Services.
+
+### Manual approach: Docker on EC2 
 
 
 
 
 
 
+
+
+-------------
+
+PLAN:
+
+Deploying Docker containers on ECS
+Creating a Cluster
+Creating an ELB
+Creating IAM Roles
+Creating an Auto Scaling Group
+Running Docker containers in your Cluster
+Update Docker containers in your ECS Cluster
 
 
 
@@ -465,6 +490,15 @@ docker run -i -t -p 80:3000 przeor/pub-app-docker
 6) start the AWS setup from the scratch with use of:
 http://www.ybrikman.com/writing/2015/11/11/running-docker-aws-ground-up/
 
+
+Your Amazon ECS service can optionally be configured to use Service Auto Scaling to adjust its desired count up or down in response to CloudWatch alarms:
+
+
+
+
+
+
+Use CloudWatch for scaling: http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html
 
 
 
