@@ -465,6 +465,18 @@ Our main goal is to make the deployment of our Docker's containers automatically
 
 ### Manual approach: Docker on EC2 
 
+We were running our Docker's container on local with the following command (few pages before):
+
+```
+$ docker run -d -p 80:3000  przeor/pub-app-docker npm start
+```
+
+... we will do the same thing, but not locally but on the EC2 instance, 100% manually (for now, later we will do it 100% automatically with the AWS ECS). 
+
+
+
+
+
 
 
 
