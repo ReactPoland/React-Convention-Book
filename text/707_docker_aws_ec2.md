@@ -391,11 +391,11 @@ docker push przeor/pub-app-docker
 
 .. and then you shall be able to find in your bash/command line something similar to:
 
-![docker build container](http://test.przeorski.pl/book/710_push_docker_container.png)
+![docker build container](http://test.przeorski.pl/book/710_push_docker_container2.png)
 
 .. and the link to the pushed repo shall be similar to the one below:
 
-![docker build container](http://test.przeorski.pl/book/711_push_docker_container_online.png)
+![docker build container](http://test.przeorski.pl/book/711_push_docker_container_online2.png)
 
 The above's screenshot has been made on the docker's pushed repository.
 
@@ -476,8 +476,114 @@ $ docker run -d -p 80:3000  przeor/pub-app-docker npm start
 
 Before we will continue let's explain what is EC2? It's a scalable computing capacity located in the Amazon Web Services cloud. In EC2 you don't need to invest money upfront in buying any hardware. Everything you pay is for the time of using an EC2 instance/s. This allows you to deploy applications faster. Very quickly you can add new virtual servers (when there is bigger web-traffic demand). There are some mechanism to scale automatically the amount of EC2 instances with use of AWS CloudWatch. Amazon EC2 gives you ability to scale up or down to handle changed requirements (like spikes in popularity) - that feature reduces your need to forecast traffic (and saves you time and money).
 
-For now, we will use only one EC2 instance (later in the book more).
+For now, we will use only one EC2 instance (later in the book more EC2 instances with Load Balancer and EC2 Containers Services). 
 
+
+#### Basics: launching an EC2 instance
+
+We will launch an EC2 instance, then login to it via SSH (you can use Putty on Windows OS).
+
+Log into the AWS Console:
+```
+https://eu-central-1.console.aws.amazon.com/console/home
+```
+
+ and click the EC2 link:
+
+```
+https://eu-central-1.console.aws.amazon.com/ec2/v2/home
+```
+
+Then click the blue button "Launch Instance" on:
+
+![EC2 launch instance](http://test.przeorski.pl/book/712_launch_ec2_instance_button.png)
+
+.. and the button look:
+
+![EC2 launch instance button](http://test.przeorski.pl/book/713_button_launch.png)
+
+After you click the button, then you will be redirected to the AMI page - that acronym stands for Amazon Machine Image.
+
+![EC2 ami](http://test.przeorski.pl/book/714_ami.png)
+
+The AMI is a list of images, that you can run an EC2 instance with. Each image has some pre-installed list of software. Like for example, the most standard image as: 
+
+![EC2 ami](http://test.przeorski.pl/book/715_ami_example.png)
+
+.. has pre-installed softwares as:
+```
+The Amazon Linux AMI is an EBS-backed, AWS-supported image. The default image includes AWS command line tools, Python, Ruby, Perl, and Java. The repositories include Docker, PHP, MySQL, PostgreSQL, and other packages.
+```
+
+On the same page you can also find other AMIs to buy on the marketplace or created and shared by the community for free. You can also filter the images so it will list only free tier:
+
+![EC2 ami](http://test.przeorski.pl/book/716_other_options.png)
+
+
+For the sake of making this step-by-step guide simple, let's choose the image that is on the screenshot above so it's name has to be similar to:
+```
+Amazon Linux AMI 2016.03.3 (HVM), SSD Volume Type
+```
+
+<InformationBox>
+The name of the image may slighly vary, don't worry about it.
+</InformationBox>
+
+Click the blue "Select" button. Then you will be rediected to the ***"Step 2: Choose an Instance Type"*** page as on the screenshot below:
+
+![EC2 choose_instance_type](http://test.przeorski.pl/book/717_choose_instance_type.png)
+
+... and from that page select the following:
+
+![EC2 718_choosen instance_type](http://test.przeorski.pl/book/718_choosen.png)
+
+... and then click the next button:
+![EC2 next_button](http://test.przeorski.pl/book/719_next_button.png)
+
+
+Simplest, keep the default options on:
+```
+1. Choose AMI 
+2. Choose Instance Type
+3. Configure Instance (keep them default)
+4. Add Storage (keep them default)
+5. Tag Instance (keep them default)
+6. Configure Security Group (we will make some changed on that tab)
+7. Review
+```
+
+Generally, click the next button as this above until we will get to the:
+```
+6. Configure Security
+```
+
+... an indicator of navigation you can find at the top as this example below:
+
+![EC2 indicator_next_page](http://test.przeorski.pl/book/720_indicator_next_page.png)
+
+
+Our goal for now is to get to the security configuration page because we need to customize slightly allowed ports.
+
+A security group consists of rules control network traffic for the EC2 instance (ala firewall options). 
+
+For the security give a new name as:
+```
+ssh-and-http-security-group
+```
+
+721 - security options
+
+722 - click review and launch
+
+723 - review and click launch
+
+724_key_pair - key pair required
+
+725_create_new_key_pair - creating key pair "pubapp-ec2-key-pair"
+
+726_click_view_launch_log - on that page click "View launch log"
+
+727_launch_log - viewing launched EC2 instance
 
 
 
@@ -520,7 +626,7 @@ Your Amazon ECS service can optionally be configured to use Service Auto Scaling
 Use CloudWatch for scaling: http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html
 
 
-
+AUTOSCALING - accept terms of service!
 
 
 
