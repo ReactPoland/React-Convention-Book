@@ -474,6 +474,13 @@ $ docker run -d -p 80:3000  przeor/pub-app-docker npm start
 ... we will do the same thing, but not locally but on the EC2 instance, 100% manually (for now, later we will do it 100% automatically with the AWS ECS). 
 
 
+Before we will continue let's explain what is EC2? It's a scalable computing capacity located in the Amazon Web Services cloud. In EC2 you don't need to invest money upfront in buying any hardware. Everything you pay is for the time of using an EC2 instance/s. This allows you to deploy applications faster. Very quickly you can add new virtual servers (when there is bigger web-traffic demand). There are some mechanism to scale automatically the amount of EC2 instances with use of AWS CloudWatch. Amazon EC2 gives you ability to scale up or down to handle changed requirements (like spikes in popularity) - that feature reduces your need to forecast traffic (and saves you time and money).
+
+For now, we will use only one EC2 instance (later in the book more).
+
+
+
+
 
 
 
