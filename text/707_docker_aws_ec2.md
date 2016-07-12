@@ -707,9 +707,25 @@ And after 10-30 seconds after the npm start will run the whole project then you 
 
 ![ec2 localhost curl test](http://test.przeorski.pl/book/732_localhost_curl_test.png)
 
-... and of course after you visit the EC2 instance public ip then you will be able to find our Publishing App available online as on the screenshot below:
+... and of course after you visit the EC2 instance public ip (in our example it is 52.29.107.244) then you will be able to find our Publishing App available online as we have set up the Security Group of our EC2 instance with exposed port 80 to the world . A screenshot below:
 
 ![ec2 works in the browser](http://test.przeorski.pl/book/733_browser_test_via_http.png)
+
+If you see our Publishing App under the public ip, then you have just deployed a Docker Container on Amazon AWS EC2 successfully! 
+
+The process we have just went through is very unefficient and manual, but shows exactly what is going on under the hood when we will starting using the EC2 Conainer Service (in short ECS).
+
+We are missing in our current approach:
+
+a) Integration with other Amazon services as load balancing, monitoring, alerting, crash recovery, route 53 etc.
+
+b) Automation as currently we are unable efficiently to deploy 10 Docker Containers quickly. This is also important if you want to deploy different Docker's containers for different services as for example you can have separate conainer for serving front-end, different container for serving backend and even separate one for your database (in our case we use mLab, so we don't need one here).
+
+As you can find out, you've just learned basics of the Amazon Web Services.
+
+#### Basics EC2 Conainer Service (AWS EC2)
+
+
 
 
 
