@@ -597,6 +597,14 @@ From that screen you can go directly to the EC2 launch logs (click the "view lau
 
 Great - your first EC2 has been launched successfully! We need to login to it and set up the Docker's container from there.
 
+Save the public ip on of your EC2 instance, as in the above launch log you can find that the machine that we've just created has public ip:
+```
+52.29.107.244
+```
+
+Your ip will be different, save it somewhere we will use it in a moment.
+
+
 #### SSH access via PuTTy (windows users only)
 
 If you don't work on Windows, then you can skip this sub-chapter.
@@ -628,9 +636,18 @@ If the PuTTy program, we need to login via ssh by typing our EC2 instance ip and
 
 PuTTy allows using SSH connections on Windows.
 
-### Connecting our EC2 instance via SSH
+### Connecting to the EC2 instance via SSH
 
-This instruction is for all OS users.
+The instruction below is for all OS users (OSX, Linux and Windows).
+
+After we have launched the EC2 instance, we have found out our public ip:
+```
+52.29.107.244
+```
+
+We need to connect to the remote EC2 instance with this public ip.
+
+
 
 
 
