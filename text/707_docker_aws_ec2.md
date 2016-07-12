@@ -602,8 +602,7 @@ Save the public ip on of your EC2 instance, as in the above launch log you can f
 52.29.107.244
 ```
 
-Your ip will be different, save it somewhere we will use it in a moment.
-
+Your ip will be different (of course, it's just example). Save it somewhere we will use it in a moment, you’ll need it to login via SSH to the server and install Docker app.
 
 #### SSH access via PuTTy (windows users only)
 
@@ -632,24 +631,39 @@ If you private key is on the list, then you are ready to use the putty.exe
 
 ![putty2](http://test.przeorski.pl/book/729_putty2.png)
 
-If the PuTTy program, we need to login via ssh by typing our EC2 instance ip and by clicking the "open" button - as on the screenshot above.
+If you have opened the PuTTy program, then we need to login via ssh by typing our EC2 instance ip and by clicking the "open" button - as on the screenshot above.
 
 PuTTy allows using SSH connections on Windows.
 
 ### Connecting to the EC2 instance via SSH
 
-The instruction below is for all OS users (OSX, Linux and Windows).
-
-After we have launched the EC2 instance, we have found out our public ip:
+After we have launched the EC2 instance, we have found out our public ip in one of the previous sub-chapter:
 ```
 52.29.107.244
 ```
 
 We need to connect to the remote EC2 instance with this public ip.
 
+I've saved the "pubapp-ec2-key-pair.pem" in my "Downloads" directory, so go to the directory where you have downloaded your .pem file:
+```
+$ cd ~/Downloads/
+$ chmod 400 pubapp-ec2-key-pair.pem
+$ ssh -i pubapp-ec2-key-pair.pem ec2-user@52.29.107.244
+```
+
+<InformationBox>
+In your PuTTy on Windows, it will look similar after this step. You need to provide into the PuTTy box the ip and ports in order to correctly login into the machine. Whne you get a prompt to type a username then use "ec2-user" as on the ssh example above.
+</InformationBox>
 
 
+After a successful login you will be able to see:
 
+![ec2 instance inside](http://test.przeorski.pl/book/730_inside_ec2_instance.png)
+
+
+The instruction below is for all OS users (OSX, Linux and Windows) as we are logged into the EC2 instance via SSH.
+
+![ec2 instance inside](http://test.przeorski.pl/book/730_inside_ec2_instance.png)
 
 
 
