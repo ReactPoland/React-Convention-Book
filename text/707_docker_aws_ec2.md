@@ -597,10 +597,40 @@ From that screen you can go directly to the EC2 launch logs (click the "view lau
 
 Great - your first EC2 has been launched successfully! We need to login to it and set up the Docker's container from there.
 
+#### SSH access via PuTTy (windows users only)
+
+If you don't work on Windows, then you can skip this sub-chapter.
+
+
+Ureferably use PuTTy that is available to download at http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html (putty.exe, pageant.exe and puttygen.exe)
+
+
+Downloaded key pairs for the EC2 instance, convert to the ppk with use of puttygen.exe:
 
 
 
+![putty1](http://test.przeorski.pl/book/728_putty1.png)
 
+
+Click the "load" button and choose the "pubapp-ec2-key-pair.pem" file, then covert it to ppk.
+
+Then you need to click "save private key" button. You are done - you can close the puttygen.exe and open the pageant.exe - in that pageant do following:
+
+a) choose Add Key
+
+b) then check if you key has been added correctly to the Pageant Key List. 
+
+If you private key is on the list, then you are ready to use the putty.exe
+
+![putty2](http://test.przeorski.pl/book/729_putty2.png)
+
+If the PuTTy program, we need to login via ssh by typing our EC2 instance ip and by clicking the "open" button - as on the screenshot above.
+
+PuTTy allows using SSH connections on Windows.
+
+### Connecting our EC2 instance via SSH
+
+This instruction is for all OS users.
 
 
 
