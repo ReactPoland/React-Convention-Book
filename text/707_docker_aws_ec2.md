@@ -661,9 +661,56 @@ After a successful login you will be able to see:
 ![ec2 instance inside](http://test.przeorski.pl/book/730_inside_ec2_instance.png)
 
 
-The instruction below is for all OS users (OSX, Linux and Windows) as we are logged into the EC2 instance via SSH.
+The instruction below is for all OS users (OSX, Linux and Windows) as we are logged into the EC2 instance via SSH. The following command are required next:
+```
+[ec2-user@ip-172-31-26-81 ~]$ sudo yum update -y
+[ec2-user@ip-172-31-26-81 ~]$ sudo yum install -y docker
+[ec2-user@ip-172-31-26-81 ~]$ sudo service docker start
+```
 
-![ec2 instance inside](http://test.przeorski.pl/book/730_inside_ec2_instance.png)
+Above terminal commands will update  the Yum package manager, install and start the docker's service in the background.
+
+```
+[ec2-user@ip-172-31-26-81 ~]$ sudo usermod -a -G docker ec2-user
+[ec2-user@ip-172-31-26-81 ~]$ exit
+
+> ssh -i pubapp-ec2-key-pair.pem ec2-user@52.29.107.244
+
+[ec2-user@ip-172-31-26-81 ~]$ docker info
+```
+
+After you run the ***docker info*** command then it shall show something similar to the below's output:
+
+![ec2 docker info instance inside](http://test.przeorski.pl/book/731_docker_info_ec2_instance.png)
+
+If you see the above, then everything is alright and we can continue with running the publishing app docker's container with the following command:
+
+```
+[ec2-user@ip-172-31-26-81 ~]$ docker run -d -p 80:3000  przeor/pub-app-docker npm start
+```
+
+... then in order if everything went well you can also do the following:
+
+```
+[ec2-user@ip-172-31-26-81 ~]$ docker ps
+```
+That command will show you if the docker's process runs correctly in the background as a detached container.
+
+And after 10-30 seconds after the npm start will run the whole project then you can test:
+
+```
+[ec2-user@ip-172-31-26-81 ~]$ curl http://localhost
+```
+
+.. and after the application has been bootstraped correctly you can see the similar output to:
+
+
+![ec2 localhost curl test](http://test.przeorski.pl/book/732_localhost_curl_test.png)
+
+... and of course after you visit the EC2 instance public ip then you will be able to find our Publishing App available online as on the screenshot below:
+
+![ec2 works in the browser](http://test.przeorski.pl/book/733_browser_test_via_http.png)
+
 
 
 
