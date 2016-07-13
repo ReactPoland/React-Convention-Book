@@ -725,8 +725,18 @@ As you can find out, you've just learned basics of the Amazon Web Services.
 
 #### Basics EC2 Conainer Service (AWS EC2)
 
+The EC2 Conainer Service helps you to create a cluster of Docker Containers instances. Each container is deployed automatically - that means that you don't need to login to any of the EC2 instances via SSH as we done it in the previous sub-chapter (manual approach). Whole job is done by the AWS and Docker software which you will learn to use in further (more automated approach). 
 
+For example you set that you want to have 5 different EC2 instances: the group of EC2 instances expose port 80 so you are able to find the Publishing Application under the http://[[EC2_PUBLIC_IP]] address. Additionally, we are adding a load balancer between all the EC2 instances and the rest of the world so in case if there is any spike of traffic or any of the EC2 instance will break then the load balancer will replace a broken EC2 instance with a new one or scale down/up amount of EC2 instances based on the traffic.
 
+The load balancer ping each instance with port 80 and if the pinged instance doesn't respond with correct code (200) then it terminates the broken instance and turn on a fresh new instance with the Docker Container that has the image of our Publishing App.
+
+Additionally we will use Amazon Route 53 in order to have a highly available and scalable cloud Domain Name System (DNS) web service so we will be able to set up a top level domain - in our case, we will use a domain that we have bought specially for that book:
+```
+http://reactjs.space
+```
+
+That will be our http address, of course if you build other service you need to buy a yourown domain in order to follow the instructions and learning how the Amazon Route 53 does work.
 
 
 
