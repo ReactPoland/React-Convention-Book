@@ -16,8 +16,8 @@ var defaultDraftJSobject = {
 
 var articleSchema = new Schema({
     articleTitle: { type: String, required: true, default: 'default article title' },
-    articleSubTitle: { type: String, required: true, default: '' },
-    articleContent: { type: String, required: true, default: '' },
+    articleSubTitle: { type: String, required: true, default: 'default subtitle' },
+    articleContent: { type: String, required: true, default: 'default content' },
     articleContentJSON: { type: Object, required: true, default: defaultDraftJSobject },
     articlePicUrl: { type: String, required: true, default: '/static/placeholder.png' }
   }, 
