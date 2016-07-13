@@ -9,11 +9,17 @@ const conf = {
 
 mongoose.connect(`mongodb://${conf.hostname}:${conf.port}/${conf.env}`);
 
+var defaultDraftJSobject = {
+    "blocks" : [],
+    "entityMap" : {}
+}
+
 var articleSchema = new Schema({
-    articleTitle: String,
-    articleContent: String,
-    articleContentJSON: Object,
-    articlePicUrl: { type: String, default: '/static/placeholder.png' }
+    articleTitle: { type: String, required: true, default: 'default article title' },
+    articleSubTitle: { type: String, required: true, default: 'default subtitle' },
+    articleContent: { type: String, required: true, default: 'default content' },
+    articleContentJSON: { type: Object, required: true, default: defaultDraftJSobject },
+    articlePicUrl: { type: String, required: true, default: '/static/placeholder.png' }
   }, 
   { 
     minimize: false 
@@ -27,7 +33,7 @@ var userSchema = {
   "password" : String,
   "firstName" : String,
   "lastName" : String,
-  "email" : { type: String, index: {unique: true, dropDups: true }},
+  "email" : { type: String, index: { unique: true, dropDups: true }},
   "role" : { type: String, default: 'editor' },
   "verified" : Boolean,
   "imageUrl" : String

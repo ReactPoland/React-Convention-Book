@@ -12,6 +12,8 @@ import { stateToHTML } from 'draft-js-export-html';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Popover from 'material-ui/lib/popover/popover';
 import ImgUploader from '../../components/articles/ImgUploader';
+import DefaultInput from '../../components/DefaultInput';
+import Formsy from 'formsy-react';
 
 const mapStateToProps = (state) => ({
 	...state
@@ -75,21 +77,17 @@ class EditArticleView extends React.Component {
     this.setState({contentJSON, htmlContent});
   }
 
-  async _articleEditSubmit() {
+  async _articleEditSubmit(articleModel) {
     let currentArticleID = this.state.editedArticleID;
     let editedArticle = {
       _id: currentArticleID,
-      articleTitle: this.state.title,
+      articleTitle: articleModel.title,
+      articleSubTitle: articleModel.subTitle,
       articleContent: this.state.htmlContent,
       articleContentJSON: this.state.contentJSON,
       articlePicUrl: this.state.articlePicUrl
     }
 
-    console.debug('editedArticle');
-    console.debug(editedArticle);
-    console.debug('editedArticle');
-
-    console.debug(1);
     let editResults = await falcorModel
       .call(
             ['articles', 'update'],
@@ -98,7 +96,7 @@ class EditArticleView extends React.Component {
       then((result) => {
         return result;
       });
-    console.debug(2);
+
     this.props.articleActions.editArticle(editedArticle);
     this.setState({ articleEditSuccess: true });
   }
@@ -166,22 +164,36 @@ class EditArticleView extends React.Component {
     return (
       <div style={{height: '100%', width: '75%', margin: 'auto'}}>
         <h1>Edit an exisitng article</h1>
-        <WYSWIGeditor
-          initialValue={initialWYSWIGValue}
-          name="editarticle"
-          title="Edit an article"
-          onChangeTextJSON={this._onDraftJSChange} />
+        <Formsy.Form onSubmit={this._articleEditSubmit}>
+          <DefaultInput 
+            onChange={(event) => {}}
+            name='title' 
+            value={this.state.articleDetails.articleTitle}
+            title='Article Title (required)' required />
 
-        <div style={{margin: '10px 10px 10px 10px'}}> 
-          <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
-        </div>
+          <DefaultInput 
+            onChange={(event) => {}}
+            name='subTitle' 
+            value={this.state.articleDetails.articleSubTitle}
+            title='Article Subtitle' />
 
-        <RaisedButton
-          onClick={this._articleEditSubmit}
-          secondary={true}
-          type="submit"
-          style={{margin: '10px auto', display: 'block', width: 150}}
-          label={'Submit Edition'} />
+          <WYSWIGeditor
+            initialValue={initialWYSWIGValue}
+            name="editarticle"
+            title="Edit an article"
+            onChangeTextJSON={this._onDraftJSChange} />
+
+          <div style={{margin: '10px 10px 10px 10px'}}> 
+            <ImgUploader updateImgUrl={this.updateImgUrl} articlePicUrl={this.state.articlePicUrl} />
+          </div>
+
+          <RaisedButton
+            onClick={this._articleEditSubmit}
+            secondary={true}
+            type="submit"
+            style={{margin: '10px auto', display: 'block', width: 150}}
+            label={'Submit Edition'} />
+        </Formsy.Form>
         <hr />
         <h1>Delete permamently this article</h1>
         <RaisedButton

@@ -161,6 +161,7 @@ export default ( req, res ) => {
       }
 
       let updatedArticle = args[0];
+      console.info(JSON.stringify(updatedArticle));
       let articleID = String(updatedArticle._id);
       let article = new Article(updatedArticle);
       article.isNew = false;
