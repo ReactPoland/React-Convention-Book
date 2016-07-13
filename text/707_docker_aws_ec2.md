@@ -723,13 +723,13 @@ b) Automation as currently we are unable efficiently to deploy 10 Docker Contain
 
 As you can find out, you've just learned basics of the Amazon Web Services.
 
-#### Basics EC2 Conainer Service (AWS EC2)
+#### Basics of EC2 Conainer Service (AWS EC2)
 
-The EC2 Conainer Service helps you to create a cluster of Docker Containers instances. Each container is deployed automatically - that means that you don't need to login to any of the EC2 instances via SSH as we done it in the previous sub-chapter (manual approach). Whole job is done by the AWS and Docker software which you will learn to use in further (more automated approach). 
+The EC2 Conainer Service helps you to create a cluster of Docker Container's instances (many copies of the same container on several EC2 instances). Each container is deployed automatically - that means that you don't need to login to any of the EC2 instances via SSH as we done it in the previous sub-chapter (manual approach). Whole job is done by the AWS and Docker software which you will learn to use in further (more automated approach). 
 
 For example you set that you want to have 5 different EC2 instances: the group of EC2 instances expose port 80 so you are able to find the Publishing Application under the http://[[EC2_PUBLIC_IP]] address. Additionally, we are adding a load balancer between all the EC2 instances and the rest of the world so in case if there is any spike of traffic or any of the EC2 instance will break then the load balancer will replace a broken EC2 instance with a new one or scale down/up amount of EC2 instances based on the traffic.
 
-The load balancer ping each instance with port 80 and if the pinged instance doesn't respond with correct code (200) then it terminates the broken instance and turn on a fresh new instance with the Docker Container that has the image of our Publishing App.
+Great feature of the AWS load balancer is that it pings each EC2 instance with port 80 and if the pinged instance doesn't respond with correct code (200) then it terminates the broken instance and turn on a fresh new instance with the Docker Container that has the image of our Publishing App. That helps us to maintain top availability of our application.
 
 Additionally we will use Amazon Route 53 in order to have a highly available and scalable cloud Domain Name System (DNS) web service so we will be able to set up a top level domain - in our case, we will use a domain that we have bought specially for that book:
 ```
@@ -737,6 +737,28 @@ http://reactjs.space
 ```
 
 That will be our http address, of course if you build other service you need to buy a yourown domain in order to follow the instructions and learning how the Amazon Route 53 does work.
+
+
+#### Creating an ECS cluster
+
+Visit the AWS Console and find there ECS, click on the link to go to the EC2 Container Service Console. Then you shall find a blue button "Get Started":
+
+![ecs get started button](http://test.przeorski.pl/book/734_ECS_get_started_button.png)
+
+After that you shall see an ECS wizard with the following steps:
+```
+Step 1: Create a task definition
+Step 2: Configure service
+Step 3: Configure cluster
+Step 4: Review
+```
+
+
+
+--- Elastic load balancing:
+"The Amazon ECS service scheduler makes calls to the Amazon EC2 and Elastic Load Balancing APIs on your behalf to register and deregister container instances with your load balancers. If you do not have the ecsServiceRole already, we can create one for you."
+
+
 
 
 
