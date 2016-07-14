@@ -456,7 +456,7 @@ PORT=80
 As you can find out above, the -e flag is for an env variable. Then the last thing is to push the container to the remote repository hosted by the Docker Hub.
 
 ```
-docker push przeor/pub-app-docker:latest
+docker push przeor/pub-app-docker
 ```
 
 .. and then you shall be able to find in your bash/command line something similar to:
@@ -844,6 +844,11 @@ Step 3: Configure cluster
 Step 4: Review
 ```
 
+PLAN:
+1) opisac zdjecia po kolei
+2) zrobic zdjecie jak znalezc adres load balancera
+3) screenshoty z dzialajacaej strony dodac (na pulpicie)
+4) zaczac opisywac route 53
 
 
 
@@ -862,21 +867,11 @@ ECS security group pending
 Auto Scaling group pending
 Launch configuration pending
 Elastic load balancer pending
-
+```
 
 
 
 -------------
-
-PLAN:
-
-Deploying Docker containers on ECS
-Creating a Cluster
-Creating an ELB
-Creating IAM Roles
-Creating an Auto Scaling Group
-Running Docker containers in your Cluster
-Update Docker containers in your ECS Cluster
 
 
 
@@ -899,6 +894,20 @@ AUTOSCALING - accept terms of service!
 
 
 
+$ docker run -i -t -e PORT=80 -e AWS_ACCESS_KEY_ID='AKIAI3Y54WVG5JM4VUHA' -e AWS_SECRET_ACCESS_KEY='k3JxxCbByqy+qTXojf7xRiJ0oRI6w3ZEmENE1I0l' -e AWS_BUCKET_NAME='publishing-app' -e AWS_REGION_NAME='eu-central-1' -e MONGO_USER='usermlab' -e MONGO_PASS='pwdmlab' -e MONGO_PORT=25762 -e MONGO_ENV='publishingapp' -e MONGO_HOSTNAME='ds025762.mlab.com' -p 80:80 przeor/pub-app-docker npm start
 
 
+
+
+
+AWS_ACCESS_KEY_ID=AKIAI3Y54WVG5JM4VUHA
+AWS_SECRET_ACCESS_KEY=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
+AWS_BUCKET_NAME=publishing-app
+AWS_REGION_NAME=eu-central-1
+MONGO_USER=usermlab
+MONGO_PASS=pwdmlab
+MONGO_PORT=25762
+MONGO_ENV=publishingapp
+MONGO_HOSTNAME=ds025762.mlab.com
+PORT=80
 
