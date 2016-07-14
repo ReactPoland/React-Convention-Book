@@ -844,6 +844,132 @@ Step 3: Configure cluster
 Step 4: Review
 ```
 
+
+#### Step 1: Create a task definition
+
+On ECS a task definition is a recipe for a container. It's something that helps for an ECS to understand what Docker's container you want to run on the EC2 instances. 
+
+It's a recipe or a blueprint of steps that the ECS has automatically done in order to successfully our Publishing App's container.
+
+Use the following details for this step:
+![ecs task definition](http://test.przeorski.pl/book/735_task_definition2.png)
+
+On the above's screenshot you can find that our task definition name is "pubapp-task". Container name is "pubapp-container". 
+
+For Image we use the same argument as when we were running a container locally with ***docker run*** - in the case przeor/pub-app-docker. The ECS will know that has to download the container from the above's url:
+```
+https://hub.docker.com/r/przeor/pub-app-docker/
+```
+
+For now let's keep the maximum memory as a default value (300). Port mappings 80:80.
+
+<InformationBox>
+At the time of writing that book, there are some problems if your container doesn't expose port 80 ... probably a bug with ECS' wizard - without wizard all ports can be used on the container.
+</InformationBox>
+
+Click the "advanced options" on the task definition view:
+
+![advanced button ecs](http://test.przeorski.pl/book/736_advanced_options_button.png)
+
+... and you will see a slide panel with additional options:
+
+![ecs task definition advanced](http://test.przeorski.pl/book/737_advanced.png)
+
+We need to specify following things:
+
+a) Command - it has to be separated with commas, so we put "npm,start"
+
+b) Working directory - we use /opt/publishing-app (identical path is set in the Dockerfile)
+
+c) Env variables - here we specify all values from the server/.env file. This part is important to setup otherwise the app won't work correctly without correct details provided via enviroment variables.
+
+d) Rest of the values/inputs there keep as a default without changes.
+
+<InformationBox>
+It's very important to add all enviroment variables - we need to be very careful as it's easy to make a mistake here which will break the app inside an EC2 instance.
+</InformationBox>
+
+After all those changes you can click next button.
+
+#### Step 2: Configure service
+
+Generally, service is a mechanism which keeps certain amount of EC2 instances running while checking their health at the same time (by the ELB) so if any server doesn't repsond on the port 80 (default but can be changed to more advanced health checks) then the service runs a new service while the unhealthy one is being shut down. This helps you to maintain very high availavility in your application.
+
+![ecs configure_service](http://test.przeorski.pl/book/739_configure_service.png)
+
+Service name is "pubapp-service". In the book we will set up 3 different EC2 instances (you can setup less or more, it's up to you) so this is the number for the "desired number of tasks" input.
+
+On the same step, we have also to setup the ELB (elasting load balancer):
+
+
+![ecs configure_service](http://test.przeorski.pl/book/740_elastic_load_balancing.png)
+
+a) Container name:port - we choose from the dropdown list pubapp-container:80
+
+b) ELB listener protocol - HTTP
+
+c) ELB listener port - 80
+
+d) ELB healt check - default, you can change it while you are out of the wizard (on the certain ELB's page)
+
+e) The wizard will create for us Service IAM role.
+
+After all that you can click the "next step" button to continue.
+
+![ecs configure_service](http://test.przeorski.pl/book/741_next_step.png)
+
+#### Step 3: Configure cluster
+
+Here you setup the ECS container agent details - called cluster. Here you specify the name of your cluster, what kind of instances type would you like to use, number of instances (it has to be bigger than the amount of or required by the service) and the key pair.
+
+![ecs configure_cluster](http://test.przeorski.pl/book/742_configure_cluster.png)
+
+a) Our cluster name is pubapp-ecs-cluster
+
+b) Instances types - t2.micro (on production I suppose to use bigger)
+
+c) Number of instances - 5 and that means that in the service will keep 3 instances alive and another two instances are on the "bench" waiting for any fatal situation. By "bench" I mean that at the one time (with our setup) we use only three instances, where at the same time another two are ready for use, but not actively used (traffic is not redirected to them).
+
+d) Key pair - we specified that key pair called "pubapp-ec2-key-pair" earlier in that chapter. Alway, you shall keep them in a safe place for later re-use
+
+On the same page you shall find also security group and container instance IAM roles setup, but we keep it as default this time:
+
+![ecs security group](http://test.przeorski.pl/book/743_security_group_iam.png)
+
+#### Step 4: Review
+
+The last thing is to review if everything looks good:
+
+![ecs review wizard](http://test.przeorski.pl/book/744_review_ecs.png)
+
+... and then choose "Launch instances and run service":
+
+![ecs review wizard button](http://test.przeorski.pl/book/745_launch_instance_and_run_service.png)
+
+#### Launch status
+
+After you have clicked the launch button, then you will find a page with status - keep it open until you will get all the boxes red with success indicator:
+
+![ecs progress1](http://test.przeorski.pl/book/746_running_in_progress1.png)
+
+.. and:
+
+![ecs progress2](http://test.przeorski.pl/book/747_running_in_progress2.png)
+
+After all that boxes will have a success indicator (green color) then you will be able to click the "view service" button that is on the top:
+
+![ecs view service](http://test.przeorski.pl/book/748_view_service.png)
+
+Click that button above ("view service") after it becomes available.
+
+#### Finding your load balancer address
+
+
+
+
+
+
+
 PLAN:
 1) opisac zdjecia po kolei
 2) zrobic zdjecie jak znalezc adres load balancera
