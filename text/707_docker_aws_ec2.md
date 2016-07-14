@@ -119,6 +119,7 @@ MONGO_PASS=<<___your_mlab_mongo_pass__>>
 MONGO_PORT=<<___your_mlab_mongo_port__>>
 MONGO_ENV=publishingapp
 MONGO_HOSTNAME=<<___your_mlab_mongo_hostname__>>
+PORT=80
 ```
 <InformationBox>
 For now we will load the enviroment variables from a file, but later we will load them from the AWS's panel. It's not really production secure to keep all that secret data on the server. We use it now for sake of brevity and later we delete it in favor of a more secure approach.
@@ -230,7 +231,7 @@ WORKDIR /opt/publishing-app
 RUN npm install
 RUN yum clean all
 
-EXPOSE 3000
+EXPOSE 80
 CMD ["npm", "start"]
 ```
 
@@ -267,9 +268,25 @@ In our case, we have created the Dockerfile in our Publishing App's directory so
 
 11) ***RUN yum clean all*** - we clean the yum cache
 
-12) ***EXPOSE 3000*** - we define the port that is using our Publishing Application
+12) ***EXPOSE 80*** - we define the port that is using our Publishing Application
 
 13) ***CMD ["npm", "start"]*** - then we specify how to run the application in our Docker's container
+
+
+We shall also create in the main project's directory a .dockerignore file:
+```
+$ [[[in the main directory]]]
+$ touch .dockerignore
+```
+
+... and the file content shall be as following:
+```
+.git
+node_modules
+.DS_Store
+```
+
+We don't want to copy over those above files (.DS_Store is specific for the OS X).
 
 
 #### Building the Publishing App container
@@ -298,15 +315,15 @@ That above command will build the container with use of Dockerfile commands. Thi
 ... and after a successfull build you shall see in your terminal/command line somethign similar to:
 ```
 [[[striped from here for the sake of brevity]]]
-Step 12 : EXPOSE 3000
- ---> Running in 08be0359cbd5
+Step 12 : EXPOSE 80
+ ---> Running in 081e0359cbd5
  ---> ce0433b220a0
-Removing intermediate container 08be0359cbd5
+Removing intermediate container 081e0359cbd5
 Step 13 : CMD npm start
- ---> Running in 586df04c8c81
+ ---> Running in 581df04c8c81
  ---> 1970dde57fec
-Removing intermediate container 586df04c8c81
-Successfully built 1970dde57fec
+Removing intermediate container 581df04c8c81
+Successfully built 1910dde57fec
 ```
 
 As you can see above from the Docker's terminal about, we have built in a successful manner the container. Next step is to test it locally, then learn little bit more of Docker's basics and finally start working on our AWS deployment.
@@ -336,7 +353,7 @@ This Docker's host ip will be used to check if our application is running correc
 Next step is to run our local container with the following command:
 
 ```
-$ docker run -d -p 80:3000  przeor/pub-app-docker npm start
+$ docker run -d -p 80:80  przeor/pub-app-docker npm start
 ```
 
 Regarding flags:
@@ -350,7 +367,7 @@ docker ps
 
 ![docker build container](http://test.przeorski.pl/book/709_example_docker_ps2.png)
 
-b) -p flag is telling that the container's port 3000 bind to the port 80 on the docker ip host. So if we expose our node app on ports 3000 in the container, then it will be able on a standard port 80 on the ip (in the examples it will be 192.168.99.100:80 which obviously the port 80 is for all http requests).
+b) -p flag is telling that the container's port 80 bind to the port 80 on the docker ip host. So if we expose our node app on ports 80 in the container, then it will be able on a standard port 80 on the ip (in the examples it will be 192.168.99.100:80 which obviously the port 80 is for all http requests).
 
 c) przeor/pub-app-docker - we tell the container's name that we want to run
 
@@ -372,7 +389,7 @@ As you can see the ip address in the browser's url at is http://192.168.99.100 -
 
 In case if the container doesn't work for you as on the screenshot above, then use the below commend to debug and find the reason:
 ```
-docker run -i -t -p 80:3000 przeor/pub-app-docker
+docker run -i -t -p 80:80 przeor/pub-app-docker
 ```
 
 This above command with -i -t -p flag will show you the all logs in the terminal/command line as on the screenshot below (just an example in order to show you potential ability to debug a Docker's container locally):
@@ -383,10 +400,63 @@ This above command with -i -t -p flag will show you the all logs in the terminal
 
 If a container works for you locally then it's almost ready for the AWS deployment.
 
-The last thing is to push the container to the remote repository hosted by the Docker Hub.
+Before pushing the container, let's add the .env file to the .dockerignore, because you have there all the sensitive data that you won't put into containers so into the .dockerignore file add:
 
 ```
-docker push przeor/pub-app-docker
+.git
+node_modules
+.DS_Store
+.env
+```
+
+... and after you will add the .env to the .gitignore, then we need to change the server/index.js file and add an additional if statement:
+```
+if(!process.env.PORT) {
+  var env = require('node-env-file');
+  // Load any undefined ENV variables form a specified file. 
+  env(__dirname + '/.env');
+}
+```
+
+This if statement checks if we run the app locally (with an .env file) or remotely on an AWS instance (then we pass the env variables in more secure manner).
+
+
+... after you have added the ".env" file into the .dockerignore (and modified the server/index.js) then build the container that will be ready for the push:
+
+
+```
+docker build -t przeor/pub-app-docker .
+```
+
+Regarding the enviroment variables, we will add them via AWS advanced options - you will learn it later, but to explain you general idea how to add them when running it on the localhost then below you can find an example (fake data provided in the command's flag):
+
+```
+$ docker run -i -t -e PORT=80 -e AWS_ACCESS_KEY_ID='AKIMOCKED5JM4VUHA' -e AWS_SECRET_ACCESS_KEY='k3JxMOCKED0oRI6w3ZEmENE1I0l' -e AWS_BUCKET_NAME='publishing-app' -e AWS_REGION_NAME='eu-central-1' -e MONGO_USER='usermlab' -e MONGO_PASS='MOCKEDpassword' -e MONGO_PORT=25732 -e MONGO_ENV='publishingapp' -e MONGO_HOSTNAME='ds025761.mlab.com' -p 80:80 przeor/pub-app-docker npm start
+```
+
+<InformationBox>
+Make sure that you have provided your correct AWS_REGION_NAME - mine is eu-central-1, but yours can be different.
+<InformationBox>
+
+As you can find everything from the server/.env file has been moved to the docker run's command in the bash temrinal:
+```
+AWS_ACCESS_KEY_ID=<<___AWS_ACCESS_KEY_ID__>>
+AWS_SECRET_ACCESS_KEY=<<___AWS_SECRET_ACCESS_KEY__>>
+AWS_BUCKET_NAME=publishing-app
+AWS_REGION_NAME=eu-central-1
+MONGO_USER=<<___your_mlab_mongo_user__>>
+MONGO_PASS=<<___your_mlab_mongo_pass__>>
+MONGO_PORT=<<___your_mlab_mongo_port__>>
+MONGO_ENV=publishingapp
+MONGO_HOSTNAME=<<___your_mlab_mongo_hostname__>>
+PORT=80
+```
+
+
+As you can find out above, the -e flag is for an env variable. Then the last thing is to push the container to the remote repository hosted by the Docker Hub.
+
+```
+docker push przeor/pub-app-docker:latest
 ```
 
 .. and then you shall be able to find in your bash/command line something similar to:
@@ -441,12 +511,12 @@ docker build -t przeor/pub-app-docker .
 
 f) Run your container in the "detached" mode:
 ```
-$ docker run -d -p 80:3000  przeor/pub-app-docker npm start
+$ docker run -d -p 80:80 przeor/pub-app-docker npm start
 ```
 
 g) Run your container in order to debug without detaching it so you can find what is going on in the container's bash terminal:
 ```
-docker run -i -t -p 80:3000 przeor/pub-app-docker
+docker run -i -t -p 80:80 przeor/pub-app-docker
 ```
 
 
@@ -468,7 +538,7 @@ Our main goal is to make the deployment of our Docker's containers automatically
 We were running our Docker's container on local with the following command (few pages before):
 
 ```
-$ docker run -d -p 80:3000  przeor/pub-app-docker npm start
+$ docker run -d -p 80:80  przeor/pub-app-docker npm start
 ```
 
 ... we will do the same thing, but not locally but on the EC2 instance, 100% manually (for now, later we will do it 100% automatically with the AWS ECS). 
@@ -686,10 +756,31 @@ After you run the ***docker info*** command then it shall show something similar
 If you see the above, then everything is alright and we can continue with running the publishing app docker's container with the following command:
 
 ```
-[ec2-user@ip-172-31-26-81 ~]$ docker run -d -p 80:3000  przeor/pub-app-docker npm start
+[ec2-user@ip-172-31-26-81 ~]$ docker run -i -t -e PORT=80 -e AWS_ACCESS_KEY_ID='AKIMOCKED5JM4VUHA' -e AWS_SECRET_ACCESS_KEY='k3JxMOCKED0oRI6w3ZEmENE1I0l' -e AWS_BUCKET_NAME='publishing-app' -e AWS_REGION_NAME='eu-central-1' -e MONGO_USER='usermlab' -e MONGO_PASS='MOCKEDpassword' -e MONGO_PORT=25732 -e MONGO_ENV='publishingapp' -e MONGO_HOSTNAME='ds025761.mlab.com' -p 80:80 przeor/pub-app-docker npm start
 ```
 
-... then in order if everything went well you can also do the following:
+<InformationBox>
+Reminder: make sure that you have provided your correct AWS_REGION_NAME - mine is eu-central-1, but yours can be different.
+<InformationBox>
+
+As you can find everything from the server/.env file has been moved to the docker run's command in the bash temrinal:
+```
+AWS_ACCESS_KEY_ID=<<___AWS_ACCESS_KEY_ID__>>
+AWS_SECRET_ACCESS_KEY=<<___AWS_SECRET_ACCESS_KEY__>>
+AWS_BUCKET_NAME=publishing-app
+AWS_REGION_NAME=eu-central-1
+MONGO_USER=<<___your_mlab_mongo_user__>>
+MONGO_PASS=<<___your_mlab_mongo_pass__>>
+MONGO_PORT=<<___your_mlab_mongo_port__>>
+MONGO_ENV=publishingapp
+MONGO_HOSTNAME=<<___your_mlab_mongo_hostname__>>
+PORT=80
+```
+
+Also make sure to rename the AWS_BUCKET_NAME, AWS_REGION_NAME or MONGO_ENV if you have your different one (if you set differently than was suggested in the previous chapters).
+
+
+... then in order to check if everything went well you can also do the following:
 
 ```
 [ec2-user@ip-172-31-26-81 ~]$ docker ps
@@ -755,10 +846,22 @@ Step 4: Review
 
 
 
---- Elastic load balancing:
-"The Amazon ECS service scheduler makes calls to the Amazon EC2 and Elastic Load Balancing APIs on your behalf to register and deregister container instances with your load balancers. If you do not have the ecsServiceRole already, we can create one for you."
 
+```
+EC2 instance status - 0 of 15 complete 
+Your EC2 instances and other cluster resources are being created. This may take a few minutes.
 
+CloudFormation stack pending
+Internet gateway pending
+VPC pending
+Route table pending
+VPC attached gateway pending
+ELB security group pending
+Public routing pending
+ECS security group pending
+Auto Scaling group pending
+Launch configuration pending
+Elastic load balancer pending
 
 
 
