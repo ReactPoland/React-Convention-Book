@@ -964,11 +964,21 @@ Click that button above ("view service") after it becomes available.
 
 #### Finding your load balancer address
 
+After you click the "view service" you shall see the main dashboard where are listed all your clusters (currently there shall be only one):
 
+![ecs main dashboard](http://test.przeorski.pl/book/749_clusters_main_dashboard.png)
 
+750_pubapp_ecs_cluster
 
+751_click_pubapp-service
 
+752_pubapp_service_mainpage
 
+753_click_on_the_ELB_name
+
+754_pubapp_ELB
+
+755_ELB_url
 
 PLAN:
 1) opisac zdjecia po kolei
