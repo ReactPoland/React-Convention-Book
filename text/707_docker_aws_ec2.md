@@ -71,7 +71,7 @@ $ docker run hello-world
 ```
 
 After you run this, then you shall see something similar in your console as on the below's screenshot:
-![running hello world](http://test.przeorski.pl/book/704_running_hello_world.png)
+![running hello world](http://test.przeorski.pl/book/704_running_hello_world2.png)
 
 
 Explanation about what've just happened: the ***docker run*** command we use in order to start the container based on an image (in our example we have used hello world's container image). In that case we have:
@@ -902,7 +902,7 @@ Service name is "pubapp-service". In the book we will set up 3 different EC2 ins
 On the same step, we have also to setup the ELB (elasting load balancer):
 
 
-![ecs configure_service](http://test.przeorski.pl/book/740_elastic_load_balancing.png)
+![ecs configure_service](http://test.przeorski.pl/book/740_elastic_load_balancing2.png)
 
 a) Container name:port - we choose from the dropdown list pubapp-container:80
 
