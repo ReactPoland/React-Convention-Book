@@ -977,13 +977,15 @@ On the above screen click the pubapp-service from the list:
 
 ...  and then you will see:
 
-![ecs pubapp_service_mainpage](http://test.przeorski.pl/book/752_pubapp_service_mainpage.png)
+![ecs pubapp_service_mainpage](http://test.przeorski.pl/book/752_pubapp_service_mainpage2.png)
 
 On the above link choose the elastic balancer:
-![ecs pubapp_service_mainpage](http://test.przeorski.pl/book/753_click_on_the_ELB_name.png)
+
+![ecs pubapp_service_mainpage](http://test.przeorski.pl/book/753_click_on_the_ELB_name2.png)
 
 And the final view of ELB is:
-![ecs pubapp_ELB](http://test.przeorski.pl/book/754_pubapp_ELB.png)
+
+![ecs pubapp_ELB](http://test.przeorski.pl/book/754_pubapp_ELB2.png)
 
 On the above's view you shall find (under the "Description Name" tab) an elastic balancer address like this one:
 ```
