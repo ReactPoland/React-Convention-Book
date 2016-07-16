@@ -999,7 +999,28 @@ This is address of your ELB which you can put into the browser and see the Publi
 ![ecs elastic_pub_app_working](http://test.przeorski.pl/book/755_elastic_pub_app_working.png)
 
 
-#### AWS Router 53
+#### AWS Route 53
+
+The last step that leftover in this chapter is to setup the Route 53 - which is a highly available and scalable cloud Domain Name System (DNS) web service.
+
+At this step you have two options:
+
+1) having your own domain already registered
+
+2) register a new domain via Route 53
+
+
+In the instructions below we will use first option - so we assume that we have already registered the reactjs.space domain (of course you need to have your own domain in order to successfully follow below's steps). 
+
+We will route end users to the Publishing App by translating name http://reactjs.space into the address of our ELB (EC2Contai-EcsElast-1E4Y3WOGMV6S4-39378274.eu-central-1.elb.amazonaws.com) that users will be able to visit our application in more friendly manner by typing the reactjs.space into the browser's address bar.
+
+
+Choose Route 53 from the AWS' services list:
+![router53 from the services list](http://test.przeorski.pl/book/757_route53_from_the_services_list.png)
+
+.. then you shall be able to see similar main page to the screenshot:
+
+![router53 main](http://test.przeorski.pl/book/758_route53_main.png)
 
 
 
