@@ -1035,75 +1035,23 @@ The form shall have a "domain name" field where you put your domain name (in our
 Success, then you shall be able to see your DNS names:
 ![router53 created_hosted_zone](http://test.przeorski.pl/book/762_created_hosted_zone.png)
 
-Next step is to park the DNSes on your domains provider.
-
-
-
-
-PLAN:
-1) opisac zdjecia po kolei
-2) zrobic zdjecie jak znalezc adres load balancera
-3) screenshoty z dzialajacaej strony dodac (na pulpicie)
-4) zaczac opisywac route 53
-
-
-
+Next step is to park the DNSes on your domains provider. The last step is to change DNSes setting at your domain registrar, in our case that are (your will be different):
 ```
-EC2 instance status - 0 of 15 complete 
-Your EC2 instances and other cluster resources are being created. This may take a few minutes.
-
-CloudFormation stack pending
-Internet gateway pending
-VPC pending
-Route table pending
-VPC attached gateway pending
-ELB security group pending
-Public routing pending
-ECS security group pending
-Auto Scaling group pending
-Launch configuration pending
-Elastic load balancer pending
+ns-1276.awsdns-31.org.
+ns-1775.awsdns-29.co.uk.
+ns-763.awsdns-31.net.
+ns-323.awsdns-40.com.
+```
+... notice the "." dots at the end, you can get rid off them so the final DNSes that we have to change are:
+```
+ns-1276.awsdns-31.org
+ns-1775.awsdns-29.co.uk
+ns-763.awsdns-31.net
+ns-323.awsdns-40.com
 ```
 
+After all that steps you can visit the website http://reactjs.space (the DNS changes may take up to 48 hours) and see our Publishing App ready to use:
 
+[[[SCREENSHOT]]]
 
--------------
-
-
-
-
-6) start the AWS setup from the scratch with use of:
-http://www.ybrikman.com/writing/2015/11/11/running-docker-aws-ground-up/
-
-
-Your Amazon ECS service can optionally be configured to use Service Auto Scaling to adjust its desired count up or down in response to CloudWatch alarms:
-
-
-
-
-
-
-Use CloudWatch for scaling: http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html
-
-
-AUTOSCALING - accept terms of service!
-
-
-
-$ docker run -i -t -e PORT=80 -e AWS_ACCESS_KEY_ID='AKIAI3Y54WVG5JM4VUHA' -e AWS_SECRET_ACCESS_KEY='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' -e AWS_BUCKET_NAME='publishing-app' -e AWS_REGION_NAME='eu-central-1' -e MONGO_USER='usermlab' -e MONGO_PASS='pwdmlab' -e MONGO_PORT=25762 -e MONGO_ENV='publishingapp' -e MONGO_HOSTNAME='ds025762.mlab.com' -p 80:80 przeor/pub-app-docker npm start
-
-
-
-
-
-AWS_ACCESS_KEY_ID=AKIAI3Y54WVG5JM4VUHA
-AWS_SECRET_ACCESS_KEY=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
-AWS_BUCKET_NAME=publishing-app
-AWS_REGION_NAME=eu-central-1
-MONGO_USER=usermlab
-MONGO_PASS=pwdmlab
-MONGO_PORT=25762
-MONGO_ENV=publishingapp
-MONGO_HOSTNAME=ds025762.mlab.com
-PORT=80
 
