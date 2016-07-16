@@ -1023,6 +1023,21 @@ Choose Route 53 from the AWS' services list:
 ![router53 main](http://test.przeorski.pl/book/758_route53_main.png)
 
 
+Next step is to create a hosted zone on Route 53 so click the blue button called "Create Hosted Zone":
+![router53 DNS_management](http://test.przeorski.pl/book/759_DNS_management.png)
+
+.. then you shall see no hosted zone, so you click again the blue button:
+![router53 no_hosted_zones](http://test.przeorski.pl/book/760_no_hosted_zones.png)
+
+The form shall have a "domain name" field where you put your domain name (in our case it's reactjs.space):
+![router53 reactjs_space_domain_name](http://test.przeorski.pl/book/761_reactjs_space_domain_name.png)
+
+Success, then you shall be able to see your DNS names:
+![router53 created_hosted_zone](http://test.przeorski.pl/book/762_created_hosted_zone.png)
+
+Next step is to park the DNSes on your domains provider.
+
+
 
 
 PLAN:

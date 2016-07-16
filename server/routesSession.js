@@ -4,8 +4,10 @@ import configMongoose from './configMongoose';
 import jwt from 'jsonwebtoken';
 import jwtSecret from './configSecret';
 import crypto from 'crypto';
+import jsonGraph from 'falcor-json-graph';
 
-let User = configMongoose.User;
+const User = configMongoose.User;
+const $error = jsonGraph.error;
 
 export default [
   { 
@@ -67,13 +69,29 @@ export default [
   },
   { 
     route: ['register'],
-    call: (callPath, args) => 
+    call: async (callPath, args) => 
       {
+        console.info(1);
         let newUserObj = args[0];
         newUserObj.password = newUserObj.password+"pubApp";
         newUserObj.password = crypto.createHash('sha256').update(newUserObj.password).digest('hex')
         let newUser = new User(newUserObj);
-        return newUser.save((err, data) => { if (err) return err; })
+        let ret2 = await newUser.save((err, data) => { 
+          console.info(2); 
+
+          console.info(3);
+          if(err) {
+            console.info(4);
+            return {
+              path: ['register'],
+              value: $error('registration error')
+            }
+          }
+          console.info(5);
+          if (err) return err; 
+
+
+        })
           .then ((newRes) => {
             /*
               got new obj data, now let's get count:
@@ -105,7 +123,24 @@ export default [
               ];
             }
             return;
-          }).catch((reason) => console.error(reason));
+          }).catch((reason) => {
+            console.info(999);
+            const ret = {
+              path: ['register'],
+              value: $error('registration error')
+            }
+            console.error(reason);
+            console.error('----');
+            console.error(ret);
+
+            return ret;
+          });
+
+        console.info('====');
+        console.info('====');
+        console.info('====');
+        console.info(ret2);
+        return ret2;
       }
   }
 ];
