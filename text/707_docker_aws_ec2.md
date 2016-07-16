@@ -977,7 +977,7 @@ On the above screen click the pubapp-service from the list:
 
 ...  and then you will see:
 
-![ecs pubapp_service_mainpage](http://test.przeorski.pl/book/752_pubapp_service_mainpage2.png)
+![ecs pubapp_service_mainpage](http://test.przeorski.pl/book/752_pubapp_service_mainpage22.png)
 
 On the above link choose the elastic balancer:
 
