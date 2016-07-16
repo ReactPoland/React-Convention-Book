@@ -968,17 +968,41 @@ After you click the "view service" you shall see the main dashboard where are li
 
 ![ecs main dashboard](http://test.przeorski.pl/book/749_clusters_main_dashboard.png)
 
-750_pubapp_ecs_cluster
+Click on the pubapp-ecs-cluster and then you shall see:
 
-751_click_pubapp-service
+![ecs pubapp_ecs_cluster](http://test.przeorski.pl/book/750_pubapp_ecs_cluster.png)
 
-752_pubapp_service_mainpage
+On the above screen click the pubapp-service from the list:
+![ecs click_pubapp-service](http://test.przeorski.pl/book/751_click_pubapp-service.png)
 
-753_click_on_the_ELB_name
+...  and then you will see:
 
-754_pubapp_ELB
+![ecs pubapp_service_mainpage](http://test.przeorski.pl/book/752_pubapp_service_mainpage.png)
 
-755_ELB_url
+On the above link choose the elastic balancer:
+![ecs pubapp_service_mainpage](http://test.przeorski.pl/book/753_click_on_the_ELB_name.png)
+
+And the final view of ELB is:
+![ecs pubapp_ELB](http://test.przeorski.pl/book/754_pubapp_ELB.png)
+
+On the above's view you shall find (under the "Description Name" tab) an elastic balancer address like this one:
+```
+DNS name:	
+EC2Contai-EcsElast-1E4Y3WOGMV6S4-39378274.eu-central-1.elb.amazonaws.com (A Record)
+```
+
+<InformationBox>
+If you will try to open the address and it won't work then give it more time. The EC2 instances may be in progress in terms of running our Docker's Publishing App container. We must be patient on the initial run of our ECS cluster.
+</InformationBox>
+
+This is address of your ELB which you can put into the browser and see the Publishing App:
+![ecs elastic_pub_app_working](http://test.przeorski.pl/book/755_elastic_pub_app_working.png)
+
+
+#### AWS Router 53
+
+
+
 
 PLAN:
 1) opisac zdjecia po kolei
