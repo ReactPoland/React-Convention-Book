@@ -996,7 +996,7 @@ If you will try to open the address and it won't work then give it more time. Th
 </InformationBox>
 
 This is address of your ELB which you can put into the browser and see the Publishing App:
-![ecs elastic_pub_app_working](http://test.przeorski.pl/book/755_elastic_pub_app_working.png)
+![ecs elastic_pub_app_working](http://test.przeorski.pl/book/755_elastic_pub_app_working2.png)
 
 
 #### AWS Route 53
