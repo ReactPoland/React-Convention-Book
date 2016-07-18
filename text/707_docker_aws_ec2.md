@@ -1052,8 +1052,39 @@ ns-763.awsdns-31.net
 ns-323.awsdns-40.com
 ```
 
-After all that steps you can visit the website http://reactjs.space (the DNS changes may take up to 48 hours) and see our Publishing App ready to use:
+After all that steps you can visit the website http://reactjs.space (the DNS changes may take up to 48 hours).
 
-[[[SCREENSHOT]]]
+
+The last thing is to create an alias of the reactjs.space domain that points to our Elastic Load Balancer. Click the following button:
+
+
+![route53 create_record](http://test.przeorski.pl/book/763_create_record.png)
+
+Then on the following view:
+![route53 create_record](http://test.przeorski.pl/book/764_create_record_set.png)
+
+Choose alias from the "radio buttons" and then you shall select the ELB from the list as on the example below:
+
+![route53 choose_ELB_as_alias](http://test.przeorski.pl/book/765_choose_ELB_as_alias.png)
+
+Currently, everything shall be working after the DNS changes are finished (which may take up to 48 hours). To improve experience with our application let's also make an alias from www.reactjs.space to reactjs.space so if anyone will type "www." before the domain name then it will work as supposed. Click again the same button called "Create Record Set" and then choose alias and type www. where you will be able to choose the www.reactjs.space domain. Do it and hit "Create":
+
+![route53 choose_www](http://test.przeorski.pl/book/766_choose_www.png)
+
+
+#### A summary
+
+We are done with all the AWS/Docker setups. After the successful DNS changes, you shall be able to find our application under the http://reactjs.space address:
+
+![route53 choose_www](http://test.przeorski.pl/book/767_works_reactjs_space.png)
+
+Next chapter will be talking about basics of continuous integration and also will help you to wrap up remaining things in the app before it will be 100% production ready (minification etc. is missing so far).
+
+Let's continue in next chapter with more detailed description of remaining topics that are going to be covered in the book.
+
+
+
+
+
 
 
