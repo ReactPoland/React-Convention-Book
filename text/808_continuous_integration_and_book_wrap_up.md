@@ -54,6 +54,11 @@ c) Testing Framework Agnostic - you can write your tests  in Jasmine, Mocha, QUn
 d) Continuous Integration - Karma works great with CI tools like Jenkins, Travis or CircleCI.
 
 
+PLAN:
+- reference for example karma setup with XYZ (check starter)
+- code code snippets
+- some output examples
+
 
 
 
