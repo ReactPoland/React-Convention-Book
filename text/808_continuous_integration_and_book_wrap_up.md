@@ -32,7 +32,7 @@ http://ReactConvention.com
 
 Visit this website and learn how integrate your app with unit and behavioral tests and learn up to date best conventions about how to make react redux applications.
 
-#### How to write unit and behavioral tests
+#### Karma for testing
 
 We won't guide you to setting up the tests thorughout this chapter, because it's not in the scope of the book. Aim of this chapter is more likely to present you online resources which will help you to understand big picture. We will try to answer a question.
 
@@ -52,6 +52,54 @@ b) Remote Control - you can run the tests remotely, for example on each save fro
 c) Testing Framework Agnostic - you can write your tests  in Jasmine, Mocha, QUnit and other frameworks. It's totally up to you.
 
 d) Continuous Integration - Karma works great with CI tools like Jenkins, Travis or CircleCI.
+
+
+#### How to write unit and behavioral tests
+
+Let's provide an example how to setup properly a project in order to have an ability to write tests.
+
+Visit the Github repo of very popular redux starter kit:
+```
+https://github.com/davezuko/react-redux-starter-kit
+```
+
+Then visit the package.json file of this repository. We can find out there what are possible commands/scripts:
+```
+  "scripts": {
+    "clean": "rimraf dist",
+    "compile": "better-npm-run compile",
+    "lint": "eslint src tests server",
+    "lint:fix": "npm run lint -- --fix",
+    "start": "better-npm-run start",
+    "dev": "better-npm-run dev",
+    "dev:no-debug": "npm run dev -- --no_debug",
+    "test": "better-npm-run test",
+    "test:dev": "npm run test -- --watch",
+    "deploy": "better-npm-run deploy",
+    "deploy:dev": "better-npm-run deploy:dev",
+    "deploy:prod": "better-npm-run deploy:prod",
+    "codecov": "cat coverage/*/lcov.info | codecov"
+  },
+```
+
+As you can find there that after npm test you it runs the following command:
+```
+    "test": {
+      "command": "babel-node ./node_modules/karma/bin/karma start build/karma.conf",
+      "env": {
+        "NODE_ENV": "test",
+        "DEBUG": "app:*"
+      }
+    }
+```
+
+From there you can find the configuration file of karma, that is located at ***build/karma.conf*** so the link for that file:
+```
+https://github.com/davezuko/react-redux-starter-kit/blob/master/build/karma.conf.js
+```
+
+
+
 
 
 PLAN:
