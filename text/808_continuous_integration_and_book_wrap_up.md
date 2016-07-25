@@ -22,8 +22,40 @@ First two points (a-b) are related to startups and young companies. The third po
 
 It's really overkill when you are building a mobile/web app and you don't have those stuff in your setup.
 
+#### React Convention 
+
+There is a project which shows fully, how the full-stack development setup shall be looking like:
+
+```
+http://ReactConvention.com
+```
+
+Visit this website and learn how integrate your app with unit and behavioral tests and learn up to date best conventions about how to make react redux applications.
 
 #### How to write unit and behavioral tests
+
+We won't guide you to setting up the tests thorughout this chapter, because it's not in the scope of the book. Aim of this chapter is more likely to present you online resources which will help you to understand big picture. We will try to answer a question.
+
+Karma is the one of most popular tool for unit and behavioral tests. The main goal is to bring a productive testing environment while working on any application.
+
+There are many features that you are provided with by using this test runner. There is a nice video that is explaining big picture about Karma at their main website:
+```
+https://karma-runner.github.io
+```
+
+Some of the main features are:
+
+a) Test on Real Devices - you can use real browsers and real devices such as phones, tablets or PhantomJS (PhantomJS is a headless WebKit scriptable with a JavaScript API. It has fast and native support for various web standards: DOM handling, CSS selector, JSON, Canvas, and SVG) to run the tests. Different enviroments, but one tool that run it all.
+
+b) Remote Control - you can run the tests remotely, for example on each save from your IDE so you don't have to do it manually
+
+c) Testing Framework Agnostic - you can write your tests  in Jasmine, Mocha, QUnit and other frameworks. It's totally up to you.
+
+d) Continuous Integration - Karma works great with CI tools like Jenkins, Travis or CircleCI.
+
+
+
+
 
 
 
