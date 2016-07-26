@@ -217,9 +217,9 @@ global.should = chai.should()
 
 Let's roughly describe what is used there:
 
-a) babel-polyfill emulate a full ES6 environment
+a) Babel-polyfill emulate a full ES6 environment
 
-b) sinon is a standalone and test framework agnostic JavaScript test spies, stubs and mocks. 
+b) Sinon is a standalone and test framework agnostic JavaScript test spies, stubs and mocks. 
 
 Spies are useful if in a tested piece of code you call for other external's services. You can check if it was called, what parameters it had, if it returned something or even how many times it was called!
 
@@ -228,11 +228,55 @@ Stubs are very likely like spies. Biggest difference is that they replace the ta
 
 Mocks are kind of "the smarter stubs". Mocks are used for asserting data and should never return data, when a stub are used simply for returning data and should never assert. Mocks can can file your tests (when asserting), while the stubs can't.
 
+c) Chai is the BDD / TDD assertion framework for node.js and the browser. In that example it has been paired with the Mocha testing framework.
 
 
+#### Example tests
 
+Let's analyze the CoreLayout.spec.js tests - this component has similar role as the CoreLayout in our Publishing App.
 
- when a stub is simple fake object, mock is smarter stub. You verify Your test passes through it.
+The CoreLayout tests file location (July 2016):
+```
+https://github.com/davezuko/react-redux-starter-kit/blob/master/tests/layouts/CoreLayout.spec.js
+```
+
+and it's content:
+```
+import React from 'react'
+import TestUtils from 'react-addons-test-utils'
+import CoreLayout from 'layouts/CoreLayout/CoreLayout'
+
+function shallowRender (component) {
+  const renderer = TestUtils.createRenderer()
+
+  renderer.render(component)
+  return renderer.getRenderOutput()
+}
+
+function shallowRenderWithProps (props = {}) {
+  return shallowRender(<CoreLayout {...props} />)
+}
+
+describe('(Layout) Core', function () {
+  let _component
+  let _props
+  let _child
+
+  beforeEach(function () {
+    _child = <h1 className='child'>Child</h1>
+    _props = {
+      children: _child
+    }
+
+    _component = shallowRenderWithProps(_props)
+  })
+
+  it('Should render as a <div>.', function () {
+    expect(_component.type).to.equal('div')
+  })
+})
+```
+
 
 
 
