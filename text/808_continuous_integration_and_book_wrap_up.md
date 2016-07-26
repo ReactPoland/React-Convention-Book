@@ -1,10 +1,11 @@
 ### Continuous integration with unit and behavioral tests. Pub App Wrap Up.
 
-We made it - congratulations! We have created a full-stack app which runs under a certain domain name (in the book case reactjs.space) and it took good chunk of time. The missing part in the whole setup are the deployments processes. Deployments should be zero downtime. We need to have a redundant servers of our application. 
+We made it - congratulations! We have created a full-stack app which runs under a certain domain name (in the book case reactjs.space). The missing part in the whole setup are the deployments processes. Deployments should be zero downtime. We need to have a redundant servers of our application. 
 
 We also missing some steps in our app to make it professionally work as minification, unit and behavioral tests.
 
 In that chapter we will roughly describe options how to make this stuff working. Rest of the missing pieces are left for you as a home work.
+
 
 #### When to write unit and behavioral tests
 
@@ -97,6 +98,141 @@ From there you can find the configuration file of karma, that is located at ***b
 ```
 https://github.com/davezuko/react-redux-starter-kit/blob/master/build/karma.conf.js
 ```
+
+and it's content is (July 2016):
+```
+import { argv } from 'yargs'
+import config from '../config'
+import webpackConfig from './webpack.config'
+import _debug from 'debug'
+
+const debug = _debug('app:karma')
+debug('Create configuration.')
+
+const karmaConfig = {
+  basePath: '../', // project root in relation to bin/karma.js
+  files: [
+    {
+      pattern: `./${config.dir_test}/test-bundler.js`,
+      watched: false,
+      served: true,
+      included: true
+    }
+  ],
+  singleRun: !argv.watch,
+  frameworks: ['mocha'],
+  reporters: ['mocha'],
+  preprocessors: {
+    [`${config.dir_test}/test-bundler.js`]: ['webpack']
+  },
+  browsers: ['PhantomJS'],
+  webpack: {
+    devtool: 'cheap-module-source-map',
+    resolve: {
+      ...webpackConfig.resolve,
+      alias: {
+        ...webpackConfig.resolve.alias,
+        sinon: 'sinon/pkg/sinon.js'
+      }
+    },
+    plugins: webpackConfig.plugins,
+    module: {
+      noParse: [
+        /\/sinon\.js/
+      ],
+      loaders: webpackConfig.module.loaders.concat([
+        {
+          test: /sinon(\\|\/)pkg(\\|\/)sinon\.js/,
+          loader: 'imports?define=>false,require=>false'
+        }
+      ])
+    },
+    // Enzyme fix, see:
+    // https://github.com/airbnb/enzyme/issues/47
+    externals: {
+      ...webpackConfig.externals,
+      'react/addons': true,
+      'react/lib/ExecutionEnvironment': true,
+      'react/lib/ReactContext': 'window'
+    },
+    sassLoader: webpackConfig.sassLoader
+  },
+  webpackMiddleware: {
+    noInfo: true
+  },
+  coverageReporter: {
+    reporters: config.coverage_reporters
+  }
+}
+
+if (config.globals.__COVERAGE__) {
+  karmaConfig.reporters.push('coverage')
+  karmaConfig.webpack.module.preLoaders = [{
+    test: /\.(js|jsx)$/,
+    include: new RegExp(config.dir_client),
+    loader: 'isparta',
+    exclude: /node_modules/
+  }]
+}
+
+// cannot use `export default` because of Karma.
+module.exports = (cfg) => cfg.set(karmaConfig)
+```
+
+As you can find in that karma.conf.js they are using Mocha (check the line with ***"frameworks: ['mocha']***"). Rest options used in that config files are described in the documentation that is available at http://karma-runner.github.io/1.0/config/configuration-file.html ... if you are interested in learning the Karma configuration then it's go to place to learn all the options that are located in the linked karma.conf.js file.
+
+
+#### What is Mocha and why you need it
+
+In that Karma config file, we have found that it uses Mocha as JS testing framework (https://mochajs.org/). Let's analyze the codebase.
+
+We can find at the config/index.js file that "dir_test : 'tests'" so based on that variable the Karma's config knows that the Mocha's tests are located in the "tests/test-bundler.js" file.
+
+Let's see what is in the tests directory:
+```
+https://github.com/davezuko/react-redux-starter-kit/tree/master/tests
+```
+
+as you can find the in the test-bundler.js there plenty of dependencies:
+```
+// ---------------------------------------
+// Test Environment Setup
+// ---------------------------------------
+import 'babel-polyfill'
+import sinon from 'sinon'
+import chai from 'chai'
+import sinonChai from 'sinon-chai'
+import chaiAsPromised from 'chai-as-promised'
+import chaiEnzyme from 'chai-enzyme'
+
+chai.use(sinonChai)
+chai.use(chaiAsPromised)
+chai.use(chaiEnzyme())
+
+global.chai = chai
+global.sinon = sinon
+global.expect = chai.expect
+global.should = chai.should()
+```
+
+Let's roughly describe what is used there:
+
+a) babel-polyfill emulate a full ES6 environment
+
+b) sinon is a standalone and test framework agnostic JavaScript test spies, stubs and mocks. 
+
+Spies are useful if in a tested piece of code you call for other external's services. You can check if it was called, what parameters it had, if it returned something or even how many times it was called!
+
+Stubs are very likely like spies. Biggest difference is that they replace the target function. They also replace called code with custom behaviour (replacing it) such as throwing exceptions or returning a value. They are also able to call a callback function that has been provided as a paramater.Stubs code returns a specified result.
+
+
+Mocks are kind of "the smarter stubs". Mocks are used for asserting data and should never return data, when a stub are used simply for returning data and should never assert. Mocks can can file your tests (when asserting), while the stubs can't.
+
+
+
+
+
+ when a stub is simple fake object, mock is smarter stub. You verify Your test passes through it.
 
 
 
