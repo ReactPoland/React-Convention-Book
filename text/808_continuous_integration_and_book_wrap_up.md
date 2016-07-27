@@ -231,9 +231,9 @@ Mocks are kind of "the smarter stubs". Mocks are used for asserting data and sho
 c) Chai is the BDD / TDD assertion framework for node.js and the browser. In that example it has been paired with the Mocha testing framework.
 
 
-#### Example tests
+#### Behavioural test example step-by-step
 
-Let's analyze the CoreLayout.spec.js tests - this component has similar role as the CoreLayout in our Publishing App.
+Let's analyze the CoreLayout.spec.js tests - this component has similar role as the CoreLayout in the Publishing App so it's a good way to describe how you can start writing tests for our application.
 
 The CoreLayout tests file location (July 2016):
 ```
@@ -276,6 +276,80 @@ describe('(Layout) Core', function () {
   })
 })
 ```
+
+
+The react-addons-test-utils makes easy to test React components with Mocha. The methods that we use in above example are is "shallow rendering":
+```
+https://facebook.github.io/react/docs/test-utils.html#shallow-rendering
+```
+
+This feature helps us test the render function and a result of rendering a one level deep in our components. Then we can assert facts about what its render method returns. As you can find below:
+```
+function shallowRender (component) {
+  const renderer = TestUtils.createRenderer()
+
+  renderer.render(component)
+  return renderer.getRenderOutput()
+}
+
+function shallowRenderWithProps (props = {}) {
+  return shallowRender(<CoreLayout {...props} />)
+}
+```
+
+First we provide a component in the shallowRender method (in this example it will be CoreLayout). Later we use a method ***.render*** and then we reutrn the output with use of renderer.getRenderOutput.
+
+In our case that function is called here:
+```
+describe('(Layout) Core', function () {
+  let _component
+  let _props
+  let _child
+
+  beforeEach(function () {
+    _child = <h1 className='child'>Child</h1>
+    _props = {
+      children: _child
+    }
+
+    _component = shallowRenderWithProps(_props)
+  })
+
+  it('Should render as a <div>.', function () {
+    expect(_component.type).to.equal('div')
+  })
+})
+```
+
+So you can find that the ***_component*** contains the result of the ***renderer.getRenderOutput***. This value is asserted here:
+```
+expect(_component.type).to.equal('div')
+```
+In that certain test we test our code if it returns a div. But if you will visit the documentation then you can find code example:
+```
+<div>
+  <span className="heading">Title</span>
+  <Subcomponent foo="bar" />
+</div>
+```
+
+... and assertion example:
+```
+var renderer = ReactTestUtils.createRenderer();
+result = renderer.getRenderOutput();
+expect(result.type).toBe('div');
+expect(result.props.children).toEqual([
+  <span className="heading">Title</span>,
+  <Subcomponent foo="bar" />
+]);
+```
+
+As you can find in above two examples, you can expect a type as div or you can expect more specific information about the CoreLayout return (depending on your needs).
+
+
+
+
+
 
 
 
