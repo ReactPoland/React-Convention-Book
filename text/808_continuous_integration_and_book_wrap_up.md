@@ -376,6 +376,6 @@ The Travis CI goal is to on every commit to your GitHub account, to run the test
 
 #### Summary
 
-
+So far we have done a lot of progress, but what you need to do as a home work to wrap up the Publishing App in 100% with all the missing pieces described in that chapter?
 
 
