@@ -231,7 +231,7 @@ Mocks are kind of "the smarter stubs". Mocks are used for asserting data and sho
 c) Chai is the BDD / TDD assertion framework for node.js and the browser. In that example it has been paired with the Mocha testing framework.
 
 
-#### Behavioural test example step-by-step
+#### Testing CoreLayout step-by-step
 
 Let's analyze the CoreLayout.spec.js tests - this component has similar role as the CoreLayout in the Publishing App so it's a good way to describe how you can start writing tests for our application.
 
@@ -346,6 +346,21 @@ expect(result.props.children).toEqual([
 
 As you can find in above two examples, you can expect a type as div or you can expect more specific information about the CoreLayout return (depending on your needs).
 
+
+The first test asserts the type of a component (if it is a div), the second example test asserts if a CoreLayout returns correct components that are following:
+```
+[
+  <span className="heading">Title</span>,
+  <Subcomponent foo="bar" />
+]
+```
+
+First test is an unit one, because this isn't testing exactly if users see a correct thing. Second one is a behavioral test.
+
+Generally, the PacktPub has many books related to BDD (Behavior-driven development) and TDD (Test-driven development) development.
+
+
+#### Continous deployment
 
 
 
