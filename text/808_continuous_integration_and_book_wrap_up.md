@@ -360,24 +360,21 @@ First test is an unit one, because this isn't testing exactly if users see a cor
 Generally, the PacktPub has many books related to BDD (Behavior-driven development) and TDD (Test-driven development) development.
 
 
-#### Continous deployment
+#### Continous integration with Travis
+
+In the given example, you can find a .yml file at:
+```
+https://github.com/davezuko/react-redux-starter-kit/blob/master/.travis.yml
+```
+
+This is configuration file for Travis. What it is? It's a hosted CI service used to build and test software. Generally, it's a tool that is free for open source projects to use. If you want a hosted Travis CI for private projects then their fees apply. 
+
+Configuration for Travis is made by adding the .travis.yml file which was mentioned above. The YAML form is a text file which placed to the root directory of your project. This file describe whole steps that has to be done to test, install and build a project.
+
+The Travis CI goal is to on every commit to your GitHub account, to run the tests and when the tests are passing you can deploy the app to a staging server on an Amazon AWS. The continous integration is not in the scope of that book so if you are interested in adding this step to the whole Publishing App project there are books related to this as well.
 
 
-
-
-
-
-
-
-
-
-PLAN:
-- reference for example karma setup with XYZ (check starter)
-- code code snippets
-- some output examples
-
-
-
+#### Summary
 
 
 
