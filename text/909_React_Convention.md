@@ -53,7 +53,7 @@ In a default starter kit from the @davezuko, you can find a home page and a coun
 
 ![starter counter](http://test.przeorski.pl/book/902_starter_counter2.png)
 
-This is a simple application with a counter, and throught this handbook you will implement other views and components which will help you understand whole codebase.
+This is a simple application with a counter, and throught this handbook you will implement other views and components which will help you understand whole codebase from a big picture perspective.
 
 To explain the whole code structure, we will start with developing a new route called Dashboard with some basic features. When you will be done with it, then you will implement a registration and login which will make you sure that you know how to do it 100% just on your own.
 
@@ -67,6 +67,13 @@ First step is to clone the starter kit and start working on this commit (the han
 ```
 https://github.com/davezuko/react-redux-starter-kit/tree/3fabc5f49272aa93960461e2d1abd6800e02e341
 ```
+
+After you have cloned the repo and you are at the same commit as me, then we can continue with the fun.
+
+
+#### General project structure explanation
+
+
 
 
 
