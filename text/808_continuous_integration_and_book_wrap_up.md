@@ -374,8 +374,21 @@ Configuration for Travis is made by adding the .travis.yml file which was mentio
 The Travis CI goal is to on every commit to your GitHub account, to run the tests and when the tests are passing you can deploy the app to a staging server on an Amazon AWS. The continous integration is not in the scope of that book so if you are interested in adding this step to the whole Publishing App project there are books related to this as well.
 
 
-#### Summary
+#### Summary 
 
-So far we have done a lot of progress, but what you need to do as a home work to wrap up the Publishing App in 100% with all the missing pieces described in that chapter?
+Let's make a summary what has been left and is required as a home work to wrap up the Publishing App.
+
+Because we already in the book finish, but there is still some homework to do for you:
+- add a minifaction on the front-end side so it will be lighter when loading over internet
+- as mentioned before you need to start using Karma and Mocha for unit and behavioral tests. An example setup was described in details in that chapter
+- you need to choose CI tool as Travis for example, start creating your yml file and prepare the enviroment on AWS
+
+That all is you can do additional besides the all 350+ pages of that book that you spend building full stack React+Redux+Falcor+Node+Express+Mongo application. I hope to keep with you in touch, follow me on Twitter/GitHub in order to keep in touch or send me a line over the email if you have any additional questions.
+
+Good luck in getting your hands dirty with next commercial full-stack applications and see you again :-)
+
+
+
+
 
 
