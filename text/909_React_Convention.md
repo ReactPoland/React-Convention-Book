@@ -2,6 +2,7 @@ http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
 #### ReactConvention - handbook for React Developers
 
+
 **** 
 "So many books, so little time." ― Frank Zappa
 "So many projects, so little time." - Kamil Przeorski
@@ -10,11 +11,17 @@ http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
 ## Preface
 
-In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there __are no really conventions that one can follow__. We are running a React Webshop from mid 2014 and we faced so many frustrations. Mostly when a client who had already an MVP wanted us to expand based on his codebase (each codebase was different in terms of structure and almost each one had it's weak points). Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase and you want to make sure that he doesn't make any "newbie" mistakes. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarize with the project's configuration, then he is not really productive in his first month of work. You need to learn him about your configuration so it takes decent amount time to pass all your knowledge to your new teammate in the project. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. 
+In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there __are no really conventions that one can follow__. We are running a React Webshop from mid 2014 and __we faced so many frustrations__. Mostly when a client who had already an MVP wanted us to expand based on his codebase. __No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to the frustrations__. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase __and you want to make sure that he doesn't make any "newbie" mistakes__. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work. __You need to learn him about your configuration so it takes decent amount time to pass all your knowledge to your new teammate in the project__. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. 
 
-The main ReactC's goal is to familiarize your new teammate to your React's project sturcture without investing time into that process. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. 
+The main ReactC's goal is to create "ready to go" convetion that you can share with your colleagues. 
 
-The handbook is also a good for people who want to start a new project from scratch.
+__SHARE THE REACT CONVETION NOW IF YOU LIKE THE IDEA__
+
+We will familiarize your new teammate to your React's project sturcture so you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. 
+
+__The handbook is also a good for people who want to start a new project from scratch__.
+
+__PLEASE USE FEEDBACK FEATURE, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS__
 
 
 
