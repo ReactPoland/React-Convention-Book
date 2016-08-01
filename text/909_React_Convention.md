@@ -121,12 +121,24 @@ Let's start with implementing a new route called "DASHBOARD".
 
 #### New dashboard route
 
-Copy the Counter route directory and rename it as Dashboard:
-
-http://test.przeorski.pl/book/903_copy_counter_to_dashboard.gif
-
+Copy the Counter route directory and rename it as Dashboard (location is src/routes/*):
 ![animated dashboard copy](http://test.przeorski.pl/book/903_copy_counter_to_dashboard.gif)
-(animated)
+
+
+Next step is to find any related things to counter and then:
+
+a) rename things from counter to dashboard
+
+b) We will rename action called __COUNTER_INCREMENT__ to __DASHBOARD_VISITS_COUNT__ (this will be a number of visits to dashboard during one sessions without refreshing the browser)
+
+![animated search for counter word](http://test.przeorski.pl/book/904_search_for_counter_in_dashboard_route.gif)
+
+
+Explained diff code:
+
+
+
+
 
 
 
