@@ -5,17 +5,18 @@ http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
 **** 
 "So many books, so little time." ― Frank Zappa
+
 "So many projects, so little time." - Kamil Przeorski
 **** 
 
 
 ## Preface
 
-In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there __are no really conventions that one can follow__. We are running a React Webshop from mid 2014 and __we faced so many frustrations__. Mostly when a client who had already an MVP wanted us to expand based on his codebase. __No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to the frustrations__. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase __and you want to make sure that he doesn't make any "newbie" mistakes__. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. __You need to learn him about your configuration so it takes decent amount time to pass all your knowledge to your new teammate in the project__. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. 
+In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there __are no really conventions that one can follow__. We are running a React Webshop from mid 2014 and __we faced so many frustrations__. Mostly when a client who had already an MVP wanted us to expand based on his codebase. __No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations__. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase __and you want to make sure that he doesn't make any "newbie" mistakes__. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. __You need to learn him about your configuration so it takes decent amount time to pass all your knowledge to your new teammate in the project__. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. 
 
 The main ReactC's goal is to create "ready to go" convention that you can share with your colleagues. 
 
-__SHARE THE REACT CONVETION NOW IF YOU LIKE THE IDEA__
+__SHARE THE REACT CONVETION IF YOU LIKE THE IDEA__
 
 We will familiarize your new teammate to your React's project sturcture so you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. 
 
@@ -58,7 +59,7 @@ Welcome to React Convention was of doing apps
 
 In a default starter kit from the @davezuko, you can find a home page and a counter component which looks as following:
 
-![starter counter](http://test.przeorski.pl/book/902_starter_counter2.png)
+![starter counter](http://test.przeorski.pl/book/902_starter_counter3.png)
 
 This is a simple application with a counter, and throught this handbook you will implement other views and components which will help you understand whole codebase from a big picture perspective.
 
@@ -111,9 +112,21 @@ We will focus on the client-side explanation for now, so let's discuss the "src"
 └── tests                    # Unit tests
 ```
 
+If you were working on any FLUX or redux projects, then the project structure shall be quite familiar to you. You will learn all the things located in that project step-by-step (bottom-up approach).
+
+Don't worry if you don't get the structure so far, you will ramp up with knowledge about it during following the instructions. We will also explain each step so you will learn by doing.
+
+Let's start with implementing a new route called "DASHBOARD".
 
 
+#### New dashboard route
 
+Copy the Counter route directory and rename it as Dashboard:
+
+http://test.przeorski.pl/book/903_copy_counter_to_dashboard.gif
+
+![animated dashboard copy](http://test.przeorski.pl/book/903_copy_counter_to_dashboard.gif)
+(animated)
 
 
 
