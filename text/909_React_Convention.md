@@ -232,7 +232,7 @@ src/components/Dashboard/Dashboard.js
 Below we have introduced statefull DashboardContainer - we need it to do this way as we are using componentDidMount for invoking the function called ***this.props.dashboardVisitIncrement()***.
 
 
-###### IMPORTANT: The statefull DashboardContainer component is required here because our features requrire using a componentDidMount and we assume that in the components directory we want to have only "dump components" and by that mean that all the React components in the "src/components" can have any states (and any React-related lifecycle methods like componentDidMount). In the src/components we will keep only stateless components (in other words they are also called dump components).
+#### IMPORTANT: The statefull DashboardContainer component is required here because our features requrire using a componentDidMount and we assume that in the components directory we want to have only "dumb components" and by that mean that all the React components in the "src/components" can have any states (and any React-related lifecycle methods like componentDidMount). In the src/components we will keep only stateless components (in other words they are also called dumb components).
 
 
 ```
@@ -262,6 +262,7 @@ As you can find above, it still a very simple dashboard. The next step is to add
 
 
 ## Add/edit/delete item on the dashboard list
+======
 
 
 ![916_code3](http://test.przeorski.pl/book/916_code3.png)
