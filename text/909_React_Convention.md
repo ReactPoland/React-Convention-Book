@@ -11,6 +11,7 @@ http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
 
 ## Preface
+------
 
 In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there __are no really conventions that one can follow__. We are running a React Webshop from mid 2014 and __we faced so many frustrations__. Mostly when a client who had already an MVP wanted us to expand based on his codebase. __No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations__. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase __and you want to make sure that he doesn't make any "newbie" mistakes__. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. __You need to learn him about your configuration so it takes decent amount time to pass all your knowledge to your new teammate in the project__. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. 
 
@@ -27,6 +28,7 @@ __PLEASE USE FEEDBACK FEATURE, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FIN
 
 
 ## How to use this handbook
+------
 
 The only requirement to get all that benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:
 ```
@@ -66,6 +68,7 @@ Welcome to React Convention was of doing apps
 
 
 ## Your First Step
+------
 
 In a default starter kit from the @davezuko, you can find a home page and a counter component which looks as following:
 
@@ -90,6 +93,7 @@ After you have cloned the repo and you are at the same commit as me, then we can
 
 
 ## General client codebase structure
+------
 
 We will focus on the client-side explanation for now, so let's discuss the "src" directory that has following structure:
 ```
@@ -130,6 +134,7 @@ Let's start with implementing a new route called "DASHBOARD".
 
 
 ## New dashboard route
+------
 
 Copy the Counter route directory and rename it as Dashboard (location is src/routes/*):
 ![animated dashboard copy](http://test.przeorski.pl/book/903_copy_counter_to_dashboard.gif)
@@ -146,6 +151,7 @@ b) We will rename action called __COUNTER_INCREMENT__ to __DASHBOARD_VISITS_COUN
 Generally all the code diffs below are simply copies of Counter's component renamed with Dashboard.
 
 ## Create dashboard component
+------
 
 We have to copy the directory from src/components/Counter and named it Dashboard and then renamed all the variables related to counter's route as below:
 
@@ -220,6 +226,7 @@ https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
 ```
 
 ## Next steps in implementing our dashboard
+------
 
 In that ***Dashboard.js*** we do some little improvements in order to progress the development:
 ```
@@ -262,7 +269,7 @@ As you can find above, it still a very simple dashboard. The next step is to add
 
 
 ## Add/edit/delete item on the dashboard list
-======
+------
 
 
 ![916_code3](http://test.przeorski.pl/book/916_code3.png)
