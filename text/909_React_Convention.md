@@ -225,13 +225,36 @@ src/routes/Dashboard/containers/DashboardContainer.js
 ![915_code2](http://test.przeorski.pl/book/915_code2.png)
 
 
-In the modules/dashboard.js we have made some cleanup of unnecessary code that was copied initially from the Counter:
+In the modules/dashboard.js we have made some improvements and cleanup of unnecessary code that was copied initially from the Counter:
 
 ```
 Changes in:
 src/routes/Dashboard/modules/dashboard.js
 ```
 ![916_code3](http://test.przeorski.pl/book/916_code3.png)
+
+... at this point you shall have an app which increments on componentDidMount of the Dashboard component as on the below animation:
+
+![917_gif_works_dashboard_v2](http://test.przeorski.pl/book/917_gif_works_dashboard_v2.gif)
+
+As you can find above, it still a very simple dashboard. The next step is to add ability of adding a list of dashboard items that has ability:
+- add an item to the list
+- remove an item to the list
+- edit an item on the list
+
+
+#### Add/edit/delete item on the dashboard list
+
+
+
+
+
+
+
+
+
+
+
 
 
 
