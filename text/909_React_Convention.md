@@ -156,6 +156,55 @@ Below the three code snippets diffs are the copied over Counter components (src/
 
 Next step is to create a link in the Header component:
 
+![code4](http://test.przeorski.pl/book/908_code4.png)
+
+Further we simply renaming the files and replacing the "counter" to "dashboard":
+
+```
+Renaming and changes in:
+.../Dashboard/containers/CounterContainer.js → ...ashboard/containers/DashboardContainer.js
+```
+
+![code5](http://test.przeorski.pl/book/909_code5.png)
+
+```
+Changes in:
+src/routes/Dashboard/index.js
+```
+![code6](http://test.przeorski.pl/book/910_code6.png)
+
+```
+Renaming and changes in:
+src/routes/Dashboard/modules/counter.js → src/routes/Dashboard/modules/dashboard.js
+```
+![code7](http://test.przeorski.pl/book/911_code7.png)
+
+
+```
+Changes in:
+src/routes/index.js
+```
+![code8](http://test.przeorski.pl/book/911_code8.png)
+
+Here above you need to modify the routes/index.js so we will add the dashboard route so we will be able to navigate in there.
+
+After you run the project with:
+```
+npm run start
+```
+
+You shall be able to find the below app running:
+
+![913_dashboard_version1](http://test.przeorski.pl/book/913_dashboard_version1.gif)
+
+As you can find above, there are two different routes with different reducers but with exactly the same feature - the counter has different number on both routes.
+
+Let's improve the dashboard.
+
+All the above screenshots were made on that commit: https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
+
+
+#### Next steps in implementing our dashboard
 
 
 
