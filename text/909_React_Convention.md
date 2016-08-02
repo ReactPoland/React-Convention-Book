@@ -213,7 +213,7 @@ In that ***Dashboard.js*** we do some little improvements in order to progress o
 Changes in:
 src/components/Dashboard/Dashboard.js
 ```
-![914_code1](http://test.przeorski.pl/book/914_code1.gif)
+![914_code1](http://test.przeorski.pl/book/914_code1.png)
 
 
 Below we have implemented statefull DashboardContainer - we need it to do this way as we are using componentDidMount for invoking the function called ***this.props.dashboardVisitIncrement()***:
@@ -222,7 +222,7 @@ Changes in:
 src/routes/Dashboard/containers/DashboardContainer.js
 ```
 
-![915_code2](http://test.przeorski.pl/book/915_code2.gif)
+![915_code2](http://test.przeorski.pl/book/915_code2.png)
 
 
 In the modules/dashboard.js we have made some cleanup of unnecessary code that was copied initially from the Counter:
@@ -231,7 +231,7 @@ In the modules/dashboard.js we have made some cleanup of unnecessary code that w
 Changes in:
 src/routes/Dashboard/modules/dashboard.js
 ```
-![916_code3](http://test.przeorski.pl/book/916_code3.gif)
+![916_code3](http://test.przeorski.pl/book/916_code3.png)
 
 
 
