@@ -184,7 +184,7 @@ src/routes/Dashboard/modules/counter.js → src/routes/Dashboard/modules/dashboa
 Changes in:
 src/routes/index.js
 ```
-![code8](http://test.przeorski.pl/book/911_code8.png)
+![code8](http://test.przeorski.pl/book/912_code8.png)
 
 Here above you need to modify the routes/index.js so we will add the dashboard route so we will be able to navigate in there.
 
