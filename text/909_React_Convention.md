@@ -201,10 +201,39 @@ As you can find above, there are two different routes with different reducers bu
 
 Let's improve the dashboard.
 
-All the above screenshots were made on that commit: https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
+__All the above screenshots were made on that commit:__
+```
+https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
+```
+
+### Next steps in implementing our dashboard
+
+In that ***Dashboard.js*** we do some little improvements in order to progress on our dashboard:
+```
+Changes in:
+src/components/Dashboard/Dashboard.js
+```
+![914_code1](http://test.przeorski.pl/book/914_code1.gif)
 
 
-#### Next steps in implementing our dashboard
+Below we have implemented statefull DashboardContainer - we need it to do this way as we are using componentDidMount for invoking the function called ***this.props.dashboardVisitIncrement()***:
+```
+Changes in:
+src/routes/Dashboard/containers/DashboardContainer.js
+```
+
+![915_code2](http://test.przeorski.pl/book/915_code2.gif)
+
+
+In the modules/dashboard.js we have made some cleanup of unnecessary code that was copied initially from the Counter:
+
+```
+Changes in:
+src/routes/Dashboard/modules/dashboard.js
+```
+![916_code3](http://test.przeorski.pl/book/916_code3.gif)
+
+
 
 
 
