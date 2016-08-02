@@ -235,7 +235,7 @@ src/routes/Dashboard/modules/dashboard.js
 
 ... at this point you shall have an app which increments on componentDidMount of the Dashboard component as on the below animation:
 
-![917_gif_works_dashboard_v2](http://test.przeorski.pl/book/917_gif_works_dashboard_v2.gif)
+![917_gif_works_dashboard_v2](http://test.przeorski.pl/book/917_gif_works_dashboard_v2_3.gif)
 
 As you can find above, it still a very simple dashboard. The next step is to add ability of adding a list of dashboard items that has ability:
 - add an item to the list
@@ -246,6 +246,7 @@ As you can find above, it still a very simple dashboard. The next step is to add
 #### Add/edit/delete item on the dashboard list
 
 
+![916_code3](http://test.przeorski.pl/book/916_code3.png)
 
 
 
