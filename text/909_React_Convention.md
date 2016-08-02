@@ -150,10 +150,10 @@ b) We will rename action called __COUNTER_INCREMENT__ to __DASHBOARD_VISITS_COUN
 
 Generally all the code diffs below are simply copies of Counter's component renamed with Dashboard.
 
-## Create dashboard component
+## Create a dashboard component
 ------
 
-We have to copy the directory from src/components/Counter and named it Dashboard and then renamed all the variables related to counter's route as below:
+We have to copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables related to counter's route as on the below's example:
 
 ```
 New file (copied from Counter example):
@@ -175,9 +175,14 @@ src/components/Dashboard/index.js
 
 Next step is to create a link in the Header component:
 
+```
+Modfiy the file:
+src/components/Header/Header.js
+```
+
 ![code4](http://test.przeorski.pl/book/908_code4.png)
 
-Further we simply renaming the files and replacing the "counter" to "dashboard":
+Further we simply renaming the files and replacing the "counter" to "dashboard" (again):
 
 ```
 Renaming and changes in:
@@ -205,7 +210,7 @@ src/routes/index.js
 ```
 ![code8](http://test.przeorski.pl/book/912_code8.png)
 
-Here above you need to modify the routes/index.js so we will add the dashboard route so we will be able to navigate in there.
+Here above you need to modify the routes/index.js so we will add the dashboard route.
 
 After you run the project with:
 ```
