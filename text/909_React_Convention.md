@@ -148,11 +148,11 @@ Generally all the code diffs below are simply copies of Counter's component rena
 #### Create dashboard component
 Below the three code snippets diffs are the copied over Counter components (src/components/Counter) copied over and renamed to Dashboard:
 
-![code1](http://test.przeorski.pl/book/905_code1.gif)
+![code1](http://test.przeorski.pl/book/905_code1.png)
 
-![code2](http://test.przeorski.pl/book/906_code2.gif)
+![code2](http://test.przeorski.pl/book/906_code2.png)
 
-![code3](http://test.przeorski.pl/book/907_code3.gif)
+![code3](http://test.przeorski.pl/book/907_code3.png)
 
 Next step is to create a link in the Header component:
 
