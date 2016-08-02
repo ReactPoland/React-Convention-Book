@@ -221,7 +221,7 @@ https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
 
 ## Next steps in implementing our dashboard
 
-In that ***Dashboard.js*** we do some little improvements in order to progress on our dashboard:
+In that ***Dashboard.js*** we do some little improvements in order to progress the development:
 ```
 Changes in:
 src/components/Dashboard/Dashboard.js
@@ -229,7 +229,12 @@ src/components/Dashboard/Dashboard.js
 ![914_code1](http://test.przeorski.pl/book/914_code1.png)
 
 
-Below we have implemented statefull DashboardContainer - we need it to do this way as we are using componentDidMount for invoking the function called ***this.props.dashboardVisitIncrement()***:
+Below we have introduced statefull DashboardContainer - we need it to do this way as we are using componentDidMount for invoking the function called ***this.props.dashboardVisitIncrement()***.
+
+```
+The statefull DashboardContainer component is required here because our features requrire using a componentDidMount and we assume that in the components directory we want to have only "dump components" and by that mean that all the React components in the "src/components" can have any states (and any React-related lifecycle methods like componentDidMount). In the src/components we will keep only stateless components (in other words they are also called dump components).
+```
+
 ```
 Changes in:
 src/routes/Dashboard/containers/DashboardContainer.js
