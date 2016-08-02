@@ -42,15 +42,25 @@ After you are using this starter kit, then the handbook will provide you the val
 
 
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 Welcome to React Convention was of doing apps
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
+
 ------- SEPARATE PAGE WITH AN IMAGE -------
 
 
@@ -68,12 +78,12 @@ To explain the whole code structure, we will start with developing a new route c
 
 First step is to clone the starter kit and start working on this commit (the handbook was written on that commit, so for better experience you shall work on the same one):
 ```
-3fabc5f49272aa93960461e2d1abd6800e02e341
+9a03e99c0dd2e7102d43264cc495bbdd4e10dcdd
 ```
 
 ... so you you will be truly working on that starting codebase:
 ```
-https://github.com/davezuko/react-redux-starter-kit/tree/3fabc5f49272aa93960461e2d1abd6800e02e341
+https://github.com/davezuko/react-redux-starter-kit/tree/9a03e99c0dd2e7102d43264cc495bbdd4e10dcdd
 ```
 
 After you have cloned the repo and you are at the same commit as me, then we can continue with the fun.
@@ -133,20 +143,18 @@ b) We will rename action called __COUNTER_INCREMENT__ to __DASHBOARD_VISITS_COUN
 
 ![animated search for counter word](http://test.przeorski.pl/book/904_search_for_counter_in_dashboard_route.gif)
 
+Generally all the code diffs below are simply copies of Counter's component renamed with Dashboard.
 
-Explained diff code:
+#### Create dashboard component
+Below the three code snippets diffs are the copied over Counter components (src/components/Counter) copied over and renamed to Dashboard:
 
+![code1](http://test.przeorski.pl/book/905_code1.gif)
 
+![code2](http://test.przeorski.pl/book/906_code2.gif)
 
+![code3](http://test.przeorski.pl/book/907_code3.gif)
 
-
-
-
-
-
-
-
-
+Next step is to create a link in the Header component:
 
 
 
