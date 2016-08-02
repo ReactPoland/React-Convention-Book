@@ -89,7 +89,7 @@ https://github.com/davezuko/react-redux-starter-kit/tree/9a03e99c0dd2e7102d43264
 After you have cloned the repo and you are at the same commit as me, then we can continue with the fun.
 
 
-#### General client codebase structure
+## General client codebase structure
 
 We will focus on the client-side explanation for now, so let's discuss the "src" directory that has following structure:
 ```
@@ -129,7 +129,7 @@ Don't worry if you don't get the structure so far, you will ramp up with knowled
 Let's start with implementing a new route called "DASHBOARD".
 
 
-#### New dashboard route
+## New dashboard route
 
 Copy the Counter route directory and rename it as Dashboard (location is src/routes/*):
 ![animated dashboard copy](http://test.przeorski.pl/book/903_copy_counter_to_dashboard.gif)
@@ -145,24 +145,24 @@ b) We will rename action called __COUNTER_INCREMENT__ to __DASHBOARD_VISITS_COUN
 
 Generally all the code diffs below are simply copies of Counter's component renamed with Dashboard.
 
-#### Create dashboard component
+## Create dashboard component
 
 We have to copy the directory from src/components/Counter and named it Dashboard and then renamed all the variables related to counter's route as below:
 
 ```
-New file (coped from Counter example):
+New file (copied from Counter example):
 src/components/Dashboard/Dashboard.js
 ```
 ![code1](http://test.przeorski.pl/book/905_code1.png)
 
 ```
-New file (coped from Counter example):
+New file (copied from Counter example):
 src/components/Dashboard/Dashboard.scss
 ```
 ![code2](http://test.przeorski.pl/book/906_code2.png)
 
 ```
-New file (coped from Counter example):
+New file (copied from Counter example):
 src/components/Dashboard/index.js
 ```
 ![code3](http://test.przeorski.pl/book/907_code3.png)
@@ -219,7 +219,7 @@ __All the above screenshots were made on that commit:__
 https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
 ```
 
-### Next steps in implementing our dashboard
+## Next steps in implementing our dashboard
 
 In that ***Dashboard.js*** we do some little improvements in order to progress on our dashboard:
 ```
@@ -256,7 +256,7 @@ As you can find above, it still a very simple dashboard. The next step is to add
 - edit an item on the list
 
 
-#### Add/edit/delete item on the dashboard list
+## Add/edit/delete item on the dashboard list
 
 
 ![916_code3](http://test.przeorski.pl/book/916_code3.png)
