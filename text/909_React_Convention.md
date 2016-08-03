@@ -150,6 +150,10 @@ b) We will rename action called __COUNTER_INCREMENT__ to __DASHBOARD_VISITS_COUN
 
 Generally all the code diffs below are simply copies of Counter's component renamed with Dashboard.
 
+```
+Source code of the new dashboard init creation: https://github.com/przeor/ReactC/commit/d3f5d0293045af4ce75522324c06c9bf44d16a90
+```
+
 ## Create a dashboard component
 ------
 
@@ -272,17 +276,84 @@ As you can find above, it still a very simple dashboard. The next step is to add
 - remove an item to the list
 - edit an item on the list
 
+```
+Source code from the screenshots: https://github.com/przeor/ReactC/commit/02ed268623f69ebed59a2d4b7bb3c1c44a5c3ffc
+```
+
 
 ## Add/edit/delete item on the dashboard list
 ------
 
+```
+Changes in:
+src/components/Dashboard/Dashboard.js
+```
 
-![916_code3](http://test.przeorski.pl/book/916_code3.png)
+![918_code1](http://test.przeorski.pl/book/918_code1.png)
+
+Above you need to add a listJSX generation code with use of:
+```
+const listJSX = props.dashboard.dashboardItems.map((item, i) => {
+	return <h4 key={i}>{item.label}</h4>
+})
+```
+
+and then modify the:
+```
+{props.dashboard.visitsCount}
+```
+... because as you can find below we have modified our reducer:
+
+
+```
+Changes in:
+src/routes/Dashboard/modules/dashboard.js
+```
+
+![919_code2](http://test.przeorski.pl/book/919_code2.png)
+
+As you can find above we have changed the old initialState:
+```
+// old code
+const initialState = 0
+```
+
+with the new code:
+```
+const initialState = {
+  visitsCount: 0,
+  dashboardItems: [
+    {key: 0, label: 'Angular'},
+    {key: 1, label: 'JQuery'},
+    {key: 2, label: 'Polymer'},
+    {key: 3, label: 'ReactJS'}
+  ]
+}
+```
+
+So generally, we have changed simple integer initialState to an object, so as you can find as well above. We have improved also the DASHBOARD_VISITS_COUNT action:
+```
+// old codebase
+[DASHBOARD_VISITS_COUNT]: (state, action) => state + action.payload
+```
+
+with new:
+```
+// updated codebase
+[DASHBOARD_VISITS_COUNT]: (state, action) => { 
+  state.visitsCount = state.visitsCount + action.payload
+  return Object.assign({}, state)
+}
+```
+
+As a final currently, we have a little improved dashboard with a list and the visitsCount also works as previously (alongside with improved dashboard's reducer):
 
 
 
 
-
+```
+Source code from the screenshots: https://github.com/przeor/ReactC/commit/8eef288af11d36d6485f00174f4b347ffd219508
+```
 
 
 
