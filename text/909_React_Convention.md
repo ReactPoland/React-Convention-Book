@@ -289,7 +289,7 @@ Changes in:
 src/components/Dashboard/Dashboard.js
 ```
 
-![918_code1](http://test.przeorski.pl/book/918_code1.png)
+![918_code1](http://test.przeorski.pl/book/918_code1-2.png)
 
 Above you need to add a listJSX generation code with use of:
 ```
