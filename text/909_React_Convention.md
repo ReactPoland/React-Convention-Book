@@ -331,7 +331,7 @@ const initialState = {
 }
 ```
 
-So generally, we have changed simple integer initialState to an object, so as you can find as well above. We have improved also the DASHBOARD_VISITS_COUNT action:
+So generally, we have changed simple integer initialState to an object, as you can find above. We have improved also the DASHBOARD_VISITS_COUNT action:
 ```
 // old codebase
 [DASHBOARD_VISITS_COUNT]: (state, action) => state + action.payload
@@ -349,6 +349,9 @@ with new:
 As a final currently, we have a little improved dashboard with a list and the visitsCount also works as previously (alongside with improved dashboard's reducer):
 
 
+920_app_dashboard_with_list.gif
+
+![920_app_dashboard_with_list.gif](http://test.przeorski.pl/book/920_app_dashboard_with_list.gif)
 
 
 ```
