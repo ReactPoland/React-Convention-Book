@@ -25,7 +25,7 @@ We will familiarize your new teammate to your React's project sturcture so you w
 
 ### __The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with other methods__.
 
-__PLEASE USE FEEDBACK FEATURE, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS - mail us with details at ReactC@mwp.io__
+__PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at ReactC@mwp.io__
 
 
 
