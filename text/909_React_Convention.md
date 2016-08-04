@@ -295,7 +295,7 @@ src/components/Dashboard/Dashboard.js
 
 ![918_code1](http://test.przeorski.pl/book/918_code1-2.png)
 
-Above you need to add a listJSX generation code with use of:
+Above you need to add a listJSX mapping code with use of:
 ```
 const listJSX = props.dashboard.dashboardItems.map((item, i) => {
 	return <h4 key={i}>{item.label}</h4>
@@ -306,8 +306,7 @@ and then modify the:
 ```
 {props.dashboard.visitsCount}
 ```
-... because as you can find below we have modified our reducer:
-
+... all that changes above are required because we have modified our reducer's structure (as you can find below):
 
 ```
 Changes in (you can click the diffs image to make it larger):
@@ -318,12 +317,13 @@ src/routes/Dashboard/modules/dashboard.js
 
 As you can find above we have changed the old initialState:
 ```
-// old code
+// old dashboard reducer structure
 const initialState = 0
 ```
 
 with the new code:
 ```
+// new dashboard reducer structure
 const initialState = {
   visitsCount: 0,
   dashboardItems: [
@@ -349,6 +349,8 @@ with new:
   return Object.assign({}, state)
 }
 ```
+
+That __DASHBOARD_VISITS_COUNT__ change was required because as was written earlier, we have modified the initalState's structure of the dashboard reducer (so we need also to change the function that handles it).
 
 As a final currently, we have a little improved dashboard with a list and the visitsCount also works as previously (alongside with improved dashboard's reducer):
 
