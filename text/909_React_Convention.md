@@ -1,6 +1,6 @@
 http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
-#### ReactConvention - handbook for React Developers
+# ReactConvention - the handbook for ReactJS Developers with a very opinionated and mature project structure
 
 
 **** 
