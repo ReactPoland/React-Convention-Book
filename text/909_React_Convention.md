@@ -72,7 +72,7 @@ Welcome to React Convention was of doing apps
 
 In a default starter kit from the @davezuko, you can find a home page and a counter component which looks as following:
 
-![starter counter](http://test.przeorski.pl/book/902_starter_counter3.png)
+![starter counter](http://test.przeorski.pl/book/902_starter_counter.gif)
 
 This is a simple application with a counter, and throught this handbook you will implement other views and components which will help you understand whole codebase from a big picture perspective.
 
@@ -281,7 +281,7 @@ Source code from the screenshots: https://github.com/przeor/ReactC/commit/02ed26
 ```
 
 
-## Add/edit/delete item on the dashboard list
+## Mocked items list on the dashboard list
 ------
 
 ```
@@ -357,6 +357,10 @@ As a final currently, we have a little improved dashboard with a list and the vi
 ```
 Source code from the screenshots: https://github.com/przeor/ReactC/commit/8eef288af11d36d6485f00174f4b347ffd219508
 ```
+
+
+## Add/edit/delete item on the dashboard list
+------
 
 
 
