@@ -1,7 +1,7 @@
 http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
-# ReactConvention (ReactC.com)
-## a free online handbook for ReactJS Developers with a very opinionated and matured project structure
+# ReactJS Convention (ReactC.com)
+## a free online handbook for React.JS Developers with a very opinionated and matured project structure
 
 
 **** 
@@ -242,7 +242,7 @@ https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
 ## Next steps in implementing our dashboard
 ------
 
-In that ***Dashboard.js*** we do some little improvements in order to progress the development:
+In the ***Dashboard.js*** file we will do some little improvements in order to progress the development:
 ```
 Changes in (you can click the diffs image to make it larger):
 src/components/Dashboard/Dashboard.js
@@ -272,7 +272,7 @@ src/routes/Dashboard/modules/dashboard.js
 ```
 ![916_code3](http://test.przeorski.pl/book/916_code3.png)
 
-... at this point you shall have an app which increments on componentDidMount of the Dashboard component as on the below animation:
+... at this point you shall have an app which increments on componentDidMount of the Dashboard component as on the animation below:
 
 ![917_gif_works_dashboard_v2](http://test.przeorski.pl/book/917_gif_works_dashboard_v2_3.gif)
 
@@ -355,9 +355,6 @@ That __DASHBOARD_VISITS_COUNT__ change was required because as was written earli
 
 As a final currently, we have a little improved dashboard with a list and the visitsCount also works as previously (alongside with improved dashboard's reducer):
 
-
-920_app_dashboard_with_list.gif
-
 ![920_app_dashboard_with_list.gif](http://test.przeorski.pl/book/920_app_dashboard_with_list.gif)
 
 
@@ -368,6 +365,8 @@ Source code from the screenshots: https://github.com/przeor/ReactC/commit/8eef28
 
 ## Add/edit/delete item on the dashboard list
 ------
+
+STEPS:
 
 
 
