@@ -252,7 +252,7 @@ src/components/Dashboard/Dashboard.js
 Below we have introduced statefull DashboardContainer - we need it to do this way as we are using componentDidMount for invoking the function called ***this.props.dashboardVisitIncrement()***.
 
 
-#### IMPORTANT: The statefull DashboardContainer component is required here because our features requrire using a componentDidMount and we assume that in the components directory we want to have only "dumb components" and by that mean that all the React components in the "src/components" can have any states (and any React-related lifecycle methods like componentDidMount). In the src/components we will keep only stateless components (in other words they are also called dumb components).
+#### IMPORTANT: The statefull DashboardContainer component is required here because our feature (increment by one on every visit of the dashboard route) require using a componentDidMount and we assume that in the components directory we want to have only "dumb components". In the src/components we will keep only stateless components (in other words they are also called dumb components).
 
 
 ```
