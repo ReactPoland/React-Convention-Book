@@ -164,19 +164,19 @@ Source code of the new dashboard init creation: https://github.com/przeor/ReactC
 We have to copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables related to counter's route as on the below's example:
 
 ```
-New file (copied from Counter example):
+New file (copied from Counter example - you can click the diffs image to make it larger) :
 src/components/Dashboard/Dashboard.js
 ```
 ![code1](http://test.przeorski.pl/book/905_code1.png)
 
 ```
-New file (copied from Counter example):
+New file (copied from Counter example - you can click the diffs image to make it larger):
 src/components/Dashboard/Dashboard.scss
 ```
 ![code2](http://test.przeorski.pl/book/906_code2.png)
 
 ```
-New file (copied from Counter example):
+New file (copied from Counter example - you can click the diffs image to make it larger):
 src/components/Dashboard/index.js
 ```
 ![code3](http://test.przeorski.pl/book/907_code3.png)
@@ -184,7 +184,7 @@ src/components/Dashboard/index.js
 Next step is to create a link in the Header component:
 
 ```
-Modfiy the file:
+Modfiy the file (you can click the diffs image to make it larger):
 src/components/Header/Header.js
 ```
 
