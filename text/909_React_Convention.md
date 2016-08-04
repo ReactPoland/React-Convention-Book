@@ -23,9 +23,9 @@ __SHARE THE REACT CONVENTION IF YOU LIKE THE IDEA, it's 100% free__
 We will familiarize your new teammate to your React's project sturcture so you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. 
 
 
-### __The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new members will be introduce to your codebase quicker than with other methods__.
+### __The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with other methods__.
 
-__PLEASE USE FEEDBACK FEATURE, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS (https://github.com/przeor/selection-sharer)__
+__PLEASE USE FEEDBACK FEATURE, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS - mail me with details at ReactC@mwp.io__
 
 
 
