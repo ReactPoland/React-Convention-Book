@@ -1,7 +1,7 @@
 http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
 # ReactConvention (ReactC.com)
-## a free online handbook for ReactJS Developers with a very opinionated and mature project structure
+## a free online handbook for ReactJS Developers with a very opinionated and matured project structure
 
 
 **** 
