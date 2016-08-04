@@ -133,6 +133,7 @@ Don't worry if you don't get the structure so far, you will ramp up with knowled
 
 Let's start with implementing a new route called "DASHBOARD".
 
+Have you cloned the repo to your local machine? Great, now you can follow the steps below.
 
 ## New dashboard route
 ------
@@ -140,6 +141,8 @@ Let's start with implementing a new route called "DASHBOARD".
 Copy the Counter route directory and rename it as Dashboard (location is src/routes/*):
 ![animated dashboard copy](http://test.przeorski.pl/book/903_copy_counter_to_dashboard.gif)
 
+
+###### IMPORTANT: from that point we will create a new component based on a copy of the Counter route that orginally is located at __src/routes/Counter__ in the the @davezuko's redux starter.
 
 Next step is to find any related things to counter and then:
 
@@ -187,30 +190,30 @@ src/components/Header/Header.js
 
 ![code4](http://test.przeorski.pl/book/908_code4.png)
 
-Further we simply renaming the files and replacing the "counter" to "dashboard" (again):
+Further, we simply need to rename the files and replace all the "counter" matches to "dashboard" (again):
 
 ```
-Renaming and changes in:
+Renaming and changes in (you can click the diffs image to make it larger):
 .../Dashboard/containers/CounterContainer.js → ...ashboard/containers/DashboardContainer.js
 ```
 
 ![code5](http://test.przeorski.pl/book/909_code5.png)
 
 ```
-Changes in:
+Changes in (you can click the diffs image to make it larger):
 src/routes/Dashboard/index.js
 ```
 ![code6](http://test.przeorski.pl/book/910_code6.png)
 
 ```
-Renaming and changes in:
+Renaming and changes in (you can click the diffs image to make it larger):
 src/routes/Dashboard/modules/counter.js → src/routes/Dashboard/modules/dashboard.js
 ```
 ![code7](http://test.przeorski.pl/book/911_code7.png)
 
 
 ```
-Changes in:
+Changes in (you can click the diffs image to make it larger):
 src/routes/index.js
 ```
 ![code8](http://test.przeorski.pl/book/912_code8.png)
@@ -240,7 +243,7 @@ https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
 
 In that ***Dashboard.js*** we do some little improvements in order to progress the development:
 ```
-Changes in:
+Changes in (you can click the diffs image to make it larger):
 src/components/Dashboard/Dashboard.js
 ```
 ![914_code1](http://test.przeorski.pl/book/914_code1.png)
@@ -253,7 +256,7 @@ Below we have introduced statefull DashboardContainer - we need it to do this wa
 
 
 ```
-Changes in:
+Changes in (you can click the diffs image to make it larger):
 src/routes/Dashboard/containers/DashboardContainer.js
 ```
 
@@ -263,7 +266,7 @@ src/routes/Dashboard/containers/DashboardContainer.js
 In the modules/dashboard.js we have made some improvements and cleanup of unnecessary code that was copied initially from the Counter:
 
 ```
-Changes in:
+Changes in (you can click the diffs image to make it larger):
 src/routes/Dashboard/modules/dashboard.js
 ```
 ![916_code3](http://test.przeorski.pl/book/916_code3.png)
@@ -286,7 +289,7 @@ Source code from the screenshots: https://github.com/przeor/ReactC/commit/02ed26
 ------
 
 ```
-Changes in:
+Changes in (you can click the diffs image to make it larger):
 src/components/Dashboard/Dashboard.js
 ```
 
@@ -307,7 +310,7 @@ and then modify the:
 
 
 ```
-Changes in:
+Changes in (you can click the diffs image to make it larger):
 src/routes/Dashboard/modules/dashboard.js
 ```
 
