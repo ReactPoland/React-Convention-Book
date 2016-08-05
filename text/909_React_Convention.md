@@ -432,7 +432,7 @@ continuation of src/routes/Dashboard/containers/DashboardContainer.js
 ![923_dashboard_container](http://test.przeorski.pl/book/923_dashboard_container.png)
 
 
-On the above code base, we have added new functions called .. so we need improve our constructor as well:
+On the above code base, we have added new functions called inputOnChange, onSubmit and itemOnEdit so we need improve our constructor as well:
 ```
   constructor(props) {
     super(props)
@@ -549,7 +549,7 @@ Next we have improved the render function:
 )}
 ```
 
-We have added standard form and inputs - they are communicating with DashboardContainer with use of callbacks (the ___value={props.inputValue}__ and __onChange={props.inputOnChange}__ take care of it). The submit button value is determined by the props.editedItemIndex - so if it is a null then that means that a user hasn't clicked any item, yet.
+We have added standard form and inputs - they are communicating with DashboardContainer with use of callbacks (the __value={props.inputValue}__ and __onChange={props.inputOnChange}__ take care of it). The submit button value is determined by the props.editedItemIndex - so if it is a null then that means that a user hasn't clicked any item, yet.
 
 This is the end results of all the changes we've made above:
 
@@ -557,19 +557,175 @@ This is the end results of all the changes we've made above:
 
 ```
 Source of the commit's screenshots: 
-https://github.com/przeor/ReactC/commit/445b1b3f22a2e0b77ca96233cc24ce00e5c4ed73
+https://github.com/przeor/ReactC/commit/f836fd4f2eccec2a3740e875247abc7870efa245
 ```
 
+## Reorder an item on the dashboard list
+
+We will implement the reordering in a proper React way without using any external "reordering components".
+
+Let's start from the reducers and actions that are related to the reordering feature:
+
+```
+Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/modules/dashboard.js
+```
+
+![926_reducer_action_reorder](http://test.przeorski.pl/book/926_reducer_action_reorder.png)
+
+An explanation for the code from the diffs:
+```
+  [DASHBOARD_REORDER_ITEM]: (state, action) => { 
+    const reorder = action.payload
+    const reorderItem = state.dashboardItems[reorder.start]
+    let newDashboardItems = []
+    state.dashboardItems.map((item, i) => {
+      if(i === reorder.start) {
+        return
+      }
+
+      // we need that if statement because
+      // the behaviour is determined if someone is dragging
+      // an item from higher to lower place on the list or vice versa
+      if(reorder.end < reorder.start) {
+        if(i === reorder.end) {
+          newDashboardItems.push(reorderItem)
+        }
+        newDashboardItems.push(item)
+      } else {
+        newDashboardItems.push(item)
+        if(i === reorder.end) {
+          newDashboardItems.push(reorderItem)
+        }
+      }
+    })
+    state.dashboardItems = newDashboardItems
+    return Object.assign({}, state)
+  }
+```
+
+This is a function which receives an object:
+```
+// just object schema
+{ 
+  start: parseInt(this.state.draggedItemIndex),
+  end: parseInt(droppedItemId)
+}
+```
+
+The __start__ is a number of order in the __dashboardItems__ array. The __end__ variable is ana  order number of a dropped-on-the-item (the id of an item that a user dropped on the dragged item). We map over all the items in our array and based on the dragging data (start and end) we create a new array called __newDashboardItems__.  Rest of the code shall be self-explained.
 
 
+```
+Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/containers/DashboardContainer.js
+```
 
-STEPS:
-4) opisac reorder
+![927_dashboardContainer1](http://test.przeorski.pl/book/927_dashboardContainer1.png)
+
+Above we have added __draggedItemIndex__ to the state which will be set in the __handleOnDragStart___ function. Beside that we are also binding this to the __handleOnDrop__ (here we handle login when a user drops a dragged div) and __handleOnDragOver__ (this function is more like placeholder, when you can add more custom logic if you want make this dragging functionality more fancy).
+
+... and continuation of the __containers/DashboardContainer.js__:
+
+![928_dashboardContainer2](http://test.przeorski.pl/book/928_dashboardContainer2.png)
+
+New functions related to the DnD:
+```
+  handleOnDragStart (e) {
+    const id = e.target.id
+    this.setState({ draggedItemIndex: id })
+  }
+
+  handleOnDragOver (e) {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+    // You can add here more logic if required
+  }
+
+  handleOnDrop (e) {
+    const droppedItemId = e.currentTarget.id
+    let reorderVal = { 
+      start: parseInt(this.state.draggedItemIndex),
+      end: parseInt(droppedItemId)
+    }
+
+    // the div ids have to be numbers to reorder correctly
+    // and the start and end value has to be different (otherwise reorder is not required)
+    const reorderIsCorrect = !isNaN(reorderVal.start) && !isNaN(reorderVal.end) && reorderVal.start !== reorderVal.end
+
+    if(reorderIsCorrect) {
+      this.props.dashboardReorderItems(reorderVal)
+    }
+
+    this.setState({ draggedItemIndex: null })
+  }
+```
+
+The most important part to understand this code above is that the div has an id as a number (check the code from the __src/components/Dashboard/Dashboard.js__ which is listed below) and that number is an order in the __newDashboardItems__ array that is kept in the dashboard reducer.
+
+Based on that assumption, we can use:
+```
+handleOnDragStart (e) {
+  const id = e.target.id
+  this.setState({ draggedItemIndex: id })
+}
+```
+
+to set the start item. Below you can find how we get the final end __newDashboardItems__ number
+```
+handleOnDrop (e) {
+  const droppedItemId = e.currentTarget.id
+  let reorderVal = { 
+    start: parseInt(this.state.draggedItemIndex),
+    end: parseInt(droppedItemId)
+  }
+  // rest of the code below has been striped out
+```
+
+Rest of the code shall be self-explanied (if something is unclear, please contact us at ReactConvention@mwp.io).
 
 
+```
+Changes in (you can click the diffs image to make it larger):
+src/components/Dashboard/Dashboard.js
+```
+
+![929_changes_in_dashboard_map](http://test.przeorski.pl/book/929_changes_in_dashboard_map.png)
 
 
+```
+  const listJSX = props.dashboard.dashboardItems.map((item, i) => {
+    let itemJSX;
+    if(props.editedItemIndex === i) {
+      itemJSX = <p><b><u>{item.label}</u></b></p>
+    } else {
+      itemJSX = <p>{item.label}</p>
+    }
+    return <h4 
+            id={i}
+            draggable='true'
+            onDragOver={props.handleOnDragOver}
+            onDragStart={props.handleOnDragStart}
+            onDrop={props.handleOnDrop}
+            key={i} 
+            onClick={props.itemOnEdit.bind(undefined, i)}
+            style={{cursor: 'pointer'}}>
+              {itemJSX}
+          </h4>
+  })
+```
 
+The last part is to add callbacks (onDragOver, onDragStart and onDrop), modify style and add the __id={i}__ (so we can take a DIV's id as an information required to make DnD works).
+
+
+```
+Source of the commit's screenshots: 
+https://github.com/przeor/ReactC/commit/126d2ae53e89ba6731cd923311d6646bb543f8a1
+```
+
+#### Login with mocked data
+
+The only backend code that we need to add is the below:
 
 
 
