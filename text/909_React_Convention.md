@@ -718,6 +718,11 @@ src/components/Dashboard/Dashboard.js
 The last part is to add callbacks (onDragOver, onDragStart and onDrop), modify style and add the __id={i}__ (so we can take a DIV's id as an information required to make DnD works).
 
 
+This is how the app shall behave after that all our changes:
+
+
+![930_dashboard_reordering](http://test.przeorski.pl/book/930_dashboard_reordering.gif)
+
 ```
 Source of the commit's screenshots: 
 https://github.com/przeor/ReactC/commit/126d2ae53e89ba6731cd923311d6646bb543f8a1
