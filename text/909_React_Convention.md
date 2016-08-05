@@ -23,16 +23,16 @@ __SHARE THE REACT CONVENTION IF YOU LIKE THE IDEA, it's 100% free__
 We will familiarize your new teammate to your React's project sturcture so you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. 
 
 
-### __The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with other methods__.
+### __The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with any other method__.
 
-__PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at ReactC@mwp.io__
+__PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at ReactConvention@mwp.io__
 
 
 
 ## How to use this handbook
 ------
 
-The only requirement to get all that benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:
+The only requirement to get all the benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:
 ```
 https://github.com/davezuko/react-redux-starter-kit
 ```
@@ -86,7 +86,7 @@ First step is to clone the starter kit and start working on this commit (the han
 9a03e99c0dd2e7102d43264cc495bbdd4e10dcdd
 ```
 
-... so you you will be truly working on that starting codebase:
+... so you will be truly working on that starting codebase:
 ```
 https://github.com/davezuko/react-redux-starter-kit/tree/9a03e99c0dd2e7102d43264cc495bbdd4e10dcdd
 ```
@@ -363,11 +363,208 @@ Source code from the screenshots: https://github.com/przeor/ReactC/commit/8eef28
 ```
 
 
-## Add/edit/delete item on the dashboard list
+## Add/edit item on the dashboard list
 ------
 
-STEPS:
+First thing to do is to prepare the action and handlers in the modules for __DASHBOARD_ADD_ITEM__ and __DASHBOARD_EDIT_ITEM__:
 
+
+```
+Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/modules/dashboard.js
+```
+
+![921_dashboard_reducer_actions](http://test.przeorski.pl/book/921_dashboard_reducer_actions.png)
+
+
+As you can find above, we have added and exported two new actions:
+```
+export function dashboardAddItem (value) {
+  return {
+    type: DASHBOARD_ADD_ITEM,
+    payload: value
+  }
+}
+
+export function dashboardEditItem (value) {
+  return {
+    type: DASHBOARD_EDIT_ITEM,
+    payload: value
+  }
+}
+```
+
+... then after an action is requrested from a Dashboard's component, we handle it with:
+```
+  [DASHBOARD_ADD_ITEM]: (state, action) => { 
+    const mockedId = Math.floor(Date.now() / 1000)
+    const newItem = {
+      label: action.payload,
+      id: mockedId
+    }
+    state.dashboardItems.push(newItem)
+    return Object.assign({}, state)
+  },
+  [DASHBOARD_EDIT_ITEM]: (state, action) => { 
+    const newLabel = action.payload.val
+    const index = action.payload.editedItemIndex
+    state.dashboardItems[index].label = newLabel
+    return Object.assign({}, state)
+  }
+```
+
+In both functions above, we are returining a new object with ***return Object.assign({}, state)***. Rest of the code shall be self-explaining for you.
+
+
+```
+Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/containers/DashboardContainer.js
+```
+
+![922_dashboard_container](http://test.przeorski.pl/book/922_dashboard_container.png)
+
+Above we have simply added the functions that were created in the Dashboard/modules/dashboard.js file so we import __dashboardAddItem__ and __dashboardEditItem__ .. and continuation of the same file below:
+
+```
+continuation of src/routes/Dashboard/containers/DashboardContainer.js
+```
+
+![923_dashboard_container](http://test.przeorski.pl/book/923_dashboard_container.png)
+
+
+On the above code base, we have added new functions called .. so we need improve our constructor as well:
+```
+  constructor(props) {
+    super(props)
+
+    this.inputOnChange = this.inputOnChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.itemOnEdit = this.itemOnEdit.bind(this)
+
+
+    this.state = {
+      inputValue: '',
+      editedItemIndex: null
+    }
+  }
+```
+... the inputValue keeps the current value of a text input. In the editedItemIndex we keep an ID of currently edited item, if there is none in edit then we make it __null__.
+
+Later we handle all the functions logic with:
+```
+  inputOnChange(e) {
+    this.setState({ inputValue: e.target.value })
+  }
+
+  itemOnEdit(itemIndex) {
+    const editedItem = this.props.dashboard.dashboardItems[itemIndex]
+    this.setState({ inputValue: editedItem.label, editedItemIndex: itemIndex })
+  }
+
+  onSubmit(e) {
+    e.preventDefault()
+    const val = this.state.inputValue
+    const editedItemIndex = this.state.editedItemIndex
+    if(val && editedItemIndex !== null) {
+      this.props.dashboardEditItem({ val, editedItemIndex })
+      this.setState({ inputValue: '', editedItemIndex: null })
+    } else if(val) {
+      this.props.dashboardAddItem(val)
+      this.setState({ inputValue: '' })
+    } else {
+      alert(`Value can't be empty`)
+    }
+  }
+```
+
+There isn't nothing fancy so I won't describe too much in details (if you think it requires more detailed description then please mail us at ReactConvention@mwp.io). 
+
+Final part is the __render method__:
+```
+  render () {
+    return (
+        <Dashboard {...this.props} 
+          editedItemIndex={this.state.editedItemIndex}
+          itemOnEdit={this.itemOnEdit}
+          inputValue={this.state.inputValue}
+          inputOnChange={this.inputOnChange}
+          onSubmit={this.onSubmit} />
+    );
+  }
+```
+... we are passing some callbacks as __this.inputOnChange__, __this.onSubmit__ and __this.itemOnEdit__ - those callbacks are required to send to our dashboard "dumb component".
+
+
+```
+Changes in (you can click the diffs image to make it larger):
+src/components/Dashboard/Dashboard.js
+```
+
+![924_dashboard_component_dumb](http://test.przeorski.pl/book/924_dashboard_component_dumb.png)
+
+Above, we have improved our listJSX map function:
+```
+  const listJSX = props.dashboard.dashboardItems.map((item, i) => {
+    let itemJSX;
+    if(props.editedItemIndex === i) {
+      itemJSX = <p><b><u>{item.label}</u></b></p>
+    } else {
+      itemJSX = <p>{item.label}</p>
+    }
+    return <h4 
+            key={i} 
+            onClick={props.itemOnEdit.bind(undefined,i)}
+            style={{cursor: 'pointer'}}>
+              {itemJSX}
+          </h4>
+  })
+```
+
+... so now it make an edited item bold and underlined. 
+
+Next we have improved the render function:
+```
+  return (
+  <div>
+      <h2 className={classes.dashboardContainer}>
+        Dashboard visits:
+        {' '}
+        <span className={classes['dashboard--green']}>
+          {props.dashboard.visitsCount}
+        </span>
+      </h2>
+    <form onSubmit={props.onSubmit}>
+      <input 
+        value={props.inputValue}
+        type='input' 
+        placeholder='type here a value' 
+        style={{width: 300}}
+        onChange={props.inputOnChange} />
+      <input 
+        type='submit' 
+        value={ props.editedItemIndex === null ? 'Add New Item To The List' : 'Edit Item' } />
+    </form>
+    {listJSX}
+  </div>
+)}
+```
+
+We have added standard form and inputs - they are communicating with DashboardContainer with use of callbacks (the ___value={props.inputValue}__ and __onChange={props.inputOnChange}__ take care of it). The submit button value is determined by the props.editedItemIndex - so if it is a null then that means that a user hasn't clicked any item, yet.
+
+This is the end results of all the changes we've made above:
+
+![925_edit_add_anim.gif](http://test.przeorski.pl/book/925_edit_add_anim.gif)
+
+```
+Source of the commit's screenshots: 
+https://github.com/przeor/ReactC/commit/445b1b3f22a2e0b77ca96233cc24ce00e5c4ed73
+```
+
+
+
+
+STEPS:
+4) opisac reorder
 
 
 
