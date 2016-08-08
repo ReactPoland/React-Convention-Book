@@ -573,7 +573,7 @@ src/routes/Dashboard/modules/dashboard.js
 
 ![926_reducer_action_reorder](http://test.przeorski.pl/book/926_reducer_action_reorder.png)
 
-An explanation for the code from the diffs:
+An explanation for the code from the diffs - you need to understand what we will send as a payload (__const reorder = action.payload__) in the function below:
 ```
   [DASHBOARD_REORDER_ITEM]: (state, action) => { 
     const reorder = action.payload
@@ -604,16 +604,19 @@ An explanation for the code from the diffs:
   }
 ```
 
-This is a function which receives an object:
+We will send an object with the following __start__ and __end__ variable as on the example below:
+
 ```
-// just object schema
+// just an example schema of
+// const reorder = action.payload
+// so you can see what values are sent to the DASHBOARD_REORDER_ITEM
 { 
   start: parseInt(this.state.draggedItemIndex),
   end: parseInt(droppedItemId)
 }
 ```
 
-The __start__ is a number of order in the __dashboardItems__ array. The __end__ variable is ana  order number of a dropped-on-the-item (the id of an item that a user dropped on the dragged item). We map over all the items in our array and based on the dragging data (start and end) we create a new array called __newDashboardItems__.  Rest of the code shall be self-explained.
+The __start__ is a number of order in the __dashboardItems__ array. The __end__ variable is an order number of a dropped-on-the-item div (the id of an item that a user dropped on the dragged item). We map over all the items in our array and based on the dragging data (start and end) we create a new array called __newDashboardItems__.  Rest of the code shall be self-explained.
 
 
 ```
@@ -623,13 +626,13 @@ src/routes/Dashboard/containers/DashboardContainer.js
 
 ![927_dashboardContainer1](http://test.przeorski.pl/book/927_dashboardContainer1.png)
 
-Above we have added __draggedItemIndex__ to the state which will be set in the __handleOnDragStart___ function. Beside that we are also binding this to the __handleOnDrop__ (here we handle login when a user drops a dragged div) and __handleOnDragOver__ (this function is more like placeholder, when you can add more custom logic if you want make this dragging functionality more fancy).
+Above we have added __draggedItemIndex__ to the state which will be set in the __handleOnDragStart__ function. Beside that we are also binding this to the __handleOnDrop__ (here we handle login when a user drops a dragged div) and __handleOnDragOver__ (this function is more like placeholder, when you can add more custom logic if you want make this dragging functionality more fancy).
 
 ... and continuation of the __containers/DashboardContainer.js__:
 
 ![928_dashboardContainer2](http://test.przeorski.pl/book/928_dashboardContainer2.png)
 
-New functions related to the DnD:
+From the above diffs we can find new functions related to the DnD:
 ```
   handleOnDragStart (e) {
     const id = e.target.id
@@ -728,9 +731,92 @@ Source of the commit's screenshots:
 https://github.com/przeor/ReactC/commit/126d2ae53e89ba6731cd923311d6646bb543f8a1
 ```
 
-#### Login with mocked data
+#### Login with mocked data (front-end)
 
-The only backend code that we need to add is the below:
+We will implement login functionality that works purely on front-end (later we will create a simple backend enpoint). First step is to prepare new session reducer which will be app-wise (it will be used all across the app).
+
+```
+Create a new directory at "src/modules" location
+.. and then create a new file src/modules/session.js
+```
+
+###### IMPORTANT: we are creating this module directory in the main src/** location because that one reducer need to be available all across the app. In the session reducer we will keep all the actions and data related to our user session (like a token or login status).
+
+![931_code1](http://test.przeorski.pl/book/931_code1.png)
+
+Above we have created __SESSION_LOGIN_SUCCESS__ and __SESSION_LOGIN_FAIL__ actions.
+
+The interesting part is the loginAsync function which looks like below:
+```
+export const loginAsync = (loginObj) => {
+  return async (dispatch, getState) => {
+    let loginToken = await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve()
+      }, 200)
+    }).then(() => {
+
+      if(loginObj.user === 'przeor' && loginObj.password === 'mwp.io') {
+        return 'www.mwp.io' // just a mocked token
+      } else {
+        return 'invalid' // mocked non successful login
+      }
+    })
+
+    if(loginToken !== 'invalid') {
+      dispatch(loginSuccess(loginToken))
+      dispatch(push('/dashboard'))
+    } else {
+      dispatch(loginFail(loginToken))
+    }
+    
+  }
+}
+```
+The function received the __loginObj__ which is composed of two keys:
+```
+loginObj.user
+loginObj.password
+```
+That data will be sent to the backend server (after we will unmock now), currenly we only check if the logins are correct with:
+```
+if(loginObj.user === 'przeor' && loginObj.password === 'mwp.io') {
+```
+
+
+Also as you can find, we have created asynchronous function (__return async (dispatch, getState) => {__) which awaits on the promise resolve after 200 milliseconds timeout (currently it's a mock, later it will be real POST to the server). Then depends if you have provided correct login details, it returns:
+```
+    }).then(() => {
+
+      if(loginObj.user === 'przeor' && loginObj.password === 'mwp.io') {
+        return 'www.mwp.io' // just a mocked token
+      } else {
+        return 'invalid' // mocked non successful login
+      }
+    })
+```
+The __'invalid'__ means, that you have provided incorrect login details (later that will be sent back from the server).
+
+The last executing code of the __loginAsync__ is:
+```
+    if(loginToken !== 'invalid') {
+      dispatch(loginSuccess(loginToken))
+      dispatch(push('/dashboard'))
+    } else {
+      dispatch(loginFail(loginToken))
+    }
+```
+
+The __dispatch__ comes from the __react-thunk__ - that means, that the loginAsync is returned immediately and waits for lazy evaluation (in our case on a respond from the server if the user has provided correct or incorrect details).
+
+On a valid details, we dispatch two actions:
+```
+dispatch(loginSuccess(loginToken))
+dispatch(push('/dashboard'))
+```
+
+One to loginSuccess with the __loginToken__ value and the second the __push__ which comes from the __react-router-redux__ (__import {push} from 'react-router-redux'__).
+
 
 
 
