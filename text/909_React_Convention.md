@@ -977,7 +977,7 @@ render () {
 }
 ```
 
-Based on that all changes you able to run this app with login required to see the dashboard as on the animation below:
+Based on that all changes we have made then you shall be able to run this app with login required to see the dashboard as on the animation below:
 
 ![938_anim](http://test.przeorski.pl/book/938_anim.gif)
 
