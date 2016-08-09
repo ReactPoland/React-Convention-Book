@@ -562,12 +562,12 @@ https://github.com/przeor/ReactC/commit/f836fd4f2eccec2a3740e875247abc7870efa245
 
 ## Reorder an item on the dashboard list
 
-We will implement the reordering in a proper React way without using any external "reordering components".
+We will implement the reordering in a proper React way without using any external reordering components or libraries.
 
 Let's start from the reducers and actions that are related to the reordering feature:
 
 ```
-Changes in (you can click the diffs image to make it larger):
+Changes m the server if the user has provided correct or incorrin (you can click the diffs image to make it larger):
 src/routes/Dashboard/modules/dashboard.js
 ```
 
@@ -742,7 +742,7 @@ Create a new directory at "src/modules" location
 
 ###### IMPORTANT: we are creating this module directory in the main src/** location because that one reducer need to be available all across the app. In the session reducer we will keep all the actions and data related to our user session (like a token or login status).
 
-![931_code1](http://test.przeorski.pl/book/931_code1.png)
+![931_code1](http://test.przeorski.pl/book/931_code1-2.png)
 
 Above we have created __SESSION_LOGIN_SUCCESS__ and __SESSION_LOGIN_FAIL__ actions.
 
@@ -784,7 +784,7 @@ if(loginObj.user === 'przeor' && loginObj.password === 'mwp.io') {
 ```
 
 
-Also as you can find, we have created asynchronous function (__return async (dispatch, getState) => {__) which awaits on the promise resolve after 200 milliseconds timeout (currently it's a mock, later it will be real POST to the server). Then depends if you have provided correct login details, it returns:
+Also as you can find, we have created an asynchronous function (__return async (dispatch, getState) => {__) which awaits on the promise resolve after 200 milliseconds timeout (currently it's a mock, later it will be real POST to the server). Then depending on if you have provided correct login details, it returns:
 ```
     }).then(() => {
 
@@ -807,7 +807,7 @@ The last executing code of the __loginAsync__ is:
     }
 ```
 
-The __dispatch__ comes from the __react-thunk__ - that means, that the loginAsync is returned immediately and waits for lazy evaluation (in our case on a respond from the server if the user has provided correct or incorrect details).
+The __dispatch__ comes from the __react-thunk__ - that means, that the loginAsync is returned immediately and waits for lazy evaluation (in our case on a respond from the server if the user has provided correct or incorrect details) and then dispatch an action depending on the server response.
 
 On a valid details, we dispatch two actions:
 ```
@@ -815,7 +815,7 @@ dispatch(loginSuccess(loginToken))
 dispatch(push('/dashboard'))
 ```
 
-One to loginSuccess with the __loginToken__ value and the second the __push__ which comes from the __react-router-redux__ (__import {push} from 'react-router-redux'__).
+One to loginSuccess with the __loginToken__ value and the second the __push__ which comes from the __react-router-redux__ (__import {push} from 'react-router-redux'__) - this function simply push user to __/dashboard__ route if he is on a different one with use of push function from the routing librare that we use..
 
 
 
