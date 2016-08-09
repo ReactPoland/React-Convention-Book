@@ -986,7 +986,7 @@ Commits screenshots source: https://github.com/przeor/ReactC/commit/83132ab8e710
 ```
 
 
-#### A summary
+## A summary (front-end part)
 
 This is first part of that free handbook related to front-end implementations.
 
