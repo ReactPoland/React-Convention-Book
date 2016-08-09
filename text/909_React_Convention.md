@@ -986,4 +986,23 @@ Commits screenshots source: https://github.com/przeor/ReactC/commit/83132ab8e710
 ```
 
 
+#### A summary
+
+This is first part of that free handbook related to front-end implementations.
+
+How do you like it? What we can improve? Please mail us with your feedback.
+
+Do you want the backend implementation? Then we need your feedback what backend tech stack you would like to use in your future projects:
+
+WHAT TO USE ON THE BACKEND IN THE React Convention handbook:
+a) GraphQL + Relay
+
+b) [FalcorJS](https://reactjs.co/2016/02/03/what-is-netflix-falcor-and-why-you-should-care/)
+
+c) Standalone REST API implementation with Axios on the front-end
+
+Please mail us at __ReactConvention@mwp.io__ and based on your feedback we will continue this free handbook.
+
+
+
 
