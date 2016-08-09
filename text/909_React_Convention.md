@@ -992,7 +992,7 @@ This is first part of that free handbook related to front-end implementations.
 
 How do you like it? What we can improve? Please mail us with your feedback.
 
-#### Do you want the backend implementation? Then we need your feedback what backend tech stack you would like to use in your future projects:
+### Do you want the backend implementation? Then we need your feedback what backend tech stack you would like to use in your future projects?
 
 __WHAT TO USE ON THE BACKEND IN THE React Convention handbook:__
 
