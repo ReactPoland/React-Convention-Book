@@ -905,6 +905,85 @@ const mapStateToProps = (state) => ({
 
 As you shall already now the mapActionCreators and mapStateToProps are connected to the redux via __import { connect } from 'react-redux'__.
 
+Then we improve the CoreLayout component as following:
+```
+class CoreLayout extends Component {
+  static propTypes = {
+    children: PropTypes.object.isRequired
+  }
+
+  constructor(props) {
+    super(props)
+    this.handleLogin = this.handleLogin.bind(this)
+  }
+
+  handleLogin(loginObj, e) {
+    e.preventDefault()
+    this.props.loginAsync(loginObj)
+  }
+
+  render () {
+    return (
+      <div className='container text-center'>
+        <Header 
+          handleLogin={this.handleLogin} 
+          session={this.props.session} />
+        <div className={classes.mainContainer}>
+          {this.props.children}
+        </div>
+      </div>)
+
+    }
+}
+
+
+export default connect(mapStateToProps, mapActionCreators)(CoreLayout)
+```
+
+In the CoreLayout you can find a function with handles login called __handleLogin__(the __e.preventDefault()__ is a standard thing so I won't explain how it works here) which sends the user and password's object to the session reducer with use of __this.props.loginAsync(loginObj)__. 
+
+To the Header's component we send down the handleLogin and the session's reducer data (__session={this.props.session}__).
+
+```
+Changes in (you can click the diffs image to make it larger):
+src/components/Header/Header.js
+```
+
+![935_code5](http://test.przeorski.pl/book/935_code5.png)
+
+Above the standard thing for login forms as __prepareLoginJSX__ function which returns a form. There are some on change as __onChange={usernameOnChange}__ and __onChange={passwordOnChange}__ which updates the loginObj on each user's input. Later after a user hits the submit button, then the loginObj is sent via callback to the session reducer (__onSubmit={props.handleLogin.bind(undefined, loginObj)}__).
+
+
+
+![936_code6](http://test.przeorski.pl/book/936_code6.png)
+
+... and in the __export const Header = (props) => {__ we simply return the login form in case if a user is not logged in __props.session.isNotLoggedIn__ and in case if a user put's wrong details then we show him a message:
+```
+if(props.session.loginToken === 'invalid') {
+  loginMessageJSX = <p>Invalid login details, please try with correct user and password</p>
+}
+```
+
+
+Everything is done besides the Dashboard improvements:
+
+![937_code7](http://test.przeorski.pl/book/937_code7.png)
+
+Above we simply add the session reducer to the DashboardContainer and then check if a user is logged in and if not then we show him a message via render function:
+```
+render () {
+  if(this.props.session.isNotLoggedIn) {
+    return <h4>Please login in order to access your dashboard</h4>
+}
+```
+
+Based on that all changes you able to run this app with login required to see the dashboard as on the animation below:
+
+![938_anim](http://test.przeorski.pl/book/938_anim.gif)
+
+```
+Commits screenshots source: https://github.com/przeor/ReactC/commit/83132ab8e71095075f8dfbe8dfcc98fe5ef5c8da
+```
 
 
 
