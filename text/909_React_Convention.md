@@ -55,7 +55,7 @@ After you are using this starter kit, then the handbook will provide you the val
 
 ------- SEPARATE PAGE WITH AN IMAGE -------
 
-Welcome to React Convention was of doing apps
+Welcome to React Convention way of doing apps
 
 ------- SEPARATE PAGE WITH AN IMAGE -------
 

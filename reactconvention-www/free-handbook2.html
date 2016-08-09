@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="./newMain.css" media="all" rel="stylesheet">
+	<script type="text/javascript" src="./floating-1.12.js"></script>  
+    <title>Reactjs Convention</title>
+<body>
+<div class="container">
+  <div>
+    <div class="readme">
+      <article class="markdown-body">
+<h1><a href="https://reactjs.co">ReactJS</a> Convention (or visit <a href="https://reactjs.co/blog" target="_blank">the ReactJS blog</a>)</h1>
+
+<h2>a free online handbook for <a href="https://reactjs.co/">React.JS</a> Developers with a very opinionated and matured project structure</h2>
+
+<hr>
+
+<p>"So many books, so little time." - Frank Zappa</p>
+
+<p>"So many projects, so little time." - Kamil Przeorski</p>
+
+<hr>
+
+<h2>Preface</h2>
+
+<hr>
+
+<p>In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there <strong>are no really conventions that one can follow</strong>. We are running a React Webshop from mid 2014 and <strong>we faced so many frustrations</strong>. Mostly when a client who had already an MVP wanted us to expand based on his codebase. <strong>No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations</strong>. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase <strong>and you want to make sure that he doesn't make any "newbie" mistakes</strong>. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. <strong>You need to teach him about your configuration so it takes you decent amount time to pass all your knowledge to your new teammate in the project</strong>. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. </p>
+
+<p>The main ReactC's goal is to create "ready to go" convention that you can share with your colleagues. </p>
+
+<p><strong>SHARE THE REACT CONVENTION IF YOU LIKE THE IDEA, it's 100% free</strong></p>
+
+<p>We will familiarize your new teammate to your React's project sturcture so you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. </p>
+
+<h3><strong>The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with any other method</strong>.</h3>
+
+<p><strong>PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at <a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a></strong></p>
+
+<h2>How to use this handbook</h2>
+
+<hr>
+
+<p>The only requirement to get all the benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:</p>
+
+<pre><code>https://github.com/davezuko/react-redux-starter-kit
+</code></pre>
+
+<p>We have found this starter, best (we know what we are talking about because we made over 15+ different React projects so far). Even Dan Abramov has noticed that this starter kit is really awesome one:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/901_dan_abramov.png" target="_blank"><img alt="Dan Abramov" src="http://test.przeorski.pl/watermark/901_dan_abramov.png" style="max-width:100%;"></a></p>
+
+<p>After you are using this starter kit, then the handbook will provide you the value which will save your team a plenty of time at work.</p>
+<br/>
+<br/>
+<br/>
+<center>
+<img src="reactjslogo.png" width="20%" height="20%" />
+<img src="ducks.png" width="30%" height="30%"  />
+
+<h1>Welcome to the React Convention way of doing apps</h1>
+</center>
+<br/>
+<br/>
+<br/>
+
+<h2>Your First Step</h2>
+
+<hr>
+
+<p>In a default starter kit from the @davezuko, you can find a home page and a counter component which looks as following:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/902_starter_counter.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/902_starter_counter.gif" style="max-width:100%;"></a></p>
+
+<p>This is a simple application with a counter, and throught this handbook you will implement other views and components which will help you understand whole codebase from a big picture perspective.</p>
+
+<p>To explain the whole code structure, we will start with developing a new route called Dashboard with some basic features. When you will be done with it, then you will implement a registration and login which will make you sure that you know how to do it 100% just on your own.</p>
+
+<p>First step is to clone the starter kit and start working on this commit (the handbook was written on that commit, so for better experience you shall work on the same one):</p>
+
+<pre><code>9a03e99c0dd2e7102d43264cc495bbdd4e10dcdd
+</code></pre>
+
+<p>... so you will be truly working on that starting codebase:</p>
+
+<pre><code>https://github.com/davezuko/react-redux-starter-kit/tree/9a03e99c0dd2e7102d43264cc495bbdd4e10dcdd
+</code></pre>
+
+<p>After you have cloned the repo and you are at the same commit as me, then we can continue with the fun.</p>
+
+<h2>General client codebase structure</h2>
+
+<hr>
+
+<p>We will focus on the client-side explanation for now, so let's discuss the "src" directory that has following structure:</p>
+
+<pre><code>├── src                      # Application source code
+│   ├── index.html           # Main HTML page container for app
+│   ├── main.js              # Application bootstrap and rendering
+│   ├── components           # Reusable Presentational Components
+│   ├── containers           # Reusable Container Components
+│   ├── layouts              # Components that dictate major page structure
+│   │   └── CoreLayout.js    # CoreLayout which receives children for each route
+│   │   └── CoreLayout.scss  # Styles related to the CoreLayout
+│   │   └── index.js         # Main file for layout
+│   ├── routes               # Main route definitions and async split points
+│   │   ├── index.js         # Bootstrap main application routes with store
+│   │   ├── Home             # Fractal route
+│   │   │   ├── index.js     # Route definitions and async split points
+│   │   │   ├── assets       # Assets required to render components
+│   │   │   ├── components   # Presentational React Components
+│   │   │   └── routes **    # Fractal sub-routes (** optional)
+│   │   └── Counter          # Fractal route
+│   │       ├── index.js     # Counter route definition
+│   │       ├── container    # Connect components to actions and store
+│   │       ├── modules      # Collections of reducers/constants/actions
+│   │       └── routes **    # Fractal sub-routes (** optional)
+│   ├── static               # Static assets (not imported anywhere in source code)
+│   ├── store                # Redux-specific pieces
+│   │   ├── createStore.js   # Create and instrument redux store
+│   │   └── reducers.js      # Reducer registry and injection
+│   └── styles               # Application-wide styles (generally settings)
+└── tests                    # Unit tests
+</code></pre>
+
+<p>If you were working on any FLUX or redux projects, then the project structure shall be quite familiar to you. You will learn all the things located in that project step-by-step (bottom-up approach).</p>
+
+<p>Don't worry if you don't get the structure so far, you will ramp up with knowledge about it during following the instructions. We will also explain each step so you will learn by doing.</p>
+
+<p>Let's start with implementing a new route called "DASHBOARD".</p>
+
+<p>Have you cloned the repo to your local machine? Great, now you can follow the steps below.</p>
+
+<h2>New dashboard route</h2>
+
+<hr>
+
+<p>Copy the Counter route directory and rename it as Dashboard (location is src/routes/*):
+<a href="http://test.przeorski.pl/watermark/903_copy_counter_to_dashboard.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/903_copy_counter_to_dashboard.gif" alt="animated dashboard copy" style="max-width:100%;"></a></p>
+
+<h6>IMPORTANT: from that point we will create a new component based on a copy of the Counter route that orginally is located at <strong>src/routes/Counter</strong> in the the @davezuko's redux starter.</h6>
+
+<p>Next step is to find any related things to counter and then:</p>
+
+<p>a) rename things from counter to dashboard</p>
+
+<p>b) We will rename action called <strong>COUNTER_INCREMENT</strong> to <strong>DASHBOARD_VISITS_COUNT</strong> (this will be a number of visits to dashboard during one sessions without refreshing the browser)</p>
+
+<p><a href="http://test.przeorski.pl/watermark/904_search_for_counter_in_dashboard_route.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/904_search_for_counter_in_dashboard_route.gif" alt="animated search for counter word" style="max-width:100%;"></a></p>
+
+<p>Generally all the code diffs below are simply copies of Counter's component renamed with Dashboard.</p>
+
+<pre><code>Source code of the new dashboard init creation: https://github.com/przeor/ReactC/commit/d3f5d0293045af4ce75522324c06c9bf44d16a90
+</code></pre>
+
+<h2>Create a dashboard component</h2>
+
+<hr>
+
+<p>We have to copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables related to counter's route as on the below's example:</p>
+
+<pre><code>New file (copied from Counter example - you can click the diffs image to make it larger) :
+src/components/Dashboard/Dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/905_code1.png" target="_blank"><img src="http://test.przeorski.pl/watermark/905_code1.png" alt="code1" style="max-width:100%;"></a></p>
+
+<pre><code>New file (copied from Counter example - you can click the diffs image to make it larger):
+src/components/Dashboard/Dashboard.scss
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/906_code2.png" target="_blank"><img src="http://test.przeorski.pl/watermark/906_code2.png" alt="code2" style="max-width:100%;"></a></p>
+
+<pre><code>New file (copied from Counter example - you can click the diffs image to make it larger):
+src/components/Dashboard/index.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/907_code3.png" target="_blank"><img src="http://test.przeorski.pl/watermark/907_code3.png" alt="code3" style="max-width:100%;"></a></p>
+
+<p>Next step is to create a link in the Header component:</p>
+
+<pre><code>Modfiy the file (you can click the diffs image to make it larger):
+src/components/Header/Header.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/908_code4.png" target="_blank"><img src="http://test.przeorski.pl/watermark/908_code4.png" alt="code4" style="max-width:100%;"></a></p>
+
+<p>Further, we simply need to rename the files and replace all the "counter" matches to "dashboard" (again):</p>
+
+<pre><code>Renaming and changes in (you can click the diffs image to make it larger):
+.../Dashboard/containers/CounterContainer.js → ...ashboard/containers/DashboardContainer.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/909_code5.png" target="_blank"><img src="http://test.przeorski.pl/watermark/909_code5.png" alt="code5" style="max-width:100%;"></a></p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/index.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/910_code6.png" target="_blank"><img src="http://test.przeorski.pl/watermark/910_code6.png" alt="code6" style="max-width:100%;"></a></p>
+
+<pre><code>Renaming and changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/modules/counter.js → src/routes/Dashboard/modules/dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/911_code7.png" target="_blank"><img src="http://test.przeorski.pl/watermark/911_code7.png" alt="code7" style="max-width:100%;"></a></p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/routes/index.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/912_code8.png" target="_blank"><img src="http://test.przeorski.pl/watermark/912_code8.png" alt="code8" style="max-width:100%;"></a></p>
+
+<p>Here above you need to modify the routes/index.js so we will add the dashboard route.</p>
+
+<p>After you run the project with:</p>
+
+<pre><code>npm run start
+</code></pre>
+
+<p>You shall be able to find the below app running:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/913_dashboard_version1.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/913_dashboard_version1.gif" alt="913_dashboard_version1" style="max-width:100%;"></a></p>
+
+<p>As you can find above, there are two different routes with different reducers but with exactly the same feature - the counter has different number on both routes.</p>
+
+<p>Let's improve the dashboard.</p>
+
+<p><strong>All the above screenshots were made on that commit:</strong></p>
+
+<pre><code>https://github.com/przeor/ReactC/commit/29aad0775fd8b14eeeba519e7080f5871e881f4e
+</code></pre>
+
+<h2>Next steps in implementing our dashboard</h2>
+
+<hr>
+
+<p>In the <strong><em>Dashboard.js</em></strong> file we will do some little improvements in order to progress the development:</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/components/Dashboard/Dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/914_code1.png" target="_blank"><img src="http://test.przeorski.pl/watermark/914_code1.png" alt="914_code1" style="max-width:100%;"></a></p>
+
+<p>Below we have introduced statefull DashboardContainer - we need it to do this way as we are using componentDidMount for invoking the function called <strong><em>this.props.dashboardVisitIncrement()</em></strong>.</p>
+
+<h4>IMPORTANT: The statefull DashboardContainer component is required here because our feature (increment by one on every visit of the dashboard route) require using a componentDidMount and we assume that in the components directory we want to have only "dumb components". In the src/components we will keep only stateless components (in other words they are also called dumb components).</h4>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/containers/DashboardContainer.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/915_code2.png" target="_blank"><img src="http://test.przeorski.pl/watermark/915_code2.png" alt="915_code2" style="max-width:100%;"></a></p>
+
+<p>In the modules/dashboard.js we have made some improvements and cleanup of unnecessary code that was copied initially from the Counter:</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/modules/dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/916_code3.png" target="_blank"><img src="http://test.przeorski.pl/watermark/916_code3.png" alt="916_code3" style="max-width:100%;"></a></p>
+
+<p>... at this point you shall have an app which increments on componentDidMount of the Dashboard component as on the animation below:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/917_gif_works_dashboard_v2_3.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/917_gif_works_dashboard_v2_3.gif" alt="917_gif_works_dashboard_v2" style="max-width:100%;"></a></p>
+
+<p>As you can find above, it still a very simple dashboard. The next step is to add ability of adding a list of dashboard items that has ability:</p>
+
+<ul>
+<li>add an item to the list</li>
+<li>remove an item to the list</li>
+<li>edit an item on the list</li>
+</ul>
+
+<pre><code>Source code from the screenshots: https://github.com/przeor/ReactC/commit/02ed268623f69ebed59a2d4b7bb3c1c44a5c3ffc
+</code></pre>
+
+<h2>Mocked items list on the dashboard list</h2>
+
+<hr>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/components/Dashboard/Dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/918_code1-2.png" target="_blank"><img src="http://test.przeorski.pl/watermark/918_code1-2.png" alt="918_code1" style="max-width:100%;"></a></p>
+
+<p>Above you need to add a listJSX mapping code with use of:</p>
+
+<pre><code>const listJSX = props.dashboard.dashboardItems.map((item, i) =&gt; {
+    return &lt;h4 key={i}&gt;{item.label}&lt;/h4&gt;
+})
+</code></pre>
+
+<p>and then modify the:</p>
+
+<pre><code>{props.dashboard.visitsCount}
+</code></pre>
+
+<p>... all that changes above are required because we have modified our reducer's structure (as you can find below):</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/modules/dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/919_code2.png" target="_blank"><img src="http://test.przeorski.pl/watermark/919_code2.png" alt="919_code2" style="max-width:100%;"></a></p>
+
+<p>As you can find above we have changed the old initialState:</p>
+
+<pre><code>// old dashboard reducer structure
+const initialState = 0
+</code></pre>
+
+<p>with the new code:</p>
+
+<pre><code>// new dashboard reducer structure
+const initialState = {
+  visitsCount: 0,
+  dashboardItems: [
+    {key: 0, label: 'Angular'},
+    {key: 1, label: 'JQuery'},
+    {key: 2, label: 'Polymer'},
+    {key: 3, label: 'ReactJS'}
+  ]
+}
+</code></pre>
+
+<p>So generally, we have changed simple integer initialState to an object, as you can find above. We have improved also the DASHBOARD_VISITS_COUNT action:</p>
+
+<pre><code>// old codebase
+[DASHBOARD_VISITS_COUNT]: (state, action) =&gt; state + action.payload
+</code></pre>
+
+<p>with new:</p>
+
+<pre><code>// updated codebase
+[DASHBOARD_VISITS_COUNT]: (state, action) =&gt; { 
+  state.visitsCount = state.visitsCount + action.payload
+  return Object.assign({}, state)
+}
+</code></pre>
+
+<p>That <strong>DASHBOARD_VISITS_COUNT</strong> change was required because as was written earlier, we have modified the initalState's structure of the dashboard reducer (so we need also to change the function that handles it).</p>
+
+<p>As a final currently, we have a little improved dashboard with a list and the visitsCount also works as previously (alongside with improved dashboard's reducer):</p>
+
+<p><a href="http://test.przeorski.pl/watermark/920_app_dashboard_with_list.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/920_app_dashboard_with_list.gif" alt="920_app_dashboard_with_list.gif" style="max-width:100%;"></a></p>
+
+<pre><code>Source code from the screenshots: https://github.com/przeor/ReactC/commit/8eef288af11d36d6485f00174f4b347ffd219508
+</code></pre>
+
+<h2>Add/edit item on the dashboard list</h2>
+
+<hr>
+
+<p>First thing to do is to prepare the action and handlers in the modules for <strong>DASHBOARD_ADD_ITEM</strong> and <strong>DASHBOARD_EDIT_ITEM</strong>:</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/modules/dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/921_dashboard_reducer_actions.png" target="_blank"><img src="http://test.przeorski.pl/watermark/921_dashboard_reducer_actions.png" alt="921_dashboard_reducer_actions" style="max-width:100%;"></a></p>
+
+<p>As you can find above, we have added and exported two new actions:</p>
+
+<pre><code>export function dashboardAddItem (value) {
+  return {
+    type: DASHBOARD_ADD_ITEM,
+    payload: value
+  }
+}
+
+export function dashboardEditItem (value) {
+  return {
+    type: DASHBOARD_EDIT_ITEM,
+    payload: value
+  }
+}
+</code></pre>
+
+<p>... then after an action is requrested from a Dashboard's component, we handle it with:</p>
+
+<pre><code>  [DASHBOARD_ADD_ITEM]: (state, action) =&gt; { 
+    const mockedId = Math.floor(Date.now() / 1000)
+    const newItem = {
+      label: action.payload,
+      id: mockedId
+    }
+    state.dashboardItems.push(newItem)
+    return Object.assign({}, state)
+  },
+  [DASHBOARD_EDIT_ITEM]: (state, action) =&gt; { 
+    const newLabel = action.payload.val
+    const index = action.payload.editedItemIndex
+    state.dashboardItems[index].label = newLabel
+    return Object.assign({}, state)
+  }
+</code></pre>
+
+<p>In both functions above, we are returining a new object with <strong><em>return Object.assign({}, state)</em></strong>. Rest of the code shall be self-explaining for you.</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/containers/DashboardContainer.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/922_dashboard_container.png" target="_blank"><img src="http://test.przeorski.pl/watermark/922_dashboard_container.png" alt="922_dashboard_container" style="max-width:100%;"></a></p>
+
+<p>Above we have simply added the functions that were created in the Dashboard/modules/dashboard.js file so we import <strong>dashboardAddItem</strong> and <strong>dashboardEditItem</strong> .. and continuation of the same file below:</p>
+
+<pre><code>continuation of src/routes/Dashboard/containers/DashboardContainer.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/923_dashboard_container.png" target="_blank"><img src="http://test.przeorski.pl/watermark/923_dashboard_container.png" alt="923_dashboard_container" style="max-width:100%;"></a></p>
+
+<p>On the above code base, we have added new functions called inputOnChange, onSubmit and itemOnEdit so we need improve our constructor as well:</p>
+
+<pre><code>  constructor(props) {
+    super(props)
+
+    this.inputOnChange = this.inputOnChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.itemOnEdit = this.itemOnEdit.bind(this)
+
+
+    this.state = {
+      inputValue: '',
+      editedItemIndex: null
+    }
+  }
+</code></pre>
+
+<p>... the inputValue keeps the current value of a text input. In the editedItemIndex we keep an ID of currently edited item, if there is none in edit then we make it <strong>null</strong>.</p>
+
+<p>Later we handle all the functions logic with:</p>
+
+<pre><code>  inputOnChange(e) {
+    this.setState({ inputValue: e.target.value })
+  }
+
+  itemOnEdit(itemIndex) {
+    const editedItem = this.props.dashboard.dashboardItems[itemIndex]
+    this.setState({ inputValue: editedItem.label, editedItemIndex: itemIndex })
+  }
+
+  onSubmit(e) {
+    e.preventDefault()
+    const val = this.state.inputValue
+    const editedItemIndex = this.state.editedItemIndex
+    if(val &amp;&amp; editedItemIndex !== null) {
+      this.props.dashboardEditItem({ val, editedItemIndex })
+      this.setState({ inputValue: '', editedItemIndex: null })
+    } else if(val) {
+      this.props.dashboardAddItem(val)
+      this.setState({ inputValue: '' })
+    } else {
+      alert(`Value can't be empty`)
+    }
+  }
+</code></pre>
+
+<p>There isn't nothing fancy so I won't describe too much in details (if you think it requires more detailed description then please mail us at <a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a>). </p>
+
+<p>Final part is the <strong>render method</strong>:</p>
+
+<pre><code>  render () {
+    return (
+        &lt;Dashboard {...this.props} 
+          editedItemIndex={this.state.editedItemIndex}
+          itemOnEdit={this.itemOnEdit}
+          inputValue={this.state.inputValue}
+          inputOnChange={this.inputOnChange}
+          onSubmit={this.onSubmit} /&gt;
+    );
+  }
+</code></pre>
+
+<p>... we are passing some callbacks as <strong>this.inputOnChange</strong>, <strong>this.onSubmit</strong> and <strong>this.itemOnEdit</strong> - those callbacks are required to send to our dashboard "dumb component".</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/components/Dashboard/Dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/924_dashboard_component_dumb.png" target="_blank"><img src="http://test.przeorski.pl/watermark/924_dashboard_component_dumb.png" alt="924_dashboard_component_dumb" style="max-width:100%;"></a></p>
+
+<p>Above, we have improved our listJSX map function:</p>
+
+<pre><code>  const listJSX = props.dashboard.dashboardItems.map((item, i) =&gt; {
+    let itemJSX;
+    if(props.editedItemIndex === i) {
+      itemJSX = &lt;p&gt;&lt;b&gt;&lt;u&gt;{item.label}&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;
+    } else {
+      itemJSX = &lt;p&gt;{item.label}&lt;/p&gt;
+    }
+    return &lt;h4 
+            key={i} 
+            onClick={props.itemOnEdit.bind(undefined,i)}
+            style={{cursor: 'pointer'}}&gt;
+              {itemJSX}
+          &lt;/h4&gt;
+  })
+</code></pre>
+
+<p>... so now it make an edited item bold and underlined. </p>
+
+<p>Next we have improved the render function:</p>
+
+<pre><code>  return (
+  &lt;div&gt;
+      &lt;h2 className={classes.dashboardContainer}&gt;
+        Dashboard visits:
+        {' '}
+        &lt;span className={classes['dashboard--green']}&gt;
+          {props.dashboard.visitsCount}
+        &lt;/span&gt;
+      &lt;/h2&gt;
+    &lt;form onSubmit={props.onSubmit}&gt;
+      &lt;input 
+        value={props.inputValue}
+        type='input' 
+        placeholder='type here a value' 
+        style={{width: 300}}
+        onChange={props.inputOnChange} /&gt;
+      &lt;input 
+        type='submit' 
+        value={ props.editedItemIndex === null ? 'Add New Item To The List' : 'Edit Item' } /&gt;
+    &lt;/form&gt;
+    {listJSX}
+  &lt;/div&gt;
+)}
+</code></pre>
+
+<p>We have added standard form and inputs - they are communicating with DashboardContainer with use of callbacks (the <strong>value={props.inputValue}</strong> and <strong>onChange={props.inputOnChange}</strong> take care of it). The submit button value is determined by the props.editedItemIndex - so if it is a null then that means that a user hasn't clicked any item, yet.</p>
+
+<p>This is the end results of all the changes we've made above:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/925_edit_add_anim.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/925_edit_add_anim.gif" alt="925_edit_add_anim.gif" style="max-width:100%;"></a></p>
+
+<pre><code>Source of the commit's screenshots: 
+https://github.com/przeor/ReactC/commit/f836fd4f2eccec2a3740e875247abc7870efa245
+</code></pre>
+
+<h2>Reorder an item on the dashboard list</h2>
+
+<p>We will implement the reordering in a proper React way without using any external reordering components or libraries.</p>
+
+<p>Let's start from the reducers and actions that are related to the reordering feature:</p>
+
+<pre><code>Changes m the server if the user has provided correct or incorrin (you can click the diffs image to make it larger):
+src/routes/Dashboard/modules/dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/926_reducer_action_reorder.png" target="_blank"><img src="http://test.przeorski.pl/watermark/926_reducer_action_reorder.png" alt="926_reducer_action_reorder" style="max-width:100%;"></a></p>
+
+<p>An explanation for the code from the diffs - you need to understand what we will send as a payload (<strong>const reorder = action.payload</strong>) in the function below:</p>
+
+<pre><code>  [DASHBOARD_REORDER_ITEM]: (state, action) =&gt; { 
+    const reorder = action.payload
+    const reorderItem = state.dashboardItems[reorder.start]
+    let newDashboardItems = []
+    state.dashboardItems.map((item, i) =&gt; {
+      if(i === reorder.start) {
+        return
+      }
+
+      // we need that if statement because
+      // the behaviour is determined if someone is dragging
+      // an item from higher to lower place on the list or vice versa
+      if(reorder.end &lt; reorder.start) {
+        if(i === reorder.end) {
+          newDashboardItems.push(reorderItem)
+        }
+        newDashboardItems.push(item)
+      } else {
+        newDashboardItems.push(item)
+        if(i === reorder.end) {
+          newDashboardItems.push(reorderItem)
+        }
+      }
+    })
+    state.dashboardItems = newDashboardItems
+    return Object.assign({}, state)
+  }
+</code></pre>
+
+<p>We will send an object with the following <strong>start</strong> and <strong>end</strong> variable as on the example below:</p>
+
+<pre><code>// just an example schema of
+// const reorder = action.payload
+// so you can see what values are sent to the DASHBOARD_REORDER_ITEM
+{ 
+  start: parseInt(this.state.draggedItemIndex),
+  end: parseInt(droppedItemId)
+}
+</code></pre>
+
+<p>The <strong>start</strong> is a number of order in the <strong>dashboardItems</strong> array. The <strong>end</strong> variable is an order number of a dropped-on-the-item div (the id of an item that a user dropped on the dragged item). We map over all the items in our array and based on the dragging data (start and end) we create a new array called <strong>newDashboardItems</strong>.  Rest of the code shall be self-explained.</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/routes/Dashboard/containers/DashboardContainer.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/927_dashboardContainer1.png" target="_blank"><img src="http://test.przeorski.pl/watermark/927_dashboardContainer1.png" alt="927_dashboardContainer1" style="max-width:100%;"></a></p>
+
+<p>Above we have added <strong>draggedItemIndex</strong> to the state which will be set in the <strong>handleOnDragStart</strong> function. Beside that we are also binding this to the <strong>handleOnDrop</strong> (here we handle login when a user drops a dragged div) and <strong>handleOnDragOver</strong> (this function is more like placeholder, when you can add more custom logic if you want make this dragging functionality more fancy).</p>
+
+<p>... and continuation of the <strong>containers/DashboardContainer.js</strong>:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/928_dashboardContainer2.png" target="_blank"><img src="http://test.przeorski.pl/watermark/928_dashboardContainer2.png" alt="928_dashboardContainer2" style="max-width:100%;"></a></p>
+
+<p>From the above diffs we can find new functions related to the DnD:</p>
+
+<pre><code>  handleOnDragStart (e) {
+    const id = e.target.id
+    this.setState({ draggedItemIndex: id })
+  }
+
+  handleOnDragOver (e) {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+    // You can add here more logic if required
+  }
+
+  handleOnDrop (e) {
+    const droppedItemId = e.currentTarget.id
+    let reorderVal = { 
+      start: parseInt(this.state.draggedItemIndex),
+      end: parseInt(droppedItemId)
+    }
+
+    // the div ids have to be numbers to reorder correctly
+    // and the start and end value has to be different (otherwise reorder is not required)
+    const reorderIsCorrect = !isNaN(reorderVal.start) &amp;&amp; !isNaN(reorderVal.end) &amp;&amp; reorderVal.start !== reorderVal.end
+
+    if(reorderIsCorrect) {
+      this.props.dashboardReorderItems(reorderVal)
+    }
+
+    this.setState({ draggedItemIndex: null })
+  }
+</code></pre>
+
+<p>The most important part to understand this code above is that the div has an id as a number (check the code from the <strong>src/components/Dashboard/Dashboard.js</strong> which is listed below) and that number is an order in the <strong>newDashboardItems</strong> array that is kept in the dashboard reducer.</p>
+
+<p>Based on that assumption, we can use:</p>
+
+<pre><code>handleOnDragStart (e) {
+  const id = e.target.id
+  this.setState({ draggedItemIndex: id })
+}
+</code></pre>
+
+<p>to set the start item. Below you can find how we get the final end <strong>newDashboardItems</strong> number</p>
+
+<pre><code>handleOnDrop (e) {
+  const droppedItemId = e.currentTarget.id
+  let reorderVal = { 
+    start: parseInt(this.state.draggedItemIndex),
+    end: parseInt(droppedItemId)
+  }
+  // rest of the code below has been striped out
+</code></pre>
+
+<p>Rest of the code shall be self-explanied (if something is unclear, please contact us at <a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a>).</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/components/Dashboard/Dashboard.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/929_changes_in_dashboard_map.png" target="_blank"><img src="http://test.przeorski.pl/watermark/929_changes_in_dashboard_map.png" alt="929_changes_in_dashboard_map" style="max-width:100%;"></a></p>
+
+<pre><code>  const listJSX = props.dashboard.dashboardItems.map((item, i) =&gt; {
+    let itemJSX;
+    if(props.editedItemIndex === i) {
+      itemJSX = &lt;p&gt;&lt;b&gt;&lt;u&gt;{item.label}&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;
+    } else {
+      itemJSX = &lt;p&gt;{item.label}&lt;/p&gt;
+    }
+    return &lt;h4 
+            id={i}
+            draggable='true'
+            onDragOver={props.handleOnDragOver}
+            onDragStart={props.handleOnDragStart}
+            onDrop={props.handleOnDrop}
+            key={i} 
+            onClick={props.itemOnEdit.bind(undefined, i)}
+            style={{cursor: 'pointer'}}&gt;
+              {itemJSX}
+          &lt;/h4&gt;
+  })
+</code></pre>
+
+<p>The last part is to add callbacks (onDragOver, onDragStart and onDrop), modify style and add the <strong>id={i}</strong> (so we can take a DIV's id as an information required to make DnD works).</p>
+
+<p>This is how the app shall behave after that all our changes:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/930_dashboard_reordering.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/930_dashboard_reordering.gif" alt="930_dashboard_reordering" style="max-width:100%;"></a></p>
+
+<pre><code>Source of the commit's screenshots: 
+https://github.com/przeor/ReactC/commit/126d2ae53e89ba6731cd923311d6646bb543f8a1
+</code></pre>
+
+<h4>Login with mocked data (front-end)</h4>
+
+<p>We will implement login functionality that works purely on front-end (later we will create a simple backend enpoint). First step is to prepare new session reducer which will be app-wise (it will be used all across the app).</p>
+
+<pre><code>Create a new directory at "src/modules" location
+.. and then create a new file src/modules/session.js
+</code></pre>
+
+<h6>IMPORTANT: we are creating this module directory in the main src/** location because that one reducer need to be available all across the app. In the session reducer we will keep all the actions and data related to our user session (like a token or login status).</h6>
+
+<p><a href="http://test.przeorski.pl/watermark/931_code1-2.png" target="_blank"><img src="http://test.przeorski.pl/watermark/931_code1-2.png" alt="931_code1" style="max-width:100%;"></a></p>
+
+<p>Above we have created <strong>SESSION_LOGIN_SUCCESS</strong> and <strong>SESSION_LOGIN_FAIL</strong> actions.</p>
+
+<p>The interesting part is the loginAsync function which looks like below:</p>
+
+<pre><code>export const loginAsync = (loginObj) =&gt; {
+  return async (dispatch, getState) =&gt; {
+    let loginToken = await new Promise((resolve) =&gt; {
+      setTimeout(() =&gt; {
+        resolve()
+      }, 200)
+    }).then(() =&gt; {
+
+      if(loginObj.user === 'przeor' &amp;&amp; loginObj.password === 'mwp.io') {
+        return 'www.mwp.io' // just a mocked token
+      } else {
+        return 'invalid' // mocked non successful login
+      }
+    })
+
+    if(loginToken !== 'invalid') {
+      dispatch(loginSuccess(loginToken))
+      dispatch(push('/dashboard'))
+    } else {
+      dispatch(loginFail(loginToken))
+    }
+
+  }
+}
+</code></pre>
+
+<p>The function received the <strong>loginObj</strong> which is composed of two keys:</p>
+
+<pre><code>loginObj.user
+loginObj.password
+</code></pre>
+
+<p>That data will be sent to the backend server (after we will unmock now), currenly we only check if the logins are correct with:</p>
+
+<pre><code>if(loginObj.user === 'przeor' &amp;&amp; loginObj.password === 'mwp.io') {
+</code></pre>
+
+<p>Also as you can find, we have created an asynchronous function (<strong>return async (dispatch, getState) =&gt; {</strong>) which awaits on the promise resolve after 200 milliseconds timeout (currently it's a mock, later it will be real POST to the server). Then depending on if you have provided correct login details, it returns:</p>
+
+<pre><code>    }).then(() =&gt; {
+
+      if(loginObj.user === 'przeor' &amp;&amp; loginObj.password === 'mwp.io') {
+        return 'www.mwp.io' // just a mocked token
+      } else {
+        return 'invalid' // mocked non successful login
+      }
+    })
+</code></pre>
+
+<p>The <strong>'invalid'</strong> means, that you have provided incorrect login details (later that will be sent back from the server).</p>
+
+<p>The last executing code of the <strong>loginAsync</strong> is:</p>
+
+<pre><code>    if(loginToken !== 'invalid') {
+      dispatch(loginSuccess(loginToken))
+      dispatch(push('/dashboard'))
+    } else {
+      dispatch(loginFail(loginToken))
+    }
+</code></pre>
+
+<p>The <strong>dispatch</strong> comes from the <strong>react-thunk</strong> - that means, that the loginAsync is returned immediately and waits for lazy evaluation (in our case on a respond from the server if the user has provided correct or incorrect details) and then dispatch an action depending on the server response.</p>
+
+<p>On a valid details, we dispatch two actions:</p>
+
+<pre><code>dispatch(loginSuccess(loginToken))
+dispatch(push('/dashboard'))
+</code></pre>
+
+<p>First <strong>dispath</strong> is for the <strong>loginSuccess</strong> with the <strong>loginToken</strong> value as a variable and the second the <strong>push</strong> which comes from the <strong>react-router-redux</strong> (<strong>import {push} from 'react-router-redux'</strong>) - this function simply push user to <strong>/dashboard</strong> route if he is on a different one with use of push function from the routing librare that we use..</p>
+
+<pre><code>continuation of src/modules/session.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/932_code2.png" target="_blank"><img src="http://test.przeorski.pl/watermark/932_code2.png" alt="932_code2" style="max-width:100%;"></a></p>
+
+<p>... and above you can find the remaining action handlers and the session reducer is looking as following:</p>
+
+<pre><code>// ------------------------------------
+// Action Handlers
+// ------------------------------------
+const ACTION_HANDLERS = {
+  [SESSION_LOGIN_SUCCESS]: (state, action) =&gt; {
+    state.loginToken = action.payload
+    state.isNotLoggedIn = false
+    return Object.assign({}, state)
+  },
+  [SESSION_LOGIN_FAIL]: (state, action) =&gt; {
+    state.loginToken = action.payload
+    return Object.assign({}, state)
+  }
+}
+
+// ------------------------------------
+// Reducer
+// ------------------------------------
+const initialState = { 
+  count: 0,
+  isNotLoggedIn: true,
+  loginToken: 'none'
+}
+</code></pre>
+
+<p>There is a flag for simplicity which handles if a user is logged in (<strong>isNotLoggedIn</strong>) and we keep in that reducer the token which shall be sent to the backend on each request while a user is logged in (the loginToken may come from the backend's JSON Web Token). </p>
+
+<p>For now we are implementing very simple login solution and then we will build up on it to make it more powerful.</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/store/reducers.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/933_code3.png" target="_blank"><img src="http://test.przeorski.pl/watermark/933_code3.png" alt="933_code3" style="max-width:100%;"></a></p>
+
+<p>Above we are simply importing the session reducer with <strong>import session from '../modules/session'</strong> and then we add it to the combineReducers:</p>
+
+<pre><code>export const makeRootReducer = (asyncReducers) =&gt; {
+  return combineReducers({
+    // Add sync reducers here
+    router,
+    session,
+    ...asyncReducers
+  })
+}
+</code></pre>
+
+<p>That's all there, then we need to improve <strong>CoreLayout.js</strong>:</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/layouts/CoreLayout/CoreLayout.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/934_code4.png" target="_blank"><img src="http://test.przeorski.pl/watermark/934_code4.png" alt="934_code4" style="max-width:100%;"></a></p>
+
+<p>Above, we make the CoreLayout as a smart component which is connected to the session reducer with use of:</p>
+
+<pre><code>import React, { Component, PropTypes } from 'react'
+import Header from '../../components/Header'
+import classes from './CoreLayout.scss'
+import '../../styles/core.scss'
+import { connect } from 'react-redux'
+import { loginAsync } from '../../modules/session'
+
+const mapActionCreators = {
+  loginAsync
+}
+
+const mapStateToProps = (state) =&gt; ({
+  session: state.session
+})
+</code></pre>
+
+<p>As you shall already now the mapActionCreators and mapStateToProps are connected to the redux via <strong>import { connect } from 'react-redux'</strong>.</p>
+
+<p>Then we improve the CoreLayout component as following:</p>
+
+<pre><code>class CoreLayout extends Component {
+  static propTypes = {
+    children: PropTypes.object.isRequired
+  }
+
+  constructor(props) {
+    super(props)
+    this.handleLogin = this.handleLogin.bind(this)
+  }
+
+  handleLogin(loginObj, e) {
+    e.preventDefault()
+    this.props.loginAsync(loginObj)
+  }
+
+  render () {
+    return (
+      &lt;div className='container text-center'&gt;
+        &lt;Header 
+          handleLogin={this.handleLogin} 
+          session={this.props.session} /&gt;
+        &lt;div className={classes.mainContainer}&gt;
+          {this.props.children}
+        &lt;/div&gt;
+      &lt;/div&gt;)
+
+    }
+}
+
+
+export default connect(mapStateToProps, mapActionCreators)(CoreLayout)
+</code></pre>
+
+<p>In the CoreLayout you can find a function with handles login called <strong>handleLogin</strong>(the <strong>e.preventDefault()</strong> is a standard thing so I won't explain how it works here) which sends the user and password's object to the session reducer with use of <strong>this.props.loginAsync(loginObj)</strong>. </p>
+
+<p>To the Header's component we send down the handleLogin and the session's reducer data (<strong>session={this.props.session}</strong>).</p>
+
+<pre><code>Changes in (you can click the diffs image to make it larger):
+src/components/Header/Header.js
+</code></pre>
+
+<p><a href="http://test.przeorski.pl/watermark/935_code5.png" target="_blank"><img src="http://test.przeorski.pl/watermark/935_code5.png" alt="935_code5" style="max-width:100%;"></a></p>
+
+<p>Above the standard thing for login forms as <strong>prepareLoginJSX</strong> function which returns a form. There are some on change as <strong>onChange={usernameOnChange}</strong> and <strong>onChange={passwordOnChange}</strong> which updates the loginObj on each user's input. Later after a user hits the submit button, then the loginObj is sent via callback to the session reducer (<strong>onSubmit={props.handleLogin.bind(undefined, loginObj)}</strong>).</p>
+
+<p><a href="http://test.przeorski.pl/watermark/936_code6.png" target="_blank"><img src="http://test.przeorski.pl/watermark/936_code6.png" alt="936_code6" style="max-width:100%;"></a></p>
+
+<p>... and in the <strong>export const Header = (props) =&gt; {</strong> we simply return the login form in case if a user is not logged in <strong>props.session.isNotLoggedIn</strong> and in case if a user put's wrong details then we show him a message:</p>
+
+<pre><code>if(props.session.loginToken === 'invalid') {
+  loginMessageJSX = &lt;p&gt;Invalid login details, please try with correct user and password&lt;/p&gt;
+}
+</code></pre>
+
+<p>Everything is done besides the Dashboard improvements:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/937_code7.png" target="_blank"><img src="http://test.przeorski.pl/watermark/937_code7.png" alt="937_code7" style="max-width:100%;"></a></p>
+
+<p>Above we simply add the session reducer to the DashboardContainer and then check if a user is logged in and if not then we show him a message via render function:</p>
+
+<pre><code>render () {
+  if(this.props.session.isNotLoggedIn) {
+    return &lt;h4&gt;Please login in order to access your dashboard&lt;/h4&gt;
+}
+</code></pre>
+
+<p>Based on that all changes we have made then you shall be able to run this app with login required to see the dashboard as on the animation below:</p>
+
+<p><a href="http://test.przeorski.pl/watermark/938_anim.gif" target="_blank"><img src="http://test.przeorski.pl/watermark/938_anim.gif" alt="938_anim" style="max-width:100%;"></a></p>
+
+<pre><code>Commits screenshots source: https://github.com/przeor/ReactC/commit/83132ab8e71095075f8dfbe8dfcc98fe5ef5c8da
+</code></pre>
+
+<h2>A summary (front-end part) </h2>
+
+<p>This is first part of that free handbook related to front-end implementations.</p>
+
+<p>How do you like it? What we can improve? Please mail us with your feedback.</p>
+
+<h3>Do you want the backend implementation? Then we need your feedback what backend tech stack you would like to use in your future projects?</h3>
+
+<p><strong>WHAT TO USE ON THE BACKEND IN THE React Convention handbook:</strong></p>
+
+<p>a) GraphQL + Relay</p>
+
+<p>b) <a href="https://reactjs.co/2016/02/03/what-is-netflix-falcor-and-why-you-should-care/">FalcorJS</a></p>
+
+<p>c) Standalone REST API implementation with Axios on the front-end</p>
+
+<p>Please mail us at <strong><a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a></strong> and based on your feedback we will continue this free handbook.</p>
+      </article>
+    </div>
+  </div>
+</div>
+
+
+<div id="floatdiv" style="  
+    position:absolute;  
+    padding-top: 100px;
+    width: 100%;
+    height:120px;
+    top:30px;
+    right:10px;  
+    padding:16px;
+    font-family: Arial;
+    font-size: 15px;
+    
+    visibility: hidden;
+    z-index:2000">  
+
+<table>
+<tr><td>
+<img src="./kamil2.png" width="110" height="110" /> <br/>
+<u>Kamil Przeorski</u> 
+</td><td style="vertical-align:bottom">
+<p style="background-color: white">I am a creator of the ReactJS Convention's handbook
+If you need any help with the handbook <a href="">visit and join the React Convention Facebook Group by clicking here</a>.
+I am also looking for your general feedback at:
+ReactConvention@mwp.io </p>
+</td></tr></table>
+</div>  
+  
+<script type="text/javascript">  
+    floatingMenu.add('floatdiv',  
+        {  
+            // Represents distance from left or right browser window  
+            // border depending upon property used. Only one should be  
+            // specified.  
+            // targetLeft: 0,  
+            targetLeft: 0,
+  
+            // Represents distance from top or bottom browser window  
+            // border depending upon property used. Only one should be  
+            // specified.  
+            targetBottom: 10,  
+            // targetBottom: 0,  
+  
+            // Uncomment one of those if you need centering on  
+            // X- or Y- axis.  
+            // centerX: true,  
+            // centerY: true,  
+  
+            // Remove this one if you don't want snap effect  
+            snap: false  
+        });  
+
+function showMessage() {
+  document.getElementById("floatdiv").style.visibility = "visible";
+}
+setTimeout("showMessage()", 900);
+
+</script> 
+
+</body></html>
