@@ -815,8 +815,95 @@ dispatch(loginSuccess(loginToken))
 dispatch(push('/dashboard'))
 ```
 
-One to loginSuccess with the __loginToken__ value and the second the __push__ which comes from the __react-router-redux__ (__import {push} from 'react-router-redux'__) - this function simply push user to __/dashboard__ route if he is on a different one with use of push function from the routing librare that we use..
+First __dispath__ is for the __loginSuccess__ with the __loginToken__ value as a variable and the second the __push__ which comes from the __react-router-redux__ (__import {push} from 'react-router-redux'__) - this function simply push user to __/dashboard__ route if he is on a different one with use of push function from the routing librare that we use..
 
+
+
+```
+continuation of src/modules/session.js
+```
+
+![932_code2](http://test.przeorski.pl/book/932_code2.png)
+
+... and above you can find the remaining action handlers and the session reducer is looking as following:
+```
+// ------------------------------------
+// Action Handlers
+// ------------------------------------
+const ACTION_HANDLERS = {
+  [SESSION_LOGIN_SUCCESS]: (state, action) => {
+    state.loginToken = action.payload
+    state.isNotLoggedIn = false
+    return Object.assign({}, state)
+  },
+  [SESSION_LOGIN_FAIL]: (state, action) => {
+    state.loginToken = action.payload
+    return Object.assign({}, state)
+  }
+}
+
+// ------------------------------------
+// Reducer
+// ------------------------------------
+const initialState = { 
+  count: 0,
+  isNotLoggedIn: true,
+  loginToken: 'none'
+}
+```
+
+There is a flag for simplicity which handles if a user is logged in (__isNotLoggedIn__) and we keep in that reducer the token which shall be sent to the backend on each request while a user is logged in (the loginToken may come from the backend's JSON Web Token). 
+
+For now we are implementing very simple login solution and then we will build up on it to make it more powerful.
+
+```
+Changes in (you can click the diffs image to make it larger):
+src/store/reducers.js
+```
+
+![933_code3](http://test.przeorski.pl/book/933_code3.png)
+
+Above we are simply importing the session reducer with __import session from '../modules/session'__ and then we add it to the combineReducers:
+```
+export const makeRootReducer = (asyncReducers) => {
+  return combineReducers({
+    // Add sync reducers here
+    router,
+    session,
+    ...asyncReducers
+  })
+}
+```
+
+That's all there, then we need to improve __CoreLayout.js__:
+
+```
+Changes in (you can click the diffs image to make it larger):
+src/layouts/CoreLayout/CoreLayout.js
+```
+
+![934_code4](http://test.przeorski.pl/book/934_code4.png)
+
+
+Above, we make the CoreLayout as a smart component which is connected to the session reducer with use of:
+```
+import React, { Component, PropTypes } from 'react'
+import Header from '../../components/Header'
+import classes from './CoreLayout.scss'
+import '../../styles/core.scss'
+import { connect } from 'react-redux'
+import { loginAsync } from '../../modules/session'
+
+const mapActionCreators = {
+  loginAsync
+}
+
+const mapStateToProps = (state) => ({
+  session: state.session
+})
+```
+
+As you shall already now the mapActionCreators and mapStateToProps are connected to the redux via __import { connect } from 'react-redux'__.
 
 
 
