@@ -153,11 +153,11 @@
 <pre><code>Source code of the new dashboard init creation: https://github.com/przeor/ReactC/commit/d3f5d0293045af4ce75522324c06c9bf44d16a90
 </code></pre>
 
-<h2>Create a dashboard component</h2>
+<h2>Create a dashboard component (from Counter copy)</h2>
 
 <hr>
 
-<p>We have to copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables related to counter's route as on the below's example:</p>
+<p>We have to copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables, values and comments related to counter's route as on the below's example:</p>
 
 <pre><code>New file (copied from Counter example - you can click the diffs image to make it larger) :
 src/components/Dashboard/Dashboard.js
@@ -583,7 +583,7 @@ src/routes/Dashboard/modules/dashboard.js
   }
 </code></pre>
 
-<p>We will send an object with the following <strong>start</strong> and <strong>end</strong> variable as on the example below:</p>
+<p>We will send an object with the following <strong>start</strong> and <strong>end</strong> properties as on the example below:</p>
 
 <pre><code>// just an example schema of
 // const reorder = action.payload
@@ -594,7 +594,7 @@ src/routes/Dashboard/modules/dashboard.js
 }
 </code></pre>
 
-<p>The <strong>start</strong> is a number of order in the <strong>dashboardItems</strong> array. The <strong>end</strong> variable is an order number of a dropped-on-the-item div (the id of an item that a user dropped on the dragged item). We map over all the items in our array and based on the dragging data (start and end) we create a new array called <strong>newDashboardItems</strong>.  Rest of the code shall be self-explained.</p>
+<p>The <strong>start</strong> is a number of order in the <strong>dashboardItems</strong> array. The <strong>end</strong> property is an order number of a dropped-on-the-item div (the id of an item that a user dropped on the dragged item). We map over all the items in our array and based on the dragging data (start and end) we create a new array called <strong>newDashboardItems</strong>.  Rest of the code shall be self-explained.</p>
 
 <pre><code>Changes in (you can click the diffs image to make it larger):
 src/routes/Dashboard/containers/DashboardContainer.js
