@@ -1,7 +1,7 @@
 http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
 # React Convention
-## React is not only V (view) anymore
+## ReactJS is not only V (view) anymore
 ### a free online handbook for React.JS Developers with a very opinionated and matured project structure
 
 
