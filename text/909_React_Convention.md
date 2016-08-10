@@ -159,10 +159,10 @@ Generally all the code diffs below are simply copies of Counter's component rena
 Source code of the new dashboard init creation: https://github.com/przeor/ReactC/commit/d3f5d0293045af4ce75522324c06c9bf44d16a90
 ```
 
-## Create a dashboard component
+## Create a dashboard component (from Counter copy)
 ------
 
-We have to copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables related to counter's route as on the below's example:
+We have to copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables, values and comments related to counter's route as on the below's example:
 
 ```
 New file (copied from Counter example - you can click the diffs image to make it larger) :
@@ -604,7 +604,7 @@ An explanation for the code from the diffs - you need to understand what we will
   }
 ```
 
-We will send an object with the following __start__ and __end__ variable as on the example below:
+We will send an object with the following __start__ and __end__ properties as on the example below:
 
 ```
 // just an example schema of
@@ -616,7 +616,7 @@ We will send an object with the following __start__ and __end__ variable as on t
 }
 ```
 
-The __start__ is a number of order in the __dashboardItems__ array. The __end__ variable is an order number of a dropped-on-the-item div (the id of an item that a user dropped on the dragged item). We map over all the items in our array and based on the dragging data (start and end) we create a new array called __newDashboardItems__.  Rest of the code shall be self-explained.
+The __start__ is a number of order in the __dashboardItems__ array. The __end__ property is an order number of a dropped-on-the-item div (the id of an item that a user dropped on the dragged item). We map over all the items in our array and based on the dragging data (start and end) we create a new array called __newDashboardItems__.  Rest of the code shall be self-explained.
 
 
 ```
