@@ -1,9 +1,7 @@
 http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 
 # React Convention
-## ReactJS is not only V (view) anymore
-### a free online handbook for React.JS Developers with a very opinionated and matured project structure
-
+## a free online handbook for React.JS Developers with a very opinionated and matured project structure. React is not only the View (in MVC) anymore - here we will teach you best practises for your next project.
 
 **** 
 "So many books, so little time." ― Frank Zappa
@@ -30,6 +28,13 @@ __PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDING
 
 
 
+- [How to use this handbook] (#how-to-use-this-handbook)
+- [Your First Step] (#)
+- [General client codebase structure] (#)
+- [New dashboard route] (#)
+
+
+
 ## How to use this handbook
 ------
 
@@ -41,7 +46,7 @@ In order to get benefits, you need already to be familiarized with:
 
 3) Basic Redux stuff
 
-##### IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, ping me on the email __ReactConvention@mwp.io__ then I will share it with you.
+##### IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, then join the FB group ReactJS Convention Facebook Group. I will share it with you there. Join the group if you have any trouble with this handbook as well.
 
 An other requirement to get all the benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:
 ```
