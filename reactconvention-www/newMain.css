@@ -138,6 +138,7 @@
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
+    font-family: Arial, Helvetica, sans-serif;
     margin-top: 24px;
     margin-bottom: 16px;
     font-weight: 600;
