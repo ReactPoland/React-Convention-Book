@@ -34,8 +34,11 @@ __PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDING
 ------
 
 In order to get benefits, you need already to be familiarized with:
+
 1) ES6/ES7 syntax
+
 2) Concept of React Life Cycle
+
 3) Basic Redux stuff
 
 #### IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, ping me on the email __ReactConvention@mwp.io__ then I will share it with you.
