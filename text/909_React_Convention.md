@@ -32,11 +32,11 @@ __PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDING
 - [Your first step] (#your-first-step)
 - [General client codebase structure] (#general-client-codebase-structure)
 - [New dashboard route] (#new-dashboard-route)
-- [Create a dashboard component (from Counter copy)] (#create-a-dashboard-component-from-counter-copy)
+- [Create a dashboard component (from the Counter copy)] (#create-a-dashboard-component-from-the-counter-copy)
 - [Next steps in implementing our dashboard] (#next-steps-in-implementing-our-dashboard)
 - [Mocked items list on the dashboard list] (#mocked-items-list-on-the-dashboard-list)
 - [Add/edit item on the dashboard list] (#addedit-item-on-the-dashboard-list)
-- [Reorder an item on the dashboard list] (#reorder-an-item-on-the-dashboard-list)
+- [Reorder an item on the dashboard list (pure React Drag and Drop example)] (#reorder-an-item-on-the-dashboard-list-pure-react-drag-and-drop-example)
 - [Login with mocked data (front-end)] (#login-with-mocked-data-front-end)
 - [A summary (front-end part)] (#a-summary-front-end-part)
 
@@ -183,7 +183,7 @@ Generally all the code diffs below are simply copies of Counter's component rena
 Source code of the new dashboard init creation: https://github.com/przeor/ReactC/commit/d3f5d0293045af4ce75522324c06c9bf44d16a90
 ```
 
-## Create a dashboard component (from Counter copy)
+## Create a dashboard component (from the Counter copy)
 ------
 
 We have to copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables, values and comments related to counter's route as on the below's example:
@@ -584,7 +584,7 @@ Source of the commit's screenshots:
 https://github.com/przeor/ReactC/commit/f836fd4f2eccec2a3740e875247abc7870efa245
 ```
 
-## Reorder an item on the dashboard list
+## Reorder an item on the dashboard list (pure React Drag and Drop example)
 
 We will implement the reordering in a proper React way without using any external reordering components or libraries.
 
