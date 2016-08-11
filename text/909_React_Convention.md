@@ -26,12 +26,20 @@ We will familiarize your new teammate to your React's project sturcture so you w
 
 __PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at ReactConvention@mwp.io__
 
-
+## Content table
 
 - [How to use this handbook] (#how-to-use-this-handbook)
-- [Your First Step] (#)
-- [General client codebase structure] (#)
-- [New dashboard route] (#)
+- [Your first step] (#your-first-step)
+- [General client codebase structure] (#general-client-codebase-structure)
+- [New dashboard route] (#new-dashboard-route)
+- [Create a dashboard component (from Counter copy)] (#create-a-dashboard-component-from-counter-copy)
+- [Next steps in implementing our dashboard] (#next-steps-in-implementing-our-dashboard)
+- [Mocked items list on the dashboard list] (#mocked-items-list-on-the-dashboard-list)
+- [Add/edit item on the dashboard list] (#addedit-item-on-the-dashboard-list)
+- [Reorder an item on the dashboard list] (#reorder-an-item-on-the-dashboard-list)
+- [Login with mocked data (front-end)] (#login-with-mocked-data-front-end)
+- [A summary (front-end part)] (#a-summary-front-end-part)
+
 
 
 
@@ -85,7 +93,7 @@ Welcome to React Convention way of doing apps
 
 
 
-## Your First Step
+## Your first step
 ------
 
 In a default starter kit from the @davezuko, you can find a home page and a counter component which looks as following:
