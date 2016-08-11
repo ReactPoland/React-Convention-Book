@@ -33,7 +33,14 @@ __PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDING
 ## How to use this handbook
 ------
 
-The only requirement to get all the benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:
+In order to get benefits, you need already to be familiarized with:
+1) ES6/ES7 syntax
+2) Concept of React Life Cycle
+3) Basic Redux stuff
+
+#### IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, ping me on the email __ReactConvention@mwp.io__ then I will share it with you.
+
+An other requirement to get all the benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:
 ```
 https://github.com/davezuko/react-redux-starter-kit
 ```
