@@ -41,7 +41,7 @@ In order to get benefits, you need already to be familiarized with:
 
 3) Basic Redux stuff
 
-#### IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, ping me on the email __ReactConvention@mwp.io__ then I will share it with you.
+##### IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, ping me on the email __ReactConvention@mwp.io__ then I will share it with you.
 
 An other requirement to get all the benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:
 ```
