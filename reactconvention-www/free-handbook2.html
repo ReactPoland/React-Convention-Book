@@ -46,8 +46,7 @@
   <div>
     <div class="readme">
       <article class="markdown-body">
-
-<h1><a href="https://reactjs.co">ReactJS</a> Convention</h1>
+<h1><a href="https://reactjs.co">ReactJS</a>.<font color="#4078c0">Co</font>nvention</h1>
 
 <h3>Free online handbook for <a href="https://reactjs.co/">React.JS</a> Developers with a very opinionated and matured project structure. <a href="https://reactjs.co">React</a> is not only the View (in MVC) anymore - here we will teach you best practises for your next project.</h3>
 <hr>
@@ -142,7 +141,7 @@
 
 <p>This is a simple application with a counter, and throught this handbook you will implement other views and components which will help you understand whole codebase from a big picture perspective.</p>
 
-<p>To explain the whole code structure, we will start with developing a new route called Dashboard with some basic features. When you will be done with it, then you will implement a registration and login which will make you sure that you know how to do it 100% just on your own.</p>
+<p>To explain the whole code structure, we will start with developing a new route called Dashboard with some basic features. When we will be done with it, then we will implement a registration and login which will make you sure that you know how to do it 100% just on your own.</p>
 
 <p>First step is to clone the starter kit and start working on this commit (the handbook was written on that commit, so for better experience you shall work on the same one):</p>
 
@@ -1085,7 +1084,25 @@ Have feedback?<br/>
 function showMessage() {
   document.getElementById("floatdiv").style.visibility = "visible";
 }
-setTimeout("showMessage()", 900);
+
+// media query event handler
+if (matchMedia) {
+  var mq = window.matchMedia("(min-width: 1200px)");
+  mq.addListener(WidthChange);
+  WidthChange(mq);
+}
+
+
+// media query change
+function WidthChange(mq) {
+  if (mq.matches) {
+    // window width is at least 500px
+    setTimeout("showMessage()", 200);
+  } else {
+    // window width is less than 500px
+  }
+
+}
 
 </script> 
 
