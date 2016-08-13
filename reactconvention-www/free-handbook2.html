@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <link rel="pingback" href="https://reactjs.co/xmlrpc.php">
-    <meta name="keywords" itemprop="keywords" content="reactjs, reactjs convention, react.js, reactjs redux, react redux" />
+    <meta name="keywords" content="reactjs, reactjs convention, react.js, reactjs redux, react redux" />
     <link rel='stylesheet' id='athemes-headings-fonts-css'  href='//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&#038;ver=4.4.4' type='text/css' media='all' />
 
     <link rel="alternate" type="application/rss+xml" title="ReactJS &raquo; Feed" href="https://reactjs.co/feed/" />
@@ -28,9 +28,9 @@
 
     <link href="/react_convention/newMain.css" media="all" rel="stylesheet">
 	<script type="text/javascript" src="https://reactjs.co/react_convention/floating-1.12.js"></script>  
-    <title>Reactjs Convention - React.js Blog</title>
+    <title>ReactJS Convention For Wise People - official convention book - Blog - React Redux</title>
 <body>
-<nav id="top-navigation" class="main-navigation" role="navigation">
+<nav id="top-navigation" class="main-navigation">
 <div class="clearfix container">
     <div class="sf-menu">
         <ul class="sf-js-enabled sf-arrows" style="touch-action: pan-y;">
@@ -46,21 +46,19 @@
   <div>
     <div class="readme">
       <article class="markdown-body">
-<h1><a href="https://reactjs.co">ReactJS</a>.<font color="#4078c0">Co</font>nvention</h1>
+<h1><a href="https://reactjs.co">ReactJS Convention For Wise People</a></h1>
 
-<h3>Free online handbook for <a href="https://reactjs.co/">React.JS</a> Developers with a very opinionated and matured project structure. <a href="https://reactjs.co">React</a> is not only the View (in MVC) anymore - here we will teach you best practises for your next project.</h3>
+<h3>Official free online convention book for <a href="https://reactjs.co/">React.JS</a> Developers with a very opinionated and matured project structure. <a href="https://reactjs.co">React</a> is not only the View (in MVC) anymore - here we will teach you best practises for your next project.</h3>
 <hr>
-
-<p>"So many books, so little time." - Frank Zappa</p>
 
 <p>"So many projects, so little time." - Kamil Przeorski</p>
 <hr>
 
-<h2 id="">Preface</h2>
+<h2>Preface</h2>
 
 <hr>
 
-<p>In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there <strong>are no really conventions that one can follow</strong>. We are running a React Webshop from mid 2014 and <strong>we faced so many frustrations</strong>. Mostly when a client who had already an MVP wanted us to expand based on his codebase. <strong>No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations</strong>. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase <strong>and you want to make sure that he doesn't make any "newbie" mistakes</strong>. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. <strong>You need to teach him about your configuration so it takes you decent amount time to pass all your knowledge to your new teammate in the project</strong>. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. </p>
+<p>In 2013 ReactJS was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there <strong>are no really conventions that one can follow</strong>. We are running a React Webshop from mid 2014 and <strong>we faced so many frustrations</strong>. Mostly when a client who had already an MVP wanted us to expand based on his codebase. <strong>No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations</strong>. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase <strong>and you want to make sure that he doesn't make any "newbie" mistakes</strong>. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. <strong>You need to teach him about your configuration so it takes you decent amount time to pass all your knowledge to your new teammate in the project</strong>. The React Convention book helps you to save time on transfering knowledge about your project's structure to any new member. </p>
 
 <p>The main ReactC's goal is to create "ready to go" convention that you can share with your colleagues. </p>
 
@@ -68,15 +66,15 @@
 
 <p>We will familiarize your new teammate to your React's project sturcture so you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. </p>
 
-<h3><strong>The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with any other method</strong>.</h3>
+<h3><strong>The ReactC book is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with any other method</strong>.</h3>
 
-<p><strong>PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at <a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a></strong></p>
+<p><strong>PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT BOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at <a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a></strong></p>
 
 
-<h2 id="">Content table</h2>
+<h2>Content table</h2>
 
 <ul>
-<li><a href="#how-to-use-this-handbook">How to use this handbook</a></li>
+<li><a href="#how-to-use-this-book">How to use this book</a></li>
 <li><a href="#your-first-step">Your first step</a></li>
 <li><a href="#general-client-codebase-structure">General client codebase structure</a></li>
 <li><a href="#new-dashboard-route">New dashboard route</a></li>
@@ -91,7 +89,7 @@
 
 
 
-<h2 id="how-to-use-this-handbook">How to use this handbook</h2>
+<h2 id="how-to-use-this-book">How to use this book</h2>
 
 <hr>
 
@@ -103,7 +101,7 @@
 
 <p>3) Basic Redux stuff</p>
 
-<h5>IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, then join the FB group <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">ReactJS Convention Facebook Group</a></strong>. I will share it with you there. Join the <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">group</a></strong> if you have any trouble with this handbook as well. </h5>
+<h5>IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, then join the FB group <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">ReactJS Convention Facebook Group</a></strong>. I will share it with you there. Join the <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">group</a></strong> if you have any trouble with this book as well. </h5>
 
 <p>An other requirement to get all the benefits mentioned in the preface is that you need to start your project with that react-redux-starter-kit:</p>
 
@@ -117,16 +115,13 @@
             https://reactjs.co/wp-content/react_convention/
 <p><a href="https://reactjs.co/wp-content/react_convention/901_dan_abramov.png" target="_blank"><img alt="Dan Abramov" src="https://reactjs.co/wp-content/react_convention/901_dan_abramov.png" style="max-width:100%;"></a></p>
 
-<p>After you are using this starter kit, then the handbook will provide you the value which will save your team a plenty of time at work.</p>
+<p>After you are using this starter kit, then the book will provide you the value which will save your team a plenty of time at work.</p>
 <br/>
 <br/>
 <br/>
-<center>
-<img src="https://reactjs.co/react_convention/reactjslogo.png" width="20%" height="20%" />
-<img src="https://reactjs.co/react_convention/ducks.png" width="30%" height="30%"  />
-
+<div style="text-align:center">
 <h1>Welcome to the React Convention way of doing apps</h1>
-</center>
+</div>
 <br/>
 <br/>
 <br/>
@@ -137,13 +132,13 @@
 
 <p>In a default starter kit from the @davezuko, you can find a home page and a counter component which looks as following:</p>
 
-<p><a href="https://reactjs.co/wp-content/react_convention/902_starter_counter.gif" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/902_starter_counter.gif" style="max-width:100%;"></a></p>
+<p><a href="https://reactjs.co/wp-content/react_convention/902_starter_counter.gif" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/902_starter_counter.gif" style="max-width:100%;" alt="starter animation redux"></a></p>
 
-<p>This is a simple application with a counter, and throught this handbook you will implement other views and components which will help you understand whole codebase from a big picture perspective.</p>
+<p>This is a simple application with a counter, and throught this book you will implement other views and components which will help you understand whole codebase from a big picture perspective.</p>
 
 <p>To explain the whole code structure, we will start with developing a new route called Dashboard with some basic features. When we will be done with it, then we will implement a registration and login which will make you sure that you know how to do it 100% just on your own.</p>
 
-<p>First step is to clone the starter kit and start working on this commit (the handbook was written on that commit, so for better experience you shall work on the same one):</p>
+<p>First step is to clone the starter kit and start working on this commit (the book was written on that commit, so for better experience you shall work on the same one):</p>
 
 <pre><code>9a03e99c0dd2e7102d43264cc495bbdd4e10dcdd
 </code></pre>
@@ -1013,13 +1008,13 @@ src/components/Header/Header.js
 
 <h2 id="a-summary-front-end-part">A summary (front-end part) </h2>
 
-<p>This is first part of that free handbook related to front-end implementations.</p>
+<p>This is first part of that free book related to front-end implementations.</p>
 
 <p>How do you like it? What we can improve? Please mail us with your feedback.</p>
 
 <h3>Do you want the backend implementation? Then we need your feedback what backend tech stack you would like to use in your future projects?</h3>
 
-<p><strong>WHAT TO USE ON THE BACKEND IN THE React Convention handbook:</strong></p>
+<p><strong>WHAT TO USE ON THE BACKEND IN THE React Convention book:</strong></p>
 
 <p>a) GraphQL + Relay</p>
 
@@ -1027,7 +1022,7 @@ src/components/Header/Header.js
 
 <p>c) Standalone REST API implementation with Axios on the front-end</p>
 
-<p>Please mail us at <strong><a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a></strong> and based on your feedback we will continue this free handbook.</p>
+<p>Please mail us at <strong><a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a></strong> and based on your feedback we will continue this free book.</p>
       </article>
     </div>
   </div>
@@ -1035,75 +1030,7 @@ src/components/Header/Header.js
 
 <br/><br/><br/>
 <br/><br/><br/>
-<br/><br/><br/>
 
-<div id="floatdiv" style="  
-    position:absolute;  
-    padding-top: 100px;
-    width: 100%;
-    height:120px;
-    top:30px;
-    right:10px;  
-    padding:16px;
-    font-family: Arial;
-    font-size: 15px;
-    
-    visibility: hidden;
-    z-index:2000">  
-
-
-Need help?<br/>
-Have feedback?<br/>
-<a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">Join us on the FB</a>.
-</div>  
-  
-<script type="text/javascript">  
-    floatingMenu.add('floatdiv',  
-        {  
-            // Represents distance from left or right browser window  
-            // border depending upon property used. Only one should be  
-            // specified.  
-            // targetLeft: 0,  
-            targetLeft: 0,
-  
-            // Represents distance from top or bottom browser window  
-            // border depending upon property used. Only one should be  
-            // specified.  
-            targetBottom: 30,  
-            // targetBottom: 0,  
-  
-            // Uncomment one of those if you need centering on  
-            // X- or Y- axis.  
-            // centerX: true,  
-            // centerY: true,  
-  
-            // Remove this one if you don't want snap effect  
-            snap: false  
-        });  
-
-function showMessage() {
-  document.getElementById("floatdiv").style.visibility = "visible";
-}
-
-// media query event handler
-if (matchMedia) {
-  var mq = window.matchMedia("(min-width: 1200px)");
-  mq.addListener(WidthChange);
-  WidthChange(mq);
-}
-
-
-// media query change
-function WidthChange(mq) {
-  if (mq.matches) {
-    // window width is at least 500px
-    setTimeout("showMessage()", 5000);
-  } else {
-    // window width is less than 500px
-  }
-
-}
-
-</script> 
+<h3>Search In Google For ReactJS Convention</h3>
 
 </body></html>

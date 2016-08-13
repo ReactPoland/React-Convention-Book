@@ -1,3 +1,7 @@
+body {
+    min-width: 360px;
+}
+
 @media only screen and (min-width: 980px) {
     .container {
         width: 980px;
@@ -16,7 +20,7 @@
 
 .readme .markdown-body,
 .readme .plain {
-    padding: 45px;
+    padding: 25px;
     word-wrap: break-word;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -28,7 +32,7 @@
     white-space: pre-wrap
 }
 .file .readme .markdown-body {
-    padding: 45px;
+    padding: 25px;
     border: 0;
     border-radius: 0
 }
