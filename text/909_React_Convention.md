@@ -8,22 +8,71 @@ http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 **** 
 
 ## Why to learn and use React
-
 1) Because of timing
+
+Currently, React has best momentum besides all the front-end frameworks/solutions. Below we can find the stats of visits within Angular vs. React subreddits:
+
+![reactjs momentum](https://reactjs.co/wp-content/react_convention/1001_momentum.png)
+
+Above, we can find that React subreddit has overpassed with popularity (unique visits) the AngularJS.
+
 
 2) Because of better job market
 
+Who Is Hiring on Hacker News are monthly updates of tech companies who are looking for certain skillsets:
+
+![reactjs who is hiring](https://reactjs.co/wp-content/react_convention/1002_who_is_hiring_trends.png)
+
+On the screenshot are stats where you can find that black line has down-trend (Angular) where the light-blue line is up-trending (React).
+
+Second part of that point is the geography:
+
+![reactjs google trends](https://reactjs.co/wp-content/react_convention/1003_trends_geography.png)
+
+As you can find on the locations' list - the Angular.JS is mostly searched in poorer countries like India (bigger competition from the cheap labour) and the React.JS is more popular in the West cities like San Francisco, Syndey or Austin.
+
+
 3) Because of it's simplicity over Angular and other
+
+React.JS API is short and sweet. Redux helps in building more complex apps. You can learn more about both below.
 
 4) Because of it's robust ecosystem
 
-## Why to learn and use Redux
+React has the most robus comminity in terms of modular components which are shared online for reusing purpose.
+
+## Why Redux
 
 1) It's simplier than FLUX to learn
 
+From my experience of teaching developers FLUX and Redux - I have found that Redux is easier to grasp.
+
 2) It's powerfull
 
+It has many features which are unique and very useful in real life web apps development (like immutability).
+
 3) It's the most used across the community
+
+Redux is the most standard tool to use for the uni-directional data flow.
+
+The good example is the <a href="https://reactjs.co">ReactJS Convention</a> which you can learn here - it deploys Redux in 100%.
+
+
+
+## Content table
+
+- [How to use this handbook] (#how-to-use-this-handbook)
+- [Your first step] (#your-first-step)
+- [General client codebase structure] (#general-client-codebase-structure)
+- [New dashboard route] (#new-dashboard-route)
+- [Create a dashboard component (from the Counter copy)] (#create-a-dashboard-component-from-the-counter-copy)
+- [Next steps in implementing our dashboard] (#next-steps-in-implementing-our-dashboard)
+- [Mocked items list on the dashboard list] (#mocked-items-list-on-the-dashboard-list)
+- [Add/edit item on the dashboard list] (#addedit-item-on-the-dashboard-list)
+- [Reorder an item on the dashboard list (pure React Drag and Drop example)] (#reorder-an-item-on-the-dashboard-list-pure-react-drag-and-drop-example)
+- [Login with mocked data (front-end)] (#login-with-mocked-data-front-end)
+- [A summary (front-end part)] (#a-summary-front-end-part)
+
+
 
 
 
@@ -43,22 +92,6 @@ We will familiarize your new teammate to your React's project sturcture so you w
 ### __The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with any other method__.
 
 __PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at ReactConvention@mwp.io__
-
-## Content table
-
-- [How to use this handbook] (#how-to-use-this-handbook)
-- [Your first step] (#your-first-step)
-- [General client codebase structure] (#general-client-codebase-structure)
-- [New dashboard route] (#new-dashboard-route)
-- [Create a dashboard component (from the Counter copy)] (#create-a-dashboard-component-from-the-counter-copy)
-- [Next steps in implementing our dashboard] (#next-steps-in-implementing-our-dashboard)
-- [Mocked items list on the dashboard list] (#mocked-items-list-on-the-dashboard-list)
-- [Add/edit item on the dashboard list] (#addedit-item-on-the-dashboard-list)
-- [Reorder an item on the dashboard list (pure React Drag and Drop example)] (#reorder-an-item-on-the-dashboard-list-pure-react-drag-and-drop-example)
-- [Login with mocked data (front-end)] (#login-with-mocked-data-front-end)
-- [A summary (front-end part)] (#a-summary-front-end-part)
-
-
 
 
 ## How to use this handbook
