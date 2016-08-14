@@ -4,27 +4,60 @@ http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 ## a free online handbook for React.JS Developers with a very opinionated and matured project structure. React is not only the View (in MVC) anymore - here we will teach you best practises for your next project.
 
 **** 
-"So many books, so little time." ― Frank Zappa
-
 "So many projects, so little time." - Kamil Przeorski
 **** 
 
+## Why to learn and use React
 
-## Preface
-------
+1) Because of timing
 
-In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there __are no really conventions that one can follow__. We are running a React Webshop from mid 2014 and __we faced so many frustrations__. Mostly when a client who had already an MVP wanted us to expand based on his codebase. __No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations__. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase __and you want to make sure that he doesn't make any "newbie" mistakes__. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. __You need to teach him about your configuration so it takes you decent amount time to pass all your knowledge to your new teammate in the project__. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. 
+Currently, React has best momentum besides all the front-end frameworks/solutions. Below we can find the stats of visits within Angular vs. React subreddits:
 
-The main ReactC's goal is to create "ready to go" convention that you can share with your colleagues. 
+![reactjs momentum](https://reactjs.co/wp-content/react_convention/1001_momentum.png)
 
-__SHARE THE REACT CONVENTION IF YOU LIKE THE IDEA, it's 100% free__
-
-We will familiarize your new teammate to your React's project sturcture so you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. 
+Above, we can find that React subreddit has overpassed with popularity (unique visits) the AngularJS.
 
 
-### __The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with any other method__.
+2) Because of better job market
 
-__PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at ReactConvention@mwp.io__
+Who Is Hiring on Hacker News are monthly updates of tech companies who are looking for certain skillsets:
+
+![reactjs who is hiring](https://reactjs.co/wp-content/react_convention/1002_who_is_hiring_trends.png)
+
+On the screenshot are stats where you can find that black line has down-trend (Angular) where the light-blue line is up-trending (React).
+
+Second part of that point is the geography:
+
+![reactjs google trends](https://reactjs.co/wp-content/react_convention/1003_trends_geography.png)
+
+As you can find on the locations' list - the Angular.JS is mostly searched in poorer countries like India (bigger competition from the cheap labour) and the React.JS is more popular in the West cities like San Francisco, Syndey or Austin.
+
+
+3) Because of it's simplicity over Angular and other
+
+React.JS API is short and sweet. Redux helps in building more complex apps. You can learn more about both below.
+
+4) Because of it's robust ecosystem
+
+React has the most robus comminity in terms of modular components which are shared online for reusing purpose.
+
+## Why Redux
+
+1) It's simplier than FLUX to learn
+
+From my experience of teaching developers FLUX and Redux - I have found that Redux is easier to grasp.
+
+2) It's powerfull
+
+It has many features which are unique and very useful in real life web apps development (like immutability).
+
+3) It's the most used across the community
+
+Redux is the most standard tool to use for the uni-directional data flow.
+
+The good example is the <a href="https://reactjs.co">ReactJS Convention</a> which you can learn here - it deploys Redux in 100%.
+
+
 
 ## Content table
 
@@ -41,6 +74,25 @@ __PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDING
 - [A summary (front-end part)] (#a-summary-front-end-part)
 
 
+
+
+
+
+## Preface for React Convention
+------
+
+In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there __are no really conventions that one can follow__. We are running a React Webshop from mid 2014 and __we faced so many frustrations__. Mostly when a client who had already an MVP wanted us to expand based on his codebase. __No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations__. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase __and you want to make sure that he doesn't make any "newbie" mistakes__. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. __You need to teach him about your configuration so it takes you decent amount time to pass all your knowledge to your new teammate in the project__. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. 
+
+The main ReactC's goal is to create "ready to go" convention that you can share with your colleagues. 
+
+__SHARE THE REACT CONVENTION IF YOU LIKE THE IDEA, it's 100% free__
+
+We will familiarize your new teammate to your React's project sturcture so you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. 
+
+
+### __The ReactC handbook is also a good for people who want to start a new project from scratch as it guides you how properly make new features in that starter and guarantees that any new future members will be introduced to your codebase quicker than with any other method__.
+
+__PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT HANDBOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at ReactConvention@mwp.io__
 
 
 ## How to use this handbook
