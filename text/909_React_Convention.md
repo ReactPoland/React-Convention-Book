@@ -58,7 +58,7 @@ The good example is the <a href="https://reactjs.co">ReactJS Convention</a> whic
 
 
 
-## Content table
+## React Convention Content table
 
 - [How to use this handbook] (#how-to-use-this-handbook)
 - [Your first step] (#your-first-step)
