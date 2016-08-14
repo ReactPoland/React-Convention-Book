@@ -4,13 +4,31 @@ http://www.valvesoftware.com/company/Valve_Handbook_LowRes.pdf
 ## a free online handbook for React.JS Developers with a very opinionated and matured project structure. React is not only the View (in MVC) anymore - here we will teach you best practises for your next project.
 
 **** 
-"So many books, so little time." ― Frank Zappa
-
 "So many projects, so little time." - Kamil Przeorski
 **** 
 
+## Why to learn and use React
 
-## Preface
+1) Because of timing
+
+2) Because of better job market
+
+3) Because of it's simplicity over Angular and other
+
+4) Because of it's robust ecosystem
+
+## Why to learn and use Redux
+
+1) It's simplier than FLUX to learn
+
+2) It's powerfull
+
+3) It's the most used across the community
+
+
+
+
+## Preface for React Convention
 ------
 
 In 2013 React was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there __are no really conventions that one can follow__. We are running a React Webshop from mid 2014 and __we faced so many frustrations__. Mostly when a client who had already an MVP wanted us to expand based on his codebase. __No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations__. Another source of annoyance is also when you need to introduce a new developer to your "well known to you" codebase __and you want to make sure that he doesn't make any "newbie" mistakes__. In context of this preface a "newbie" means a someone who isn't familiarized to the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. __You need to teach him about your configuration so it takes you decent amount time to pass all your knowledge to your new teammate in the project__. The React Convention handbook helps you to save time on transfering knowledge about your project's structure to any new member. 
