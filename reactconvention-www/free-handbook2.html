@@ -66,7 +66,6 @@
 <div style="text-align:center; margin-right: auto; margin-left: auto">
 <p><a href="https://reactjs.co/wp-content/react_convention/1001_momentum.png" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/1001_momentum.png" alt="reactjs momentum" style="width:60%; height: 60%"></a></p>
 </div>
-<hr />
 
 <p>Above, we can find that React subreddit has overpassed with popularity (unique visits) the AngularJS.</p>
 
@@ -93,7 +92,7 @@ As you can see, you can get an advice from Wayne Gretzky and play where "the puc
 <p><b>Second part of that point is the geography.</b></p>
 
 <hr>
-<p>Angular is searched mostly in poor cities where React has more traction in SF, Sydney or Austin</p>
+<p>Angular is searched mostly in poor cities where React has more traction in SF, Sydney or Austin:</p>
 <div style="text-align:center; margin-right: auto; margin-left: auto">
 <p><a href="https://reactjs.co/wp-content/react_convention/1003_trends_geography.png" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/1003_trends_geography.png" alt="reactjs google trends" style="width:60%; height: 60%"></a></p>
 </div>
@@ -111,13 +110,15 @@ As you can see, you can get an advice from Wayne Gretzky and play where "the puc
 
 <h2>Why Redux</h2>
 
-Redux is "kind of" replacement of Service or Factory in Angular. It's keeps your application model in one place and helps organize data of your application in one place. Redux is "kind of back-end on the front-end" - it's your database of your front-end application. <i>AN ANALOGY TO SQL: it helps you to query with SELECT, INSERT and UPDATE on the client-side</i>.
+Redux is "kind of" replacement of Service or Factory in Angular. It keeps your application model in one place and helps organize data of your application in one place. Redux is "kind of back-end on the front-end" - it's your database of your front-end application. <i>AN ANALOGY TO SQL: it helps you to query SELECT, INSERT and UPDATE the client-side data</i>. <u>In that book you will learn basics and advanced things about how to use React+Redux</u>.
 
-<h4>1) It's simplier than <b>Facebook's FLUX singleton approach</b> to learn</h4>
+<h3>Why to use Redux:</h3>
+
+<h4>1) It's simplier to learn (than <b>Facebook's FLUX singleton approach</b>)</h4>
 
 <p>From my experience of teaching developers FLUX and Redux - I have found that Redux is easier to grasp.</p>
 
-<h4>2) It's powerful</h4>
+<h4>2) It's more powerful than other solutions</h4>
 
 <p>It has many features which are unique and very useful in real life web apps development (like immutability).</p>
 
@@ -132,10 +133,11 @@ Redux is "kind of" replacement of Service or Factory in Angular. It's keeps your
 <h2>React Convention Content Table</h2>
 
 <ul>
-<li><a href="#react-convention-preface">React Convention Preface</a></li>
-<li><a href="#how-to-use-this-book">How to use this book</a></li>
-<li><a href="#your-first-step">Your first step</a></li>
-<li><a href="#general-client-codebase-structure">General client codebase structure</a></li>
+<li><a href="#basic-preface">Preface #1: How to learn basic things in React and Redux</a></li>
+<li><a href="#react-convention-preface">Preface #2: Why to use the React Convention</a></li>
+<li><a href="#how-to-use-this-book">How to use the React Convention book</a></li>
+<li><a href="#your-first-step">Your first step with the React Convention</a></li>
+<li><a href="#general-client-codebase-structure">General client codebase structure of the React Convention</a></li>
 <li><a href="#new-dashboard-route">New dashboard route</a></li>
 <li><a href="#create-a-dashboard-component-from-the-counter-copy">Create a dashboard component (from the Counter copy)</a></li>
 <li><a href="#next-steps-in-implementing-our-dashboard">Next steps in implementing our dashboard</a></li>
@@ -146,9 +148,79 @@ Redux is "kind of" replacement of Service or Factory in Angular. It's keeps your
 <li><a href="#a-summary-front-end-part">A summary (front-end part)</a></li>
 </ul>
 
+<hr> 
+<h2 id="basic-preface">Preface #1: How to learn React and Redux basics</h2>
 
-<hr>
-<h2 id="react-convention-preface">Preface: Why to use React Convention</h2>
+<hr/>
+
+<div>
+I assume that most people who came to <a href="https://reactjs.co">ReactJS Convention</a> website don't know too much about React and Redux. 
+
+<h4><u>If you feel strong in using React and Redux then you can skip Preface #1 and go directly to <a href="#react-convention-preface">Preface #2: Why to use the React Convention</a></u></h4>
+
+<h3>Knowledge about React and Redux is very important to understand concepts behind React Convention.</h3>
+
+Because of that I will share with you online resources which are the most important for a someone who:
+<ul>
+<li>Who has background with HTML5, CSS3 and VanillaJS</li>
+<li>Likely, has experience with jQuery, Angular or other "older" front-end solutions</li>
+<li>Want to learn React.JS basics</li>
+<li>Likes the React Convention idea and want to make higly scalable and managable client-side apps</li>
+</ul>
+
+<hr/>
+
+
+<h4>THINGS TO LEARN AND MASTER before deeping into the React Convention:</h4>
+<hr/>
+<h4>1) Functional programming concepts in VanilaJS:</h4>
+<b>Higher-order functions - Part 1 of Functional Programming in JavaScript
+:</b><br/> https://www.youtube.com/watch?v=BMUiFMZr7vk <br/><br/>
+<b>Map - Part 2 of Functional Programming in JavaScript
+:</b><br/> https://www.youtube.com/watch?v=bCqtb-Z5YGQ <br/><br/>
+<b>Reduce basics - Part 3 of Functional Programming in JavaScript
+:</b><br/> https://www.youtube.com/watch?v=Wl98eZpkp-c <br/><br/>
+<b>Reduce Advanced - Part 4 of Functional Programming in JavaScript:</b><br/> https://www.youtube.com/watch?v=1DMolJ2FrNY <br/><br/>
+<b>Closures - Part 5 of Functional Programming in JavaScript
+:</b><br/> https://www.youtube.com/watch?v=CQqwU2Ixu-U <br/><br/>
+<b>Currying - Part 6 of Functional Programming in JavaScript
+:</b><br/> https://www.youtube.com/watch?v=iZLP4qOwY8I <br/><br/>
+<b>Recursion - Part 7 of Functional Programming in JavaScript
+:</b><br/> https://www.youtube.com/watch?v=k7-N8R0-KY4 <br/><br/>
+<b>Promises - Part 8 of Functional Programming in JavaScript:</b><br/> https://www.youtube.com/watch?v=2d7s3spWAzo
+<hr/>
+<br/>
+
+If you are a JS developer, then you shall be already familiar with the concepts from the links above (^^). I'm putting the links for other people who wants to master the JS as <b>in React we use much more VanillaJS than in other solutions like AngularJS or EmberJS</b>.
+
+<hr/>
+After you are familiar with the things listed in the youtube videos from above, then you can start learning ES6 and more JS from Egghead (or skip it and go directly to resources related to React and Redux).
+<h3>2) Egghead resources about ES6 and JS:</h3>
+<b>EcmaScript 6: </b><br/> 
+https://egghead.io/courses/learn-es6-ecmascript-2015 <br/><br/>
+
+<b>Reduce Data with Javascript Array: </b><br/> 
+https://egghead.io/courses/reduce-data-with-javascript <br/><br/>
+
+<b>JavaScript Arrays in Depth: </b><br/> 
+https://egghead.io/courses/javascript-arrays-in-depth <br/><br/>
+
+<hr/>
+<h3>3) Egghead resources about React and Redux:</h3>
+
+<b>React Fundamentals: </b><br/> 
+https://egghead.io/courses/react-fundamentals <br/><br/>
+
+<b>Getting Started with Redux: </b><br/> 
+https://egghead.io/courses/getting-started-with-redux <br/><br/>
+
+
+</div>
+
+<p>After you will be familiar the materials listed above then you are ready for learning the React Convention.</p>
+
+<hr> 
+<h2 id="react-convention-preface">Preface #2: Why to use the React Convention</h2>
 
 <hr>
 
@@ -166,7 +238,7 @@ Redux is "kind of" replacement of Service or Factory in Angular. It's keeps your
 
 
 
-<h2 id="how-to-use-this-book">How to use this book</h2>
+<h2 id="how-to-use-this-book">How to use the React Convention book</h2>
 
 <hr>
 
@@ -206,7 +278,7 @@ Redux is "kind of" replacement of Service or Factory in Angular. It's keeps your
 <br/>
 <br/>
 
-<h2 id="your-first-step">Your first step</h2>
+<h2 id="your-first-step">Your first step with the React Convention</h2>
 
 <hr>
 
@@ -230,7 +302,7 @@ Redux is "kind of" replacement of Service or Factory in Angular. It's keeps your
 
 <p>After you have cloned the repo and you are at the same commit as me, then we can continue with the fun.</p>
 
-<h2 id="general-client-codebase-structure">General client codebase structure</h2>
+<h2 id="general-client-codebase-structure">General client codebase structure of the React Convention</h2>
 
 <hr>
 
