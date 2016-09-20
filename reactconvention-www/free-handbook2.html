@@ -43,13 +43,18 @@ setTimeout(timer1801,1801000);
 
 
 <style>
-body{min-width:360px;}
+body{
+  min-width:360px;
+  margin:0px;
+}
 @media only screen and (min-width:980px){.container{width:980px;margin-right:auto;margin-left:auto}
 }
 @media only screen and (max-width:980px){.container{width:100%;margin-right:auto;margin-left:auto}
 }
 .readme .markdown-body,
-.readme .plain{padding:25px;word-wrap:break-word;background-color:#fff;border:1px solid #ddd;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
+.readme .plain{
+  padding: 60px 25px 25px 25px;
+  word-wrap:break-word;background-color:#fff;border:1px solid #ddd;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
 .readme .plain pre{font-size:15px;white-space:pre-wrap}
 .file .readme .markdown-body{padding:25px;border:0;border-radius:0}
 .markdown-body{font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";font-size:16px;line-height:1.5;word-wrap:break-word}
@@ -376,7 +381,9 @@ object{max-width:100%;}
 ul.sub-menu li{float:none;display:block;z-index:902;}
 .sf-menu li ul{top:-999em;position:static;z-index:900;}
 }
-.container{width:980px;}
+.container{
+  width:980px;
+}
 .content-area{width:100%;float:left;}
 .site-content{margin:0 340px 0 0;}
 .site-sidebar{width:300px;float:left;margin:0 0 0 -300px;}
@@ -547,62 +554,63 @@ ul.widget-tab-nav{margin:0 0 15px;border-bottom:3px solid #333;*zoom:1;}
 .site-footer .site-credit{float:none;}
 }
 @media screen and (max-width:320px){}
+
+.header-cont {
+    width:100%;
+    position:fixed;
+    top:0px;
+}
 </style>
 
 
 </head>
 <body>
-<nav id="top-navigation" class="main-navigation">
-<div class="clearfix container">
-    <div class="sf-menu">
-        <ul class="sf-js-enabled sf-arrows" style="touch-action: pan-y;">
-            <li class="current_page_item"><a href="https://reactjs.co/">Home</a></li>
-            <li class="page_item page-item-10"><a href="https://reactjs.co/blog/">Blog</a></li>
-            <li class="page_item page-item-11"><a href="https://www.facebook.com/groups/reactjs.co/" target="_blank" ref="nofollow">ReactJS, React Native, GraphQL developers on FB</a></li>
+<div class="header-cont">
+  <nav id="top-navigation" class="main-navigation">
+  <div class="clearfix container">
+      <div class="sf-menu">
+          <ul class="sf-js-enabled sf-arrows" style="touch-action: pan-y;">
+              <li class="current_page_item"><a href="https://reactjs.co/">ReactJS</a></li>
+              <li class="page_item page-item-10"><a href="https://reactjs.co/blog/">Blog</a></li>
+              <li class="page_item page-item-11"><a href="https://www.facebook.com/groups/reactjs.co/" target="_blank" ref="nofollow">Community</a></li>
 
-            
-        </ul>
-    </div>
+              
+          </ul>
+      </div>
+  </div>
+  <!-- #top-navigation -->
+  </nav>
 </div>
-<!-- #top-navigation --></nav>
 
 <div class="container">
   <div>
     <div class="readme">
       <article class="markdown-body">
 <h1><a href="https://reactjs.co">ReactJS Redux, the Right Way.</a></h1>
-<h2>Free React Convention&#8482; E-book.</h2>
-
-<h2>What is that book about?</h2>
+<h2><a href="https://reactjs.co">ReactJS Convention</a>&#8482; Free E-Book</h2>
+<h2>What is that e-book about?</h2>
 <div class="clearfix">
-<p> <b><u>This book is 100% online</u></b> (no emails required, no PDFs to downlad etc.). It contains learning materials for junior and senior front-end devs who want to master React Redux.
+<p>
+This is the online convention and tutorial e-book for <a href="https://reactjs.co/">React.JS</a> Developers. <a href="https://reactjs.co">React</a> is not only the View (in MVC) anymore - learn your way to use React and Redux altogether.
 </p>
 
-<p>
-This is the online convention and tutorial book for <a href="https://reactjs.co/">React.JS</a> Developers. <a href="https://reactjs.co">React</a> is not only the View (in MVC) anymore - learn your way to use React and Redux altogether.
+<p> <b><u>This e-book is 100% online</u></b> (no emails required, no PDFs to downlad etc.). It contains learning materials for junior and senior front-end devs who want to master React Redux.
 </p>
 
 <p>
 In case of any problems and feedback, feel free to contact me at kamil.przeorski@gmail.com </p>
 </div>
 
-<h1>Welcome to the React Convention&#8482; way of doing apps</h1>
-<div style="text-align:center">
-<img src="/react_convention/optimized_contents/image/cover.png" />
-<br/>
-<iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Freactjs.co%2F&width=450&layout=standard&action=like&size=large&show_faces=true&share=true&height=80&appId=457389594285984" width="450" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-<br/>
-
-</div>
 
 
 <h2 id="react-convention-content-table">The React Convention&#8482; Book's Content Table</h2>
 <ul>
 <li><a href="#Why-to-learn-and-use-React">Why to learn and use React</a></li>
 <li><a href="#Why-Redux">Why Redux</a></li>
-<li><a href="#basic-preface">Preface #1: How to learn basic things in React and Redux</a></li>
-<li><a href="#react-convention-preface">Preface #2: Why to use the React Convention&#8482;</a></li>
-<li><a href="#how-to-use-this-book">How to use the React Convention&#8482; book</a></li>
+<li><a href="#learn-es6">Learning ES6</a></li>
+<li><a href="#basic-reactjs-redux">How to learn basic things in React and Redux</a></li>
+<li><a href="#react-convention-why">Why to use the React Convention&#8482;</a></li>
+<li><a href="#how-to-use-this-book">How to use the React Convention&#8482; e-book</a></li>
 <li><a href="#your-first-step">Your first step with the React Convention&#8482;</a></li>
 <li><a href="#general-client-codebase-structure">General client codebase structure of the React Convention&#8482;</a></li>
 <li><a href="#new-dashboard-route">New dashboard route</a></li>
@@ -680,7 +688,7 @@ In case of any problems and feedback, feel free to contact me at kamil.przeorski
 
 <p><i><b>Redux's ANALOGY #2 (TO SQL):</b></i> it helps you to query SELECT, INSERT and UPDATE the client-side data in it's single state tree (you will learn about it later).</p>
 
-<p><u>In that book you will learn the basics and advanced things regarding "how to use React Redux, the right way"</u>.</p>
+<p><u>In that e-book you will learn the basics and advanced things regarding "how to use React Redux, the right way"</u>.</p>
 
 <h3>Why to use Redux:</h3>
 
@@ -705,14 +713,14 @@ In case of any problems and feedback, feel free to contact me at kamil.przeorski
 <br/>
 
 
-<h2 id="basic-preface">Preface #1: How to learn React and Redux basics</h2>
+<h2 id="learn-es6">Learning  EcmaScript6 (JS)</h2>
 
 <hr/>
 
 <div>
-I assume that most people who came to the <a href="https://reactjs.co">ReactJS Convention&#8482;</a> book's website don't know too much about React and Redux. 
+I assume that most people who came to the <a href="https://reactjs.co">ReactJS Convention&#8482;</a> e-book's website don't know too much about React and Redux. 
 
-<h4><u>If you feel you are strong in using React and Redux then you can skip Preface #1 and go directly to <a href="#react-convention-preface">Preface #2: Why you should use the React Convention&#8482;</a></u> and start learning advanced things.</h4>
+<h4><u>If you feel you are strong in using React and Redux then you can skip Preface #1 and go directly to <a href="#react-convention-why">Why you should use the React Convention&#8482;</a></u> and start learning advanced things.</h4>
 
 <h3>Knowledge about React and Redux is very important to understand concepts behind React Convention&#8482;.</h3>
 
@@ -750,6 +758,9 @@ Because of that I will share with you online resources which are the most useful
 If you are a JS developer, then you should be already familiar with the concepts from the links above (^^). I'm putting the links for other people who want to master the JS. <b>In React we use much more VanillaJS than in other solutions like AngularJS or EmberJS</b>.
 
 <hr/>
+
+<h2 id="basic-reactjs-redux">How to learn React and Redux basics</h2>
+
 After you are familiar with the tutorials linked to YouTube from the above list, then you can start learning ES6 and more JS from Egghead (or skip it and go directly to resources related to React and Redux in case if you feel strong in that area).
 <h3>2) Egghead resources about ES6 and JS:</h3>
 <b>EcmaScript 6: </b><br/> 
@@ -787,7 +798,7 @@ You need to be aware of three principles:
 <p>Once you are familiar with the materials listed above, then you are ready to learn the React Convention&#8482; in order to make SPA apps, the right way.</p>
 
 <hr> 
-<h2 id="react-convention-preface">Preface #2: Why you should use the React Convention&#8482;</h2>
+<h2 id="react-convention-why">Why you should use the React Convention&#8482;</h2>
 <p>"So many projects, so little time." - Kamil Przeorski</p>
 
 
@@ -805,7 +816,7 @@ Have fun while learning :-) !
 <hr>
 
 
-<p>In 2013 ReactJS was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there <strong>are no really conventions that one can follow</strong>. I am writing about those problems as a founder of the ReactJS/React-Native Webshop called MobileWeb Pro (www.MWP.io) - we made over 15+ React projects for clients from 4 continents <strong><u>and I can tell you that we  faced so many frustrations</u> (and this is why we want to share with you the ReactJS Convention&#8482; for free)</strong>. Mostly when a client who had already an MVP wanted us to expand based on his codebase. <strong>No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations</strong>. Also, another source of annoyance is, when you need to introduce a new developer to your "well known to you" codebase <strong>and you want to make sure that he doesn't make any "newbie" mistakes</strong>. In context of this preface a "newbie" means a someone who isn't acquainted with the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. <strong>You need to teach him about your configuration which will take you decent amount of time to pass all your knowledge to your new teammate in the project</strong>. The React Convention&#8482; book helps you to save time on transferring knowledge about your project's structure to any new member. </p>
+<p>In 2013 ReactJS was almost "nothing", today it's "something" for the JavaScript world. We developers, have so little time and so much work to do. The main problem with anyone who wants to learn how to make single-page-apps with React is that there <strong>are no really conventions that one can follow</strong>. I am writing about those problems as a founder of the ReactJS/React-Native Webshop called MobileWeb Pro (www.MWP.io) - we made over 15+ React projects for clients from 4 continents <strong><u>and I can tell you that we  faced so many frustrations</u> (and this is why we want to share with you the ReactJS Convention&#8482; for free)</strong>. Mostly when a client who had already an MVP wanted us to expand based on his codebase. <strong>No convention at all, many projects structure codebases and almost each one had it's weak points - this led us to many frustrations</strong>. Also, another source of annoyance is, when you need to introduce a new developer to your "well known to you" codebase <strong>and you want to make sure that he doesn't make any "newbie" mistakes</strong>. In context of this preface a "newbie" means a someone who isn't acquainted with the project's structure. Because he is not familizarized with the project's configuration, then he is not really productive in his first month of work and additionally slows your progress down. <strong>You need to teach him about your configuration which will take you decent amount of time to pass all your knowledge to your new teammate in the project</strong>. The React Convention&#8482; e-book helps you to save time on transferring knowledge about your project's structure to any new member. </p>
 
 <p>The main ReactC's goal is to create "ready to go" convention that you can share with your colleagues. </p>
 
@@ -813,13 +824,18 @@ Have fun while learning :-) !
 
 <p>We will familiarize your new teammate with your React's project structure so that you will save a lot of money when following it. You will save 90% of your time on explaining why, how and what has been done with the project's codebase. </p>
 
-<h3><strong>The ReactC book is also a good for people who want to start a new project from scratch as it guides you on how to properly equip the new starter with your codebase and guarantees that any new future members will be introduced to your codebase quicker than any other method</strong>.</h3>
+<h3><strong>The ReactC e-book is also a good for people who want to start a new project from scratch as it guides you on how to properly equip the new starter with your codebase and guarantees that any new future members will be introduced to your codebase quicker than any other method</strong>.</h3>
+
+<h3>Welcome to the React Convention&#8482; way of doing single-page apps.</h3>
 
 <p><strong>PLEASE SEND US FEEDBACK, SO WE CAN IMPROVE THAT BOOK BASED ON YOUR FINDINGS AND ISSUES - mail us with details at <a href="mailto:kamil.przeorski@gmail.com">kamil.przeorski@gmail.com</a></strong></p>
 
+<br/>
+<iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Freactjs.co%2F&width=450&layout=standard&action=like&size=large&show_faces=true&share=true&height=80&appId=457389594285984" width="450" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+<br/>
 
 
-<h2 id="how-to-use-this-book">How to use the React Convention&#8482; book</h2>
+<h2 id="how-to-use-this-book">How to use the React Convention&#8482; e-book</h2>
 
 <hr>
 
@@ -831,9 +847,9 @@ Have fun while learning :-) !
 
 <p>3) Basic Redux stuff</p>
 
-<p>All the above things can be learned from the <a href="#basic-preface">Preface #1: How to learn basic things in React and Redux</a>. If you are already familiar with all that basic knowledge, then please continue.</p>
+<p>All the above things can be learned from the <a href="#basic-reactjs-redux">How to learn basic things in React and Redux</a>. If you are already familiar with all that basic knowledge, then please continue.</p>
 
-<h5>IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, then join the FB group <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">ReactJS Convention&#8482; Facebook Group</a></strong>. I will share it with you there. Join the <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">group</a></strong> if you have any trouble with this book as well. </h5>
+<h5>IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, then join the FB group <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">ReactJS Convention&#8482; Facebook Group</a></strong>. I will share it with you there. Join the <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">group</a></strong> if you have any trouble with this e-book as well. </h5>
 
 <p>Other requirement required to get all the benefits mentioned in the preface is that you will need to start your project with that react-redux-starter-kit:</p>
 
@@ -850,7 +866,7 @@ Have fun while learning :-) !
 
 <p><a href="https://reactjs.co/wp-content/react_convention/901_dan_abramov.png" target="_blank"><img alt="Dan Abramov" src="/react_convention/optimized_contents/image/901_dan_abramov.png" style="max-width:100%;"></a></p>
 
-<p>Once you start using this starter kit, definitely the book will provide you the value which will save your team a plenty of time at work.</p>
+<p>Once you start using this starter kit, definitely the e-book will provide you the value which will save your team a plenty of time at work.</p>
 <br/>
 
 In case of any issue, we are on Facebook in order to help you - just ping us on <a href="https://www.facebook.com/przeorski" target="_blank" ref="nofollow">the FB</a> or send an email.
@@ -864,11 +880,11 @@ In case of any issue, we are on Facebook in order to help you - just ping us on 
 
 <p><a href="https://reactjs.co/wp-content/react_convention/902_starter_counter.gif" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/902_starter_counter.gif" style="max-width:100%;" alt="starter animation redux"></a></p>
 
-<p>This is a simple application with a counter, and through this book you will implement other views and components which will help you understand whole codebase from a big picture perspective.</p>
+<p>This is a simple application with a counter, and through this e-book you will implement other views and components which will help you understand whole codebase from a big picture perspective.</p>
 
 <p>To explain the whole code structure, we will start with developing a new route called Dashboard with some basic features. When we are done with it, then we will implement a registration and login which will ensure that you know how to do it 100% just on your own.</p>
 
-<p>First step is to clone the starter kit and start working on this commit (the book was written on that commit, so for better experience you shall work on the same one):</p>
+<p>First step is to clone the starter kit and start working on this commit (the e-book was written on that commit, so for better experience you shall work on the same one):</p>
 
 <pre><code>9a03e99c0dd2e7102d43264cc495bbdd4e10dcdd
 </code></pre>
@@ -1741,13 +1757,13 @@ src/components/Header/Header.js
 
 <h2 id="a-summary-front-end-part">A summary (front-end part) </h2>
 
-<p>This is first part of the book related to front-end implementations.</p>
+<p>This is first part of the e-book related to front-end implementations.</p>
 
 <p>How do you like it? What we can improve? Please mail us with your feedback.</p>
 
 <h3>Do you want the backend implementation? Then we need your feedback what backend tech stack you would like to use in your future projects?</h3>
 
-<p><strong>WHAT TO USE ON THE BACKEND IN THE React Convention&#8482; book:</strong></p>
+<p><strong>WHAT TO USE ON THE BACKEND IN THE React Convention&#8482; e-book:</strong></p>
 
 <p>a) GraphQL + Relay</p>
 
@@ -1758,7 +1774,7 @@ src/components/Header/Header.js
 <p>Please mail us at <strong><a href="mailto:kamil.przeorski@gmail.com">kamil.przeorski@gmail.com</a></strong> and based on your feedback we will continue this free book.</p>
 
 
-<p><a href="https://www.facebook.com/groups/reactjs.co/" target="_blank" ref="nofollow">Here you can post any suggestions about the book: ReactJS, React Native, GraphQL developers on FB</a>.</p>
+<p><a href="https://www.facebook.com/groups/reactjs.co/" target="_blank" ref="nofollow">Here you can post any suggestions about the e-book: ReactJS, React Native, GraphQL developers on FB</a>.</p>
 
 
 

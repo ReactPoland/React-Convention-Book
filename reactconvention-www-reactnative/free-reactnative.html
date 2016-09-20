@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="pingback" href="https://reactjs.co/xmlrpc.php">
+    <meta name="keywords" content="reactjs, reactjs convention, react.js, reactjs redux, react redux" />
+
+
+    <link rel="alternate" type="application/rss+xml" title="ReactJS &raquo; Feed" href="https://reactjs.co/feed/" />
+    <link rel="alternate" type="application/rss+xml" title="ReactJS &raquo; Comments Feed" href="https://reactjs.co/comments/feed/" />
+
+<script async src="https://code.jquery.com/jquery-3.1.0.slim.min.js"   integrity="sha256-cRpWjoSOw5KcyIOaZNo4i6fZ9tKPhYYb6i5T9RSVJG8="   crossorigin="anonymous"></script>
+    <!-- BEGIN GADWP v4.9.1.2 Universal Tracking - https://deconf.com/google-analytics-dashboard-wordpress/ -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-72670381-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- END GADWP Universal Tracking -->
+
+    <title>React Native Amazing Free Guide. React Native Redux Free Book, Blog and Tutorial</title>
+
+<script type="text/javascript">
+function timer11(){ga('send', 'event', 'TimeOnPage', '1', '11-30 seconds', { 'nonInteraction': 1 });}
+function timer31(){ga('send', 'event', 'TimeOnPage', '2', '31-60 seconds', { 'nonInteraction': 1 });}
+function timer61(){ga('send', 'event', 'TimeOnPage', '3', '61-180 seconds', { 'nonInteraction': 1 });}
+function timer181(){ga('send', 'event', 'TimeOnPage', '4', '181-600 seconds', { 'nonInteraction': 1 });}
+function timer601(){ga('send', 'event', 'TimeOnPage', '5', '601-1800 seconds', { 'nonInteraction': 1 });}
+function timer1801(){ga('send', 'event', 'TimeOnPage', '6', '1801+ seconds', { 'nonInteraction': 1 });}
+ga('send', 'event', 'TimeOnPage', '0', '0-10 seconds', { 'nonInteraction': 1 });
+setTimeout(timer11,11000);
+setTimeout(timer31,31000);
+setTimeout(timer61,61000);
+setTimeout(timer181,181000);
+setTimeout(timer601,601000);
+setTimeout(timer1801,1801000);
+</script>
+
+
+<style>
+body{
+  min-width:360px;
+  margin:0px;
+}
+@media only screen and (min-width:980px){.container{width:980px;margin-right:auto;margin-left:auto}
+}
+@media only screen and (max-width:980px){.container{width:100%;margin-right:auto;margin-left:auto}
+}
+.readme .markdown-body,
+.readme .plain{
+  padding: 60px 25px 25px 25px;
+  word-wrap:break-word;background-color:#fff;border:1px solid #ddd;border-bottom-right-radius:3px;border-bottom-left-radius:3px}
+.readme .plain pre{font-size:15px;white-space:pre-wrap}
+.file .readme .markdown-body{padding:25px;border:0;border-radius:0}
+.markdown-body{font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";font-size:16px;line-height:1.5;word-wrap:break-word}
+.markdown-body::before{display:table;content:""}
+.markdown-body::after{display:table;clear:both;content:""}
+.markdown-body>*:first-child{margin-top:0 !important}
+.markdown-body>*:last-child{margin-bottom:0 !important}
+.markdown-body .absent{color:#c00}
+.markdown-body .anchor{float:left;padding-right:4px;margin-left:-20px;line-height:1}
+.markdown-body .anchor:focus{outline:none}
+.markdown-body a{color:#4078c0;text-decoration:none;}
+.markdown-body a:link{color:#4078c0;text-decoration:none;}
+.markdown-body a:visited{color:#4078c0;text-decoration:none;}
+.markdown-body a:hover{color:#407800;text-decoration:none;}
+.markdown-body a:active{color:#4078c0;text-decoration:none;}
+.markdown-body a:active{color:#4078c0;text-decoration:none;}
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre{margin-top:0;margin-bottom:16px}
+.markdown-body hr{height:0.25em;padding:0;margin:24px 0;background-color:#e7e7e7;border:0}
+.markdown-body blockquote{padding:0 1em;color:#777;border-left:0.25em solid #ddd}
+.markdown-body blockquote>:first-child{margin-top:0}
+.markdown-body blockquote>:last-child{margin-bottom:0}
+.markdown-body kbd{display:inline-block;padding:3px 5px;font-size:11px;line-height:10px;color:#555;vertical-align:middle;background-color:#fcfcfc;border:solid 1px #ccc;border-bottom-color:#bbb;border-radius:3px;box-shadow:inset 0 -1px 0 #bbb}
+.markdown-body .loweralpha{list-style-type:lower-alpha}
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6{font-family:Arial, Helvetica, sans-serif;margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link{color:#000;vertical-align:middle;visibility:hidden}
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor{text-decoration:none}
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link{visibility:visible}
+.markdown-body h1 tt,
+.markdown-body h1 code,
+.markdown-body h2 tt,
+.markdown-body h2 code,
+.markdown-body h3 tt,
+.markdown-body h3 code,
+.markdown-body h4 tt,
+.markdown-body h4 code,
+.markdown-body h5 tt,
+.markdown-body h5 code,
+.markdown-body h6 tt,
+.markdown-body h6 code{font-size:inherit}
+.markdown-body h1{padding-bottom:0.3em;font-size:2em;border-bottom:1px solid #eee}
+.markdown-body h2{padding-bottom:0.3em;font-size:1.5em;border-bottom:1px solid #eee}
+.markdown-body h3{font-size:1.25em}
+.markdown-body h4{font-size:1em}
+.markdown-body h5{font-size:0.875em}
+.markdown-body h6{font-size:0.85em;color:#777}
+.markdown-body ul,
+.markdown-body ol{padding-left:2em}
+.markdown-body ul.no-list,
+.markdown-body ol.no-list{padding:0;list-style-type:none}
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul{margin-top:0;margin-bottom:0}
+.markdown-body li>p{margin-top:16px}
+.markdown-body li+li{margin-top:0.25em}
+.markdown-body dl{padding:0}
+.markdown-body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}
+.markdown-body dl dd{padding:0 16px;margin-bottom:16px}
+.markdown-body table{display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}
+.markdown-body table th{font-weight:bold}
+.markdown-body table th,
+.markdown-body table td{padding:6px 13px;border:1px solid #ddd}
+.markdown-body table tr{background-color:#fff;border-top:1px solid #ccc}
+.markdown-body table tr:nth-child(2n){background-color:#f8f8f8}
+.markdown-body img{max-width:100%;box-sizing:content-box;background-color:#fff}
+.markdown-body img[align=right]{padding-left:20px}
+.markdown-body img[align=left]{padding-right:20px}
+.markdown-body .emoji{max-width:none;vertical-align:text-top;background-color:transparent}
+.markdown-body span.frame{display:block;overflow:hidden}
+.markdown-body span.frame>span{display:block;float:left;width:auto;padding:7px;margin:13px 0 0;overflow:hidden;border:1px solid #ddd}
+.markdown-body span.frame span img{display:block;float:left}
+.markdown-body span.frame span span{display:block;padding:5px 0 0;clear:both;color:#333}
+.markdown-body span.align-center{display:block;overflow:hidden;clear:both}
+.markdown-body span.align-center>span{display:block;margin:13px auto 0;overflow:hidden;text-align:center}
+.markdown-body span.align-center span img{margin:0 auto;text-align:center}
+.markdown-body span.align-right{display:block;overflow:hidden;clear:both}
+.markdown-body span.align-right>span{display:block;margin:13px 0 0;overflow:hidden;text-align:right}
+.markdown-body span.align-right span img{margin:0;text-align:right}
+.markdown-body span.float-left{display:block;float:left;margin-right:13px;overflow:hidden}
+.markdown-body span.float-left span{margin:13px 0 0}
+.markdown-body span.float-right{display:block;float:right;margin-left:13px;overflow:hidden}
+.markdown-body span.float-right>span{display:block;margin:13px auto 0;overflow:hidden;text-align:right}
+.markdown-body code,
+.markdown-body tt{padding:0;padding-top:0.2em;padding-bottom:0.2em;margin:0;font-size:85%;background-color:rgba(0, 0, 0, 0.04);border-radius:3px}
+.markdown-body code::before,
+.markdown-body code::after,
+.markdown-body tt::before,
+.markdown-body tt::after{letter-spacing:-0.2em;content:"\00a0"}
+.markdown-body code br,
+.markdown-body tt br{display:none}
+.markdown-body del code{text-decoration:inherit}
+.markdown-body pre{word-wrap:normal}
+.markdown-body pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:transparent;border:0}
+.markdown-body .highlight{margin-bottom:16px}
+.markdown-body .highlight pre{margin-bottom:0;word-break:normal}
+.markdown-body .highlight pre,
+.markdown-body pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f7f7f7;border-radius:3px}
+.markdown-body pre code,
+.markdown-body pre tt{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}
+.markdown-body pre code::before,
+.markdown-body pre code::after,
+.markdown-body pre tt::before,
+.markdown-body pre tt::after{content:normal}
+.counter{display:inline-block;padding:2px 5px;font-size:12px;font-weight:600;line-height:1;color:#666;background-color:#eee;border-radius:20px}
+.menu{margin-bottom:15px;list-style:none;background-color:#fff;border:1px solid #d8d8d8;border-radius:3px}
+.menu-item{position:relative;display:block;padding:8px 10px;text-shadow:0 1px 0 #fff;border-bottom:1px solid #eee}
+.menu-item:first-child{border-top:0;border-top-left-radius:2px;border-top-right-radius:2px}
+.menu-item:first-child::before{border-top-left-radius:2px}
+.menu-item:last-child{border-bottom:0;border-bottom-right-radius:2px;border-bottom-left-radius:2px}
+.menu-item:last-child::before{border-bottom-left-radius:2px}
+.menu-item:hover{text-decoration:none;background-color:#f9f9f9}
+.menu-item.selected{font-weight:bold;color:#222;cursor:default;background-color:#fff}
+.menu-item.selected::before{position:absolute;top:0;bottom:0;left:0;width:2px;content:"";background-color:#d26911}
+.menu-item .octicon{width:16px;margin-right:5px;color:#333;text-align:center}
+.menu-item .counter{float:right;margin-left:5px}
+.menu-item .menu-warning{float:right;color:#d26911}
+.menu-item .avatar{float:left;margin-right:5px}
+.menu-item.alert .counter{color:#bd2c00}
+.menu-heading{display:block;padding:8px 10px;margin-top:0;margin-bottom:0;font-size:13px;font-weight:bold;line-height:20px;color:#555;background-color:#f7f7f7;border-bottom:1px solid #eee}
+.menu-heading:hover{text-decoration:none}
+.menu-heading:first-child{border-top-left-radius:2px;border-top-right-radius:2px}
+.menu-heading:last-child{border-bottom:0;border-bottom-right-radius:2px;border-bottom-left-radius:2px}
+
+body{color:#333;font-weight:400;font-family:Georgia, "Times New Roman", Times, serif;line-height:1.8;background:#fff;}
+h1, h2, h3, h4, h5, h6{margin:1.25em 0 .5em;font-weight:400;font-family: Arial, Helvetica, sans-serif;line-height:1.2em;}
+h1{font-size:16px;font-size:1.6rem;}
+h2{font-size:14px;font-size:1.4rem;}
+h3{font-size:13px;font-size:1.3rem;}
+h4{font-size:12px;font-size:1.2rem;}
+h5{font-size:11px;font-size:1.1rem;}
+h6{font-size:10px;font-size:1rem;}
+a{color:#1fa0ae;outline:none;-webkit-transition:all 0.14s ease 0s;-moz-transition:all 0.14s ease 0s;-o-transition:all 0.14s ease 0s;}
+a:visited{color:#1fa0ae;}
+a:hover,
+a:focus,
+a:active{color:#333;}
+blockquote p{line-height:1.6;}
+dd{margin-bottom:1em;}
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input{height:26px;color:#333;line-height:26px;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;}
+textarea{width:80%;height:auto;}
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus{border-color:#d6d6d6;outline:0;outline:thin dotted \9;-webkit-box-shadow:none;-moz-box-shadow:none;box-shadow:none;}
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"]{padding:4px 15px;color:#fff;font-size:1.2em;font-weight:300;font-family: Arial, Helvetica, sans-serif;line-height:26px;text-transform:uppercase;background:#333;border:solid #666;border-width:0 0 3px;}
+button:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover{background:#666;border-color:#333;}
+table{width:100%;margin-bottom:20px;}
+table th,
+table td{padding:8px;line-height:20px;text-align:left;vertical-align:top;border-top:1px solid #ddd;}
+table th{font-weight:bold;}
+table thead th{vertical-align:bottom;}
+table caption + thead tr:first-child th,
+table caption + thead tr:first-child td,
+table colgroup + thead tr:first-child th,
+table colgroup + thead tr:first-child td,
+table thead:first-child tr:first-child th,
+table thead:first-child tr:first-child td{border-top:0;}
+table tbody + tbody{border-top:2px solid #ddd;}
+embed,
+iframe,
+object{max-width:100%;}
+.alignleft{display:inline;float:left;margin:0 1.5em 1.5em 0;}
+.alignright{display:inline;float:right;margin:0 0 1.5em 1.5em;}
+.aligncenter{clear:both;display:block;margin:0 auto;}
+.screen-reader-text{position:absolute !important;clip:rect(1px, 1px, 1px, 1px);}
+.screen-reader-text:hover,
+.screen-reader-text:active,
+.screen-reader-text:focus{top:0;left:0;width:auto;height:auto;display:block;clip:auto !important;line-height:normal;text-decoration:none;z-index:100000;}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.clearfix{display:inline-block;}
+* html .clearfix{height:1%;}
+*:first-child+html .clearfix{min-height:1px;}
+.clearfix{display:block;}
+.clear{clear:both;}
+.site-header{padding:40px 0 20px;}
+.site-branding{float:left;}
+.site-title{margin:0;font-size:30px;font-size:3rem;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;line-height:1em;}
+.site-title a{color:#333;text-decoration:none;}
+.site-description{color:#a6a6a6;font-weight:300;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;letter-spacing:2px;}
+.sf-menu ul:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.sf-menu ul{display:inline-block;}
+* html .sf-menu ul{height:1%;}
+*:first-child+html .sf-menu ul{min-height:1px;}
+.sf-menu ul{display:block;}
+.sf-menu ul{margin:0;padding:0;list-style:none;}
+.sf-menu li ul{top:-999em;position:absolute;z-index:900;}
+.sf-menu li:hover ul,
+.sf-menu li.sfHover ul{top:40px;}
+.sf-menu li:hover li ul,
+.sf-menu li.sfHover li ul{top:-999em;}
+.sf-menu li li:hover ul,
+.sf-menu li li.sfHover ul{top:0;left:170px;}
+.sf-menu li li:hover li ul,
+.sf-menu li li.sfHover li ul{top:-999em;}
+.sf-menu li li li:hover ul,
+.sf-menu li li li.sfHover ul{top:0;left:170px;}
+.sf-menu li{float:left;position:relative;visibility:inherit;}
+.sf-menu li a{float:left;display:block;font-weight:400;font-family: Arial, Helvetica, sans-serif;text-decoration:none;text-transform:uppercase;}
+.sf-menu li a:hover,
+.sf-menu li.sfHover > a,
+.sf-menu li.current_page_item > a,
+.sf-menu li.current-menu-item > a,
+.sf-menu li.current-menu-parent > a,
+.sf-menu li.current-page-parent > a,
+.sf-menu li.current-page-ancestor > a,
+.sf-menu li.current_page_ancestor > a{}
+.sf-menu li:hover li a,
+.sf-menu li.sfHover li a{width:140px;}
+#top-navigation{background:#333;}
+#top-navigation ul{border-left:1px dotted #565656;}
+#top-navigation li ul{}
+#top-navigation li:hover ul,
+#top-navigation li.sfHover ul{top:40px;background:#333;border-left:none;border-top:1px dotted #565656;}
+#top-navigation li li:hover ul,
+#top-navigation li li.sfHover ul{top:-1px;border-left:1px dotted #565656;}
+#top-navigation li{border-right:1px dotted #565656;}
+#top-navigation li li{border-right:none;border-bottom:1px dotted #565656;}
+#top-navigation li a{padding:0 15px;color:#a6a6a6;font-size:.9em;line-height:40px;}
+#top-navigation li a:hover,
+#top-navigation li.sfHover > a,
+#top-navigation li.current_page_item > a,
+#top-navigation li.current-menu-item > a,
+#top-navigation li.current-menu-parent > a,
+#top-navigation li.current-page-parent > a,
+#top-navigation li.current-page-ancestor > a,
+#top-navigation li.current_page_ancestor > a{color:#fff;}
+#top-navigation li:hover li a,
+#top-navigation li.sfHover li a{padding:10px 15px;font-size:.75em;line-height:normal;}
+#main-navigation{border:solid #333;border-width:1px 0 3px;}
+#main-navigation li a{padding:0 20px;color:#333;font-size:1.2em;line-height:50px;letter-spacing:1px;}
+#main-navigation .sf-menu > ul > li:after{width:6px;float:left;margin-top:16px;content:"/";display:block;color:#e6e6e6;font-size:1.8em;font-family:Arial, Helvetica, sans-serif;}
+#main-navigation .sf-menu > ul > li:last-child:after{display:none;}
+#main-navigation li:hover ul,
+#main-navigation li.sfHover ul{top:50px;background:#333;}
+#main-navigation li li:hover ul,
+#main-navigation li li.sfHover ul{top:-1px;border-left:1px dotted #565656;}
+#main-navigation li li{border-bottom:1px dotted #565656;}
+#main-navigation li li a{color:#a6a6a6;}
+#main-navigation li a:hover,
+#main-navigation li.sfHover > a,
+#main-navigation li.current_page_item > a,
+#main-navigation li.current-menu-item > a,
+#main-navigation li.current-menu-parent > a,
+#main-navigation li.current-page-parent > a,
+#main-navigation li.current-page-ancestor > a,
+#main-navigation li.current_page_ancestor > a{color:#1fa0ae;}
+#main-navigation li:hover li a,
+#main-navigation li.sfHover li a{padding:10px 20px;font-size:.75em;line-height:normal;}
+.nav-open,
+.nav-close{display:none;color:#333;font-size:1.2em;font-weight:400;font-family: Arial, Helvetica, sans-serif;text-decoration:none;text-transform:uppercase;line-height:50px;letter-spacing:1px;}
+@media only screen and (max-width:60em){.nav-open{display:inline-block;}
+#main-navigation:target > .nav-open{display:none;}
+#main-navigation:target > .nav-close{display:inline-block;}
+#main-navigation > .sf-menu{position:relative;text-align:left;}
+#main-navigation > .sf-menu > ul{position:absolute;top:0;left:0;width:100%;max-height:0;max-width:16em;overflow:hidden;background:#333;}
+#main-navigation:target > .sf-menu > ul{max-height:900px;max-width:100%;z-index:901;}
+#main-navigation > .sf-menu > ul > li{float:none;display:block;border-bottom:1px dotted #565656;}
+#main-navigation > .sf-menu ul li:only-child{border-top:1px dotted #565656;}
+#main-navigation > .sf-menu ul li:last-child{border-bottom:none;}
+#main-navigation > .sf-menu > ul > li:after{display:none;}
+#main-navigation li a{float:none;display:block;color:#fff;}
+#main-navigation li li:hover ul,
+#main-navigation li li.sfHover ul{border-left:none;}
+ul.sub-menu li{float:none;display:block;z-index:902;}
+.sf-menu li ul{top:-999em;position:static;z-index:900;}
+}
+.container{
+  width:980px;
+}
+.content-area{width:100%;float:left;}
+.site-content{margin:0 340px 0 0;}
+.site-sidebar{width:300px;float:left;margin:0 0 0 -300px;}
+.site-main{padding:40px 0;}
+.site-content li{margin:0 0 .75em;}
+.site-content ul ul,
+.site-content ul ol,
+.site-content ol ol,
+.site-content ol ul{margin-top:.75em;}
+.sticky{}
+.hentry{margin:0 0 40px;-ms-word-wrap:break-word;word-wrap:break-word;}
+.entry-header{margin:0 0 1.25em;text-align:center;}
+.entry-title{margin:0 40px;font-size:16px;font-size:1.6rem;line-height:1.4;text-transform:uppercase;}
+.entry-title a{color:#333;text-decoration:none;}
+.entry-title a:hover{color:#1fa0ae;}
+.entry-meta{color:#a6a6a6;font-size:.9em;font-weight:300;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;}
+.entry-meta a{color:#a6a6a6;text-decoration:none;}
+.entry-meta a:hover{color:#333;}
+.entry-meta .cat-links{margin:0 20px 0 0;}
+.entry-meta [class^="ico-"]:before{margin-right:5px;color:#333;}
+.comments-link:before,
+.author.vcard:before{margin:0 0 0 8px;padding:0 6px 0 0;content:"/";color:#d6d6d6;}
+.entry-thumbnail{margin:0 0 20px;}
+.entry-thumbnail img{display:block;}
+.entry-content{margin:0 0 30px;}
+.entry-summary{margin:0 0 30px;}
+.entry-footer{clear:both;padding:8px 0;border:solid #333;border-width:1px 0 3px;}
+.more-link,
+.page-links{margin:15px 0 0;display:block;text-align:center;}
+.post-password-required label{float:left;margin:0 10px 0 0;}
+.page-header{margin:0 0 30px;border-bottom:3px solid #333;}
+.page-title{margin:0 0 10px;color:#a6a6a6;font-size:1.2em;text-transform:uppercase;letter-spacing:2px;}
+body.page .entry-header{text-align:left;}
+body.page .entry-title{margin:0;}
+body.search .page .entry-footer{padding:0;border-top:none;}
+.author-info{margin:0 0 40px;padding:0 0 30px;border-bottom:1px solid #333;}
+.author-info .author-photo{float:left;margin:0 30px 0 0;}
+.author-info .author-content{margin:0 0 0 105px;}
+.author-info .author-content h3{margin:0 0 10px;font-size:1.2em;text-transform:uppercase;letter-spacing:1px;}
+.author-info .author-links a{margin:0 20px 0 0;color:#a6a6a6;font-size:.9em;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;text-decoration:none;letter-spacing:2px;}
+.author-info .author-links a:hover{color:#333;}
+.page-content img.wp-smiley,
+.entry-content img.wp-smiley,
+.comment-content img.wp-smiley{margin-bottom:0;margin-top:0;padding:0;border:none;}
+.wp-caption{border:1px solid #d5d5d5;margin-bottom:1.5em;max-width:100%;}
+.wp-caption img[class*="wp-image-"]{display:block;margin:1.2% auto 0;max-width:98%;}
+.wp-caption-text{text-align:center;}
+.wp-caption .wp-caption-text{margin:.5em 0;}
+.site-content .gallery{margin-bottom:1.5em;}
+.gallery-caption{}
+.site-content .gallery a img{border:none;height:auto;max-width:90%;}
+.site-content .gallery dd{margin:0;}
+.entry-attachment .attachment{margin:0 0 15px;}
+.site-content [class*="navigation"]{margin:0 0 15px;overflow:hidden;}
+[class*="navigation"] .nav-previous{width:50%;float:left;}
+[class*="navigation"] .nav-next{width:50%;float:right;text-align:right;}
+.site-content [class*="navigation"] a{display:inline-block;padding:4px 15px;color:#fff;font-size:1.2em;font-weight:300;font-family:Arial, Helvetica, sans-serif;text-transform:uppercase;text-decoration:none;line-height:26px;background:#333;border:solid #666;border-width:0 0 3px;}
+.site-content [class*="navigation"] a:hover{background:#666;border-color:#333;}
+.site-content .post-navigation{margin-top:-25px;padding:0 0 10px;border-bottom:1px solid #333;}
+.site-content .post-navigation a{padding:0;color:#333;font-size:.9em;font-weight:400;line-height:20px;background:none;border:none;}
+.site-content .post-navigation a:hover{color:#1fa0ae;background:none;border:none;}
+.site-content .post-navigation span{display:block;color:#a6a6a6;font-size:1.3em;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;}
+.site-content .post-navigation .meta-nav{display:none;}
+.site-content .post-navigation .nav-next{width:35%;margin-left:5%;padding-right:10%;text-align:left;}
+.site-content .post-navigation .nav-previous{width:35%;margin-right:5%;padding-left:10%;text-align:right;}
+#reply-title,
+.comments-title{margin:0 0 20px;padding:0 0 15px;color:#a6a6a6;font-size:1.3em;text-transform:uppercase;letter-spacing:2px;border-bottom:3px solid #333;}
+.comment-list{margin:0 0 20px;padding:0;list-style:none;}
+.comment-list ul.children{margin:0 0 0 50px;list-style:none;}
+.comment-list li.comment,
+.comment-list li.pingback{margin:0;padding:0;}
+.comment-list li.pingback p{margin:0;font-style:italic;}
+.comment-list li.comment .comment-body{padding:30px 0 20px;border-bottom:1px solid #d6d6d6;}
+.comment-list li.comment .comment-author .avatar{float:left;margin:0 20px 0 0;display:block;}
+.comment-list li.comment .comment-author .fn{color:#999;font-size:1.2em;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;}
+.comment-list li.comment .comment-author .fn a{color:#333;text-decoration:none;}
+.comment-list li.comment .comment-author .fn a:hover{color:#1fa0ae;}
+.comment-list li.comment .comment-metadata{margin:0 0 3px;}
+.comment-list li.comment .comment-metadata a{color:#a6a6a6;font-size:.9em;font-weight:300;font-family:Arial, Helvetica, sans-serif;text-transform:uppercase;text-decoration:none;}
+.comment-list li.comment .comment-metadata a:hover{color:#333;}
+.comment-list li.comment .reply{float:right;}
+.comment-list li.comment .reply a{color:#a6a6a6;font-size:.9em;font-weight:300;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;text-decoration:none;}
+.comment-list li.comment .reply a:hover{color:#333;}
+.comment-content{clear:both;margin:20px 0 0;}
+.comment-content a{word-wrap:break-word;}
+.bypostauthor{}
+#reply-title{margin-top:20px;}
+#cancel-comment-reply-link{margin:0 0 0 10px;color:#333;font-size:.9em;text-decoration:none;}
+#commentform{margin:0;padding:0;}
+#commentform label{color:#a6a6a6;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;letter-spacing:2px;}
+#commentform textarea{height:125px;}
+.widget{margin:0 0 15px;border-bottom:1px solid #333;}
+.widget-title{margin:0 0 15px;padding:0 0 15px;font-size:1.2em;font-weight:400;text-align:center;text-transform:uppercase;letter-spacing:2px;border-bottom:3px solid #333;}
+.widget select{max-width:100%;}
+.widget ul{margin:0 0 20px;padding:0;list-style:none;}
+.widget ul ul{margin:0 0 0 10px;}
+.widget li{margin:0 0 10px;}
+.widget li a{color:#333;}
+.widget li a:hover{color:#1fa0ae;}
+ul.widget-tab-nav{margin:0 0 15px;border-bottom:3px solid #333;*zoom:1;}
+.widget-tab-nav li{float:left;width:33.3%;margin:0;text-align:center;}
+.widget-tab-nav li a{display:block;padding:4px 15px;color:#a6a6a6;font-size:1.1em;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;letter-spacing:2px;line-height:30px;background:none;border:none;border-radius:0;}
+.widget-tab-nav li a:hover,
+.widget-tab-nav li a:focus{color:#333;text-decoration:none;}
+.widget-tab-nav li.active a{color:#fff;background:#333;}
+.widget-tab-content .tab-pane{display:none;}
+.widget-tab-content .active{display:block;}
+.widget-tab-content .tab-pane li{margin:0 0 15px;}
+.widget-entry-thumbnail{float:left;width:50px;height:50px;}
+.widget-entry-thumbnail img{width:50px;height:50px;display:block;}
+.widget-entry-summary{margin:3px 0 0 60px;}
+.widget-entry-content span,
+.widget-entry-summary span{color:#a6a6a6;font-size:.875em;font-weight:300;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;}
+.widget-entry-content h4,
+.widget-entry-summary h4{margin:0;font-size:1em;text-transform:uppercase;line-height:1.4;}
+.widget-entry-content h4 a,
+.widget-entry-summary h4 a{}
+.widget-entry-content h4 a:hover,
+.widget-entry-summary h4 a:hover{text-decoration:none;}
+#widget-tab-tags{padding:0 0 15px;font-size:.9em;font-weight:300;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;line-height:1.8;}
+#widget-tab-tags a{color:#a6a6a6;text-decoration:none;}
+#widget-tab-tags a:hover{color:#333;}
+.widget-oembed-content{margin:0 auto 5px;}
+.widget-oembed-content embed,
+.widget-oembed-content iframe,
+.widget-oembed-content object,
+.widget-oembed-content video{max-width:100%;min-height:200px;max-height:250px;}
+.widget-oembed-description{margin:0 0 15px;}
+.widget-social-icons li{float:left;margin:5px 10px 5px 0;text-align:center;}
+.widget-social-icons li a{display:block;}
+.widget-social-icons li a [class^="ico-"]:before{width:40px;margin:0;color:#fff;font-size:20px;line-height:40px;background:#333;}
+.widget-social-icons li a:hover [class^="ico-"]:before{background:#1fa0ae;}
+.widget-flickr-stream{margin:0 -10px;}
+.flickr_badge_image{float:left;width:60px;display:block;margin:0 10px 20px 10px;}
+.flickr_badge_image img{display:block;}
+.site-header .widget{float:right;clear:right;margin:0;text-align:right;border:none;}
+.site-sidebar .widget_search .search-form{margin:15px 0;}
+.site-sidebar .widget_search .search-field{float:left;width:65%;margin:0 10px 0 0;}
+.site-extra{padding:20px 0;border-top:1px solid #333;}
+.site-extra .pad{margin:0 -15px;}
+.site-extra .widget-area{float:left;width:25%;}
+.extra-one .widget-area{width:100%;}
+.extra-two .widget-area{width:50%;}
+.extra-three .widget-area{width:33.3%;}
+.site-extra .widget{margin:0 15px 30px;padding:0;border:none;}
+.site-extra .widget-social-icons li a [class^="ico-"]:before{width:25px;line-height:25px;background:none;}
+.site-extra .widget-social-icons li a:hover [class^="ico-"]:before{color:#1fa0ae;}
+.site-footer{padding:15px;color:#a6a6a6;font-size:.875em;font-family: Arial, Helvetica, sans-serif;text-transform:uppercase;letter-spacing:1px;background:#333;}
+.site-footer a{color:#fff;text-decoration:none;}
+.site-footer a:hover{color:#1fa0ae;}
+.site-info{float:left;}
+.site-credit{float:right;}
+@media screen and (max-width:960px){.container{width:90%;}
+.site-content{margin-right:40%;}
+.site-sidebar{width:35%;margin-left:-35%;}
+.site-sidebar .widget_search .search-field{width:95%;margin:0 0 10px;}
+.site-extra .widget-area{width:50%;}
+}
+@media screen and (max-width:758px){.site-header .widget-area{display:none;}
+.site-header .site-branding{float:none;text-align:center;}
+.content-area{float:none;}
+.site-content{margin:0;}
+.site-sidebar{width:auto;float:none;margin:20px 0 0;}
+.site-extra .widget-area{width:100%;}
+}
+@media screen and (max-width:480px){.site-footer{text-align:center;}
+.site-footer .site-info,
+.site-footer .site-credit{float:none;}
+}
+@media screen and (max-width:320px){}
+
+.header-cont {
+    width:100%;
+    position:fixed;
+    top:0px;
+}
+</style>
+
+
+</head>
+<body>
+<div class="header-cont">
+  <nav id="top-navigation" class="main-navigation">
+  <div class="clearfix container">
+      <div class="sf-menu">
+          <ul class="sf-js-enabled sf-arrows" style="touch-action: pan-y;">
+              <li class="current_page_item"><a href="https://reactjs.co/">ReactJS</a></li>
+              <li class="page_item page-item-10"><a href="https://reactjs.co/blog/">Blog</a></li>
+              <li class="page_item page-item-11"><a href="https://www.facebook.com/groups/reactjs.co/" target="_blank" ref="nofollow">Forum@FB</a></li>
+
+
+          </ul>
+      </div>
+  </div>
+  <!-- #top-navigation -->
+  </nav>
+</div>
+
+<div class="container">
+  <div>
+    <div class="readme">
+      <article class="markdown-body">
+
+<h1><a href="#">React Native Redux, the Right Way.</a></h1>
+
+<p>You want to learn React Native, but you don't know where to start?</p>
+
+<p>This is an AMAZING free React-Native guide.</p>
+
+<ul>
+<li>Are you a front-end developer who want to start writing native mobile apps with React Native?</li>
+<li>Are you an iOS developer who heard of React Native and want to ramp up his skills for the future demanding job market?</li>
+<li>Are you a poor Android developer who launched many indie games and didn't get his success in the Google App Store Market and want to update his skills in order to a find better job?</li>
+<li>Are you a ReactJS developer who want to master React Native in order to broden his sellable skills?</li>
+<li>... or simply you are React-Native developer who is looking for a best possible way to structure his next mobile app?</li>
+</ul>
+
+<p>It's good that you have found that amazing guide - you will find here everything you need and if not then... this book is going to be improved over time so please send any feedback to kamil.przeorski@gmail.com</p>
+
+<h2>Analyzing React Native learning path</h2>
+
+<p>Depending of your previous experience, the learning path will be different in order to master the React Native development.</p>
+
+<h4>Case #1: JavaScript newbie (like iOS or Android developer)</h4>
+
+<p>Let's assume that you are a JS newbie. Maybe you have experience in C#, Swift or Android's Java. The most important advice for you is: learn ES6. Where to learn the ES6 - check the <a href="https://reactjs.co/#learn-es6" target="_blank">ES6 learning guide here</a>.</p>
+
+
+<h2>Introduction</h2>
+
+<hr/>
+
+<p>In order to get benefits, you need already to be familiarized with:</p>
+
+<p>1) ES6/ES7 syntax</p>
+
+<p>2) Concept of React Life Cycle</p>
+
+<p>3) Basic Redux stuff</p>
+
+<p>4) Basic of React-Native</p>
+
+<h5>IMPORTANT: if you are a beginner and you need a list of resources where to learn those three things, then join the FB group <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">React Native Convention&#8482; Facebook Group</a></strong>. I will share it with you there. Join the <strong><a rel="nofollow" href="https://www.facebook.com/groups/reactjs.co" target="_blank">group</a></strong> if you have any trouble with this e-book as well. </h5>
+
+<p>You need proper development environment set to work on react-native projects. To set it correctly please follow the official instructions:</p>
+
+<pre><code>https://facebook.github.io/react-native/docs/getting-started.html
+</code></pre>
+
+<p>What u need for this handbook (environment: MAC, platform: iOS) is:
+1) Xcode with iPhone simulator
+2) React-native client</p>
+
+<p>We want to keep the concept and structure of the project as in React 'web' project so this project base on the react-redux-starter-kit:</p>
+
+<pre><code>https://github.com/davezuko/react-redux-starter-kit
+</code></pre>
+
+<p>In this project the starting point is a rewritten react-redux-starter-kit project.
+So the react-native-redux-starter-kit is available in our repository and is our development base.</p>
+
+<pre><code>https://github.com/ReactConvention/react-native-redux-starter-kit
+</code></pre>
+
+<h2><a id="user-content-your-first-step" class="anchor" href="#your-first-step" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Your first step</h2>
+
+<hr>
+
+<p>In our starter kit, you can find a home scene and a counter scene which looks as following:</p>
+
+<p style="text-align: center;"><a href="/react_convention/reactNativeContent/rnrsk1.gif" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk1.gif" alt="starter counter" style="max-width:100%;"></a></p>
+
+<p>This is a simple application with a counter, and throught this e-book you will implement other views and components which will help you understand whole codebase.</p>
+
+<p>To explain the whole code structure, we will start with developing a new Dashboard view with some basic features. Then we will implement a registration and login which will make you sure that you know how to do it just on your own.</p>
+
+<p>First step is to clone the starter kit and follow the initial instructions:</p>
+
+<pre><code>https://github.com/ReactConvention/react-native-redux-starter-kit
+</code></pre>
+
+<p>After you have cloned the repo, then we can start our react-native fun.</p>
+
+<h2><a id="user-content-general-client-codebase-structure" class="anchor" href="#general-client-codebase-structure" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>General client codebase structure</h2>
+
+<hr>
+
+<p>We will focus on the client-side explanation for now, so let's discuss the "src" directory that has following structure:</p>
+
+<pre><code>── src                      # Application source code
+   ├── main.js              # Application bootstrap and rendering
+   │
+   ├── components           # Reusable Presentational Components
+   │
+   ├── routes               # Main route definitions
+   │   ├── index.js         # Bootstrap main application routes with store
+   │   ├── Home             # Fractal route
+   │   │   ├── index.js     # Route definitions
+   │   │   ├── assets       # Assets required to render components
+   │   │   └── components   # Presentational React Components
+   │   │
+   │   └── Counter          # Fractal route
+   │       ├── index.js     # Counter route definition
+   │       ├── container    # Connect components to actions and store
+   │       └── modules      # Collections of reducers/constants/actions
+   │
+   ├── scenes               # Components that dictate major app structure
+   │   ├── router.js        # Scenes wrapper
+   │   └── scenes.js        # Scenes definitions
+   │
+   ├── static               # Static assets
+   │
+   └── store                # Redux-specific pieces
+       ├── createStore.js   # Create and instrument redux store
+       └── reducers.js      # Reducer registry and injection
+</code></pre>
+
+<p>If you were working on any FLUX or redux projects, then the project structure shall be quite familiar to you. You will learn all the things located in that project step-by-step (bottom-up approach).</p>
+
+<p>Don't worry if you don't get the structure so far, you will ramp up with knowledge about it during following the instructions. We will also explain each step so you will learn by doing.</p>
+
+<p>Let's start with implementing a new scene called "DASHBOARD".</p>
+
+<h2><a id="user-content-new-dashboard-scene---create-dashboard-route" class="anchor" href="#new-dashboard-scene---create-dashboard-route" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>New dashboard scene - create dashboard route</h2>
+
+<hr>
+
+<p>Copy the Counter route directory and rename it as Dashboard (location is src/routes/*):</p>
+<p style="text-align: center;"><a href="/react_convention/reactNativeContent/rnrsk2.gif" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk2.gif" alt="animated dashboard" style="max-width:100%;"></a></p>
+<br/>
+
+<p>Next step is to rewrite counter files to dashboard files:</p>
+
+<p>a) rename variables with name "counter" to "dashboard"</p>
+
+<p>b) We will rename action called COUNTER_INCREMENT to DASHBOARD_INCREMENT (this will be a number of visits to dashboard during one sessions without refreshing the browser)</p>
+
+<p>Generally all code below are simply copies of Counter's router files renamed to Dashboard's.</p>
+
+<p>Dashboard reducer:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard1.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard1.png" alt="code1" style="max-width:100%;"></a></p>
+
+<p>Dashboard container:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard2.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard2.png" alt="code2" style="max-width:100%;"></a></p>
+
+<p>Dashboard index:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard3.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard3.png" alt="code3" style="max-width:100%;"></a></p>
+
+<h2><a id="user-content-create-dashboard-component" class="anchor" href="#create-dashboard-component" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Create dashboard component</h2>
+
+<hr>
+
+<p>Again we can copy the directory from src/components/Counter and name it Dashboard. Then rename all the variables and values related to counter's route as below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard4.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard4.png" alt="code4" style="max-width:100%;"></a></p>
+
+<h2><a id="user-content-connect-dashboard-to-app" class="anchor" href="#connect-dashboard-to-app" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Connect dashboard to App</h2>
+
+<hr>
+
+<p>To connect our new created dashboard view to the App we need insert dashboard route into src/routes/index.js, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard5.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard5.png" alt="code5" style="max-width:100%;"></a></p>
+
+<p>Project creates scenes automaticly base on the routes index.js file, so u don't need to worry about the scenes creator. (You can see and change this mechanism here: src/scenes/scenes.js)</p>
+
+<p>Next step is to create a link to Dashboard View in Home View, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard6.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard6.png" alt="code6" style="max-width:100%;"></a></p>
+
+<p>After you refresh the App it should work like this:</p>
+<p style="text-align: center;"><a href="/react_convention/reactNativeContent/rnrsk3.gif" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk3.gif" alt="animated dashboard" style="max-width:100%;"></a></p>
+
+<p>As you can see, there are two different routes with different reducers, so counter and dashboard keeps their values separately, but the mechanism is exaclty the same.</p>
+
+<p>All new changes u can find in this commit:
+<code>https://github.com/ReactConvention/react-native-redux-starter-kit/commit/55af911b5c7e6ea63e9e89aeb05d32fa6cbb8c34</code></p>
+
+<h2><a id="user-content-change-dashboard-functionality" class="anchor" href="#change-dashboard-functionality" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Change dashboard functionality</h2>
+
+<hr>
+
+<p>What we want in dashboard view is a counter of user visits in dashboard view.
+To do it we need to increment the dashboard visit's counter each time the dashboard view is shown, so when component is mount to the view.</p>
+
+<p>First we need to change dashboard reducer for new functionality, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard7.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard7.png" alt="code7" style="max-width:100%;"></a></p>
+
+<p>Next, we need changes in dashboard container, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard8.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard8.png" alt="code8" style="max-width:100%;"></a></p>
+
+<p>We have introduced statefull DashboardContainer - we need it to do this that way, cause we are using componentDidMount for invoking the function called <strong><em>this.props.visitsIncrement()</em></strong>.</p>
+
+<p>Finally, we need changes in dashboard component, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard9.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard9.png" alt="code9" style="max-width:100%;"></a></p>
+
+<h4><a id="user-content-important-the-statefull-dashboardcontainer-component-is-required-here-because-our-feature-increment-by-one-on-every-visit-of-the-dashboard-route-require-using-a-componentdidmount-and-we-assume-that-in-the-components-directory-we-want-to-have-only-dumb-components-in-the-srccomponents-we-will-keep-only-stateless-components-in-other-words-they-are-also-called-dumb-components" class="anchor" href="#important-the-statefull-dashboardcontainer-component-is-required-here-because-our-feature-increment-by-one-on-every-visit-of-the-dashboard-route-require-using-a-componentdidmount-and-we-assume-that-in-the-components-directory-we-want-to-have-only-dumb-components-in-the-srccomponents-we-will-keep-only-stateless-components-in-other-words-they-are-also-called-dumb-components" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>IMPORTANT: The statefull DashboardContainer component is required here because our feature (increment by one on every visit of the dashboard route) require using a componentDidMount and we assume that in the components directory we want to have only "dumb components". In the src/components we will keep only stateless components (in other words they are also called dumb components).</h4>
+
+<p>At this point you shall have an app which increments visit's counter on dashboard view every time u enter this view, as on the animation below:</p>
+<p style="text-align: center;"><a href="/react_convention/reactNativeContent/rnrsk4.gif" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk4.gif" alt="animated dashboard" style="max-width:100%;"></a></p>
+
+<p>All new changes u can find in this commit:
+<code>https://github.com/ReactConvention/react-native-redux-starter-kit/commit/007b2ee0b303284b6e3b2ddb01b1baee191bef88</code></p>
+
+<p>So right now we have really simple dashboard view with new functionality. The next step is to add list to the dashboard with random items. List should have following abilities:</p>
+
+<ul>
+<li>add an item to the list</li>
+<li>remove an item from the list</li>
+<li>edit an item from the list</li>
+</ul>
+
+<h2><a id="user-content-add-items-list-to-the-dashboard-view" class="anchor" href="#add-items-list-to-the-dashboard-view" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Add items list to the dashboard view</h2>
+
+<hr>
+
+<p>First we need to create mocked objects (that will be stored in a list) inside dashboard reducer.
+We also need to update the state object of the dashboard reducer to store current list objects and dashboard visit's counter value. Changes are presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard10.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard10.png" alt="code10" style="max-width:100%;"></a></p>
+
+<p>Next, we need to apply those changes into dashboard container, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard11.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard11.png" alt="code11" style="max-width:100%;"></a></p>
+
+<p>Finally we have to create list on the dashboard component, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard12.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard12.png" alt="code12" style="max-width:100%;"></a></p>
+
+<p>Currently, we have a little improved dashboard with visit's counter and items list (alongside with improved dashboard's reducer):</p>
+<p style="text-align: center;"><a href="/react_convention/reactNativeContent/rnrsk5.gif" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk5.gif" alt="animated dashboard" style="max-width:100%;"></a></p>
+
+<p>All new changes u can find in this commit:
+<code>https://github.com/ReactConvention/react-native-redux-starter-kit/commit/e972d1d606312fa0b745bf55d5b81b10dd152140</code></p>
+
+<h2><a id="user-content-addedit-item-on-the-dashboard-list" class="anchor" href="#addedit-item-on-the-dashboard-list" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Add/edit item on the dashboard list</h2>
+
+<hr>
+
+<p>First, we need to prepare the action and handlers in the dashboard reducer for DASHBOARD_ADD_ITEM and DASHBOARD_EDIT_ITEM, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard13.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard13.png" alt="code13" style="max-width:100%;"></a></p>
+
+<p>As you can find above, we have added and exported two new actions:</p>
+
+<pre><code>export const dashboardAddItem = (label) =&gt; ({
+    type: DASHBOARD_ADD_ITEM,
+    label
+})
+
+export const dashboardEditItem = (label, index) =&gt; ({
+    type: DASHBOARD_EDIT_ITEM,
+    label,
+    index
+})
+</code></pre>
+
+<p>Then, after an action is requrested from a Dashboard's component, we handle it with:</p>
+
+<pre><code>    case DASHBOARD_ADD_ITEM:
+      const mockedId = Math.floor(Date.now() / 1000);
+      const newItem = {
+        label: action.label,
+        id: mockedId
+      }
+      state.list.push(newItem);
+      return Object.assign({}, state)
+
+    case DASHBOARD_EDIT_ITEM:
+      const newLabel = action.label;
+      const index = action.index;
+      state.list[index].label = newLabel;
+      return Object.assign({}, state)
+</code></pre>
+
+<p>In both functions above, we are returining a new object with <strong><em>return Object.assign({}, state)</em></strong>. Rest of the code shall be self-explaining for you.</p>
+
+<p>Next, we have to inject new actions into dashboard container with proper logic, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard14.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard14.png" alt="code14" style="max-width:100%;"></a></p>
+
+<p>We have to define constructor with new state object and funtions declaration:</p>
+
+<pre><code>  constructor(props) {
+    super(props)
+
+    this.onChangeText = this.onChangeText.bind(this)
+    this.submitAction = this.submitAction.bind(this)
+    this.itemOnEdit = this.itemOnEdit.bind(this)
+
+
+    this.state = {
+      inputValue: '',
+      editedItemIndex: null
+    }
+  }
+</code></pre>
+
+<p>The inputValue inside state keeps the current value of a text input. In the editedItemIndex inside state we keep an ID of currently edited item, if there is none in edit then we make it <strong>null</strong>.</p>
+
+<p>Next we had to implement the logic of each function:</p>
+
+<pre><code>  onChangeText(newText) {
+    this.setState({ inputValue: newText })
+  }
+
+  submitAction() {
+    const { dashboardAddItem, dashboardEditItem } = this.props;
+    const { inputValue, editedItemIndex } = this.state;
+
+    if(editedItemIndex === null){
+      dashboardAddItem(inputValue);
+    } else {
+      dashboardEditItem(inputValue, editedItemIndex);
+    }
+
+
+    this.setState({
+      inputValue: '',
+      editedItemIndex: null
+    })
+  }
+
+  itemOnEdit(index) {
+    const { list } = this.props;
+    const item = list[index];
+    this.setState({
+      inputValue: item.label,
+      editedItemIndex: index
+    });
+  }
+</code></pre>
+
+<p>I won't describe details about those functions logic. (if you think it requires more detailed description then please mail us at <a href="mailto:ReactConvention@mwp.io">ReactConvention@mwp.io</a>).</p>
+
+<p>Final part is the render method:</p>
+
+<pre><code>  render() {
+    const { inputValue, editedItemIndex } = this.state;
+    const buttonText = (editedItemIndex === null) ? 'Add item' : 'Edit item';
+
+    return (
+      &lt;Dashboard
+        {...this.props}
+        onChangeText={this.onChangeText}
+        submitAction={this.submitAction}
+        itemOnEdit={this.itemOnEdit}
+        textInput={inputValue}
+        buttonText={buttonText} /&gt;
+    )
+  }
+</code></pre>
+
+<p>We are passing some callbacks to the dashboard "dumb component" - we need them to operate on the reducer actions from the component level.</p>
+
+<p>Finally, we have to change dashboard component to handle all new props from parent with new functional logic, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard15.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard15.png" alt="code15" style="max-width:100%;"></a></p>
+
+<p>We have improved our listJSX map function to keep an clickable elements on the list, as presented below:</p>
+
+<pre><code>  const listJSX = list.map((item, i) =&gt; {
+      return &lt;TouchableOpacity key={i} onPress={()=&gt;editLabelAction(i)}&gt;
+              &lt;Text style={styles.buttonText}&gt; {item.label} &lt;/Text&gt;
+             &lt;/TouchableOpacity&gt;
+  })
+</code></pre>
+
+<p>We have also improved the render function where we add TextInput element for typing labels and we add clickable element to submit the TextInput text, as presented below:</p>
+
+<pre><code>  return (
+    &lt;View style={styles.container}&gt;
+      &lt;Text style={styles.text}&gt;
+        Dashboard visits: &lt;Text style={styles.value}&gt;{value}&lt;/Text&gt;
+      &lt;/Text&gt;
+      &lt;TextInput
+        style={styles.inputText}
+        onChangeText={(text) =&gt; onChangeText(text)}
+        value={textInput}
+        placeholder='Type here new label' /&gt;
+      &lt;TouchableOpacity onPress={inputSubmitAction} style={styles.button}&gt;
+        &lt;Text style={styles.buttonText}&gt; {buttonText} &lt;/Text&gt;
+      &lt;/TouchableOpacity&gt;
+      {listJSX}
+    &lt;/View&gt;
+  )
+</code></pre>
+
+<p>Result of above changes is presented below:</p>
+<p style="text-align: center;"><a href="/react_convention/reactNativeContent/rnrsk6.gif" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk6.gif" alt="animated dashboard" style="max-width:100%;"></a></p>
+
+<p>All new changes u can find in this commit:
+<code>https://github.com/ReactConvention/react-native-redux-starter-kit/commit/d8740011cd27cf83b465a397e4a419d406a99cd9</code></p>
+
+<h2><a id="user-content-login-with-mocked-data" class="anchor" href="#login-with-mocked-data" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Login with mocked data</h2>
+
+<p>We will implement login functionality that works purely on front-end.
+First step is to prepare new session reducer which will be app-wise (it will be used all across the app).
+We need new directory at "src/modules" location with new session.js file inside, with the following reducer definition inside:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard16.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard16.png" alt="code16" style="max-width:100%;"></a></p>
+
+<p>Above we have created SESSION_LOGIN_SUCCESS and SESSION_LOGIN_FAIL actions.
+Heart of the reducer is the loginAsync function which looks like below:</p>
+
+<pre><code>  export const loginAsync = (loginObj) =&gt; {
+    return async (dispatch, getState) =&gt; {
+      let loginToken = await new Promise((resolve) =&gt; {
+        setTimeout(() =&gt; {
+          resolve()
+        }, 200)
+      }).then(() =&gt; {
+        console.log("loginObj", loginObj);
+        if(loginObj.user === 'React' &amp;&amp; loginObj.password === 'React') {
+          return 'react' // just a mocked token
+        } else {
+          return 'invalid' // mocked non successful login
+        }
+      })
+
+      console.log("loginToken", loginToken)
+
+      if(loginToken !== 'invalid') {
+        dispatch(loginSuccess(loginToken))
+      } else {
+        dispatch(loginFail(loginToken))
+      }
+
+    }
+  }
+</code></pre>
+
+<p>The function received the loginObj which is composed of two keys 'user' and 'password'.
+That object will be sent to the backend server (after we will unmock now), currenly we only check if the logins are correct with:</p>
+
+<pre><code>if(loginObj.user === 'React' &amp;&amp; loginObj.password === 'React') {
+</code></pre>
+
+<p>We have created also an asynchronous function (return async (dispatch, getState) =&gt; {) which awaits on the promise resolve after 200 milliseconds timeout (currently it's a mock, later it will be real POST to the server).</p>
+
+<p>Last part of the above code check if the login data are correct and execute proper actions.</p>
+
+<pre><code>  if(loginToken !== 'invalid') {
+      dispatch(loginSuccess(loginToken))
+    } else {
+      dispatch(loginFail(loginToken))
+    }
+</code></pre>
+
+<p>The dispatch comes from the react-thunk - that means, that the loginAsync is returned immediately and waits for lazy evaluation (in our case on a respond from the server if the user has provided correct or incorrect details) and then dispatch an action depending on the server response.</p>
+
+<p>We dispatch loginSuccess and loginFail actions with the loginToken value as a variable.</p>
+
+<pre><code>export const loginSuccess = (value) =&gt; ({
+  type: SESSION_LOGIN_SUCCESS,
+  payload: value
+})
+
+export const loginFail = (value) =&gt; ({
+    type: SESSION_LOGIN_FAIL,
+    payload: value
+})
+
+const initialState = {
+  isNotLoggedIn: true,
+  loginToken: 'none'
+}
+</code></pre>
+
+<p>There is a flag for simplicity which handles if a user is logged in (isNotLoggedIn) and we keep in that reducer the token which shall be sent to the backend on each request while a user is logged in (the loginToken may come from the backend's JSON Web Token).</p>
+
+<p>Now, we are simply importing the session reducer with import session from '../modules/session' and then we add it to the reducers object, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard17.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard17.png" alt="code17" style="max-width:100%;"></a></p>
+
+<p>After that we need to improve dashboardContainer.js to inject session reducer data:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard18.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard18.png" alt="code18" style="max-width:100%;"></a></p>
+
+<p>Next we have to add new component from loginDashboard.js to dashboard.js
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard19.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard19.png" alt="code19" style="max-width:100%;"></a>
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard20.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard20.png" alt="code20" style="max-width:100%;"></a></p>
+
+<p>Based on that all changes we have made then you shall be able to run app with login required to see the dashboard as on the animation below:</p>
+<p style="text-align: center;"><a href="/react_convention/reactNativeContent/rnrsk7.gif" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk7.gif" alt="animated dashboard" style="max-width:100%;"></a></p>
+
+<p>All new changes u can find in this commit:
+<code>https://github.com/ReactConvention/react-native-redux-starter-kit/commit/9baed90900ee15712377c28444ed9b106ca8208b</code></p>
+
+<h2><a id="user-content-drag-and-drop-list-elements" class="anchor" href="#drag-and-drop-list-elements" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Drag and Drop list elements</h2>
+
+<p>In this part we would like to add new drag and drop functionality to current dashboard view list.
+We need to improve our dashboard by creating new dashboardDragDropList.js component file and prepare changes in dashboard.js, as presented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard21.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard21.png" alt="code21" style="max-width:100%;"></a>
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard22.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard22.png" alt="code22" style="max-width:100%;"></a></p>
+
+<p>In react-native, drag'drop events can be handled by PanResponder, and this is what we are using. PanResponder is described in official react-native documentation (<code>https://facebook.github.io/react-native/docs/panresponder.html</code>) so it shouldn't be a problem to understand how does it work.</p>
+
+<p>Until now, we create a DashboardDragDropList component and we inject it to the Dashboard component in the place of our old list objects. Next, we have to prepare logic for list element position change event - we need to improve our dashboardReducer.js and inject changes into dashboardContainer.js.
+Changes are prestented below:
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard23.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard23.png" alt="code23" style="max-width:100%;"></a>
+<a href="/react_convention/reactNativeContent/rnrsk-dashboard24.png" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk-dashboard24.png" alt="code24" style="max-width:100%;"></a></p>
+
+<p>In dashbord reducer we add new action DASHBOARD_CHANGE_ITEMS_ORDER to handle list elements order change with proper logic.</p>
+
+<pre><code>    case DASHBOARD_CHANGE_ITEMS_ORDER:
+      let newList = [];
+      action.orderArray.map((orderItem)=&gt;{
+        state.list.map((stateItem)=&gt;{
+          if(orderItem == stateItem.key) {
+            newList.push(stateItem);
+          }
+        })
+      });
+      return {
+        ...state,
+        list: newList
+      }
+</code></pre>
+
+<p>In DASHBOARD_CHANGE_ITEMS_ORDER action we take as an argument an array of the key's of the element on the list with the new order that will be applied. Based on this newOrderArray we change the position of the element in the list inside reducer and we apply new state to the reducer.</p>
+
+<p>Additionaly we edit the DASHBOARD_EDIT_ITEM action to take key of the list element as an argument - before it was the index of the element in an array, but this is not a good solution if we mutate array positions - and because of this, we have to rename the state property in dashboardContainer from 'editedItemIndex' into 'editedItemKey'.</p>
+
+<p>Finally, you shall be able to run app and see the dashboard as on the animation below:</p>
+<p style="text-align: center;"><a href="/react_convention/reactNativeContent/rnrsk8.gif" target="_blank"><img src="/react_convention/reactNativeContent/rnrsk8.gif" alt="animated dashboard" style="max-width:100%;"></a></p>
+
+<p>All new changes u can find in those commits:</p>
+<p><code>https://github.com/ReactConvention/react-native-redux-starter-kit/commit/c75aeed451c56badd2dd3653d579f05603d61650</code></p>
+<p><code>https://github.com/ReactConvention/react-native-redux-starter-kit/commit/b87116958d955a480e909a3afa9de05a98ae6213</code></p>
+
+<h2><a id="user-content-a-summary-front-end-part" class="anchor" href="#a-summary-front-end-part" aria-hidden="true"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>A summary (front-end part)</h2>
+
+<p>This is react-native part of that e-book.</p>
+
+<p>How do you like it? What we can improve? Please mail us with your feedback.</p>
+
+      </article>
+    </div>
+  </div>
+</div>
+
+<br/><br/><br/>
+
+<script type="text/javascript">
+
+
+function showMessage() {
+  var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+
+  if(w>800) {
+    document.getElementById("floatdiv").style.visibility = "visible";
+  }
+}
+
+// media query event handler
+if (matchMedia) {
+  var mq = window.matchMedia("(min-width: 1200px)");
+  mq.addListener(WidthChange);
+  WidthChange(mq);
+}
+
+
+// media query change
+function WidthChange(mq) {
+  if (mq.matches) {
+    // window width is at least 500px
+    setTimeout("showMessage()", 5500);
+  } else {
+    // window width is less than 500px
+  }
+
+}
+
+var isVisible = false;
+$('#shortcuts').hide();
+$(window).scroll(function(){
+     var shouldBeVisible = $(window).scrollTop()>4500;
+     if (shouldBeVisible && !isVisible) {
+          isVisible = true;
+          $('#shortcuts').show();
+     } else if (isVisible && !shouldBeVisible) {
+          isVisible = false;
+          $('#shortcuts').hide();
+    }
+});
+
+</script>
+
+<h3>Search In Google For ReactJS Convention&#8482;</h3>
+
+
+    <noscript id="deferred-styles">
+
+    </noscript>
+    <script>
+      var loadDeferredStyles = function() {
+        var addStylesNode = document.getElementById("deferred-styles");
+        var replacement = document.createElement("div");
+        replacement.innerHTML = addStylesNode.textContent;
+        document.body.appendChild(replacement)
+        addStylesNode.parentElement.removeChild(addStylesNode);
+      };
+      var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+          webkitRequestAnimationFrame || msRequestAnimationFrame;
+      if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+      else window.addEventListener('load', loadDeferredStyles);
+    </script>
+
+<script id="_webengage_script_tag" type="text/javascript">
+var webengage; !function(e,t,n){function o(e,t){e[t[t.length-1]]=function(){r.__queue.push([t.join("."),arguments])}}var i,s,r=e[n],g=" ",l="init options track screen onReady".split(g),a="feedback survey notification".split(g),c="options render clear abort".split(g),p="Open Close Submit Complete View Click".split(g),u="identify login logout setAttribute".split(g);if(!r||!r.__v){for(e[n]=r={__queue:[],__v:"6.0",user:{}},i=0;i<l.length;i++)o(r,[l[i]]);for(i=0;i<a.length;i++){for(r[a[i]]={},s=0;s<c.length;s++)o(r[a[i]],[a[i],c[s]]);for(s=0;s<p.length;s++)o(r[a[i]],[a[i],"on"+p[s]])}for(i=0;i<u.length;i++)o(r.user,["user",u[i]]);setTimeout(function(){var f=t.createElement("script"),d=t.getElementById("_webengage_script_tag");f.type="text/javascript",f.async=!0,f.src=("https:"==t.location.protocol?"https://ssl.widgets.webengage.com":"http://cdn.widgets.webengage.com")+"/js/webengage-min-v-6.0.js",d.parentNode.insertBefore(f,d)})}}(window,document,"webengage");
+
+webengage.init("~2024b520");
+</script>
+
+
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script async type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57bc5140dea4c347"></script>
+
+  <script async type="text/javascript" src="/react_convention/optimized_contents/js/floating-1.12.js"></script>
+
+
+<script type="text/javascript">
+var _mfq = _mfq || [];
+  (function() {
+    var mf = document.createElement("script");
+    mf.type = "text/javascript"; mf.async = true;
+    mf.src = "//cdn.mouseflow.com/projects/43f1dbfa-c6f3-49b3-ac7a-e812ca93b8bb.js";
+    document.getElementsByTagName("head")[0].appendChild(mf);
+  })();
+</script>
+
+<script>
+  (function() {
+    var cx = '000555627217792939988:rdjdwqspo5e';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+<script src="https://www.w3counter.com/tracker.js?id=104161"></script>
+
+</body></html>
