@@ -1146,19 +1146,20 @@ const initialState = {
 <p>with new:</p>
 
 <pre><code>// updated codebase
-[DASHBOARD_VISITS_COUNT]: (state, action) =&gt; { 
-  state.visitsCount = state.visitsCount + action.payload
-  return Object.assign({}, state)
-}
+  [DASHBOARD_VISITS_COUNT]: (state, action) =&gt; { 
+    return Object.assign({}, state, {
+      visitsCount: state.visitsCount + action.payload
+    })
+  }
 </code></pre>
 
-<p>That <strong>DASHBOARD_VISITS_COUNT</strong> change was required because as was written earlier, we have modified the initalState's structure of the dashboard reducer (so we need also to change the function that handles it).</p>
+<p>That <strong>DASHBOARD_VISITS_COUNT</strong> change was required because as was written earlier, we have modified the initalState's structure of the dashboard reducer (so we need also to change the function that handles it). The Object.assign's visitsCount is used the same way as on the Redux's tutorial's videos on EggHead.</p>
 
 <p>As a final currently, we have a little improved dashboard with a list and the visitsCount also works as previously (alongside with improved dashboard's reducer):</p>
 
 <p><a href="https://reactjs.co/wp-content/react_convention/920_app_dashboard_with_list.gif" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/920_app_dashboard_with_list.gif" alt="920_app_dashboard_with_list.gif" style="max-width:100%;"></a></p>
 
-<pre><code>Source code from the screenshots: https://github.com/przeor/ReactC/commit/8eef288af11d36d6485f00174f4b347ffd219508
+<pre><code>Source code from the screenshots: https://github.com/przeor/ReactC/commit/1b2df4cd38872810257008d82559e8a0116f011b
 </code></pre>
 
 <h2 id="addedit-item-on-the-dashboard-list">Add/edit item on the dashboard list</h2>
@@ -1192,24 +1193,29 @@ export function dashboardEditItem (value) {
 
 <p>... then after an action is requrested from a Dashboard's component, we handle it with:</p>
 
-<pre><code>  [DASHBOARD_ADD_ITEM]: (state, action) =&gt; { 
+<pre><code>
+  [DASHBOARD_ADD_ITEM]: (state, action) =&gt; { 
     const mockedId = Math.floor(Date.now() / 1000)
     const newItem = {
       label: action.payload,
       id: mockedId
     }
-    state.dashboardItems.push(newItem)
-    return Object.assign({}, state)
+    return Object.assign({}, state, {
+      dashboardItems: [...state.dashboardItems, newItem]
+    })
   },
   [DASHBOARD_EDIT_ITEM]: (state, action) =&gt; { 
     const newLabel = action.payload.val
     const index = action.payload.editedItemIndex
-    state.dashboardItems[index].label = newLabel
-    return Object.assign({}, state)
+    let immutableDashboardItems = [...state.dashboardItems]
+    immutableDashboardItems[index].label = newLabel
+    return Object.assign({}, state, {
+      dashboardItems: immutableDashboardItems
+    })
   }
 </code></pre>
 
-<p>In both functions above, we are returining a new object with <strong><em>return Object.assign({}, state)</em></strong>. Rest of the code shall be self-explaining for you.</p>
+<p>In both functions above, we are returining a new object with <strong><em>return Object.assign</em></strong>. Rest of the code shall be self-explaining for you.</p>
 
 <pre><code>Changes in (you can click the diffs image to make it larger):
 src/routes/Dashboard/containers/DashboardContainer.js
@@ -1348,7 +1354,7 @@ src/components/Dashboard/Dashboard.js
 <p><a href="https://reactjs.co/wp-content/react_convention/925_edit_add_anim.gif" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/925_edit_add_anim.gif" alt="925_edit_add_anim.gif" style="max-width:100%;"></a></p>
 
 <pre><code>Source of the commit's screenshots: 
-https://github.com/przeor/ReactC/commit/f836fd4f2eccec2a3740e875247abc7870efa245
+https://github.com/przeor/ReactC/commit/b94cf9935ab632065ee0d9b5f9126159317c1178
 </code></pre>
 
 <h2 id="reorder-an-item-on-the-dashboard-list-pure-react-drag-and-drop-example">Reorder an item on the dashboard list (pure React Drag and Drop example)</h2>
@@ -1389,8 +1395,10 @@ src/routes/Dashboard/modules/dashboard.js
         }
       }
     })
-    state.dashboardItems = newDashboardItems
-    return Object.assign({}, state)
+
+    return Object.assign({}, state, {
+      dashboardItems: newDashboardItems
+    })
   }
 </code></pre>
 
@@ -1508,7 +1516,7 @@ src/components/Dashboard/Dashboard.js
 <p><a href="https://reactjs.co/wp-content/react_convention/930_dashboard_reordering.gif" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/930_dashboard_reordering.gif" alt="930_dashboard_reordering" style="max-width:100%;"></a></p>
 
 <pre><code>Source of the commit's screenshots: 
-https://github.com/przeor/ReactC/commit/126d2ae53e89ba6731cd923311d6646bb543f8a1
+https://github.com/przeor/ReactC/commit/1f40f87a9b0ab4bd823e7a922f88f7a8a8ab1b9a
 </code></pre>
 
 <h2 id="login-with-mocked-data-front-end">Login with mocked data (front-end)</h2>
@@ -1610,13 +1618,15 @@ dispatch(push('/dashboard'))
 // ------------------------------------
 const ACTION_HANDLERS = {
   [SESSION_LOGIN_SUCCESS]: (state, action) =&gt; {
-    state.loginToken = action.payload
-    state.isNotLoggedIn = false
-    return Object.assign({}, state)
+    return Object.assign({}, state, {
+      loginToken: action.payload,
+      isNotLoggedIn: false
+    })
   },
   [SESSION_LOGIN_FAIL]: (state, action) =&gt; {
-    state.loginToken = action.payload
-    return Object.assign({}, state)
+    return Object.assign({}, state, {
+      loginToken: action.payload
+    })
   }
 }
 
@@ -1752,7 +1762,7 @@ src/components/Header/Header.js
 
 <p><a href="https://reactjs.co/wp-content/react_convention/938_anim.gif" target="_blank"><img src="https://reactjs.co/wp-content/react_convention/938_anim.gif" alt="938_anim" style="max-width:100%;"></a></p>
 
-<pre><code>Commits screenshots source: https://github.com/przeor/ReactC/commit/83132ab8e71095075f8dfbe8dfcc98fe5ef5c8da
+<pre><code>Commits screenshots source: https://github.com/przeor/ReactC/commit/52ac2ef6317e53ad736355506db346eab898c7e2
 </code></pre>
 
 <h2 id="a-summary-front-end-part">A summary (front-end part) </h2>
