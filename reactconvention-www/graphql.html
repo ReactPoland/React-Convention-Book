@@ -606,12 +606,86 @@ ul.widget-tab-nav{margin:0 0 15px;border-bottom:3px solid #333;*zoom:1;}
 
 <h2 id="1">GraphQL-server-as-a-service with ScapHold </h2>
 
-<p> For the quick backend kick-off, we will use <a href="https://scaphold.io/referral?ref=02Q6VP" ref="nofollow" target="_blank">ScapHold.io (a referal link which provides you with $10 of free credits to use on their backend as a service platform)</a> GraphQL-backend-as-a-service (later in our tutorial, you will also learn how to implement a GraphQL server from scratch without ScapHold).</p>
+<p> For the quick backend kick-off, we will use <a href="https://scaphold.io/referral?ref=02Q6VP" ref="nofollow" target="_blank">ScapHold.io (a referal link which provides you with $10 of free credits to use on their backend as a service platform)</a> GraphQL-backend-as-a-service (later in our tutorial, you will also learn how to implement a GraphQL server from scratch with NodeJS.</p>
 
-<p>We are done with implementation of the the client side's features. It's time to take care of the backend stuff. After we are done with it, we will also improve the client-side code in terms of connecting the client-side with the backend-side.</p>
+<p>We are done with implementation of the the client side's features (React+Redux). It's time to take care of the backend stuff. After we are done with it, we will also improve the client-side code in terms of connecting the client-side with the backend-side.</p>
 
 
-<p>We will add the new following tools to our full-stack:</p>
+<p> Next steps are:</p>
+<ul>
+  <li>1) Setup a <a href="https://scaphold.io/referral?ref=02Q6VP" ref="nofollow" target="_blank">ScapHold</a> account</li>
+  <li>2) Create the GraphQL schema</li>
+  <li>3) Install and start using the Apollo client (you will find the more detailed description about this library later in the tutorial)</li>
+</ul>
+
+<h2 id="1">Setup the account </h2>
+You will get $10 in credits by siging via referal program provided by the <a href="https://scaphold.io/referral?ref=02Q6VP" ref="nofollow" target="_blank">ScapHold</a>, then you will find this screen:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/001graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/001graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a></p>
+
+<br/><br/>
+Register:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/002graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/002graphql.png" alt="reactjs who is hiring" style="width:30%; height: 30%"></a></p>
+
+<br/><br/>
+In my case, I create the account via Google Sign-on with my email:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/003graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/003graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a></p>
+<br/><br/>
+After the registration is successful, then you will see the following screen:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/004graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/004graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a></p>
+
+<br/><br/>
+Then click the "Create An App" button and fill in the form:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/005graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/005graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a></p>
+
+<br/><br/>
+After the app's creation, you will see the following:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/006graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/006graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a></p>
+
+<br/><br/>
+Click the button "Add Type" and choose from the list "Type":
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/007graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/007graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a></p>
+
+<br/><br/>
+Let's add first type to the project, which will be called "DashbordItem":
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/008graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/008graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a><br/>
+This is our collection of our dashboard items. There we will keep the items from the list like AngularJS, BackboneJS, ReactJS etc. (the items were also used in our client-side React + Redux tutorial).</p>
+
+<br/><br/>
+Now, we will need to add the "label" property to the DashboardItem's class:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/009graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/009graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a></p>
+
+
+<br/><br/>
+After adding the "label" this is what you shall see on the list:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/010graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/010graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a><br/>
+<b>The label property is the "String" type.</b>
+</p>
+
+<br/><br/>
+OK - now you can click the "Create" button:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/011graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/011graphql.png" alt="reactjs who is hiring" style="width:20%; height: 20%"></a></p>
+
+<br/><br/>
+The final output in the Scaphold's dashboard shall see as following:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/012graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/012graphql.png" alt="reactjs who is hiring" style="width:60%; height: 60%"></a></p>
+
+
+<p><b>A summary:</b> at this stage, we shall have the backend DashboardItem class, ready. That means, that we can start working on the client-side in order to fetch the data.</p>
+
+<h2 id="1">Fetching data from the backend (GraphQL) to the client side (Apollo)</h2>
+<p></p>
 
 
 
