@@ -727,8 +727,6 @@ If you have any problems or want to share you feedback, feel free to contact me 
 
 <br/>
 
-<h1>#### HERE TO CONTINUE ####</h1>
-
 <h2 id="learn-es6">Learning  EcmaScript6 (JS)</h2>
 
 <hr/>
@@ -1589,10 +1587,11 @@ https://github.com/przeor/ReactC/commit/1f40f87a9b0ab4bd823e7a922f88f7a8a8ab1b9a
 loginObj.password
 </code></pre>
 
-<p>That data will be sent to the backend server (after we will unmock now), currently we only check to see if the logins are correct with:</p>
+<p>That data will be sent to the backend server (after we will unmock it). Currently we only check to see, if the logins are correct with this statement:</p>
 
 <pre><code>if(loginObj.user === 'przeor' &amp;&amp; loginObj.password === 'mwp.io') {
 </code></pre>
+<p>(this above is just a mock, until we will implement the backend's glue mechanism later in the tutorial)</p>
 
 <p>Also as you can see, we have created an asynchronous function (<strong>return async (dispatch, getState) =&gt; {</strong>) which `awaits` on the promise resolve after 200 milliseconds timeout (currently it's a mock, later it will be real POST to the server). Then depending on if you have provided the correct login details, it returns:</p>
 

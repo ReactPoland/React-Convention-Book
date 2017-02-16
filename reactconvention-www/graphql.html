@@ -598,7 +598,7 @@ ul.widget-tab-nav{margin:0 0 15px;border-bottom:3px solid #333;*zoom:1;}
 
 <p><b>IN SHORT:</b> GraphQL is a query language which provides a common interface between the client and the server for data fetching and the data's mutations (insert a row, edit a row etc).</p>
 
-<p>This new concept introduced by Facebook, helps you to make the fullstack development faster (GraphQL servers are written in many different backend languages as for example Node, Go, PHP or Elixir).</p>
+<p>This new concept introduced by Facebook, helps you to make the fullstack development faster (GraphQL servers are written in many different backend languages as for example Go, PHP, JavaScript's Node or Elixir).</p>
 
 <p><b>GRAPHQL ANALOGY #1:</b> with SQL you can query the databse from the backend (for example you can make a SQL query in your PHP backend). GraphQL is similar concept, but you can make the query from the client-side to the backend side. </p>
 
@@ -606,7 +606,7 @@ ul.widget-tab-nav{margin:0 0 15px;border-bottom:3px solid #333;*zoom:1;}
 
 <h2 id="1">GraphQL-server-as-a-service with ScapHold </h2>
 
-<p> For the quick backend kick-off, we will use <a href="https://scaphold.io/referral?ref=02Q6VP" ref="nofollow" target="_blank">ScapHold.io (a referal link which provides you with $10 of free credits to use on their backend as a service platform)</a> GraphQL-backend-as-a-service (later in our tutorial, you will also learn how to implement a GraphQL server from scratch with NodeJS.</p>
+<p> For the quick backend kick-off, we will use <a href="https://scaphold.io/referral?ref=02Q6VP" ref="nofollow" target="_blank">ScapHold.io (a referal link which provides you with $10 of free credits to use on their backend as a service platform)</a> GraphQL-backend-as-a-service (later in our tutorial, you will also learn how to implement a GraphQL server from scratch with NodeJS).</p>
 
 <p>We are done with implementation of the the client side's features (React+Redux). It's time to take care of the backend stuff. After we are done with it, we will also improve the client-side code in terms of connecting the client-side with the backend-side.</p>
 
@@ -705,7 +705,7 @@ Click the "Add Object" button:
 <p><a href="http://reactjs.co/react_convention/graphql-tutorial/015graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/015graphql.png" alt="graphql apollo tutorial" style="width:10%; height: 10%"></a></p>
 
 <br/><br/>
-Add new dashboard items (for example BackboneJS etc.):
+Add a new dashboard item (for example BackboneJS etc.):
 <br/><br/>
 <p><a href="http://reactjs.co/react_convention/graphql-tutorial/016graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/016graphql.png" alt="graphql apollo tutorial" style="width:20%; height: 20%"></a></p>
 
@@ -716,7 +716,268 @@ On the example below, we have added 4 different objects into the "DashboardItem"
 
 After we have data in the "DashboradItem" class, we are ready for the further development.
 
+<h2 id="1">Client-side: install the Apollo client and the GraphQL dependencies</h2>
+
+We need to install some new libraries:
+
+<ul>
+  <li>npm i --save apollo-client@0.8.4</li>
+  <li>npm i --save graphiql@0.9.2</li>
+  <li>npm i --save graphql-tag@1.2.4</li>
+</ul>
+
+<p>NOTE: at this point, you shall already know how to use the NPM correctly :-)  </p>
+
+
 <h2 id="1">Fetching data from the backend (GraphQL) to the client side (Apollo)</h2>
+
+<br/><br/>
+After installing via NPM, the current package.json shall be following:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/018graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/018graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a></p>
+
+
+<br/><br/>
+Let's create a new directory at "src/utils" location. Then in the new "utils" directory, please create a file called apolloConfig.js:
+<br/><br/>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/019graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/019graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a></p>
+
+
+<h3>EXPLANATION: </h3>
+
+<p>We import the following:</p>
+
+<pre><code>import ApolloClient, { createNetworkInterface } from 'apollo-client'
+import gql from 'graphql-tag'
+</code></pre>
+
+<p>The Apollo-Client is a fully-featured caching client library (for any GraphQL server). We will use it, because it's powerful. In bigger projects some Apollo's features could be more useful over "plain GraphQL queries from the front-end". This is why, we have choose the Apollo client on the client-side over other solutions as fetch-isomorphic library, Lokka or Relay. Anyway, the Relay library doesn't play well with Redux.</p>
+
+<pre><code>const config = {
+  // this url below, has to be replaced by you
+  scapholdUrl: 'https://us-west-2.api.scaphold.io/graphql/[[REPLACE-YOUR-ID-HERE]]'
+}
+</code></pre>
+
+<p>
+<h4>IMPORTANT NOTE: </br> you need to replace the scaphold's server address from the <u>https://us-west-2.api.scaphold.io/graphql/[[REPLACE-YOUR-ID-HERE]]</u> to the your one. You can find this address on the dashboard at https://scaphold.io/apps.</h4>
+</p>
+
+<pre><code>const query = gql`query GetAllDashboardItems {
+  viewer {
+    allDashboardItems  {
+      edges {
+        node {
+          id
+          label
+        }
+      }
+    }
+  }
+}`
+</code></pre>
+
+<p>This is your first GraphQL query. Above you can find the query name <b>query GetAllDashboardItems</b>. </p>
+
+<p> Then the word <b>"viewer"</b>. That comes from the ScapHold's GraphQL schema which is default for everyone. It's the top level entity to model the various data served to the user - so we can make configure that certain data is available for a current logged user (after we will implement it later).
+
+<p>... and later <b>"allDashboardItems"</b> (the keyword "all" says, that you want receive the all dashboard items. It's GraphQL specified way to define queries).</p>
+
+<p>We will learn more about the queries later. In case when you are interested to learn more, there is a <a href="http://graphql.org/learn/queries/" target="_blank" ref="nofollow">GraphQL's queries documentation</a>.</p>
+
+
+<p>The last part of the current commit is this:</p>
+<pre><code>
+const opts = {uri: config.scapholdUrl}
+const networkInterface = createNetworkInterface(opts)
+const client = new ApolloClient({
+  networkInterface,
+});
+
+client
+  .query({query})
+  .then((results) => {
+    const { data: { viewer: { allDashboardItems: { edges } }}} = results
+    const resArray = edges.map((item, i) => {
+      return item.node
+    })
+    console.info('Example resArray: ', resArray)
+    return resArray
+})
+</code></pre>
+
+
+<p>
+The last thing is to import the utils/apolloConfig into the Dashboard's reducer by doing following:
+</p>
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/020graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/020graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a></p>
+
+
+<p>
+Run the application and check the console. 
+This is just an example usage, before getting into the further implementation in our reducers (in a moment). As you can see above, there is a console.info and here is the response:</p>
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/021graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/021graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a></p>
+
+<pre><code>The links to the two commit from the screenshots: 
+
+https://github.com/przeor/ReactC/commit/5cdfbaffc32ee758311e8951afe885e401e07303
+
+https://github.com/przeor/ReactC/commit/d2ecd3a7421ff52f8c30b9632a9bc7575a26c0d3</code></pre>
+
+<p>All that above, has been fetched from the Scaphold's database via their GraphQL server. For now, we will make the user of the fetched data in our front-end app (not just using a console log).</p>
+
+<h2 id="1">Using the fetched data in our application</h2>
+
+<p>
+At this point, we are have the function that helps us to fetch data from the backend to browser. We need to place it under correct place, so we will fetch the dashboard elements into correct places.
+</p>
+
+<p>In short, we have to implement the fetching mechanism (below screenshot) for the items from the list:</p>
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/022-a-graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/022-a-graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+
+
+<br/><br/><br/><br/>
+
+<h3>In order to implement this, we need to make following steps:</h3>
+
+<p>1) This is our new version of the apolloConfig.png file:</p>
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/022-b-graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/022-b-graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a> <br/>
+We have deleted the test code and the export default also has changed.
+</p>
+
+
+<hr/>
+
+
+<p>2) Add the new Action called "fetchDashboardDataSuccess" in the <i>src/routes/routes/Dashboard/modules/dashboard.js</i> file:</p>
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/022graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/022graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+<br/>
+
+We also have introduced here a constant called <b>FETCH_DASHBOARD_DATA_SUCCESS</b> (you already shall be used to this convention from our previous tutorial's steps).
+
+</p>
+
+
+<hr/>
+
+
+<p>3) Next step is to make the asynchronous function called fetchDashboardDataAsync as following:</p>
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/023graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/023graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+<br/>
+This function uses async await approach (we <a href="#login-with-mocked-data-front-end">have used it already in the login implementation in the tutorial</a> so you shall be already familiar with it). 
+
+<pre><code>
+export const fetchDashboardDataAsync = () => {
+  return async (dispatch, getState) => {
+    const query = gql`query GetAllDashboardItems {
+      viewer {
+        allDashboardItems  {
+          edges {
+            node {
+              id
+              label
+            }
+          }
+        }
+      }
+    }`
+
+    let dashboardItemsArray = await client
+      .query({query})
+      .then((results) => {
+        const { data: { viewer: { allDashboardItems: { edges } }}} = results
+        const resArray = edges.map((item, i) => {
+          return item.node
+        })
+        return resArray
+    }).catch((errorReason) => {
+      // Here you handle any errors.
+      // You can dispatch some
+      // custom error actions like:
+      // dispatch(yourCustomErrorAction(errorReason))
+    })
+
+    dispatch(fetchDashboardDataSuccess(dashboardItemsArray))
+  }
+}
+</pre></code>
+
+After the promise resolves, we dispatch the request results array (check the screenshot from the <a href="http://reactjs.co/react_convention/graphql-tutorial/021graphql.png" target="_blank">console.info here again</a>) with use of the <b>fetchDashboardDataSuccess(dashboardItemsArray)</b> function.
+</p>
+
+<pre><code>
+const ACTION_HANDLERS = {
+  [FETCH_DASHBOARD_DATA_SUCCESS]: (state, action) => { 
+    return Object.assign({}, state, {
+      dashboardItems: action.payload
+    })
+},
+</pre></code>
+
+<p>
+The action handler just updates the single state tree with new fetched array of dashboard items, so the new array can be rendered in the <u>src/routes/routes/Dashboard/containers/DashboardContainer.js</u> related components.
+</p>
+
+<hr/>
+
+
+<p>4) In the same file (<i>src/routes/routes/Dashboard/modules/dashboard.js</i>) we continue to improve the Action Handlers:</p>
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/024graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/024graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+<br/>
+
+At this step, we have everything regarding the redux reducers (constants, actions and action handlers).
+</p>
+
+
+<hr/>
+
+
+<p>5) We need just to import the <b>fetchDashboardDataAsync</b> function into the <u>src/routes/routes/Dashboard/containers/DashboardContainer.js</u>:</p>
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/025graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/025graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+<br />
+As you can see above, we are start fetching:
+<pre><code>
+componentWillMount() {
+  this.props.fetchDashboardDataAsync()
+}
+</pre></code>
+
+We have also commented the login check in the render function in order to have easier life while developing (you don't need to login everytime you make a change):
+<pre><code>
+render () {
+  // if(this.props.session.isNotLoggedIn) {
+  //   return &lt;h4&gt;Please login in order to access your dashboard&lt;/h4&gt;
+  // }
+</pre></code>
+
+Rest of the implementation shall be clear, as we have been explaining it more in the details in the beginning of the tutorial.
+</p>
+
+
+<hr/>
+
+
+
+<pre><code>
+The commit from the above sub-chapter:
+https://github.com/przeor/ReactC/commit/0e3787be23a3dc9a64b8f7f3a36233aedaef503e
+</pre></code>
+
+<h2>Reordering the dashboard lists and saving it in the database</h2>
+
+<p>Implementation of the list's order is more complcated, than you can expect. Let's deep into details so you will learn more, why it's a tricky task to do properly fullstack. </p>
+
+
+
+
 
 
 
