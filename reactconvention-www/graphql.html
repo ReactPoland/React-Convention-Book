@@ -993,33 +993,46 @@ In our case, we will keep IDs of items in a order list. That order will be keept
 
 
 
-<h2> Version #1: Reordering the dashboard lists (read-only)</h2>
+<h2>Version #1: preparing a class where we will store our order's lists</h2>
 
-
-
+<p>1) Visit the Scaphold's dashboard and click the "Add Type":</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/007graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/007graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+</p>
+<hr />
+<p>2) Then fill in the right-nav form as following:</p>
 <p><a href="http://reactjs.co/react_convention/graphql-tutorial/026graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/026graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+<br/>
+... and click the "Create" button.
+</p>
 
 <hr />
-
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/027graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/027graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
-
-<hr />
-
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/028graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/028graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+<p>3) After we have created the <b>DashboardItemListOrder</b> class, then we need to click the "+" button and then click the "field" from the list as showed below:</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/027graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/027graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a></p>
 
 <hr />
-
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/029graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/029graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
-
-<hr />
-
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/030graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/030graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+<p>4) Then we need to fill in the right-nav form as following:</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/028graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/028graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a></p>
 
 <hr />
+<p>5) Choose the "List" type as shown below:</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/029graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/029graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a></p>
 
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/031graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/031graphql.png" alt="graphql apollo tutorial" style="width:20%; height: 20%"></a>
+<hr />
+<p>6) The "list" has to be type of strings, so choose as below:</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/030graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/030graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a></p>
+
+<hr />
+<p>7) Choose the NonNull checkbox, so the GraphQL will give us an error in case if we will try to push a null into the class:</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/031graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/031graphql.png" alt="graphql apollo tutorial" style="width:20%; height: 20%"></a></p>
+<hr />
+
+<p>Regarding all the seven steps above, we just have created the place where we will store lists of DashboardItemsLists ids with a correct (choosed by our app's users) order.</p>
 
 
+<h3>Version #1: coding the reordering (read-only)</h3>
+<p>
+We have prepared
+</p>
 
 <pre><code>
 The commit from the above sub-chapter:
