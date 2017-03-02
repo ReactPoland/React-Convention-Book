@@ -1030,15 +1030,156 @@ In our case, we will keep IDs of items in a order list. That order will be keept
 
 
 <h3>Version #1: coding the reordering (read-only)</h3>
+
+
+<p>Before starting working on the code, watch this video which explains how to populate the database upfront, so we will be able to fetch data from the backend (and it won't be an empty list):</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/x_oHKZqvnSo" frameborder="0" allowfullscreen></iframe>
+
+
 <p>
-We have prepared
+We have prepared the backend, let's start working on the front-end. Go to the <b>src/routes/Dashboard/modules/dashboard.js</b> file and find the function called "fetchDashboardDataAsync" - we need to do following in that function:
 </p>
+
+<ul>
+<li>1) STEP #1. - let's fetch the items order</li>
+<li>2) STEP #2. - let's fetch the items details</li>
+<li>3) STEP #3. - let's mix the order with the items details</li>
+<li>4) STEP #4. - let's dispatch the dashboardItemsArrayOrdered</li>
+</ul>
+
+All that four steps are described in the javascript's code below:
+<pre><code>
+export const fetchDashboardDataAsync = () =&gt; {
+  return async (dispatch, getState) =&gt; {
+    // below we are mocking the list name, but in future
+    // when we will have more than just a one list
+    // then that name below "dashboardMainListOrder"
+    // will be dynamic one
+    const dashboardListOrderName = 'dashboardMainListOrder'
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #1. - let's fetch the items order
+    // *************
+
+    // this query, is asking for the Order
+    const queryOrder = gql`query GetAllDashboardItemListOrders {
+      viewer {
+        allDashboardItemListOrders (where: {
+          orderListName: {
+            eq: "${dashboardListOrderName}"
+          }
+        })  {
+          edges {
+            node {
+              id
+              orderListIdsArray
+              orderListName
+            }
+          }
+        }
+      }
+    }`
+
+
+    // based on the results, we will have the dashboardItemsOrdersArray
+    const dashboardItemsOrdersArray = await client
+      .query({query: queryOrder})
+      .then((results) =&gt; {
+        console.info('results', results.data.viewer.allDashboardItemListOrders.edges)
+        const { data: { viewer: { allDashboardItemListOrders: { edges } }}} = results
+        const resArray = edges.map((item, i) =&gt; {
+          return item.node
+        })
+        return resArray
+    }).catch((errorReason) =&gt; {
+      // Here you handle any errors.
+      // You can dispatch some
+      // custom error actions like:
+      // dispatch(yourCustomErrorAction(errorReason))
+    })
+
+    const orderListIdsArray = dashboardItemsOrdersArray[0].orderListIdsArray
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #2. - let's fetch the items details
+    // *************
+
+    // THE ITEMS ORDER is known, let's ask for the certain
+    // items.. as we know the items Ids from the dashboardItemsOrdersArray
+    const queryFetchItems = gql`query GetAllDashboardItems {
+      viewer {
+        allDashboardItems  {
+          edges {
+            node {
+              id
+              label
+            }
+          }
+        }
+      }
+    }`
+
+    let dashboardItemsObjects = await client
+      .query({query: queryFetchItems})
+      .then((results) =&gt; {
+        console.info('results', results)
+        const { data: { viewer: { allDashboardItems: { edges } }}} = results
+        let resObj = {}
+        edges.map((item, i) =&gt; {
+          resObj[item.node.id] = item.node
+          return item.node
+        })
+        return resObj
+    }).catch((errorReason) =&gt; {
+      // Here you handle any errors.
+      // You can dispatch some
+      // custom error actions like:
+      // dispatch(yourCustomErrorAction(errorReason))
+    })
+
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #3. - let's mix the order with the items details
+    // *************
+    const dashboardItemsArrayOrdered = orderListIdsArray.map((listItemID) =&gt; {
+      return dashboardItemsObjects[listItemID]
+    })
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #4. - let's dispatch the dashboardItemsArrayOrdered
+    // *************
+    dispatch(fetchDashboardDataSuccess(dashboardItemsArrayOrdered))
+  }
+}
+</code></pre>
+
+<p>All the comments shall clear out the steps, that we are doing. Below is also a diff image, so you can find the improvements even better:</p>
+
+<p>Diffs for the <b>src/routes/Dashboard/modules/dashboard.js</b>file are below</p>
+<p>1) Diff part one:</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/032graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/032graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a></p>
+<p>2) Diff part two:</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/033graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/033graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a></p>
+<p>3) Diff part three:</p>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/034graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/034graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a></p>
+
+
+All those changes, helping us to fetch the order from the backend, and then fetch the details of each dashboard's items objects. We will improve this even more in future.
+
 
 <pre><code>
 The commit from the above sub-chapter:
 https://github.com/przeor/ReactC/commit/d31ea56cfad4558f90350a011ccece6fe2f8d238
 </pre></code>
 
+<h2>Version #2: ability to add a new item to the list and save it in the database</h2>
+
+<p>At this point, you shall be able to see a fetched list in a specified order. Let's make ability to add a new item to the end of the list.</p>
 
       </article>
     </div>
