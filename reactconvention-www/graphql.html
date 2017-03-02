@@ -971,14 +971,60 @@ The commit from the above sub-chapter:
 https://github.com/przeor/ReactC/commit/0e3787be23a3dc9a64b8f7f3a36233aedaef503e
 </pre></code>
 
-<h2>Reordering the dashboard lists and saving it in the database</h2>
+<h2>BIG PICTURE: Implementing the reordering feature</h2>
 
 <p>Implementation of the list's order is more complcated, than you can expect. Let's deep into details so you will learn more, why it's a tricky task to do properly fullstack. </p>
 
+<p>
+In our case, we will keep IDs of items in a order list. That order will be keept in a separate class called <b>DashboardItemListOrder</b>. There is a video made for the sub-chapter below in Version1. In that video, you will see how this all looks like in the database and cooperates, so the correct order is stored in the database.
+
+
+</p>
+
+<p>Our next steps are: </p>
+<ul>
+<li>a) Version 1: ordered read-only list fetched from the database</li>
+<li>b) Version 2: ability to add a new item to the list and save it in the database</li>
+<li>c) Version 3: ability to drag-and-drop, reorder and save it permamently in the databse, so after a browser refresh the data is still in a correct order</li>
+<li>d) Version 4: edge cases management, so in any situation the feature will work correctly</li>
+</ul>
+
+<p>Let's start with working on the version #1 of our ordered list feature.</p>
 
 
 
+<h2> Version #1: Reordering the dashboard lists (read-only)</h2>
 
+
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/026graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/026graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+
+<hr />
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/027graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/027graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+
+<hr />
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/028graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/028graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+
+<hr />
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/029graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/029graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+
+<hr />
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/030graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/030graphql.png" alt="graphql apollo tutorial" style="width:40%; height: 40%"></a>
+
+<hr />
+
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/031graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/031graphql.png" alt="graphql apollo tutorial" style="width:20%; height: 20%"></a>
+
+
+
+<pre><code>
+The commit from the above sub-chapter:
+https://github.com/przeor/ReactC/commit/d31ea56cfad4558f90350a011ccece6fe2f8d238
+</pre></code>
 
 
       </article>
