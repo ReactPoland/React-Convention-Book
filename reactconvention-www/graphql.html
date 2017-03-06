@@ -1160,16 +1160,16 @@ export const fetchDashboardDataAsync = () =&gt; {
 
 <p>All the comments shall clear out the steps, that we are doing. Below is also a diff image, so you can find the improvements even better:</p>
 
-<p>Diffs for the <b>src/routes/Dashboard/modules/dashboard.js</b>file are below</p>
-<p>1) Diff part one:</p>
+<p>Diffs for the <b>src/routes/Dashboard/modules/dashboard.js</b> file are below</p>
+<p>1) The dashboard.js diff part one:</p>
 <p><a href="http://reactjs.co/react_convention/graphql-tutorial/032graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/032graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a></p>
-<p>2) Diff part two:</p>
+<p>2) The dashboard.js diff part two:</p>
 <p><a href="http://reactjs.co/react_convention/graphql-tutorial/033graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/033graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a></p>
-<p>3) Diff part three:</p>
+<p>3) The dashboard.js diff part three:</p>
 <p><a href="http://reactjs.co/react_convention/graphql-tutorial/034graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/034graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a></p>
 
 
-All those changes, helping us to fetch the order from the backend, and then fetch the details of each dashboard's items objects. We will improve this even more in future.
+All those changes, helping us to fetch the order from the backend, and then fetch the details of each dashboard's items objects. We will improve this even more during next steps of the tutorial.
 
 
 <pre><code>
@@ -1179,7 +1179,85 @@ https://github.com/przeor/ReactC/commit/d31ea56cfad4558f90350a011ccece6fe2f8d238
 
 <h2>Version #2: ability to add a new item to the list and save it in the database</h2>
 
-<p>At this point, you shall be able to see a fetched list in a specified order. Let's make ability to add a new item to the end of the list.</p>
+<p>At this point, you shall be able to see a fetched list in a specified order. Let's make an ability to add a new item to the end of the list.</p>
+
+
+<p>Plan for making the adding ability feature work is as following:</p>
+<ul>
+<li>1) Improve our's dashboard reducer: we will add a new property called <b>currentListId: null</b> - in that property, we will keep the ID of the list that is fetched in the </li>
+<li>2) Improving the <b>FETCH_DASHBOARD_DATA_SUCCESS</b> action handler, so it will save also the list's ID in our reducer while fetching with use of the <b>fetchDashboardDataAsync</b></li>
+<li>3) Add a new function called <b>dashboardAddItemAsync</b> in the src/routes/Dashboard/modules/dashboard.js</li>
+<li>4) Improve the <b>DASHBOARD_ADD_ITEM</b> action handler altogether with the dispatching it correctly via the <b>dispatch(dashboardAddItem({ newDashboardItemValue, newDashboardItemID }))</b></li>
+<li>5) Improve the <b>src/routes/Dashboard/containers/DashboardContainer.js</b> codebase, so we will introduce a new function called "dashboardAddItemAsync". This function is making an async request to the GraphQL's server</li>
+</ul>
+
+<p>
+OK, let's start our work so you will get even better all the 4 points above in practise.  
+</p>
+
+
+
+<p>
+1) <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/035graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/035graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+
+<p>
+2) <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/036graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/036graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+
+<p>
+3) <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/037graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/037graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+<p>
+4) <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/038graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/038graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+
+
+<p>
+5) <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/039graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/039graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+
+<p>
+6) <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/040graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/040graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+<p>
+7) <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/041graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/041graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+<pre><code>
+The commit from the above sub-chapter:
+https://github.com/przeor/ReactC/commit/945f6a0a37f84730a1b5798ddcfd379c7dc0d002
+</pre></code>
+
+
+
+
+
+
+
+
+
+
 
       </article>
     </div>
