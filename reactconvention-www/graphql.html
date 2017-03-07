@@ -1036,6 +1036,7 @@ In our case, we will keep IDs of items in a order list. That order will be keept
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/x_oHKZqvnSo" frameborder="0" allowfullscreen></iframe>
 
+<h3 style="color: red"> Please make sure that you made the steps from the video above, before continuing the programming below.</h3>
 
 <p>
 We have prepared the backend, let's start working on the front-end. Go to the <b>src/routes/Dashboard/modules/dashboard.js</b> file and find the function called "fetchDashboardDataAsync" - we need to do following in that function:
@@ -1169,8 +1170,12 @@ export const fetchDashboardDataAsync = () =&gt; {
 <p><a href="http://reactjs.co/react_convention/graphql-tutorial/034graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/034graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a></p>
 
 
-All those changes, helping us to fetch the order from the backend, and then fetch the details of each dashboard's items objects. We will improve this even more during next steps of the tutorial.
+<p>All those changes, helping us to fetch the order from the backend, and then fetch the details of each dashboard's items objects. We will improve this even more during next steps of the tutorial.</p>
 
+
+<p>After all that points, you will be to see a full stack application that fetches the data from the backend:</p>
+
+<h1>ANIMATED-GIF-TO-ADD</h1>
 
 <pre><code>
 The commit from the above sub-chapter:
@@ -1195,54 +1200,189 @@ https://github.com/przeor/ReactC/commit/d31ea56cfad4558f90350a011ccece6fe2f8d238
 OK, let's start our work so you will get even better all the 4 points above in practise.  
 </p>
 
+<hr />
 
 
 <p>
-1) <br/>
+1) First of all, we need to create a new property in our dashboard's reducer object. We will call it currentListId and it will store the ID from the databse, of our list called <b>dashboardMainListOrder</b>: <br/>
 <a href="http://reactjs.co/react_convention/graphql-tutorial/035graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/035graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
 </p>
 
+<hr />
 
 <p>
-2) <br/>
+2) The most important part is to define the <b>const currentListId (line 108)</b> and then dispatching that value in the line 167. Rest on that diff is less important and more likely some cosmetic changes like changing <b>let</b> to <b>const</b> and some additional comments. <br/>
 <a href="http://reactjs.co/react_convention/graphql-tutorial/036graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/036graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
 </p>
 
+<hr />
 
 <p>
-3) <br/>
+3) Next we are improving the action handler, so we update the single state tree with the currentListId value (it will be used in next steps, this is why we need to do it beforehand):<br/>
 <a href="http://reactjs.co/react_convention/graphql-tutorial/037graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/037graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
 </p>
 
+<hr />
+
 <p>
-4) <br/>
+4) Here we start working on the next function called <b>dashboardAddItemAsync</b>. First three steps (1-4) are adding the item into the <b>DashboardItem class</b>, the 4th step is just console logging the ID from the database:<br/>
 <a href="http://reactjs.co/react_convention/graphql-tutorial/038graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/038graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
 </p>
 
-
+<hr />
 
 <p>
-5) <br/>
+5) In the steps 5 to 8, we are editing (update's mutation query) the list with use of <b>orderListIdsArray</b> from the scaphold's GraphQL <b>DashboardItemListOrder class</b>:  <br/>
 <a href="http://reactjs.co/react_convention/graphql-tutorial/039graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/039graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
 </p>
 
 
+<p>Below is the complete dashboardAddItemAsync function from the <b>src/routes/Dashboard/modules/dashboard.js</b> (screenshots from diffs of the same function are above in the point 4 and 5):</p>
+
+<pre><code>
+export const dashboardAddItemAsync = (newDashboardItemObject) =&gt; {
+  return async (dispatch, getState) =&gt; {
+    const { newDashboardItemValue, dashboardState  } = newDashboardItemObject
+    const currentListId = dashboardState.currentListId
+    // the currentListArray holds an array of IDs, which we will update later
+    // via the GraphQL query (see step 6, below)
+    const currentListArray = dashboardState.dashboardItems.map((dashboardItem) =&gt; {
+      return dashboardItem.id
+    })
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #1. - preparation of the mutation query
+    // *************
+    const mutationInsert = gql`mutation Create($data: CreateDashboardItemInput!) {
+        createDashboardItem(input: $data) {
+          changedDashboardItem {
+            id
+            label
+          }
+        }
+      }`
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #2. - preparation of the variables that we need to insert
+    // *************
+    const variablesInsert = {
+        "data": {
+          "label": newDashboardItemValue
+        }
+      }
+
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #3. - making the mutations and retrieving the newDashboardItemID
+    // *************
+    const newDashboardItemID = await client
+      .mutate({mutation: mutationInsert, variables: variablesInsert})
+      .then((results) =&gt; {
+        const newObjectId = results.data.createDashboardItem.changedDashboardItem.id
+        console.info('results', newObjectId)
+        return newObjectId
+
+    }).catch((errorReason) =&gt; {
+      // Here you handle any errors.
+      // You can dispatch some
+      // custom error actions like:
+      // dispatch(yourCustomErrorAction(errorReason))
+      console.info('error', errorReason)
+    })
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #4. - OK, we've got the ID. Let's update the list
+    // *************
+    console.info('here is the ID: ', newDashboardItemID)
+
+
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #5. - preparation of the mutation query
+    // *************
+    const mutationListUpdate = gql`mutation UpdateDashboardItemListOrder($data: UpdateDashboardItemListOrderInput!) {
+      updateDashboardItemListOrder(input: $data) {
+        changedDashboardItemListOrder {
+          id
+          orderListIdsArray
+        }
+      }
+    }`
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #6. - preparation of the variables that we need to have in order to update
+    // *************
+    const variablesListUpdate = {
+      "data": {
+        // this ID, is the ID of the list which we want to update
+        "id": currentListId,
+        // here is going a current list with all IDS (including the new one)
+        // we are using the ES6's "..."  spread operator 
+        "orderListIdsArray": [...currentListArray, newDashboardItemID]
+      }
+    }
+
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #7. - doing the async backend call with all details 
+    // ************* (GraphQL query doing the heavy lifting now)
+    // *************
+    const listID = await client
+      .mutate({mutation: mutationListUpdate, variables: variablesListUpdate})
+      .then((results) =&gt; {
+        const newObjectId = results.data.createDashboardItemListOrder.changedDashboardItemListOrder.id
+        return newObjectId
+    }).catch((errorReason) =&gt; {
+      // Here you handle any errors.
+      // You can dispatch some
+      // custom error actions like:
+      // dispatch(yourCustomErrorAction(errorReason))
+      console.info('error', errorReason)
+    })
+
+    // *****************************************************************
+    // *************
+    // ************* STEP #8. - we have updated the list, let's dispatch the new value and ID
+    // *************
+    dispatch(dashboardAddItem({ newDashboardItemValue, newDashboardItemID }))
+  }
+}
+</code></pre>
+
+<hr />
+
 <p>
-6) <br/>
+6) Next we are improving the DASHBOARD_ADD_ITEM action handler, so instead of mocked ID it will use a real ID from our database:<br/>
 <a href="http://reactjs.co/react_convention/graphql-tutorial/040graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/040graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
 </p>
 
+<hr />
+
 <p>
-7) <br/>
+7) The last step is to edit the <b>src/routes/Dashboard/containers/DashboardContainer.js</b>, so wer will use there the <b>this.props.dashboardAddItemAsync({ newDashboardItemValue: val, dashboardState: this.props.dashboard  })</b> instead of the old one (dashboardAddItem) function:  <br/>
 <a href="http://reactjs.co/react_convention/graphql-tutorial/041graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/041graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
 </p>
+
+
+<p>At this point, you will be able to see the following:</p>
+
+<h1>ANIMATED-GIF-TO-ADD</h1>
+
+
 
 <pre><code>
 The commit from the above sub-chapter:
@@ -1250,6 +1390,12 @@ https://github.com/przeor/ReactC/commit/945f6a0a37f84730a1b5798ddcfd379c7dc0d002
 </pre></code>
 
 
+
+<h3>Version #3: ability to drag-and-drop, reorder and save it into the database</h3>
+
+<p>
+  We want to save our reorder actions permamently in the databse, so after a browser refresh the data is still in a correct order. Let's start working on that mechanism right now.
+</p>
 
 
 
