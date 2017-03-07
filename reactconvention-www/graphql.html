@@ -1036,7 +1036,7 @@ In our case, we will keep IDs of items in a order list. That order will be keept
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/x_oHKZqvnSo" frameborder="0" allowfullscreen></iframe>
 
-<h3 style="color: red"> Please make sure that you made the steps from the video above, before continuing the programming below.</h3>
+<h3 style="color: red"> Please make sure that you made the things from the video above, before continuing the programming steps below. Otherwise, you may occur some problems. <a href="https://www.facebook.com/groups/reactjs.co/" ref="nofollow">You can always ask questions on the Facebook group in case of any problems</a>.</h3>
 
 <p>
 We have prepared the backend, let's start working on the front-end. Go to the <b>src/routes/Dashboard/modules/dashboard.js</b> file and find the function called "fetchDashboardDataAsync" - we need to do following in that function:
@@ -1397,11 +1397,43 @@ https://github.com/przeor/ReactC/commit/945f6a0a37f84730a1b5798ddcfd379c7dc0d002
   We want to save our reorder actions permamently in the databse, so after a browser refresh the data is still in a correct order. Let's start working on that mechanism right now.
 </p>
 
+<hr />
+<p>
+1) The diff belows, mostly shows that the logic has been moved from the actions' handler to the action handler (the function called dashboardReorderItemsAsync):  <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/042graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/042graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
+</p>
 
+<hr />
 
+<p>
+2) The variable name <b>const newListArray</b> contains the IDs that we need to update in our orderListIdsArray property in the scaphold's class called <b>DashboardItemListOrder</b>:  <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/043graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/043graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
 
+</p>
 
+<hr />
+
+<p>
+3) ... and next thing is to dispatch the final newDashboardItems (line 389 on the screenshot). You can also find the logic deleted from the action's handler - this logic has been moved to the part from step 1 above:  <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/044graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/044graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+<hr />
+
+<p>
+4) This part shall be clear to you, we just renamed the old function dashboardReorderItems to the new one dashboardReorderItemsAsync:  <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/045graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/045graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+<hr />
+
+<pre><code>
+The commit from the above sub-chapter:
+https://github.com/przeor/ReactC/commit/e2c21e24774ca3614c1016e33bee56876297ac88
+</pre></code>
 
 
 
