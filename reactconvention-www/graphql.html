@@ -1234,13 +1234,17 @@ OK, let's start our work so you will get even better all the 4 points above in p
 
 </p>
 
+
 <hr />
 
 <p>
 5) In the steps 5 to 8, we are editing (update's mutation query) the list with use of <b>orderListIdsArray</b> from the scaphold's GraphQL <b>DashboardItemListOrder class</b>:  <br/>
 <a href="http://reactjs.co/react_convention/graphql-tutorial/039graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/039graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
-
+<p>PLEASE NOTE: there is a typo in line number 269 the correct variable is:  <b>const newObjectId = results.data.updateDashboardItemListOrder.changedDashboardItemListOrder.id</b> (update instead of create). The application gives an error in the console, and this note is fixing it.</p>
 </p>
+
+
+<hr />
 
 
 <p>Below is the complete dashboardAddItemAsync function from the <b>src/routes/Dashboard/modules/dashboard.js</b> (screenshots from diffs of the same function are above in the point 4 and 5):</p>
@@ -1439,6 +1443,59 @@ https://github.com/przeor/ReactC/commit/e2c21e24774ca3614c1016e33bee56876297ac88
 
 
 <h3>Version 4: ability to edit an existing item</h3>
+
+<p>
+1) Preparation the dashboardEditItemAsync function. Standard GraphQL query's preparation (we have done similar stuff already in previous steps):  <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/046graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/046graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+<hr />
+
+
+<p>
+2) Here we simply query the GraphQL server with use of the <b>mutationDashboardItemUpdate and variablesListUpdate</b>:  <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/047graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/047graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+<hr />
+
+
+<p>
+3) The writableObject is here required, because the objects from the GraphQL fetched in the <b>fetchDashboardDataAsync function</b> are <a href="http://stackoverflow.com/questions/2428409/how-can-you-make-a-variable-object-read-only-in-javascript" target="_blank" rel="nofollow">read-only</a>:  <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/048graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/048graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+<hr />
+
+<p>
+4) In the Dashboard's container we change the <b>dashboardEditItem</b> to <b>dashboardEditItem</b> in order to use the new asynchronous functions:  <br/>
+<a href="http://reactjs.co/react_convention/graphql-tutorial/049graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/049graphql.png" alt="graphql apollo tutorial" style="width:80%; height: 80%"></a>
+
+</p>
+
+
+<hr />
+
+
+<p>
+At this point, we have an app where we can:
+<ul>
+<li>1) fetch items from the database</li>
+<li>2) add an item to the database</li>
+<li>3) reorder the items in the list in the database</li>
+<li>4) add an item to the database</li>
+</ul>
+
+Now it's time to implement the user authentication, properly.
+</p>
+
+<pre><code>
+The commit from the above sub-chapter:
+https://github.com/przeor/ReactC/commit/c936919e4713b15055451e80ae0ee9ac589dc41a
+</pre></code>
 
 
 
