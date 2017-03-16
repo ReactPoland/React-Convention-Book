@@ -1580,6 +1580,33 @@ The commit from the above sub-chapter:
 https://github.com/przeor/ReactC/commit/46d6fbd74cf10fd4cb8546b42d8c9be98a56f2c3
 </pre></code>
 
+<h3>Registration functionality</h3>
+
+<p>We will implement simple registration mechanism</p>
+
+<h1>TODO coding</h1>
+
+<h3>Securing the DashboardItems on the backend</h3>
+
+
+<p>
+Currently, any user of our app can create the same list of dashboardItems. 
+
+We will implement the security feature on the backend so the behaviour of our application is 
+as following:
+</p>
+
+
+<ul>
+<li>1) We will secure on the backend, that each user will have his own DashboardItemListOrder</li>
+<li>2) After each user has his own DashboardItemListOrder, we will make sure that the list does exists (so we will make a mechanism to create it, in case if it doesn't exist)</li>
+<li>3) After we are done, with the order class from the ScapHold. Then we will make sure that only authenticated users who has created it's own DashboardItem can fetch them from the backend. This will make sure, that for example an User1 doesn't have access to the User2's dashboardItems.</li>
+<li>4) We will try to hack the mechanism, so you will learn that you will get the Permissions error while trying to fetch not your own (logged user) dashboard items.</li>
+</ul>
+
+
+<h1>TODO coding</h1>
+
       </article>
     </div>
   </div>
