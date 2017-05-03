@@ -728,6 +728,8 @@ We need to install some new libraries:
 
 <p>NOTE: at this point, you shall already know how to use the NPM correctly :-)  </p>
 
+<h1>TODO: describe what are the libraries for?</h1>
+
 
 <h2 id="1">Fetching data from the backend (GraphQL) to the client side (Apollo)</h2>
 
@@ -820,11 +822,13 @@ This is just an example usage, before getting into the further implementation in
 
 <p><a href="http://reactjs.co/react_convention/graphql-tutorial/021graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/021graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a></p>
 
-<pre><code>The links to the two commit from the screenshots: 
+<p>PLEASE NOTE: you must visit the dashboard route, in order to trigger the above's console log. It won't work on other's routes like Home or Counter.</p>
 
-https://github.com/przeor/ReactC/commit/5cdfbaffc32ee758311e8951afe885e401e07303
+<pre><code>
+The current progress is available at the below's commit:
 
-https://github.com/przeor/ReactC/commit/d2ecd3a7421ff52f8c30b9632a9bc7575a26c0d3</code></pre>
+https://github.com/ReactPoland/reactjs-redux-tutorial/commit/ac2bdb36c35371cf1719925111e592f1d8e7de6d
+</code></pre>
 
 <p>All that above, has been fetched from the Scaphold's database via their GraphQL server. For now, we will make the user of the fetched data in our front-end app (not just using a console log).</p>
 
@@ -855,7 +859,7 @@ We have deleted the test code and the export default also has changed.
 
 <p>2) Add the new Action called "fetchDashboardDataSuccess" in the <i>src/routes/routes/Dashboard/modules/dashboard.js</i> file:</p>
 
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/022graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/022graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/022graphqlNEW.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/022graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
 <br/>
 
 We also have introduced here a constant called <b>FETCH_DASHBOARD_DATA_SUCCESS</b> (you already shall be used to this convention from our previous tutorial's steps).
@@ -868,7 +872,7 @@ We also have introduced here a constant called <b>FETCH_DASHBOARD_DATA_SUCCESS</
 
 <p>3) Next step is to make the asynchronous function called fetchDashboardDataAsync as following:</p>
 
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/023graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/023graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/023graphqlNEW.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/023graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
 <br/>
 This function uses async await approach (we <a href="#login-with-mocked-data-front-end">have used it already in the login implementation in the tutorial</a> so you shall be already familiar with it). 
 
@@ -888,7 +892,7 @@ export const fetchDashboardDataAsync = () => {
       }
     }`
 
-    let dashboardItemsArray = await client
+    const dashboardItemsArray = await client
       .query({query})
       .then((results) => {
         const { data: { viewer: { allDashboardItems: { edges } }}} = results
@@ -912,12 +916,12 @@ After the promise resolves, we dispatch the request results array (check the scr
 </p>
 
 <pre><code>
-const ACTION_HANDLERS = {
   [FETCH_DASHBOARD_DATA_SUCCESS]: (state, action) => { 
-    return Object.assign({}, state, {
+    return {
+      ...state,
       dashboardItems: action.payload
-    })
-},
+    }
+  },
 </pre></code>
 
 <p>
@@ -929,7 +933,7 @@ The action handler just updates the single state tree with new fetched array of 
 
 <p>4) In the same file (<i>src/routes/routes/Dashboard/modules/dashboard.js</i>) we continue to improve the Action Handlers:</p>
 
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/024graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/024graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/024graphqlNEW.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/024graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
 <br/>
 
 At this step, we have everything regarding the redux reducers (constants, actions and action handlers).
@@ -939,18 +943,22 @@ At this step, we have everything regarding the redux reducers (constants, action
 <hr/>
 
 
-<p>5) We need just to import the <b>fetchDashboardDataAsync</b> function into the <u>src/routes/routes/Dashboard/containers/DashboardContainer.js</u>:</p>
+<p>5) We need just to import the <b>fetchDashboardDataAsync</b> function into the <u>src/routes/Dashboard/containers/DashboardContainer.js</u> and then we change the component properly at <u>src/routes/Dashboard/components/Dashboard.js</u>:</p>
 
-<p><a href="http://reactjs.co/react_convention/graphql-tutorial/025graphql.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/025graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
+<p><a href="http://reactjs.co/react_convention/graphql-tutorial/025graphqlNEW.png" target="_blank"><img src="http://reactjs.co/react_convention/graphql-tutorial/025graphql.png" alt="graphql apollo tutorial" style="width:90%; height: 90%"></a>
 <br />
-As you can see above, we are start fetching:
+As you can see above, fetch functions starts in the constructor:
 <pre><code>
-componentWillMount() {
-  this.props.fetchDashboardDataAsync()
-}
+class DashboardRoute extends React.Component {
+  
+  constructor (props) {
+      super(props)
+      this.props.fetchDashboardDataAsync()
+  }
+
 </pre></code>
 
-We have also commented the login check in the render function in order to have easier life while developing (you don't need to login everytime you make a change):
+We have also commented out the login check in the render function in order to have easier life while developing (you don't need to login everytime you make a change):
 <pre><code>
 render () {
   // if(this.props.session.isNotLoggedIn) {
@@ -968,8 +976,11 @@ Rest of the implementation shall be clear, as we have been explaining it more in
 
 <pre><code>
 The commit from the above sub-chapter:
-https://github.com/przeor/ReactC/commit/0e3787be23a3dc9a64b8f7f3a36233aedaef503e
+https://github.com/przeor/ReactC/commit/bcace0ad68e2e6556b1c17b234926597552d5e09
 </pre></code>
+
+
+<h1>DONE TO THIS POINT #1</h1>
 
 <h2>BIG PICTURE: Implementing the reordering feature</h2>
 
